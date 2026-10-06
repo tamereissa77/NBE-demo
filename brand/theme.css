@@ -1,0 +1,33 @@
+/*
+ * NBE brand tokens for the demo portal.
+ * Sampled 6 Oct 2026 from nbe.com.eg (rendered homepage, see docs/brand/nbe-website-reference.png)
+ * and from the supplied logo (brand/nbe-logo.png). The site's font files could not be retrieved,
+ * so fonts are bundled locally (offline): Cairo for Arabic + Latin UI text.
+ */
+:root {
+  /* Primary: buttons, headings, links (site "Read more" buttons and section titles) */
+  --nbe-green: #006643;
+  --nbe-green-dark: #0c5435;      /* chat widget / hover */
+  --nbe-green-logo: #107614;      /* logo mark only, do not use for UI */
+
+  /* Accent: category bar, active carousel dot, highlights */
+  --nbe-orange: #ffa100;
+  --nbe-gold: #f9c40e;
+  --nbe-orange-deep: #fd6805;
+  --nbe-gradient: linear-gradient(90deg, #f9c40e 0%, #faa30b 35%, #fc7f07 70%, #fd6805 100%);
+
+  /* Neutrals */
+  --nbe-bg: #f8f8f8;
+  --nbe-surface: #ffffff;
+  --nbe-text: #4a4a4a;
+  --nbe-text-strong: #141414;
+  --nbe-border: #d6d6d6;
+
+  /* Status (demo semantics, not NBE brand) */
+  --status-review: #ffa100;       /* "flagged for review" */
+  --status-stop: #c62828;         /* guardrail STOP */
+  --status-ok: #006643;
+
+  --font-ui: "Cairo", "Segoe UI", Tahoma, sans-serif;
+  --radius-button: 999px;         /* NBE site uses pill buttons */
+}

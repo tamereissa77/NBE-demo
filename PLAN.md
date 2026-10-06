@@ -3,7 +3,7 @@
 **Source brief:** *NBE AI demos on GB10*, Dell Technologies, draft of 6 Oct 2026 (17 slides)
 **Target:** seven live demos (D1 to D7), one per NBE use case, on one Dell Pro Max with GB10, fully offline and fully containerised
 **Repo:** https://github.com/tamereissa77/NBE-demo · **Local:** `~/NBE-demo`
-**Status:** plan for review. No code has been written yet.
+**Status:** plan approved 6 Oct; branding and decisions in §10. Implementation starts with Phase 0.
 
 ---
 
@@ -35,7 +35,7 @@ These come straight from the brief. Every phase below is checked against them.
 | Gemma 4 31B-IT NVFP4 | **not on disk** (~20 GB download, needs the HF token from `~/gemma-gb10/.env`) | Quality LLM for D5 |
 | bge-m3, bge-reranker-v2-m3, SDXL, Piper voices, NeMo safety model | **not on disk** | Download in Phase 0 |
 
-**Contention warning.** This GB10 is shared. `gemma4-gb10-vllm` (restart `always`, ~74 GB) and the six `galene` containers (`/etc/galene`, restart `always`) take most of the memory at boot. vLLM sizes itself from whatever memory is free *when it starts*, so `make preflight` has to stop **all** competitors in one go before the NBE model servers start (§6).
+**Contention warning.** This GB10 is shared. `gemma4-gb10-vllm` (restart `always`, ~74 GB) and the six `galene` containers (`/etc/galene`, restart `always`) take most of the memory at boot. vLLM sizes itself from whatever memory is free *when it starts*, so `make preflight` has to stop **all** competitors in one go before the NBE model servers start (§6). Galene auto-start was disabled on 6 Oct (§10), so after a reboot only `gemma4-gb10-vllm` comes back by itself.
 
 ---
 
@@ -86,6 +86,7 @@ NBE-demo/
 ├── Makefile                    single control surface (§7)
 ├── docker-compose.yml          all services, profiles, networks
 ├── .env.example                copy to .env (machine-specific, not portable)
+├── brand/                    nbe-logo.png, theme.css (NBE colour tokens)
 ├── config/
 │   ├── litellm.yaml            model aliases → endpoints
 │   ├── guardrails/             NeMo Guardrails configs (colang + yaml) per demo
@@ -102,7 +103,7 @@ NBE-demo/
 │   ├── d6_assistant/           router service + Open WebUI pipelines
 │   ├── d7_complaints/          FastAPI: classify, SLA route, draft, trends
 │   ├── embed/  mockbank/  asr/  tts/  sdxl/  docling/
-│   └── portal/                 React + Vite + Tailwind, i18n AR/EN
+│   └── portal/                 React + Vite + Tailwind (NBE theme tokens), i18n AR/EN
 ├── data/
 │   ├── generators/             synthetic data scripts (run in the nbe-datagen container)
 │   ├── seed/                   small committed seed files (templates, policies, prompts)
@@ -210,7 +211,7 @@ Budget is about 100 GB usable out of 128 GB unified.
 
 ## 6. Runtime control and GPU contention
 
-- `make preflight` lists GPU consumers (nvidia-smi PID → cgroup → container), then stops `gemma4-gb10-vllm` and all `galene`/`appliance-*` containers **together**, and checks free memory meets the budget. It does **not** change their restart policies unless run as `make preflight PERSIST=1`, which runs `docker update --restart=no` (reversible, prints the undo command).
+- `make preflight` lists GPU consumers (nvidia-smi PID → cgroup → container), then stops `gemma4-gb10-vllm` and any running `galene`/`appliance-*` containers **together**, and checks free memory meets the budget. Galene no longer auto-starts (§10); the Gemma restart policy is left as is.
 - NBE model servers use `restart: "no"`, so they never grab memory at boot. App containers use `unless-stopped`.
 - `make up` = preflight → start the model servers one by one, waiting on health → start shared services → start the apps → warm-up (one request per alias, so the first live request isn't a cold start).
 - Profiles: `make voice-on|off`, `make image-on|off`, `make quality-on|off`, `make hero|hero-off`.
@@ -256,12 +257,16 @@ The brief's calendar (slide 14) is the external commitment. The build phases bel
 
 ---
 
-## 10. Open decisions (defaults I'll use unless you say otherwise)
+## 10. Decisions
 
-1. **GitHub push access.** The remote is reachable but empty, and this box has no GitHub credentials or `gh`. I'll commit locally with `origin` set. To push, either install `gh` and run `gh auth login`, or give a fine-grained PAT scoped to `NBE-demo` only. *Default: commit locally, push when credentials exist.*
-2. **Port.** *Default `:8200`* (free; avoids 8080 openshell, 8090 fraud demo, 8000 Gemma).
-3. **Stopping galene and gemma-gb10.** *Default: stop them during NBE runs only, and don't change their restart policy.* Use `PERSIST=1` only if you confirm galene isn't needed by someone else.
-4. **Branding.** *Default: Dell Technologies + NVIDIA marks (reusing `~/APPS/Money2020` brand assets) and a neutral "NBE" text wordmark.* No NBE logo until NBE provides one and approves its use.
-5. **Downloads (~45 GB):** Gemma 4 31B NVFP4, bge-m3, bge-reranker-v2-m3, SDXL base, Piper voices, optional Nemotron safety guard. *Default: yes, into `/opt/models`.*
-6. **Second GB10.** *Default: design for one unit;* the `hero` alias can point at a second unit by changing one config line.
-7. **NBE inputs needed (slide 17):** demo date and audience, ranking of the 7 use cases, masked samples vs synthetic, language priority, Dataiku version/host, which mock APIs matter, and who validates legal and compliance outputs.
+| # | Decision | Status |
+|---|---|---|
+| 1 | GitHub push | **Decided:** push with a PAT supplied 6 Oct. The token is used for one push at a time and never written to disk or the remote URL. Repo is currently **public**, see note below. |
+| 2 | Port | `:8200` (default) |
+| 3 | Galene auto-start | **Done 6 Oct:** all 33 `/etc/galene` containers set to `restart=no`. Original policies saved in `ops/galene-restart-policies.txt` (git-ignored). Undo: `while read c p; do docker update --restart=$p $c; done < ops/galene-restart-policies.txt`. `gemma4-gb10-vllm` (restart `always`) is unchanged; `make preflight` stops it during NBE runs. |
+| 4 | Branding | **Decided: NBE theme.** Logo in `brand/nbe-logo.png` (transparent PNG supplied by user). Colours sampled from nbe.com.eg in `brand/theme.css`: primary green `#006643`, accent orange `#ffa100`, logo gradient `#f9c40e → #fd6805`, page background `#f8f8f8`, white header with orange rule, pill-shaped green buttons. Fonts bundled locally (Cairo) because the demo is offline. A small "Powered by Dell Pro Max with GB10" footer mark stays for the hardware story. |
+| 5 | Model downloads (~45 GB) | Pending confirmation; needed from Phase 1 |
+| 6 | Second GB10 | Design for one unit; `hero` alias can point at a second unit |
+| 7 | NBE inputs (slide 17) | Pending from NBE: demo date and audience, use-case ranking, masked vs synthetic data, language priority, Dataiku version/host, mock APIs, output validators |
+
+**Repo visibility.** The source deck is marked *Commercial in Confidence*, and this repo carries the plan derived from it plus NBE's logo. Make the repo private before pushing, or keep NBE-specific material out of it.
