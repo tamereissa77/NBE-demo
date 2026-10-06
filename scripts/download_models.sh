@@ -13,6 +13,7 @@ dl nvidia/Gemma-4-31B-IT-NVFP4               Gemma-4-31B-IT-NVFP4
 dl BAAI/bge-m3                               bge-m3 --exclude "onnx/*" --exclude "*.onnx"
 dl BAAI/bge-reranker-v2-m3                   bge-reranker-v2-m3
 dl stabilityai/stable-diffusion-xl-base-1.0  sdxl-base-1.0 --include "*.json" --include "*.txt" --include "*fp16.safetensors"
+dl openai/gpt-oss-120b                      gpt-oss-120b --include "model-*.safetensors" --include "*.json" --include "chat_template.jinja"
 dl rhasspy/piper-voices                      piper-voices --include "ar/ar_JO/kareem/medium/*" --include "en/en_US/lessac/medium/*" --include "voices.json"
-echo "=== all downloads complete"; du -sh /models/Gemma-4-31B-IT-NVFP4 /models/bge-m3 /models/bge-reranker-v2-m3 /models/sdxl-base-1.0 /models/piper-voices
+echo "=== all downloads complete"; du -sh /models/Gemma-4-31B-IT-NVFP4 /models/bge-m3 /models/bge-reranker-v2-m3 /models/sdxl-base-1.0 /models/piper-voices /models/gpt-oss-120b
 '

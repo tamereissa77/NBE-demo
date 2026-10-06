@@ -29,8 +29,13 @@ else
   echo "preflight: no competing GPU consumers running"
 fi
 
+if docker inspect -f '{{.State.Running}}' nbe-llm 2>/dev/null | grep -q true; then
+  echo "preflight: NBE model servers already running (see 'make gpu')"
+  exit 0
+fi
+
 avail=$(free -g | awk '/^Mem:/ {print $7}')
-need=${NBE_MIN_FREE_GB:-90}
+need=${NBE_MIN_FREE_GB:-95}
 echo "preflight: ${avail} GB unified memory available (budget needs ~${need} GB)"
 if [ "$avail" -lt "$need" ]; then
   echo "preflight: WARNING - below budget; check 'make gpu' and 'free -g' before starting models" >&2

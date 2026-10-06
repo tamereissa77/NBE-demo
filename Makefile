@@ -3,16 +3,20 @@
 SHELL := /bin/bash
 
 COMPOSE := docker compose
+# Management commands see every profile, so on-demand model servers are included in ps/stop/down/logs
+COMPOSE_ALL := docker compose --profile core --profile quality --profile voice --profile image --profile hero
 -include .env
 export NBE_PORT
 
 .PHONY: help up down start stop restart build rebuild ps status logs clean \
-        preflight gpu verify models d1 d2 d3 d4 d5 d6 d7
+        preflight gpu verify platform-check warm models d1 d2 d3 d4 d5 d6 d7 \
+        hero hero-off quality-on quality-off voice-on voice-off image-on image-off
 
 help:
 	@echo "NBE AI demos on GB10"
 	@echo ""
-	@echo "  make up            preflight (free the GPU), then start everything"
+	@echo "  make up            preflight (free the GPU), then start everything in a memory-safe order"
+	@echo "                     (MODE=show default: core + quality + voice;  MODE=core: core models only)"
 	@echo "  make down          stop and remove containers (data volumes kept)"
 	@echo "  make start|stop    start/stop existing containers"
 	@echo "  make restart       restart all containers"
@@ -24,7 +28,13 @@ help:
 	@echo ""
 	@echo "  make preflight     stop non-NBE GPU consumers together, report free memory"
 	@echo "  make gpu           GPU memory per container"
-	@echo "  make verify        smoke test via the gateway + offline check"
+	@echo "  make verify        smoke test via the gateway + offline check + platform check"
+	@echo "  make platform-check  exercise every shared service through nbe_core"
+	@echo "  make warm          first request to every model, so nothing is cold on stage"
+	@echo ""
+	@echo "  make hero          swap quality/voice/image out, gpt-oss-120b in (D6 hero moment)"
+	@echo "  make hero-off      swap back to the show configuration"
+	@echo "  make quality-on|off  voice-on|off  image-on|off   switch on-demand models"
 	@echo "  make models        download model weights into \$$MODELS_DIR (the only online step)"
 	@echo "  make d1 .. d7      health of one demo"
 	@echo ""
@@ -33,32 +43,32 @@ help:
 .env:
 	@cp .env.example .env
 	@sed -i "s/^POSTGRES_PASSWORD=.*/POSTGRES_PASSWORD=$$(head -c 18 /dev/urandom | base64 | tr -d '/+=')/" .env
-	@echo "Created .env from .env.example (random Postgres password)"
+	@sed -i "s/^LITELLM_MASTER_KEY=.*/LITELLM_MASTER_KEY=sk-$$(head -c 24 /dev/urandom | base64 | tr -d '/+=')/" .env
+	@echo "Created .env from .env.example (random Postgres password and gateway key)"
 
 up: .env preflight
-	$(COMPOSE) up -d
-	@echo "Portal: http://localhost:$${NBE_PORT:-8200}"
+	@scripts/up.sh
 
 down:
-	$(COMPOSE) down
+	$(COMPOSE_ALL) down
 
 start:
-	$(COMPOSE) start
+	$(COMPOSE_ALL) start
 
 stop:
-	$(COMPOSE) stop
+	$(COMPOSE_ALL) stop
 
 restart:
-	$(COMPOSE) restart
+	$(COMPOSE_ALL) restart
 
 build: .env
-	$(COMPOSE) build
+	$(COMPOSE_ALL) build
 
 rebuild: .env
-	$(COMPOSE) build --no-cache
+	$(COMPOSE_ALL) build --no-cache
 
 ps:
-	$(COMPOSE) ps
+	$(COMPOSE_ALL) ps
 
 status: ps
 	@echo ""
@@ -67,13 +77,13 @@ status: ps
 	done
 
 logs:
-	$(COMPOSE) logs -f --tail=100
+	$(COMPOSE_ALL) logs -f --tail=100
 
 logs-%:
-	$(COMPOSE) logs -f --tail=200 $*
+	$(COMPOSE_ALL) logs -f --tail=200 $*
 
 clean:
-	$(COMPOSE) down -v
+	$(COMPOSE_ALL) down -v
 
 preflight:
 	@scripts/preflight.sh
@@ -83,6 +93,13 @@ gpu:
 
 verify:
 	@scripts/verify.sh
+
+platform-check warm:
+	@docker run --rm --network nbe-core --env-file .env -e LLM_GATEWAY_URL=http://nbe-llmgw:4000/v1 \
+	  -v $(CURDIR)/tests:/tests:ro nbe-d1:latest python /tests/platform_check.py
+
+hero hero-off quality-on quality-off voice-on voice-off image-on image-off:
+	@scripts/mode.sh $@
 
 models: .env
 	@HF_TOKEN=$(HF_TOKEN) MODELS_DIR=$(MODELS_DIR) scripts/download_models.sh

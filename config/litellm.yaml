@@ -1,0 +1,25 @@
+# Model aliases used by every demo (PLAN.md §2, §5). Demos never address a model directly,
+# so the week-1 Arabic bake-off can swap models here without code changes.
+model_list:
+  - model_name: workhorse                 # Gemma 4 26B-A4B, FP8: chat, drafting, tool calling
+    litellm_params: { model: hosted_vllm/gemma-4-26b-a4b, api_base: "http://nbe-llm:8000/v1", api_key: none }
+  - model_name: vision                    # same server: Gemma 4 handles images natively
+    litellm_params: { model: hosted_vllm/gemma-4-26b-a4b, api_base: "http://nbe-llm:8000/v1", api_key: none }
+  - model_name: quality                   # Gemma 4 31B NVFP4 (profile: quality), legal-grade summaries
+    litellm_params: { model: hosted_vllm/gemma-4-31b, api_base: "http://nbe-llm-q:8000/v1", api_key: none }
+  - model_name: hero                      # gpt-oss-120b (profile: hero), D6 code explanation
+    litellm_params: { model: hosted_vllm/gpt-oss-120b, api_base: "http://nbe-hero:8000/v1", api_key: none }
+  - model_name: embed                     # bge-m3, 1024-dim, multilingual
+    litellm_params: { model: hosted_vllm/bge-m3, api_base: "http://nbe-embed:8000/v1", api_key: none }
+
+router_settings:
+  # If an on-demand model is down, answer with the workhorse rather than fail (UI shows the model used)
+  fallbacks:
+    - quality: [workhorse]
+    - hero: [workhorse]
+  num_retries: 0
+
+litellm_settings:
+  drop_params: true
+  request_timeout: 600
+  telemetry: false

@@ -1,0 +1,4 @@
+fastapi
+uvicorn[standard]
+nemoguardrails==0.24.1
+langchain-openai

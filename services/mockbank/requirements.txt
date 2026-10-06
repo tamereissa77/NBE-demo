@@ -1,0 +1,1 @@
+# nbe_core deps are enough

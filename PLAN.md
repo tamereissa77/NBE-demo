@@ -3,7 +3,7 @@
 **Source brief:** *NBE AI demos on GB10*, Dell Technologies, draft of 6 Oct 2026 (17 slides)
 **Target:** seven live demos (D1 to D7), one per NBE use case, on one Dell Pro Max with GB10, fully offline and fully containerised
 **Repo:** https://github.com/tamereissa77/NBE-demo · **Local:** `~/NBE-demo`
-**Status:** Phase 0 (scaffold) done 6 Oct, verified with `make verify`. Phase 1 (platform) next. Decisions in §10.
+**Status:** Phase 0 (scaffold) and Phase 1 (platform) done 6–7 Oct, both verified with `make verify`. Phase 2 (Arabic gate) next. Measured budget in §5, Phase 1 findings in §11, decisions in §10.
 
 ---
 
@@ -199,13 +199,30 @@ Budget is about 100 GB usable out of 128 GB unified.
 | image | SDXL base 1.0 | diffusers, FP16 | ~10 GB | image |
 | hero | gpt-oss-120b (MXFP4) | vLLM | ~65 GB + KV | hero (exclusive) |
 
-**Planned operating points**
+**Measured on this GB10 (Phase 1, 7 Oct).** The table above was the plan; these are the real numbers. `make gpu` reproduces them.
 
-- **Full show (D1–D5, D7 live):** core + quality + voice + image ≈ 29+10+10+4+18+3+10 ≈ **84 GB**. Fits, with headroom for OS and apps.
-- **Hero moment (D6 code):** `make hero` stops quality, voice and image, then starts gpt-oss-120b: core ≈ 43 + hero ≈ 70 → **~113 GB, too tight.** So `make hero` also stops the separate VLM if there is one and lowers workhorse KV. If the measured budget is still over, hero runs **alone** (workhorse down, router sends everything to hero) or on a second GB10. This is measured in Phase 1, not assumed. The brief itself says "alone or on a second GB10".
-- Each vLLM gets an explicit `--gpu-memory-utilization` derived from the budget. They are started **one after another** (each waits for the previous healthcheck), because vLLM sizes its KV cache from free memory at start time.
+| Service | Model and serving | Memory used | Speed (single user) |
+|---|---|---|---|
+| nbe-llm | Gemma 4 26B-A4B, FP8 online quant, 32k context, util 0.30 | 35.4 GB (25.7 GB weights) | ~30–40 tok/s; Arabic chat, tool calls and **vision** all verified |
+| nbe-embed | bge-m3 (vLLM pooling runner, dense) | 1.7 GB | 3 texts in 40 ms |
+| nbe-rerank | bge-reranker-v2-m3 (vLLM pooling runner) | 1.7 GB | 20 ms per query |
+| nbe-llm-q | Gemma 4 31B NVFP4 (attention kept in BF16, so 31 GB of weights), 16k context, util 0.33 | 37.7–43 GB | **6.7 tok/s** (dense 31B is bandwidth-bound) |
+| nbe-asr | whisper-large-v3 FP16 | 3.4–4.9 GB | 1.2 s for 7.8 s of Arabic audio (warm) |
+| nbe-tts | Piper ar_JO-kareem / en_US-lessac, CPU | none on GPU | ~0.3 s per sentence |
+| nbe-sdxl | SDXL base 1.0 FP16, cuDNN off (see §11) | 7–16 GB | 11 s for 1216×832 at 25 steps (warm) |
+| nbe-hero | gpt-oss-120b MXFP4, 16k context, util 0.575 | ~71 GB (66 GB weights) | **37–39 tok/s** |
 
-**Week-1 Arabic gate (slide 13).** `eval/arabic_gate` holds 30 NBE-style prompts: 15 MSA, 10 Egyptian dialect, 5 code-switching/English, covering QA, summarisation, drafting, classification and tool-call selection. Candidates are Gemma 4 26B-A4B vs Gemma 4 31B, with Qwen2.5-14B (already on disk) and NBE's Llama-3-8B as references. Each output is scored on a 1–5 rubric (correctness, fluency, dialect handling, format adherence) by a human, with an LLM-judge pre-score to speed it up. The result is frozen into `config/models.lock` by **16 Oct**.
+| Operating point | Command | Used / free | Notes |
+|---|---|---|---|
+| Show: core + quality + voice | `make up` | 87–97 GB / 24–33 GB | Cold start to ready **4 min 14 s** |
+| Show + live banners | `make image-on` | ~106 GB / ~15 GB | SDXL loads in 11 s |
+| Hero moment | `make hero` | ~114 GB / 6–7 GB | Swap 70 s (repeated 3×); back to show with `make hero-off` in 111 s |
+
+- The separate document VLM is **not needed**: Gemma 4 26B reads documents itself (invoice fields extracted correctly), which saves ~10 GB. The `vision` alias points at `nbe-llm`; Qwen2.5-VL-7B remains a fallback.
+- The hero model fits **alongside** the workhorse on one GB10, so D6 can show real routing between two models. A second GB10 is not required.
+- Model servers start strictly one after another (`scripts/up.sh`), because vLLM sizes its cache from memory free at start time.
+
+**Week-1 Arabic gate (slide 13).** `eval/arabic_gate` holds 30 NBE-style prompts: 15 MSA, 10 Egyptian dialect, 5 code-switching/English, covering QA, summarisation, drafting, classification and tool-call selection. Candidates are Gemma 4 26B-A4B vs Gemma 4 31B, with Qwen2.5-14B (already on disk) and NBE's Llama-3-8B as references. Each output is scored on a 1–5 rubric (correctness, fluency, dialect handling, format adherence) by a human, with an LLM-judge pre-score to speed it up. The result is frozen into `config/models.lock` by **16 Oct**. The gate must also settle one question raised by Phase 1: Gemma 4 31B runs at 6.7 tok/s, so a 400-token legal summary takes about a minute. If the 26B is close on legal quality, drop the `quality` profile and give its ~40 GB to SDXL and the hero model.
 
 ---
 
@@ -232,7 +249,7 @@ The brief's calendar (slide 14) is the external commitment. The build phases bel
 | Phase | Scope | Exit criteria | Brief milestone |
 |---|---|---|---|
 | **0. Scaffold** ✅ | Repo layout, compose skeleton, Makefile, `.env.example`, Caddy, Postgres, Qdrant, portal shell with 7 empty screens, CI-free smoke test | `make up` brings up the shell, portal reachable on :8200 | Kickoff 12 Oct |
-| **1. Platform** | vLLM workhorse (FP8), embed/rerank service, LiteLLM aliases, guardrails, mock-bank, `nbe_core`, preflight/gpu scripts, model downloads. **Validate every component on aarch64**: Docling, Piper, whisper, SDXL, FlagEmbedding, OpenCV, NeMo Guardrails | All aliases answer; memory budget measured against §5; aarch64 gap list closed or worked around | Platform + Arabic test 12–23 Oct |
+| **1. Platform** ✅ | vLLM workhorse (FP8), embed/rerank service, LiteLLM aliases, guardrails, mock-bank, `nbe_core`, preflight/gpu scripts, model downloads. **Validate every component on aarch64**: Docling, Piper, whisper, SDXL, FlagEmbedding, OpenCV, NeMo Guardrails | All aliases answer; memory budget measured against §5; aarch64 gap list closed or worked around | Platform + Arabic test 12–23 Oct |
 | **2. Arabic gate** | Run `eval/arabic_gate`, pick models, write `models.lock` | Stack frozen and documented | **Model stack frozen 16 Oct** |
 | **3. Synthetic data** | All generators: D1 docs + forgeries, D2 procedures v1/v2, D3 customers/txns/merchants, D4 bank + KB, D5 contracts + templates, D6 doc corpus, D7 500 complaints | `make data && make ingest` repeatable and deterministic (seeded) | Synthetic data 12–30 Oct |
 | **4. Wave 1** | D2 → D5 (reuses D2 RAG) → D7 → D6 | Each passes its §4 acceptance criteria and `make verify` | Wave 1 19–30 Oct |
@@ -265,8 +282,23 @@ The brief's calendar (slide 14) is the external commitment. The build phases bel
 | 2 | Port | `:8200` (default) |
 | 3 | Galene auto-start | **Done 6 Oct:** all 33 `/etc/galene` containers set to `restart=no`. Original policies saved in `ops/galene-restart-policies.txt` (git-ignored). Undo: `while read c p; do docker update --restart=$p $c; done < ops/galene-restart-policies.txt`. `gemma4-gb10-vllm` (restart `always`) is unchanged; `make preflight` stops it during NBE runs. |
 | 4 | Branding | **Decided: NBE theme.** Logo in `brand/nbe-logo.png` (transparent PNG supplied by user). Colours sampled from nbe.com.eg in `brand/theme.css`: primary green `#006643`, accent orange `#ffa100`, logo gradient `#f9c40e → #fd6805`, page background `#f8f8f8`, white header with orange rule, pill-shaped green buttons. Fonts bundled locally (Cairo) because the demo is offline. A small "Powered by Dell Pro Max with GB10" footer mark stays for the hardware story. |
-| 5 | Model downloads (~45 GB) | Pending confirmation; needed from Phase 1 |
-| 6 | Second GB10 | Design for one unit; `hero` alias can point at a second unit |
+| 5 | Model downloads | **Done 7 Oct** (`make models`): Gemma 4 31B NVFP4, bge-m3, bge-reranker-v2-m3, SDXL base fp16, Piper voices, and the 3 gpt-oss-120b shards that were missing on disk |
+| 6 | Second GB10 | **Not needed** (measured, §5). The `hero` alias can still point at a second unit |
 | 7 | NBE inputs (slide 17) | Pending from NBE: demo date and audience, use-case ranking, masked vs synthetic data, language priority, Dataiku version/host, mock APIs, output validators |
 
 **Repo visibility.** The source deck is marked *Commercial in Confidence*, and this repo carries the plan derived from it plus NBE's logo. Make the repo private before pushing, or keep NBE-specific material out of it.
+
+---
+
+## 11. Phase 1 findings (7 Oct)
+
+Things the plan did not anticipate, found by running every component on this GB10:
+
+1. **cuDNN convolutions are wrong on GB10 in `nvcr.io/nvidia/vllm:26.05`.** SDXL produced pure noise; a VAE encode/decode round trip had error 0.65 with cuDNN and 0.004 without. SDXL runs with `torch.backends.cudnn.enabled = False` (11 s per banner). Whisper and Gemma vision outputs were checked and are correct. Any new GPU service that uses convolutions must be checked the same way.
+2. **Docling scrambles Arabic from PDF text layers** (reversed digits "٦٢٠٢", wrong line-wrap order, reversed table cells). It is exact on source formats (DOCX/HTML/MD). Rule: our synthetic corpora are authored in source formats; uploaded Arabic PDFs (`rtl_pdf: true` from `/convert`) are rendered with `/render` and transcribed by the `vision` alias (~6 s per page, verified exact). D5's live-upload target of 30 pages in 90 s therefore needs parallel page transcription, or pre-ingested documents.
+3. **Embeddings are dense only.** bge-m3 and the reranker are served by vLLM (pooling runner), which avoids a separate PyTorch image but does not expose bge-m3's sparse vectors. Retrieval is dense search + bge-reranker-v2-m3, which ranked correctly in tests. Revisit only if D2's golden set shows retrieval misses.
+4. **vLLM's CUDA-graph memory estimate varies between runs** (3.4 → 7.3 GiB for gpt-oss), which intermittently left no KV cache. Fixed by capping graph capture at 16 tokens and batched tokens at 4096 for the hero model.
+5. **LiteLLM now refuses to start without a master key.** `make .env` generates `LITELLM_MASTER_KEY`; demos pass it automatically.
+6. **Piper Arabic is understandable but not perfect without diacritics** (Whisper heard "الاعتمانية" for "الائتمانية"). For D4, add automatic diacritisation before TTS or compare with MMS-TTS Arabic (already on disk) in Wave 2.
+7. **gpt-oss-120b on disk was incomplete** (3 of 15 shards missing); `make models` now fetches anything missing.
+8. **Guardrails:** NeMo self-check rails on the workhorse passed 8/8 cases (English and Egyptian-dialect jailbreaks blocked, angry complaints allowed, leaked card number and PIN blocked) in 120–600 ms.

@@ -17,6 +17,11 @@ x-demo-api: &demo-api
   environment: &demo-env
     POSTGRES_HOST: nbe-postgres
     QDRANT_URL: http://nbe-qdrant:6333
+    LLM_GATEWAY_URL: http://nbe-llmgw:4000/v1
+    RERANK_URL: http://nbe-rerank:8000
+    MOCKBANK_URL: http://nbe-mockbank:8000
+    GUARDRAILS_URL: http://nbe-guardrails:8000
+    DOCLING_URL: http://nbe-docling:8000
     HF_HUB_OFFLINE: "1"
   networks: [nbe-core]
   depends_on:
@@ -28,6 +33,31 @@ x-demo-api: &demo-api
     timeout: 5s
     retries: 5
     start_period: 10s
+
+x-vllm: &vllm
+  image: nvcr.io/nvidia/vllm:26.05-py3
+  restart: "no"          # model servers never auto-start at boot (shared GB10, see PLAN.md §6)
+  ipc: host
+  shm_size: 16g
+  networks: [nbe-core]
+  environment:
+    HF_HUB_OFFLINE: "1"
+    TRANSFORMERS_OFFLINE: "1"
+    VLLM_NO_USAGE_STATS: "1"
+    DO_NOT_TRACK: "1"
+  volumes:
+    - ${MODELS_DIR:-/opt/models}:/models:ro
+    - nbe-vllm-cache:/root/.cache
+  deploy:
+    resources:
+      reservations:
+        devices: [{ driver: nvidia, count: all, capabilities: [gpu] }]
+  healthcheck:
+    test: ["CMD", "curl", "-fsS", "http://localhost:8000/health"]
+    interval: 15s
+    timeout: 5s
+    retries: 80
+    start_period: 900s
 
 services:
   # ---------------------------------------------------------------- edge
@@ -85,6 +115,240 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+
+  # ---------------------------------------------------------------- model serving (PLAN.md §5)
+  # Started one after another (depends_on healthy) because vLLM sizes its KV cache from the
+  # memory that is free at start time. --gpu-memory-utilization is a fraction of the 128 GB pool.
+  nbe-llm:
+    <<: *vllm
+    container_name: nbe-llm
+    profiles: [core]
+    command:
+      - vllm
+      - serve
+      - /models/gemma-4-26B-A4B-it
+      - --served-model-name=gemma-4-26b-a4b
+      - --quantization=fp8
+      - --max-model-len=32768
+      - --max-num-seqs=4
+      - --max-num-batched-tokens=8192
+      - --gpu-memory-utilization=${NBE_LLM_GPU_UTIL:-0.30}
+      - --enable-auto-tool-choice
+      - --tool-call-parser=gemma4
+      - --limit-mm-per-prompt={"image":4}
+      - --host=0.0.0.0
+      - --port=8000
+
+
+  nbe-embed:
+    <<: *vllm
+    container_name: nbe-embed
+    profiles: [core]
+    depends_on: { nbe-llm: { condition: service_healthy } }
+    command:
+      - vllm
+      - serve
+      - /models/bge-m3
+      - --served-model-name=bge-m3
+      - --runner=pooling
+      - --max-model-len=8192
+      - --gpu-memory-utilization=${NBE_EMBED_GPU_UTIL:-0.05}
+      - --host=0.0.0.0
+      - --port=8000
+
+  nbe-rerank:
+    <<: *vllm
+    container_name: nbe-rerank
+    profiles: [core]
+    depends_on: { nbe-embed: { condition: service_healthy } }
+    command:
+      - vllm
+      - serve
+      - /models/bge-reranker-v2-m3
+      - --served-model-name=bge-reranker-v2-m3
+      - --runner=pooling
+      - --max-model-len=8192
+      - --gpu-memory-utilization=${NBE_RERANK_GPU_UTIL:-0.05}
+      - --host=0.0.0.0
+      - --port=8000
+
+
+
+  nbe-llm-q:
+    <<: *vllm
+    container_name: nbe-llm-q
+    profiles: [quality]
+    command:
+      - vllm
+      - serve
+      - /models/Gemma-4-31B-IT-NVFP4
+      - --served-model-name=gemma-4-31b
+      - --kv-cache-dtype=fp8
+      - --max-model-len=16384
+      - --max-num-seqs=2
+      - --max-num-batched-tokens=8192
+      - --gpu-memory-utilization=${NBE_LLMQ_GPU_UTIL:-0.33}
+      - --limit-mm-per-prompt={"image":0}
+      - --host=0.0.0.0
+      - --port=8000
+
+
+
+  nbe-hero:
+    <<: *vllm
+    container_name: nbe-hero
+    profiles: [hero]     # exclusive: `make hero` stops quality, voice and image first (PLAN.md §5)
+    command:
+      - vllm
+      - serve
+      - /models/gpt-oss-120b
+      - --served-model-name=gpt-oss-120b
+      - --max-model-len=16384
+      - --max-num-seqs=2
+      - --max-num-batched-tokens=4096
+      # vLLM overrides gpt-oss graph capture to 1024 tokens and its graph-memory estimate swung
+      # 3.4 -> 7.3 GiB between runs, leaving no KV cache. Single-user demo: small graphs are enough.
+      - '--compilation-config={"max_cudagraph_capture_size": 16}'
+      - --gpu-memory-utilization=${NBE_HERO_GPU_UTIL:-0.575}
+      - --enable-auto-tool-choice
+      - --tool-call-parser=openai
+      - --reasoning-parser=openai_gptoss
+      - --host=0.0.0.0
+      - --port=8000
+
+  # ---------------------------------------------------------------- speech + image (on demand)
+  nbe-asr:
+    build:
+      context: .
+      dockerfile: docker/gpu-python/Dockerfile
+      args: { SERVICE: asr }
+    image: nbe-asr:latest
+    container_name: nbe-asr
+    profiles: [voice]
+    restart: "no"
+    environment:
+      HF_HOME: /hf
+    volumes:
+      - ${HF_CACHE_DIR:-/opt/huggingface-cache}:/hf:ro
+    networks: [nbe-core]
+    deploy:
+      resources:
+        reservations:
+          devices: [{ driver: nvidia, count: all, capabilities: [gpu] }]
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+      start_period: 120s
+
+  nbe-tts:
+    build:
+      context: .
+      dockerfile: docker/tts/Dockerfile
+    image: nbe-tts:latest
+    container_name: nbe-tts
+    profiles: [voice]
+    restart: "no"
+    volumes:
+      - ${MODELS_DIR:-/opt/models}/piper-voices:/models/piper-voices:ro
+    networks: [nbe-core]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  nbe-sdxl:
+    build:
+      context: .
+      dockerfile: docker/gpu-python/Dockerfile
+      args: { SERVICE: sdxl }
+    image: nbe-sdxl:latest
+    container_name: nbe-sdxl
+    profiles: [image]
+    restart: "no"
+    volumes:
+      - ${MODELS_DIR:-/opt/models}/sdxl-base-1.0:/models/sdxl-base-1.0:ro
+    networks: [nbe-core]
+    deploy:
+      resources:
+        reservations:
+          devices: [{ driver: nvidia, count: all, capabilities: [gpu] }]
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+      start_period: 180s
+
+  # ---------------------------------------------------------------- model gateway
+  nbe-llmgw:
+    image: ghcr.io/berriai/litellm:main-stable
+    container_name: nbe-llmgw
+    restart: unless-stopped
+    command: ["--config", "/app/config.yaml", "--port", "4000"]
+    environment:
+      LITELLM_LOCAL_MODEL_COST_MAP: "True"    # offline: do not fetch the cost map at start
+      LITELLM_TELEMETRY: "False"
+      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:?set LITELLM_MASTER_KEY in .env}
+    volumes:
+      - ./config/litellm.yaml:/app/config.yaml:ro
+    networks: [nbe-core]
+    healthcheck:
+      test: ["CMD-SHELL", "python3 -c \"import urllib.request; urllib.request.urlopen('http://localhost:4000/health/liveliness')\""]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # ---------------------------------------------------------------- shared services
+  nbe-mockbank:
+    <<: *demo-api
+    build:
+      context: .
+      dockerfile: docker/demo-api/Dockerfile
+      args: { SERVICE: mockbank }
+    image: nbe-mockbank:latest
+    container_name: nbe-mockbank
+    environment: { <<: *demo-env, DEMO_ID: mockbank }
+
+  nbe-guardrails:
+    build:
+      context: .
+      dockerfile: docker/guardrails/Dockerfile
+    image: nbe-guardrails:latest
+    container_name: nbe-guardrails
+    restart: unless-stopped
+    environment:
+      OPENAI_API_KEY: ${LITELLM_MASTER_KEY}
+      HF_HUB_OFFLINE: "1"
+    volumes:
+      - ./config/guardrails:/config:ro
+    networks: [nbe-core]
+    depends_on: [nbe-llmgw]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  nbe-docling:
+    build:
+      context: .
+      dockerfile: docker/docling/Dockerfile
+    image: nbe-docling:latest
+    container_name: nbe-docling
+    restart: unless-stopped
+    networks: [nbe-core]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
 
   # ---------------------------------------------------------------- demo APIs (one per use case)
   nbe-d1:
@@ -167,3 +431,4 @@ networks:
 volumes:
   nbe-postgres:
   nbe-qdrant:
+  nbe-vllm-cache:
