@@ -1,0 +1,42 @@
+# NBE gateway: the single entry point on :80 (published as NBE_PORT).
+# /api/dN/* -> nbe-dN:8000 (prefix stripped), everything else -> portal.
+{
+	admin off
+	auto_https off
+}
+
+:80 {
+	encode gzip
+
+	handle_path /api/d1/* {
+		reverse_proxy nbe-d1:8000
+	}
+
+	handle_path /api/d2/* {
+		reverse_proxy nbe-d2:8000
+	}
+
+	handle_path /api/d3/* {
+		reverse_proxy nbe-d3:8000
+	}
+
+	handle_path /api/d4/* {
+		reverse_proxy nbe-d4:8000
+	}
+
+	handle_path /api/d5/* {
+		reverse_proxy nbe-d5:8000
+	}
+
+	handle_path /api/d6/* {
+		reverse_proxy nbe-d6:8000
+	}
+
+	handle_path /api/d7/* {
+		reverse_proxy nbe-d7:8000
+	}
+
+	handle {
+		reverse_proxy nbe-portal:80
+	}
+}

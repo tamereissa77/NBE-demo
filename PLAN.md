@@ -3,7 +3,7 @@
 **Source brief:** *NBE AI demos on GB10*, Dell Technologies, draft of 6 Oct 2026 (17 slides)
 **Target:** seven live demos (D1 to D7), one per NBE use case, on one Dell Pro Max with GB10, fully offline and fully containerised
 **Repo:** https://github.com/tamereissa77/NBE-demo · **Local:** `~/NBE-demo`
-**Status:** plan approved 6 Oct; branding and decisions in §10. Implementation starts with Phase 0.
+**Status:** Phase 0 (scaffold) done 6 Oct, verified with `make verify`. Phase 1 (platform) next. Decisions in §10.
 
 ---
 
@@ -231,7 +231,7 @@ The brief's calendar (slide 14) is the external commitment. The build phases bel
 
 | Phase | Scope | Exit criteria | Brief milestone |
 |---|---|---|---|
-| **0. Scaffold** | Repo layout, compose skeleton, Makefile, `.env.example`, Caddy, Postgres, Qdrant, portal shell with 7 empty screens, CI-free smoke test | `make up` brings up the shell, portal reachable on :8200 | Kickoff 12 Oct |
+| **0. Scaffold** ✅ | Repo layout, compose skeleton, Makefile, `.env.example`, Caddy, Postgres, Qdrant, portal shell with 7 empty screens, CI-free smoke test | `make up` brings up the shell, portal reachable on :8200 | Kickoff 12 Oct |
 | **1. Platform** | vLLM workhorse (FP8), embed/rerank service, LiteLLM aliases, guardrails, mock-bank, `nbe_core`, preflight/gpu scripts, model downloads. **Validate every component on aarch64**: Docling, Piper, whisper, SDXL, FlagEmbedding, OpenCV, NeMo Guardrails | All aliases answer; memory budget measured against §5; aarch64 gap list closed or worked around | Platform + Arabic test 12–23 Oct |
 | **2. Arabic gate** | Run `eval/arabic_gate`, pick models, write `models.lock` | Stack frozen and documented | **Model stack frozen 16 Oct** |
 | **3. Synthetic data** | All generators: D1 docs + forgeries, D2 procedures v1/v2, D3 customers/txns/merchants, D4 bank + KB, D5 contracts + templates, D6 doc corpus, D7 500 complaints | `make data && make ingest` repeatable and deterministic (seeded) | Synthetic data 12–30 Oct |

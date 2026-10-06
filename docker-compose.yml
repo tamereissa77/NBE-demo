@@ -1,0 +1,169 @@
+# NBE AI demos on GB10. See PLAN.md for the full architecture.
+#
+# Networks:
+#   nbe-edge  - the only network with a published port (gateway :${NBE_PORT})
+#   nbe-core  - internal: true, no route out. Every app, data and model service lives here,
+#               which is what makes the demo offline by construction.
+#
+# Model servers (vLLM, ASR, TTS, SDXL) are added in Phase 1 with restart: "no" and
+# compose profiles (core / quality / voice / image / hero).
+
+name: nbe
+
+x-demo-api: &demo-api
+  image: nbe-demo-api:latest
+  restart: unless-stopped
+  env_file: .env
+  environment: &demo-env
+    POSTGRES_HOST: nbe-postgres
+    QDRANT_URL: http://nbe-qdrant:6333
+    HF_HUB_OFFLINE: "1"
+  networks: [nbe-core]
+  depends_on:
+    nbe-postgres:
+      condition: service_healthy
+  healthcheck:
+    test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+    interval: 15s
+    timeout: 5s
+    retries: 5
+    start_period: 10s
+
+services:
+  # ---------------------------------------------------------------- edge
+  nbe-gateway:
+    image: caddy:2.11-alpine
+    container_name: nbe-gateway
+    restart: unless-stopped
+    ports:
+      - "${NBE_PORT:-8200}:80"
+    volumes:
+      - ./config/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+    networks: [nbe-edge, nbe-core]
+    depends_on: [nbe-portal]
+
+  nbe-portal:
+    build:
+      context: .
+      dockerfile: docker/portal/Dockerfile
+    image: nbe-portal:latest
+    container_name: nbe-portal
+    restart: unless-stopped
+    networks: [nbe-core]
+
+  # ---------------------------------------------------------------- shared data
+  nbe-postgres:
+    image: postgres:16-alpine
+    container_name: nbe-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: nbe
+      POSTGRES_USER: nbe
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      TZ: ${TZ:-Africa/Cairo}
+    volumes:
+      - nbe-postgres:/var/lib/postgresql/data
+      - ./config/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks: [nbe-core]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nbe -d nbe"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  nbe-qdrant:
+    image: qdrant/qdrant:latest
+    container_name: nbe-qdrant
+    restart: unless-stopped
+    environment:
+      QDRANT__TELEMETRY_DISABLED: "true"
+    volumes:
+      - nbe-qdrant:/qdrant/storage
+    networks: [nbe-core]
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c ':> /dev/tcp/127.0.0.1/6333' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # ---------------------------------------------------------------- demo APIs (one per use case)
+  nbe-d1:
+    <<: *demo-api
+    build:
+      context: .
+      dockerfile: docker/demo-api/Dockerfile
+      args: { SERVICE: d1_docverify }
+    image: nbe-d1:latest
+    container_name: nbe-d1
+    environment: { <<: *demo-env, DEMO_ID: d1 }
+
+  nbe-d2:
+    <<: *demo-api
+    build:
+      context: .
+      dockerfile: docker/demo-api/Dockerfile
+      args: { SERVICE: d2_chatdoc }
+    image: nbe-d2:latest
+    container_name: nbe-d2
+    environment: { <<: *demo-env, DEMO_ID: d2 }
+
+  nbe-d3:
+    <<: *demo-api
+    build:
+      context: .
+      dockerfile: docker/demo-api/Dockerfile
+      args: { SERVICE: d3_campaigns }
+    image: nbe-d3:latest
+    container_name: nbe-d3
+    environment: { <<: *demo-env, DEMO_ID: d3 }
+
+  nbe-d4:
+    <<: *demo-api
+    build:
+      context: .
+      dockerfile: docker/demo-api/Dockerfile
+      args: { SERVICE: d4_agent }
+    image: nbe-d4:latest
+    container_name: nbe-d4
+    environment: { <<: *demo-env, DEMO_ID: d4 }
+
+  nbe-d5:
+    <<: *demo-api
+    build:
+      context: .
+      dockerfile: docker/demo-api/Dockerfile
+      args: { SERVICE: d5_legal }
+    image: nbe-d5:latest
+    container_name: nbe-d5
+    environment: { <<: *demo-env, DEMO_ID: d5 }
+
+  nbe-d6:
+    <<: *demo-api
+    build:
+      context: .
+      dockerfile: docker/demo-api/Dockerfile
+      args: { SERVICE: d6_assistant }
+    image: nbe-d6:latest
+    container_name: nbe-d6
+    environment: { <<: *demo-env, DEMO_ID: d6 }
+
+  nbe-d7:
+    <<: *demo-api
+    build:
+      context: .
+      dockerfile: docker/demo-api/Dockerfile
+      args: { SERVICE: d7_complaints }
+    image: nbe-d7:latest
+    container_name: nbe-d7
+    environment: { <<: *demo-env, DEMO_ID: d7 }
+
+networks:
+  nbe-edge:
+    name: nbe-edge
+  nbe-core:
+    name: nbe-core
+    internal: true
+
+volumes:
+  nbe-postgres:
+  nbe-qdrant:

@@ -1,0 +1,30 @@
+@import "tailwindcss";
+@import "@fontsource-variable/cairo";
+@import "../../../brand/theme.css";
+
+/* Map the NBE brand tokens (brand/theme.css) into Tailwind utilities: bg-nbe-green, text-nbe-orange, ... */
+@theme inline {
+  --color-nbe-green: var(--nbe-green);
+  --color-nbe-green-dark: var(--nbe-green-dark);
+  --color-nbe-orange: var(--nbe-orange);
+  --color-nbe-gold: var(--nbe-gold);
+  --color-nbe-orange-deep: var(--nbe-orange-deep);
+  --color-nbe-bg: var(--nbe-bg);
+  --color-nbe-text: var(--nbe-text);
+  --color-nbe-strong: var(--nbe-text-strong);
+  --color-nbe-border: var(--nbe-border);
+  --color-status-review: var(--status-review);
+  --color-status-stop: var(--status-stop);
+  --font-sans: "Cairo Variable", var(--font-ui);
+}
+
+html { background: var(--nbe-bg); }
+body {
+  margin: 0;
+  background: var(--nbe-bg);
+  color: var(--nbe-text);
+  font-family: "Cairo Variable", var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+}
+
+.nbe-rule { height: 4px; background: var(--nbe-gradient); }
