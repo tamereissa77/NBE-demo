@@ -1,0 +1,10 @@
+.env
+models/
+data/generated/
+recordings/
+*.safetensors
+*.gguf
+__pycache__/
+node_modules/
+dist/
+.venv/
