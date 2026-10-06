@@ -3,7 +3,7 @@
 **Source brief:** *NBE AI demos on GB10*, Dell Technologies, draft of 6 Oct 2026 (17 slides)
 **Target:** seven live demos (D1 to D7), one per NBE use case, on one Dell Pro Max with GB10, fully offline and fully containerised
 **Repo:** https://github.com/tamereissa77/NBE-demo · **Local:** `~/NBE-demo`
-**Status:** Phase 0 (scaffold) and Phase 1 (platform) done 6–7 Oct, both verified with `make verify`. Phase 2 (Arabic gate) next. Measured budget in §5, Phase 1 findings in §11, decisions in §10.
+**Status:** Phases 0–1 done and verified (6–7 Oct). Phase 2 (Arabic gate) has run on all five models with LLM-judge pre-scores (§12); **blind human scoring at `/eval` is the remaining step** before `make models-lock` freezes the stack (target 16 Oct).
 
 ---
 
@@ -250,7 +250,7 @@ The brief's calendar (slide 14) is the external commitment. The build phases bel
 |---|---|---|---|
 | **0. Scaffold** ✅ | Repo layout, compose skeleton, Makefile, `.env.example`, Caddy, Postgres, Qdrant, portal shell with 7 empty screens, CI-free smoke test | `make up` brings up the shell, portal reachable on :8200 | Kickoff 12 Oct |
 | **1. Platform** ✅ | vLLM workhorse (FP8), embed/rerank service, LiteLLM aliases, guardrails, mock-bank, `nbe_core`, preflight/gpu scripts, model downloads. **Validate every component on aarch64**: Docling, Piper, whisper, SDXL, FlagEmbedding, OpenCV, NeMo Guardrails | All aliases answer; memory budget measured against §5; aarch64 gap list closed or worked around | Platform + Arabic test 12–23 Oct |
-| **2. Arabic gate** | Run `eval/arabic_gate`, pick models, write `models.lock` | Stack frozen and documented | **Model stack frozen 16 Oct** |
+| **2. Arabic gate** 🟡 run; awaiting human scores | Run `eval/arabic_gate`, pick models, write `models.lock` | Stack frozen and documented | **Model stack frozen 16 Oct** |
 | **3. Synthetic data** | All generators: D1 docs + forgeries, D2 procedures v1/v2, D3 customers/txns/merchants, D4 bank + KB, D5 contracts + templates, D6 doc corpus, D7 500 complaints | `make data && make ingest` repeatable and deterministic (seeded) | Synthetic data 12–30 Oct |
 | **4. Wave 1** | D2 → D5 (reuses D2 RAG) → D7 → D6 | Each passes its §4 acceptance criteria and `make verify` | Wave 1 19–30 Oct |
 | **5. Wave 2** | D1 → D3 → D4 (voice last, most risk) | Same | Wave 2 26 Oct–13 Nov |
@@ -302,3 +302,33 @@ Things the plan did not anticipate, found by running every component on this GB1
 6. **Piper Arabic is understandable but not perfect without diacritics** (Whisper heard "الاعتمانية" for "الائتمانية"). For D4, add automatic diacritisation before TTS or compare with MMS-TTS Arabic (already on disk) in Wave 2.
 7. **gpt-oss-120b on disk was incomplete** (3 of 15 shards missing); `make models` now fetches anything missing.
 8. **Guardrails:** NeMo self-check rails on the workhorse passed 8/8 cases (English and Egyptian-dialect jailbreaks blocked, angry complaints allowed, leaked card number and PIN blocked) in 120–600 ms.
+
+---
+
+## 12. Arabic gate: provisional result (7 Oct, LLM judge only)
+
+`make arabic-gate` ran the 30 prompts in `eval/arabic_gate/prompts.yaml` (15 MSA, 10 Egyptian, 5 mixed; all seven demos) on five models, temperature 0, one GB10. gpt-oss-120b pre-scored every answer (correctness / Arabic quality / format, 1–5). **Human blind scoring at `/eval` decides the result;** the guide is `docs/arabic_gate.md`.
+
+| Model | tok/s | Mean latency | Auto-checks | Judge C / A / F | Judge mean | MSA / Egyptian / mixed | D5 legal |
+|---|---|---|---|---|---|---|---|
+| **Gemma 4 26B-A4B (FP8)**, workhorse | **40.0** | 5.4 s | 12/13 | 4.70 / 4.97 / 4.50 | 4.72 | 4.71 / 4.63 / 4.93 | 4.44 |
+| Gemma 4 31B (NVFP4), quality | 10.3 | 26.1 s | 12/13 | 4.63 / 4.90 / 4.03 | 4.52 | 4.67 / 4.20 / 4.73 | 4.56 |
+| gpt-oss-120b, hero (and judge) | 37.2 | 7.3 s | **10/13** | 4.80 / 5.00 / 4.87 | 4.89 | 4.93 / 4.77 / 5.00 | 4.78 |
+| Qwen2.5-14B-Instruct, reference | 8.6 | 18.4 s | 12/13 | 4.43 / 4.77 / 4.50 | 4.57 | 4.71 / 4.27 / 4.73 | 4.22 |
+| Mistral-7B-Instruct v0.3, NBE's list | 15.8 | 24.8 s | 8/13 | 3.20 / 3.23 / 3.67 | 3.37 | 3.71 / 3.17 / 2.73 | 3.22 |
+
+**Provisional recommendation (by the rule in `services/eval/app/main.py`, fixed before scoring):**
+- **Workhorse: keep Gemma 4 26B-A4B.** Best of the models fast enough for interactive demos, strongest in Egyptian dialect among them, and the best tool caller.
+- **Drop Gemma 4 31B** (quality): only +0.12 over the workhorse on the D5 legal items against the +0.5 threshold, at a quarter of the speed. Dropping it frees ~40 GB.
+- **Keep gpt-oss-120b as the hero model** for D6 code explanation and reasoning, but **not as an agent**: it failed all three tool-calling prompts, describing the action ("I'll transfer you") without calling the tool. It may be vLLM's gpt-oss tool parser rather than the model; recheck before using it in any agent flow.
+- **Mistral-7B (NBE's list) is not suitable** for Arabic banking use: weak Arabic, refused to help on a lost card, and told an angry customer to "stop harassing" (egy-04).
+
+**Caveats.**
+- The judge rates Arabic quality near the ceiling for every model except Mistral, including Qwen answers that a human reader would mark down (broken dialect verb forms, a hallucinated hotline number in egy-01).
+- The judge also scores its own answers, so gpt-oss-120b's top row is not independent.
+- Both are why human scores lead.
+
+**Findings that change the demo builds (not only the model choice):**
+1. **Tool calls must be enforced by the agent loop.** On egy-02 (dialect: "block my card ending 4821") the Gemma models and gpt-oss all *said* they would send the OTP but did not call `send_otp`. D4 will use `tool_choice` when an action is pending, plus a check that rejects "I will do X" replies with no call.
+2. **Customer-facing drafts need a "reply text only" instruction.** Both Gemma models wrap replies and SMS copy in a preamble and offer several alternatives, which costs format points (msa-07, egy-04, egy-09). D3 and D7 prompts will ask for exactly one output with no preamble, and validate length.
+3. **Judge reliability:** the first judge prompt over-applied a "JSON only" example to every task (fixed: only constraints the task states), and gpt-oss sometimes loops on whitespace inside the JSON schema (fixed: one retry at temperature 0.7, and old scores are cleared before a re-judge).

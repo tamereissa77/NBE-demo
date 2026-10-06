@@ -6,7 +6,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 MODE=${MODE:-show}
-C="docker compose --profile core --profile quality --profile voice --profile image --profile hero"
+C="docker compose --profile core --profile quality --profile voice --profile image --profile hero --profile eval"
 
 step() { printf '\n== %s\n' "$*"; }
 

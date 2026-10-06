@@ -14,6 +14,8 @@ dl BAAI/bge-m3                               bge-m3 --exclude "onnx/*" --exclude
 dl BAAI/bge-reranker-v2-m3                   bge-reranker-v2-m3
 dl stabilityai/stable-diffusion-xl-base-1.0  sdxl-base-1.0 --include "*.json" --include "*.txt" --include "*fp16.safetensors"
 dl openai/gpt-oss-120b                      gpt-oss-120b --include "model-*.safetensors" --include "*.json" --include "chat_template.jinja"
+# Arabic-gate reference from the NBE model list (PLAN.md §5); Llama-3 is gated for this account. No apostrophes in this block: it is single-quoted.
+dl mistralai/Mistral-7B-Instruct-v0.3         Mistral-7B-Instruct-v0.3 --include "model-*.safetensors" --include "*.json" --include "tokenizer*"
 dl rhasspy/piper-voices                      piper-voices --include "ar/ar_JO/kareem/medium/*" --include "en/en_US/lessac/medium/*" --include "voices.json"
-echo "=== all downloads complete"; du -sh /models/Gemma-4-31B-IT-NVFP4 /models/bge-m3 /models/bge-reranker-v2-m3 /models/sdxl-base-1.0 /models/piper-voices /models/gpt-oss-120b
+echo "=== all downloads complete"; du -sh /models/Gemma-4-31B-IT-NVFP4 /models/bge-m3 /models/bge-reranker-v2-m3 /models/sdxl-base-1.0 /models/piper-voices /models/gpt-oss-120b /models/Mistral-7B-Instruct-v0.3
 '

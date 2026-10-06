@@ -10,7 +10,7 @@ See [PLAN.md](PLAN.md) for the architecture, per-demo specs, model and memory bu
 |---|---|
 | 0. Scaffold | **Done.** Gateway, NBE-themed portal (EN/AR, RTL), Postgres, Qdrant, seven demo API services with health checks, `make verify` |
 | 1. Platform | **Done.** Gemma 4 26B (workhorse + vision), Gemma 4 31B (quality), gpt-oss-120b (hero, on demand), bge-m3 + reranker, LiteLLM gateway, NeMo guardrails, mock bank, Docling, Whisper, Piper, SDXL. Measured budget in PLAN.md §5 |
-| 2. Arabic gate | Next |
+| 2. Arabic gate | **Run on 5 models; awaiting blind human scores** at `/eval` (guide: `docs/arabic_gate.md`). Provisional result in PLAN.md §12 |
 | 3–7 | See PLAN.md §8 |
 
 ## Quick start

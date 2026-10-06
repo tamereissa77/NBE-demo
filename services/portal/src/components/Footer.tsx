@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useI18n } from "../i18n";
 
 export function Footer() {
@@ -12,7 +13,12 @@ export function Footer() {
           <span aria-hidden className="hidden sm:inline">·</span>
           <span>{t.synthetic}</span>
         </div>
-        <div className="font-semibold text-nbe-gold">{t.poweredBy}</div>
+        <div className="flex items-center gap-4">
+          <Link to="/eval" className="opacity-70 hover:opacity-100 hover:underline">
+            Arabic gate
+          </Link>
+          <span className="font-semibold text-nbe-gold">{t.poweredBy}</span>
+        </div>
       </div>
     </footer>
   );

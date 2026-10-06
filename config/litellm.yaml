@@ -11,6 +11,11 @@ model_list:
     litellm_params: { model: hosted_vllm/gpt-oss-120b, api_base: "http://nbe-hero:8000/v1", api_key: none }
   - model_name: embed                     # bge-m3, 1024-dim, multilingual
     litellm_params: { model: hosted_vllm/bge-m3, api_base: "http://nbe-embed:8000/v1", api_key: none }
+  # Arabic gate references (profile: eval), PLAN.md §5. Mistral-7B is on NBE's requested-model list.
+  - model_name: ref-qwen14b
+    litellm_params: { model: hosted_vllm/qwen2.5-14b, api_base: "http://nbe-ref-qwen:8000/v1", api_key: none }
+  - model_name: ref-mistral7b
+    litellm_params: { model: hosted_vllm/mistral-7b, api_base: "http://nbe-ref-mistral:8000/v1", api_key: none }
 
 router_settings:
   # If an on-demand model is down, answer with the workhorse rather than fail (UI shows the model used)

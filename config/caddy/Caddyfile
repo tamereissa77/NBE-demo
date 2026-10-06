@@ -36,6 +36,10 @@
 		reverse_proxy nbe-d7:8000
 	}
 
+	handle_path /api/eval/* {
+		reverse_proxy nbe-eval:8000
+	}
+
 	handle {
 		reverse_proxy nbe-portal:80
 	}

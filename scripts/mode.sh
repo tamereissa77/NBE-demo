@@ -3,7 +3,7 @@
 #   mode.sh hero | hero-off | quality-on | quality-off | voice-on | voice-off | image-on | image-off | show
 set -euo pipefail
 cd "$(dirname "$0")/.."
-C="docker compose --profile core --profile quality --profile voice --profile image --profile hero"
+C="docker compose --profile core --profile quality --profile voice --profile image --profile hero --profile eval"
 avail() { free -g | awk '/^Mem:/ {print $7}'; }
 need() {  # need <GB> <what>
   if [ "$(avail)" -lt "$1" ]; then

@@ -4,13 +4,13 @@ SHELL := /bin/bash
 
 COMPOSE := docker compose
 # Management commands see every profile, so on-demand model servers are included in ps/stop/down/logs
-COMPOSE_ALL := docker compose --profile core --profile quality --profile voice --profile image --profile hero
+COMPOSE_ALL := docker compose --profile core --profile quality --profile voice --profile image --profile hero --profile eval
 -include .env
 export NBE_PORT
 
 .PHONY: help up down start stop restart build rebuild ps status logs clean \
         preflight gpu verify platform-check warm models d1 d2 d3 d4 d5 d6 d7 \
-        hero hero-off quality-on quality-off voice-on voice-off image-on image-off
+        arabic-gate models-lock hero hero-off quality-on quality-off voice-on voice-off image-on image-off
 
 help:
 	@echo "NBE AI demos on GB10"
@@ -32,6 +32,8 @@ help:
 	@echo "  make platform-check  exercise every shared service through nbe_core"
 	@echo "  make warm          first request to every model, so nothing is cold on stage"
 	@echo ""
+	@echo "  make arabic-gate   run the week-1 Arabic gate on every candidate model (~40 min), then score at /eval"
+	@echo "  make models-lock   freeze the gate result into config/models.lock (after human scoring)"
 	@echo "  make hero          swap quality/voice/image out, gpt-oss-120b in (D6 hero moment)"
 	@echo "  make hero-off      swap back to the show configuration"
 	@echo "  make quality-on|off  voice-on|off  image-on|off   switch on-demand models"
@@ -97,6 +99,12 @@ verify:
 platform-check warm:
 	@docker run --rm --network nbe-core --env-file .env -e LLM_GATEWAY_URL=http://nbe-llmgw:4000/v1 \
 	  -v $(CURDIR)/tests:/tests:ro nbe-d1:latest python /tests/platform_check.py
+
+arabic-gate:
+	@mkdir -p ops && set -o pipefail && scripts/arabic_gate.sh 2>&1 | tee ops/arabic_gate.log
+
+models-lock:
+	@docker exec nbe-eval python -m app.gate lock > config/models.lock && cat config/models.lock
 
 hero hero-off quality-on quality-off voice-on voice-off image-on image-off:
 	@scripts/mode.sh $@

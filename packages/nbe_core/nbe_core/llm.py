@@ -67,11 +67,23 @@ async def chat(messages: list[dict], alias: str = "workhorse", *, tools: list[di
                      tool_calls=msg.get("tool_calls") or [])
 
 
-async def chat_json(messages: list[dict], schema: dict, alias: str = "workhorse", **kw) -> tuple[dict, LLMResult]:
+class JSONOutputError(ValueError):
+    """The model's structured output did not parse; `raw` holds the text for diagnosis."""
+
+    def __init__(self, msg: str, raw: str):
+        super().__init__(msg)
+        self.raw = raw
+
+
+async def chat_json(messages: list[dict], schema: dict, alias: str = "workhorse", temperature: float = 0,
+                    **kw) -> tuple[dict, LLMResult]:
     """Structured output: the model is constrained to `schema`; returns (parsed, result)."""
-    res = await chat(messages, alias, json_schema=schema, temperature=0, **kw)
+    res = await chat(messages, alias, json_schema=schema, temperature=temperature, **kw)
     text = res.text.strip().removeprefix("```json").removesuffix("```").strip()
-    return json.loads(text), res
+    try:
+        return json.loads(text), res
+    except json.JSONDecodeError as exc:
+        raise JSONOutputError(str(exc), res.text) from exc
 
 
 async def stream(messages: list[dict], alias: str = "workhorse", max_tokens: int = 1024,
