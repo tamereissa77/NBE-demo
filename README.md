@@ -1,16 +1,16 @@
-# NBE AI Demos on Dell AI infrastructure
+# Riyad Bank AI Demos on Dell AI infrastructure
 
 > **Riyad Bank edition (branch `Riyadh-Bank`).** The same seven demos and platform as `main`, presented for **Riyad Bank (بنك الرياض)**: Riyad Bank logo and colours (`brand/`), IBM Plex Sans Arabic as the UI font, and the bank's name in the portal, the model prompts, the D1 loan documents and the D5 contracts (`.env.example`: `BANK_*`, `COMPOSE_PROJECT_NAME=ryd`, `IMAGE_TAG=ryd`). Start it with `make start-RYD`; `make start-NBE` switches back. Improvements made on `main` merge into this branch with `git merge main`; bank-specific files are `brand/`, `.env.example`, `locale.py`, `specs.py`, the gate prompts and `data/seed/`.
 >
-> **Localised for Saudi Arabia.** All synthetic content is Saudi: amounts in SAR, Saudi names, cities and national addresses, 10-digit national IDs, +966 mobiles, 15% VAT with a VAT number, mada cards, Nafath/Absher verification, SARIE transfers, SAMA rules (33.33% DBR, 5-year personal finance, the "SAMA Cares" complaints channel), a Sharia-compliant tawarruq contract template (profit rate and APR, takaful, no late-payment penalties, PDPL, Banking Disputes Committee), Saudi-dialect prompts and complaints, and Asia/Riyadh time. The locale lives in `packages/nbe_core/nbe_core/locale.py`, `data/generators/specs.py`, `brand/brand.json` (`locale`) and `eval/arabic_gate/prompts.yaml`; the seed data under `data/seed/` was re-authored from it. `PLAN.md` remains the original NBE programme plan; the platform sections of this README apply unchanged, while examples quoted below come from the NBE edition.
+> **Localised for Saudi Arabia.** All synthetic content is Saudi: amounts in SAR, Saudi names, cities and national addresses, 10-digit national IDs, +966 mobiles, 15% VAT with a VAT number, mada cards, Nafath/Absher verification, SARIE transfers, SAMA rules (33.33% DBR, 5-year personal finance, the "SAMA Cares" complaints channel), a Sharia-compliant tawarruq contract template (profit rate and APR, takaful, no late-payment penalties, PDPL, Banking Disputes Committee), Saudi-dialect prompts and complaints, and Asia/Riyadh time. The locale lives in `packages/nbe_core/nbe_core/locale.py`, `data/generators/specs.py`, `brand/brand.json` (`locale`) and `eval/arabic_gate/prompts.yaml`; the seed data under `data/seed/` was re-authored from it. `PLAN.md` is the build plan, adapted for Riyad Bank; measured results quoted below come from the first build run on the GB10.
 
-Seven live AI applications for the **National Bank of Egypt (NBE)**, one per NBE use case. They run fully offline and fully containerised: today on a single **Dell Pro Max with GB10** (the demo platform), and tomorrow on **Dell PowerEdge XE7745** or **XE9780** servers for production (see [Production rollout](#15-production-rollout-on-poweredge-xe7745-and-xe9780)).
+Seven live AI applications for **Riyad Bank (بنك الرياض)**, one per use case. They run fully offline and fully containerised: today on a single **Dell Pro Max with GB10** (the demo platform), and tomorrow on **Dell PowerEdge XE7745** or **XE9780** servers for production (see [Production rollout](#15-production-rollout-on-poweredge-xe7745-and-xe9780)).
 
 | | |
 |---|---|
 | **Status** | All seven demos are built and pass the end-to-end UI walkthrough in Arabic and English. Measured results are in [section 11](#11-evaluation-and-measured-results). |
 | **Open item** | Blind human scoring for the Arabic model gate at `/eval`, then `make models-lock`. |
-| **Data** | 100% synthetic. No NBE or customer data is on the box. |
+| **Data** | 100% synthetic. No Riyad Bank or customer data is on the box. |
 | **Positioning** | A single-user proof of concept on one GB10. Production sizing is done separately on PowerEdge. |
 | **Guides** | [docs/runbook.md](docs/runbook.md) (operators) · [docs/talk-tracks.md](docs/talk-tracks.md) (presenters) · [docs/arabic_gate.md](docs/arabic_gate.md) (model scoring) · [PLAN.md](PLAN.md) (build plan, decisions, findings) |
 
@@ -40,14 +40,14 @@ Seven live AI applications for the **National Bank of Egypt (NBE)**, one per NBE
 
 ## 1. The seven demos
 
-| # | NBE use case | What it does | Key techniques |
+| # | Riyad Bank use case | What it does | Key techniques |
 |---|---|---|---|
 | **D1** | Doc verification for credit lending | Reads a loan pack (ID, utility bill, HR letter, bank statement, commercial register, invoice), checks the documents against each other and for tampering, and returns an evidence-backed "flagged for review" verdict for a human to decide | Vision-LLM field extraction, image forensics (noise consistency, duplicate stamps, metadata, ELA heatmap), deterministic cross-document rules |
 | **D2** | Chat with Document | Answers branch questions from working procedures with a citation on every sentence, prefers the current version, shows what changed since the previous one, and says "not found" instead of guessing | Retrieval with bge-m3, Qdrant and bge-reranker-v2-m3; grounded generation; version comparison |
 | **D3** | Campaigns & Offers (hyper-personalisation) | Profiles a segment's interests from transactions, matches a partner merchant, writes Arabic/English/dialect copy, enforces compliance, renders a banner and sizes an A/B test | SQL analytics, semantic merchant search, structured generation, rule-based compliance with auto-fix, SDXL, power calculation |
 | **D4** | AI Virtual Agent | Voice or chat agent: mock OTP, card block, balance, complaint ticket, human handoff; jailbreaks stopped live | Tool-calling agent loop, NeMo Guardrails (input and output), Whisper ASR, Piper TTS, mock core-banking API |
 | **D5** | Legal Documents Summarisation | Summarises rulings and contracts, extracts clauses with verified quotes, flags risks and compares a contract with the approved template | Map-reduce summarisation, schema-guided extraction, quote verification, clause-level template diff |
-| **D6** | NBE AI Assistant | One employee assistant for file chat, drafting, summaries, translation and code, with a router that picks the model per task and shows why; OpenAI-compatible endpoint for Dataiku | Task routing (rules plus LLM), documentation-grounded code answers, file conversion, OpenAI-compatible API |
+| **D6** | Riyad Bank AI Assistant | One employee assistant for file chat, drafting, summaries, translation and code, with a router that picks the model per task and shows why; OpenAI-compatible endpoint for Dataiku | Task routing (rules plus LLM), documentation-grounded code answers, file conversion, OpenAI-compatible API |
 | **D7** | Complaints Personalisation | Classifies complaints (topic, severity, sentiment, vulnerability), assigns SLAs and teams, drafts policy-checked replies that wait for human approval, mines trends | Zero-shot structured classification, SLA rules, similar-case retrieval, guarded drafting, embedding clustering |
 
 The portal also hosts the **Arabic gate** (`/eval`): a blind scoring tool used to choose the models (section 11).
@@ -152,12 +152,12 @@ flowchart TB
 | Relational store | PostgreSQL | 16 | Demo state, D3 commerce data, D7 complaints, evaluation scores, audit log |
 | Guardrails | NeMo Guardrails | 0.24.1 | Self-check input and output rails on the workhorse; banking policy prompts |
 | Documents | Docling | 2.134 (CPU) | Layout-aware conversion of DOCX/HTML/PDF; page rendering for vision transcription |
-| Speech to text | Whisper large-v3 | FP16, transformers on the NGC image | Arabic, Egyptian dialect and English |
+| Speech to text | Whisper large-v3 | FP16, transformers on the NGC image | Arabic, Saudi dialect and English |
 | Text to speech | Piper | 1.8, voices ar_JO-kareem and en_US-lessac (CPU) | Light, offline, aarch64 wheels |
 | Image generation | SDXL base 1.0 | diffusers 0.41, FP16 | Banner mock-ups for D3 |
 | Forensics | OpenCV + Pillow + NumPy | opencv-python-headless 5.0 | Noise analysis, stamp matching, ELA |
 | Demo services | FastAPI + httpx + psycopg | FastAPI 0.142, Python 3.12 | Async APIs, one container per demo |
-| Portal | React + Vite + Tailwind CSS | React 19, Vite 6, Tailwind 4, TypeScript 5.7 | Bilingual (RTL) single-page app with the NBE theme; fonts bundled for offline use |
+| Portal | React + Vite + Tailwind CSS | React 19, Vite 6, Tailwind 4, TypeScript 5.7 | Bilingual (RTL) single-page app with the Riyad Bank theme; fonts bundled for offline use |
 | Web gateway | Caddy | 2.11 | Single published port, path routing, caching headers |
 | Testing | Playwright, pytest-style scripts | Playwright 1.55 | End-to-end UI walkthrough, backup video recording |
 
@@ -249,7 +249,7 @@ upload / pick pack ─► vision extraction (per document type, JSON schema) ─
 
 - **Interest profile:** SQL over 50,000 transactions: each category's share of the segment's spend and its lift against all customers.
 - **Merchant match:** the partner merchant where the segment spends most among its top interests, or a semantic match to a free-text brief (bge-m3 over merchant descriptions).
-- **Copy:** one structured generation (JSON schema) for SMS A/B, English SMS, Arabic and English email, and an Egyptian-dialect social post.
+- **Copy:** one structured generation (JSON schema) for SMS A/B, English SMS, Arabic and English email, and a Saudi-dialect social post.
 - **Compliance:** deterministic rules (required disclaimer, SMS ≤ 160 characters, banned claims such as "guaranteed" or comparisons with other banks); a failure triggers one LLM fix pass and a re-check. A stress-test switch plants a banned claim to show the check working.
 - **Banner and A/B plan:** SDXL renders a background (Arabic text is overlaid in the UI; image models cannot write Arabic), cached per category when SDXL is off. The A/B plan uses a two-proportion power calculation and states the smallest lift the real audience can detect.
 
@@ -273,11 +273,11 @@ mic/text ─► Whisper (voice) ─► input guardrail ─STOP?─► agent loop
 - **Template diff:** articles aligned by number; identical or placeholder-filled articles are skipped; changed articles are compared by the model into structured changes (aspect, template value, contract value), a severity and a risk statement; missing articles are flagged.
 - **Uploads:** Docling for source formats; Arabic PDFs are rendered page by page and transcribed by the vision model, because PDF text layers scramble Arabic.
 
-### D6 · NBE AI Assistant
+### D6 · Riyad Bank AI Assistant
 
 - **Router:** keyword rules first, then a small LLM classification; tasks map to aliases (`code` → `hero`, everything else → `workhorse`), and the reason is returned with every answer.
 - **Grounding:** code answers retrieve from the real docstrings of the installed pandas and numpy (48 APIs) to cut hallucinated APIs; file chat uses Docling or vision transcription.
-- **Integration:** `/v1/chat/completions` and `/v1/models` (model `nbe-auto`, bearer `D6_API_KEY`) for Dataiku LLM Mesh or Open WebUI; streaming is relayed; route decisions are returned in `X-NBE-Route-*` headers.
+- **Integration:** `/v1/chat/completions` and `/v1/models` (model `auto`, bearer `D6_API_KEY`) for Dataiku LLM Mesh or Open WebUI; streaming is relayed; route decisions are returned in `X-Route-*` headers.
 
 ### D7 · Complaints Personalisation
 
@@ -287,7 +287,7 @@ mic/text ─► Whisper (voice) ─► input guardrail ─STOP?─► agent loop
 
 ### Arabic gate (model selection)
 
-30 NBE-style prompts (`eval/arabic_gate/prompts.yaml`) run on every candidate model; 13 have automatic checks (tool calls, JSON fields, required phrases); gpt-oss-120b pre-scores every answer; humans score blind at `/eval`. The recommendation follows a rule written before any scoring (`services/eval/app/main.py`), and `make models-lock` writes `config/models.lock`.
+30 Saudi retail-banking prompts (`eval/arabic_gate/prompts.yaml`) run on every candidate model; 13 have automatic checks (tool calls, JSON fields, required phrases); gpt-oss-120b pre-scores every answer; humans score blind at `/eval`. The recommendation follows a rule written before any scoring (`services/eval/app/main.py`), and `make models-lock` writes `config/models.lock`.
 
 ---
 
@@ -320,7 +320,7 @@ All data is synthetic and generated reproducibly in the `nbe-datagen` container 
 | D4 | 20 mock-bank customers, 30 knowledge-base articles (AR/EN) | Mock bank seed; LLM-authored articles constrained to the procedure facts |
 | D5 | Approved template, 5 contracts with 8 planted deviations, 3 rulings | Clauses written deterministically (`d5_clauses.py`) so every planted term is verbatim; rulings LLM-authored |
 | D6 | 48 pandas/numpy API docs | Real docstrings extracted from the installed libraries |
-| D7 | 500 labelled complaints (MSA, Egyptian, English; 4 channels), 20-item demo queue | LLM-authored from a topic × severity × channel × language grid; labels by construction |
+| D7 | 500 labelled complaints (MSA, Saudi dialect, English; 4 channels), 20-item demo queue | LLM-authored from a topic × severity × channel × language grid; labels by construction |
 
 ---
 
@@ -331,7 +331,7 @@ All data is synthetic and generated reproducibly in the `nbe-datagen` container 
 - **Guardrails:** NeMo self-check rails on input (jailbreaks, other customers' data, bypassing OTP, illegal requests) and output (leaked card numbers or PINs, unauthorised promises, asking for secrets); 8/8 on the test cases, 120 to 600 ms.
 - **Least privilege for the model:** the agent sees tool results, not secrets (OTP codes are withheld); banking tools require a verified session.
 - **Human in the loop:** D1 verdicts, D7 replies and D4's irreversible actions require a person; decisions and tool calls are written to `audit.events`.
-- **Data:** synthetic only; masked NBE samples only with written approval.
+- **Data:** synthetic only; masked Riyad Bank samples only with written approval.
 - **Containers:** application containers run as an unprivileged user where possible.
 
 ---
@@ -348,7 +348,7 @@ All data is synthetic and generated reproducibly in the `nbe-datagen` container 
 | D6 | Correct routing with on-screen reason; honest fallback when the hero model is off |
 | D7 | 94% topic accuracy, 98% severity within one level, on 100 held-out complaints (zero-shot) |
 
-**Arabic gate (judge scores, provisional until human scoring):** Gemma 4 26B-A4B 4.72 at 40 tokens/s (selected workhorse); gpt-oss-120b 4.89 at 37 tokens/s (hero; skipped tool calls, so not used as an agent); Gemma 4 31B 4.52 at 10 tokens/s (optional); Qwen2.5-14B 4.57 at 9 tokens/s; Mistral-7B from NBE's list 3.37.
+**Arabic gate (judge scores from the first run, on the earlier Egyptian-dialect prompt set; re-run `make arabic-gate` to score the Saudi prompts):** Gemma 4 26B-A4B 4.72 at 40 tokens/s (selected workhorse); gpt-oss-120b 4.89 at 37 tokens/s (hero; skipped tool calls, so not used as an agent); Gemma 4 31B 4.52 at 10 tokens/s (optional); Qwen2.5-14B 4.57 at 9 tokens/s; Mistral-7B from the original brief's list 3.37.
 
 Reproduce: `make verify`, `make ui-test`, `python tests/golden_d2.py`, `GET /api/d1/evaluate`, `GET /api/d7/accuracy`, `make arabic-gate`.
 
@@ -381,7 +381,7 @@ Troubleshooting is in [docs/runbook.md](docs/runbook.md).
 NBE-demo/
 ├── Makefile, docker-compose.yml, .env.example
 ├── PLAN.md                     build plan, measured budget, findings, results
-├── brand/                      NBE logo, mark and colour tokens (theme.css)
+├── brand/                      Riyad Bank logo, mark, colour tokens (theme.css) and brand.json
 ├── config/                     caddy/, postgres/, litellm.yaml, guardrails/banking/
 ├── docker/                     Dockerfiles: demo-api, portal, gpu-python, tts, guardrails, docling, datagen
 ├── packages/nbe_core/          shared Python library (section 8)
@@ -428,7 +428,7 @@ NBE-demo/
 
 ## 15. Production rollout on PowerEdge XE7745 and XE9780
 
-The GB10 proves the use cases for one user at a time. Production for NBE means many concurrent employees and customers, high availability, integration with NBE systems and NBE's security controls. The application design carries over unchanged: the same containers, the same role aliases, the same guardrails and audit trail. What changes is the platform underneath, the size of the models it can afford, and the number of replicas.
+The GB10 proves the use cases for one user at a time. Production for Riyad Bank means many concurrent employees and customers, high availability, integration with Riyad Bank systems and Riyad Bank's security controls. The application design carries over unchanged: the same containers, the same role aliases, the same guardrails and audit trail. What changes is the platform underneath, the size of the models it can afford, and the number of replicas.
 
 ### 15.1 Target platforms
 
@@ -439,7 +439,7 @@ The GB10 proves the use cases for one user at a time. Production for NBE means m
 | GPUs | 1 × GB10, 128 GB unified memory | Up to 8 double-wide 600 W PCIe GPUs (NVIDIA RTX PRO 6000 Blackwell Server Edition, H200 NVL, H100 NVL, L40S) or 16 single-wide | 8 × NVIDIA HGX B300 (SXM6), NVLink at 900 GB/s per GPU |
 | GPU memory | 128 GB shared with the OS | 8 × 96 GB GDDR7 (RTX PRO 6000) = 768 GB, or 8 × 141 GB HBM3e (H200 NVL) ≈ 1.1 TB | 8 × B300, up to 288 GB HBM3e each (≈ 2.2 to 2.3 TB) |
 | System memory | (unified) | Up to 3 TB DDR5-6400 | Up to 4 TB DDR5-6400 |
-| Best for NBE | Portable proof of concept, single user | **Production inference for the seven use cases**: many replicas of mid-size models, cost-effective, standard air-cooled racks | **Bank-wide scale and the largest models**: high concurrency, frontier-size open models at full precision, fine-tuning |
+| Best for Riyad Bank | Portable proof of concept, single user | **Production inference for the seven use cases**: many replicas of mid-size models, cost-effective, standard air-cooled racks | **Bank-wide scale and the largest models**: high concurrency, frontier-size open models at full precision, fine-tuning |
 
 Sources: [PowerEdge XE9780](https://www.dell.com/en-us/shop/ipovw/poweredge-xe9780), [XE9780 technical guide](https://www.delltechnologies.com/asset/en-us/products/servers/technical-support/poweredge-xe9780-technical-guide.pdf), [PowerEdge XE7745 spec sheet](https://www.delltechnologies.com/asset/no-no/products/servers/technical-support/poweredge-xe7745-spec-sheet.pdf), [XE7745 GPU specifications](https://www.dell.com/support/manuals/en-us/poweredge-xe7745/pexe7745_ism_pub/gpu-specifications?guid=guid-7df68356-8f29-4ec7-a077-a5251c9c4275&lang=en-us). Configurations change; confirm with the current Dell spec sheet before quoting.
 
@@ -455,11 +455,11 @@ Sources: [PowerEdge XE9780](https://www.dell.com/en-us/shop/ipovw/poweredge-xe97
 | Hero model | Swapped in on demand | Always on (gpt-oss-120b fits one 96 GB GPU in MXFP4, or larger models on B300 with NVLink tensor parallelism) |
 | Concurrency | Single user | Continuous batching across many users; replicas per workload sized by measured tokens/s and latency targets |
 | Data stores | Single Qdrant and Postgres containers | Qdrant cluster (replicated collections); PostgreSQL HA (Patroni or managed); object storage for documents |
-| Integrations | Mock bank, synthetic data | NBE core banking and card systems behind the same tool interfaces (`send_otp`, `block_card`, …); document management; CRM; Dataiku via `/v1`; WhatsApp and IVR channels for D4 |
-| Identity and access | Shared demo | NBE SSO (OIDC/SAML) at the gateway; role-based access per demo; API keys per integration |
-| Security | Offline box | NBE network zones, TLS everywhere, secrets in a vault, image signing and scanning, data masking for logs |
-| Observability | Trace drawer, audit table | Prometheus/Grafana (GPU, latency, tokens), central logs, the audit log shipped to NBE's SIEM, model-quality dashboards |
-| Evaluation | Golden sets, Arabic gate | The same harness on NBE-approved data, run in CI before every model or prompt change |
+| Integrations | Mock bank, synthetic data | Riyad Bank core banking and card systems behind the same tool interfaces (`send_otp`, `block_card`, …); document management; CRM; Dataiku via `/v1`; WhatsApp and IVR channels for D4 |
+| Identity and access | Shared demo | Riyad Bank SSO (OIDC/SAML) at the gateway; role-based access per demo; API keys per integration |
+| Security | Offline box | Riyad Bank network zones, TLS everywhere, secrets in a vault, image signing and scanning, data masking for logs |
+| Observability | Trace drawer, audit table | Prometheus/Grafana (GPU, latency, tokens), central logs, the audit log shipped to Riyad Bank's SIEM, model-quality dashboards |
+| Evaluation | Golden sets, Arabic gate | The same harness on Riyad Bank-approved data, run in CI before every model or prompt change |
 
 ### 15.3 Indicative mapping of the current workloads
 
@@ -477,42 +477,42 @@ Planning assumptions to validate by benchmark, not commitments.
 
 ### 15.4 Sizing method
 
-1. **Define service levels per use case** with NBE: concurrent users, requests per hour at peak, target latency (for example time to first token under 1 s for D4, a loan pack under 60 s for D1).
+1. **Define service levels per use case** with Riyad Bank: concurrent users, requests per hour at peak, target latency (for example time to first token under 1 s for D4, a loan pack under 60 s for D1).
 2. **Benchmark on the target GPU**: run each demo's real request mix (the `tests/` harness plus a load generator) against one replica and record tokens/s, latency percentiles and requests per second.
 3. **Compute replicas** per workload = peak load ÷ measured capacity per replica, plus headroom (typically 30%) and N+1 for availability.
 4. **Pack replicas onto GPUs**, then servers; add a second server or site for high availability.
-5. **Re-run the Arabic gate and golden sets** on the production models with NBE-approved data before go-live.
+5. **Re-run the Arabic gate and golden sets** on the production models with Riyad Bank-approved data before go-live.
 
 ### 15.5 Phased rollout
 
 | Phase | Scope | Platform | Exit criteria |
 |---|---|---|---|
-| 0. Proof of concept (done) | Seven demos, synthetic data, single user | GB10 | NBE dry run; model gate frozen |
-| 1. Pilot | Two to three use cases ranked first by NBE (for example D2 and D7), masked NBE data, a pilot group of employees, Kubernetes deployment | 1 × XE7745 | Accuracy on NBE golden sets, latency targets, security sign-off |
-| 2. Production, internal use cases | D2, D5, D6, D7 for employees; SSO; Dataiku integration; HA | 2 × XE7745 (active/active) | Service levels met at peak; audit and monitoring in NBE tools |
+| 0. Proof of concept (done) | Seven demos, synthetic data, single user | GB10 | Dry run with Riyad Bank (to schedule); model gate frozen |
+| 1. Pilot | Two to three use cases ranked first by Riyad Bank (for example D2 and D7), masked Riyad Bank data, a pilot group of employees, Kubernetes deployment | 1 × XE7745 | Accuracy on Riyad Bank golden sets, latency targets, security sign-off |
+| 2. Production, internal use cases | D2, D5, D6, D7 for employees; SSO; Dataiku integration; HA | 2 × XE7745 (active/active) | Service levels met at peak; audit and monitoring in Riyad Bank tools |
 | 3. Customer-facing and document-heavy | D4 on real channels (web, WhatsApp, IVR) with core-banking integration; D1 for loan intake; D3 for marketing | XE7745 fleet, XE9780 for high-concurrency or larger-model workloads | Customer-facing risk review; human-handoff and guardrail metrics |
 | 4. Scale and optimise | Larger or fine-tuned models, bank-wide rollout, continuous evaluation | XE9780 | Cost per request and quality targets |
 
 ### 15.6 Migration steps (from this repository)
 
-1. Push the images to NBE's registry; replace `docker-compose.yml` with Helm charts (one per service; model servers as GPU deployments).
+1. Push the images to Riyad Bank's registry; replace `docker-compose.yml` with Helm charts (one per service; model servers as GPU deployments).
 2. Point the LiteLLM aliases in `config/litellm.yaml` at the production model services; nothing in the demo code changes.
-3. Replace the mock bank with an adapter to NBE's APIs that keeps the same tool contracts; keep OTP and session checks in the bank's systems.
-4. Swap synthetic data for NBE sources: procedure repository (D2), contract templates (D5), complaints feed (D7), loan intake (D1), campaign data (D3).
-5. Load NBE's real policies into the guardrails (`config/guardrails/`) and the D7 and D3 rule sets.
-6. Wire SSO at the gateway, ship `audit.events` and metrics to NBE's platforms, and run the evaluation harness in CI.
+3. Replace the mock bank with an adapter to Riyad Bank's APIs that keeps the same tool contracts; keep OTP and session checks in the bank's systems.
+4. Swap synthetic data for Riyad Bank sources: procedure repository (D2), contract templates (D5), complaints feed (D7), loan intake (D1), campaign data (D3).
+5. Load Riyad Bank's real policies into the guardrails (`config/guardrails/`) and the D7 and D3 rule sets.
+6. Wire SSO at the gateway, ship `audit.events` and metrics to Riyad Bank's platforms, and run the evaluation harness in CI.
 
 ---
 
 ## 16. Known limitations
 
 - **Single user:** speeds on the GB10 are single-user figures and must not be read as production throughput.
-- **Synthetic data:** accuracy on NBE's real documents, complaints and customers has not been measured.
-- **Policies are placeholders:** D7 reply rules and D3 compliance rules await NBE's real policies; D5 outputs need NBE legal validation.
+- **Synthetic data:** accuracy on Riyad Bank's real documents, complaints and customers has not been measured.
+- **Policies are placeholders:** D7 reply rules and D3 compliance rules await Riyad Bank's real policies; D5 outputs need Riyad Bank legal validation.
 - **Model choice is provisional** until human scoring of the Arabic gate.
-- **Voice:** browsers allow the microphone only on `localhost` or https; Egyptian dialect in voice is a bonus, not a guarantee.
+- **Voice:** browsers allow the microphone only on `localhost` or https; Saudi dialect in voice is a bonus, not a guarantee.
 - **D1 forensics** flag for review and are not fraud-proof.
-- **Not deployed:** Open WebUI (the D6 portal screen replaces it; `/v1` is ready if wanted), Dataiku (version and host to be confirmed by NBE).
+- **Not deployed:** Open WebUI (the D6 portal screen replaces it; `/v1` is ready if wanted), Dataiku (version and host to be confirmed by Riyad Bank).
 
 
 ---
@@ -523,7 +523,7 @@ The platform is bank-neutral; a **brand pack** and a few settings decide which b
 
 | Bank | Branch | Start it | Worktree (created on first use) |
 |---|---|---|---|
-| National Bank of Egypt | `main` | `make start-NBE` | the main checkout, e.g. `~/NBE-demo` |
+| Original edition (Egypt) | `main` | `make start-NBE` | the main checkout, e.g. `~/NBE-demo` |
 | Riyad Bank | `Riyadh-Bank` | `make start-RYD` | `~/NBE-demo-Riyadh-Bank` |
 
 `make start-NBE` / `make start-RYD` work from either checkout. They find (or create) the bank's git worktree, stop the other bank's stack (containers removed, data volumes kept), and run `make up` there; the first start of a bank builds its images and generates and loads its data. `make brand` shows which bank is running. Only one bank runs at a time on the GB10.
@@ -548,4 +548,4 @@ The platform is bank-neutral; a **brand pack** and a few settings decide which b
 
 ---
 
-*Dell Technologies · NBE AI demos · Draft for discussion · Commercial in Confidence. Synthetic data only; NBE's name and logo are used for this customer demonstration.*
+*Dell Technologies · Riyad Bank AI demos · Draft for discussion · Commercial in Confidence. Synthetic data only; Riyad Bank's name and logo are used for this customer demonstration.*
