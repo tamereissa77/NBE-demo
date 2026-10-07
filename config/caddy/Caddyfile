@@ -36,6 +36,11 @@
 		reverse_proxy nbe-d7:8000
 	}
 
+	# OpenAI-compatible endpoint of the D6 assistant (Open WebUI, Dataiku LLM Mesh); path kept as /v1
+	handle /v1/* {
+		reverse_proxy nbe-d6:8000
+	}
+
 	handle_path /api/eval/* {
 		reverse_proxy nbe-eval:8000
 	}

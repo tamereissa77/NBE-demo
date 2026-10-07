@@ -1,1 +1,3 @@
-# Demo-specific dependencies (nbe_core deps are installed by the base image)
+numpy
+pillow
+opencv-python-headless

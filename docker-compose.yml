@@ -24,6 +24,8 @@ x-demo-api: &demo-api
     DOCLING_URL: http://nbe-docling:8000
     HF_HUB_OFFLINE: "1"
   networks: [nbe-core]
+  volumes:
+    - ./data:/data:ro          # seeds and generated synthetic data (PLAN.md Phase 3)
   depends_on:
     nbe-postgres:
       condition: service_healthy
@@ -397,6 +399,22 @@ services:
     environment: { <<: *demo-env, DEMO_ID: eval }
     volumes:
       - ./eval/arabic_gate:/eval:ro
+
+  # ---------------------------------------------------------------- tools (run on demand)
+  nbe-datagen:
+    build:
+      context: .
+      dockerfile: docker/datagen/Dockerfile
+    image: nbe-datagen:latest
+    container_name: nbe-datagen
+    profiles: [tools]
+    env_file: .env
+    environment:
+      POSTGRES_HOST: nbe-postgres
+      LLM_GATEWAY_URL: http://nbe-llmgw:4000/v1
+    volumes:
+      - ./data:/repo/data
+    networks: [nbe-core]
 
   # ---------------------------------------------------------------- demo APIs (one per use case)
   nbe-d1:

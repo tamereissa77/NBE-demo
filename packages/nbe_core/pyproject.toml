@@ -1,6 +1,6 @@
 [project]
 name = "nbe_core"
-version = "0.2.0"
+version = "0.3.0"
 description = "Shared library for the NBE GB10 demos: settings, app factory, audit log, clients"
 requires-python = ">=3.11"
 dependencies = [
@@ -9,6 +9,7 @@ dependencies = [
     "httpx>=0.27",
     "psycopg[binary,pool]>=3.2",
     "pydantic>=2.8",
+    "python-multipart>=0.0.9",
 ]
 
 [build-system]

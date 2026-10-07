@@ -46,7 +46,8 @@ help:
 	@cp .env.example .env
 	@sed -i "s/^POSTGRES_PASSWORD=.*/POSTGRES_PASSWORD=$$(head -c 18 /dev/urandom | base64 | tr -d '/+=')/" .env
 	@sed -i "s/^LITELLM_MASTER_KEY=.*/LITELLM_MASTER_KEY=sk-$$(head -c 24 /dev/urandom | base64 | tr -d '/+=')/" .env
-	@echo "Created .env from .env.example (random Postgres password and gateway key)"
+	@sed -i "s/^D6_API_KEY=.*/D6_API_KEY=nbe-$$(head -c 18 /dev/urandom | base64 | tr -d '/+=')/" .env
+	@echo "Created .env from .env.example (random Postgres password and API keys)"
 
 up: .env preflight
 	@scripts/up.sh

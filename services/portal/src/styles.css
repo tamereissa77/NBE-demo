@@ -28,3 +28,17 @@ body {
 }
 
 .nbe-rule { height: 4px; background: var(--nbe-gradient); }
+
+/* Markdown answers */
+.nbe-md p { margin: 0.35rem 0; }
+.nbe-md ul, .nbe-md ol { margin: 0.35rem 0; padding-inline-start: 1.25rem; }
+.nbe-md ul { list-style: disc; }
+.nbe-md ol { list-style: decimal; }
+.nbe-md h1, .nbe-md h2, .nbe-md h3 { font-weight: 700; color: var(--nbe-green); margin: 0.6rem 0 0.3rem; }
+.nbe-md h1 { font-size: 1.15rem; } .nbe-md h2 { font-size: 1.05rem; } .nbe-md h3 { font-size: 1rem; }
+.nbe-md table { border-collapse: collapse; margin: 0.5rem 0; font-size: 0.85rem; }
+.nbe-md th, .nbe-md td { border: 1px solid var(--nbe-border); padding: 0.25rem 0.5rem; }
+.nbe-md code { background: var(--nbe-bg); border-radius: 4px; padding: 0 0.25rem; font-size: 0.85em; }
+.nbe-md pre { background: var(--nbe-text-strong); color: white; border-radius: 8px; padding: 0.75rem; overflow-x: auto; direction: ltr; }
+.nbe-md pre code { background: transparent; }
+.nbe-md strong { font-weight: 700; }

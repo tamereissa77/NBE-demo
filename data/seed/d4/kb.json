@@ -1,0 +1,242 @@
+[
+  {
+    "id": "KB01",
+    "topic": "كيف أوقف بطاقتي المفقودة أو المسروقة",
+    "question_ar": "كيف أوقف بطاقتي المفقودة أو المسروقة؟",
+    "answer_ar": "لحماية أموالك، يجب عليك إيقاف البطاقة المفقودة فوراً قبل البدء في إجراءات إصدار البديل. يمكنك طلب استبدال البطاقة من خلال التحقق من بطاقة الرقم القومي ورمز تحقق لمرة واحدة (OTP) عبر هاتفك المسجل. تبلغ رسوم استبدال بطاقة الخصم المباشر 50 جنيهاً، بينما تبلغ رسوم بطاقة الائتمان 100 جنيه، مع إعفاء بطاقات حسابات الرواتب من هذه الرسوم. يتم تسليم البطاقة الجديدة في الفرع خلال 5 أيام عمل.",
+    "question_en": "How do I stop my lost or stolen card?",
+    "answer_en": "To protect your funds, you must stop the lost card immediately before proceeding with the replacement process. You can request a replacement card by verifying your National ID and a One-Time Password (OTP) sent to your registered mobile number. The replacement fee for debit cards is 50 EGP, while credit card replacement fees are 100 EGP; salary account cards are exempt from these fees. The new card will be delivered to the branch within 5 working days."
+  },
+  {
+    "id": "KB02",
+    "topic": "رسوم استبدال البطاقات",
+    "question_ar": "ما هي الرسوم والإجراءات المتبعة لاستبدال بطاقتي المفقودة؟",
+    "answer_ar": "لاستبدال بطاقتك المفقودة، يجب أولاً إيقاف البطاقة المفقودة قبل إصدار البديل. يتطلب الإجراء التحقق من بطاقة الرقم القومي ورمز تحقق لمرة واحدة (OTP) عبر الهاتف المسجل. تبلغ رسوم استبدال بطاقة الخصم المباشر 50 جنيهاً، بينما تبلغ رسوم بطاقة الائتمان 100 جنيه، مع العلم أن بطاقات حسابات الرواتب تُعفى من هذه الرسوم. يتم تسليم البطاقة الجديدة في الفرع خلال 5 أيام عمل.",
+    "question_en": "What are the fees and procedures for replacing my lost card?",
+    "answer_en": "To replace your lost card, you must first stop the lost card before issuing a replacement. The procedure requires verifying your National ID and a One-Time Password (OTP) sent to your registered phone. The replacement fee for a debit card is 50 EGP, while the credit card replacement fee is 100 EGP; please note that salary account cards are exempt from these fees. The new card will be delivered to the branch within 5 working days."
+  },
+  {
+    "id": "KB03",
+    "topic": "كيف أفعّل تطبيق الهاتف",
+    "question_ar": "كيف أفعّل تطبيق الهاتف؟",
+    "answer_ar": "يمكن للعملاء الحاليين تفعيل واستخدام تطبيق الهاتف لإتمام العديد من العمليات المصرفية بسهولة. يمكنك من خلال التطبيق فتح حساب توفير جديد دون الحاجة لزيارة الفرع، كما يتيح لك التطبيق تحديث بياناتك الشخصية (اعرف عميلك) باستخدام خاصية التحقق بالصورة. بالإضافة إلى ذلك، يمكنك استخدام التطبيق لطلب الاسترداد المبكر للشهادات الادخارية، أو إعادة تعيين الرقم السري للبطاقة بعد التحقق عبر رمز التحقق لمرة واحدة (OTP)، أو حتى تقديم طلب إيقاف الحساب وتوقيعه إلكترونياً.",
+    "question_en": "How do I activate the mobile application?",
+    "answer_en": "Existing customers can activate and use the mobile application to conveniently perform various banking operations. Through the app, you can open a new savings account without visiting a branch, and update your KYC data using photo verification. Additionally, the application allows you to request early redemption of savings certificates, reset your card PIN after verifying via an OTP, or even submit and electronically sign a request to close your account."
+  },
+  {
+    "id": "KB04",
+    "topic": "نسيت كلمة مرور التطبيق",
+    "question_ar": "نسيت كلمة مرور التطبيق، ماذا أفعل؟",
+    "answer_ar": "في حال نسيان كلمة مرور تطبيق الهاتف المحمول، يمكنك إعادة تعيينها بسهولة لضمان استمرارية وصولك إلى خدماتنا الرقمية. يمكنك البدء بعملية إعادة التعيين من خلال التطبيق نفسه باتباع الخطوات الإرشادية، حيث سيتم التحقق من هويتك عبر إرسال رمز تحقق لمرة واحدة (OTP) إلى رقم هاتفك المسجل لدينا لضمان أمان حسابك. كما يمكنك دائماً زيارة أقرب فرع من فروع البنك للحصول على الدعم اللازم من موظفينا وإتمام الإجراءات اللازمة لاستعادة الوصول إلى حسابك بأمان.",
+    "question_en": "I forgot my application password, what should I do?",
+    "answer_en": "If you have forgotten your mobile banking application password, you can easily reset it to ensure continuous access to our digital services. You can initiate the reset process through the application itself by following the guided steps, where your identity will be verified by sending a one-time password (OTP) to your registered mobile number to ensure account security. Additionally, you can always visit your nearest bank branch to receive the necessary support from our staff and complete the required procedures to safely regain access to your account."
+  },
+  {
+    "id": "KB05",
+    "topic": "حدود التحويل اليومية",
+    "question_ar": "ما هي حدود التحويل اليومية المتاحة لي؟",
+    "answer_ar": "يوفر البنك خيارات مرنة لرفع حدود التحويل اليومية لتناسب احتياجاتكم. الحد الافتراضي للتحويل عبر تطبيق الهاتف المحمول هو 50,000 جنيه مصري. ويمكنكم رفع هذا الحد ليصل إلى أقصى حد عبر التطبيق وهو 200,000 جنيه مصري، وذلك بعد إتمام عملية التحقق باستخدام رمز التحقق لمرة واحدة (OTP). أما في حال رغبتكم في إجراء تحويلات تتجاوز هذا الحد، فيتعين عليكم تقديم طلب موقع في الفرع، على أن يسري هذا التعديل في يوم العمل التالي لتقديم الطلب.",
+    "question_en": "What are my daily transfer limits?",
+    "answer_en": "The bank provides flexible options to increase daily transfer limits to suit your needs. The default limit via the mobile application is 50,000 EGP. You can increase this limit to a maximum of 200,000 EGP through the app after verifying via a One-Time Password (OTP). For amounts exceeding this limit, a signed request must be submitted at the branch, and the new limit will take effect on the following business day."
+  },
+  {
+    "id": "KB06",
+    "topic": "كيف أرفع حد التحويل",
+    "question_ar": "كيف أرفع حد التحويل؟",
+    "answer_ar": "يمكنك رفع حدود التحويل اليومية عبر عدة مستويات؛ حيث يبلغ الحد الافتراضي للتحويل عبر التطبيق 50,000 جنيه مصري. يمكنك زيادة هذا الحد ليصل إلى أقصى حد متاح عبر التطبيق وهو 200,000 جنيه مصري، وذلك بعد إتمام عملية التحقق باستخدام رمز التحقق لمرة واحدة (OTP). أما في حال رغبتك في رفع الحد لما يتجاوز مبلغ 200,000 جنيه، فيتعين عليك تقديم طلب موقع شخصياً داخل الفرع، على أن يسري هذا التعديل في يوم العمل التالي لتقديم الطلب.",
+    "question_en": "How do I increase my transfer limit?",
+    "answer_en": "You can increase your daily transfer limits through several levels; the default limit via the app is 50,000 EGP. You can increase this limit to a maximum of 200,000 EGP via the app after verifying with a One-Time Password (OTP). If you wish to increase the limit beyond 200,000 EGP, you must submit a signed request at the branch, and the change will take effect on the following business day."
+  },
+  {
+    "id": "KB07",
+    "topic": "رسوم التحويلات الدولية",
+    "question_ar": "ما هي الرسوم والحدود والإجراءات الخاصة بالتحويلات الدولية الصادرة؟",
+    "answer_ar": "لإجراء تحويل دولي صادر، يبلغ الحد اليومي الأقصى 25,000 دولار أمريكي أو ما يعادلها. تُطبق عمولة قدرها 0.4% بحد أدنى 20 دولاراً. يتطلب الإجراء تقديم نموذج التحويل مع توضيح سبب التحويل، وتستغرق مدة التنفيذ يومي عمل. يرجى العلم أنه يشترط تقديم مستند داعم (مثل فاتورة أو عقد) للتحويلات التي تتجاوز قيمتها 5,000 دولار أمريكي.",
+    "question_en": "What are the fees, limits, and procedures for outgoing international transfers?",
+    "answer_en": "To perform an outgoing international transfer, the maximum daily limit is 25,000 USD or its equivalent. A commission of 0.4% applies, with a minimum of 20 USD. The procedure requires submitting a transfer form and stating the reason for the transfer, with an execution period of two business days. Please note that a supporting document (such as an invoice or contract) is required for transfers exceeding 5,000 USD."
+  },
+  {
+    "id": "KB08",
+    "topic": "مواعيد عمل الفروع",
+    "question_ar": "ما هي مواعيد عمل الفروع؟",
+    "answer_ar": "نود إفادتكم بأن فروعنا تستقبل عملائها خلال ساعات العمل الرسمية المعتادة المحددة من قبل البنك. تختلف مواعيد العمل قليلاً بين الفروع المختلفة بناءً على موقعها الجغرافي، لذا يرجى مراجعة أقرب فرع لكم أو استخدام تطبيق الهاتف المحمول للتحقق من مواعيد العمل الخاصة بفرعكم المحدد. كما نود التنويه بأنه يمكنكم إتمام العديد من الخدمات المصرفية، مثل فتح الحسابات أو تحديث البيانات أو طلب استرداد الشهادات، عبر تطبيق الهاتف بكل سهولة دون الحاجة لزيارة الفرع خلال ساعات العمل.",
+    "question_en": "What are the branch working hours?",
+    "answer_en": "We would like to inform you that our branches receive customers during the standard official working hours set by the bank. Working hours may vary slightly between different branches based on their geographical location; therefore, please check with your nearest branch or use the mobile application to verify the specific working hours for your chosen branch. We would also like to note that many banking services, such as opening accounts, updating data, or requesting certificate redemption, can be easily completed via the mobile application without the need to visit the branch during working hours."
+  },
+  {
+    "id": "KB09",
+    "topic": "كيف أقدم شكوى",
+    "question_ar": "كيف أقدم شكوى؟",
+    "answer_ar": "في حال رغبتكم في تقديم شكوى، يرجى اتباع مستويات التصعيد التالية: يبدأ المستوى الأول عبر التواصل مع الفرع أو مركز الاتصال خلال يومي عمل. في حال عدم الحل، يتم التصعيد للمستوى الثاني إلى إدارة الشكاوى خلال 5 أيام عمل. أما إذا لم تُحل الشكوى خلال 15 يوم عمل، فيمكنكم التصعيد للمستوى الثالث وهو البنك المركزي المصري. نود التنويه بأن الشكاوى العاجلة المتعلقة بالاحتيال والخصم غير المصرح به تُعالج خلال 24 ساعة فقط.",
+    "question_en": "How do I file a complaint?",
+    "answer_en": "If you wish to file a complaint, please follow these escalation levels: The first level begins by contacting the branch or the call center within two business days. If unresolved, it escalates to the second level, the Complaints Department, within 5 business days. If the complaint is not resolved within 15 business days, you may escalate to the third level, the Central Bank of Egypt. Please note that urgent complaints regarding fraud and unauthorized debits are processed within 24 hours."
+  },
+  {
+    "id": "KB10",
+    "topic": "مدة معالجة الشكاوى",
+    "question_ar": "كم تستغرق مدة معالجة شكاويكم؟",
+    "answer_ar": "تخضع معالجة الشكاوى في البنك لنظام تصعيد محدد لضمان الكفاءة؛ حيث يتم التعامل مع المستوى الأول من الشكاوى عبر الفرع أو مركز الاتصال خلال يومي عمل. وفي حال عدم الحل، يتم التصعيد للمستوى الثاني (إدارة الشكاوى) خلال 5 أيام عمل. أما إذا لم تُحل الشكوى خلال 15 يوم عمل، يحق للعميل التصعيد للمستوى الثالث وهو البنك المركزي المصري. ونود التنويه بأن الشكاوى العاجلة المتعلقة بالاحتيال أو الخصم غير المصرح به تُعالج بصفة استثنائية خلال 24 ساعة فقط.",
+    "question_en": "How long does it take to process my complaints?",
+    "answer_en": "Complaint processing at the bank follows a specific escalation system to ensure efficiency. Level one complaints are handled via the branch or call center within two business days. If unresolved, they are escalated to Level Two (Complaints Department) within 5 business days. If the complaint remains unresolved after 15 business days, the customer may escalate to Level Three, which is the Central Bank of Egypt. Please note that urgent complaints regarding fraud or unauthorized debits are treated exceptionally and processed within 24 hours."
+  },
+  {
+    "id": "KB11",
+    "topic": "ما هو رمز التحقق OTP ولماذا لا يجب مشاركته",
+    "question_ar": "ما هو رمز التحقق OTP ولماذا لا يجب مشاركته؟",
+    "answer_ar": "رمز التحقق لمرة واحدة (OTP) هو وسيلة أمان رقمية تُرسل إلى هاتفك المسجل لتأكيد هويتك عند إجراء عمليات حساسة، مثل إعادة تعيين الرقم السري للبطاقة عبر التطبيق أو رفع حدود التحويل اليومية. يُعد هذا الرمز بمثابة مفتاح خاص لعملياتك المصرفية، لذا يُمنع تماماً مشاركته مع أي شخص، بما في ذلك موظفي البنك. تذكر دائماً أن موظف الفرع لا يحق له الاطلاع على أرقامك السرية أو إملاؤها لك؛ فالحفاظ على سرية هذا الرمز هو خط الدفاع الأول لحماية حسابك من الاحتيال والوصول غير المصرح به.",
+    "question_en": "What is an OTP and why should I not share it?",
+    "answer_en": "A One-Time Password (OTP) is a digital security measure sent to your registered mobile phone to verify your identity during sensitive transactions, such as resetting your card PIN via the app or increasing daily transfer limits. This code acts as a private key for your banking operations; therefore, you must never share it with anyone, including bank employees. Always remember that branch staff are not permitted to view or dictate your secret codes to you. Maintaining the confidentiality of this code is your first line of defense in protecting your account from fraud and unauthorized access."
+  },
+  {
+    "id": "KB12",
+    "topic": "كيف أحمي نفسي من الاحتيال",
+    "question_ar": "كيف أحمي نفسي من الاحتيال؟",
+    "answer_ar": "لحماية حساباتك من الاحتيال، يجب عليك الحفاظ على سرية بياناتك الشخصية وعدم مشاركة رموز التحقق لمرة واحدة (OTP) مع أي شخص، علماً بأن موظف البنك لا يجوز له الاطلاع على رقمك السري أو إملاؤه لك. في حال تعرضك لعملية احتيال أو خصم غير مصرح به، يرجى تصعيد شكواك فوراً، حيث يتم التعامل مع شكاوى الاحتيال والخصم غير المصرح به كشكاوى عاجلة تُعالج خلال 24 ساعة. كما ننصحك بإيقاف بطاقتك المفقودة فوراً قبل طلب إصدار بديل لضمان أمان أموالك.",
+    "question_en": "How can I protect myself from fraud?",
+    "answer_en": "To protect your accounts from fraud, you must maintain the confidentiality of your personal data and never share One-Time Passwords (OTP) with anyone, noting that bank employees are not permitted to view or dictate your PIN. In the event of fraud or unauthorized deductions, please escalate your complaint immediately; fraud and unauthorized deduction complaints are treated as urgent cases and are processed within 24 hours. We also advise you to stop your lost card immediately before requesting a replacement to ensure the security of your funds."
+  },
+  {
+    "id": "KB13",
+    "topic": "فتح حساب توفير",
+    "question_ar": "كيف يمكنني فتح حساب توفير وما هي المتطلبات؟",
+    "answer_ar": "لفتح حساب توفير للأفراد، يجب تقديم بطاقة رقم قومي سارية وإيصال مرافق حديث. يتطلب فتح الحساب إيداع حد أدنى قدره 500 جنيه مصري. يتم احتساب العائد على الرصيد اليومي ويُصرف بشكل شهري. تستغرق مدة تفعيل الحساب يوم عمل واحد فقط. كما نتيح للعملاء الحاليين ميزة جديدة تتيح لهم فتح الحساب عبر تطبيق الهاتف المحمول مباشرة دون الحاجة لزيارة الفرع.",
+    "question_en": "How can I open a savings account and what are the requirements?",
+    "answer_en": "To open a savings account for individuals, you must provide a valid national ID and a recent utility bill. Opening the account requires a minimum deposit of 500 EGP. Interest is calculated on the daily balance and paid out monthly. The activation period takes only one business day. Additionally, we offer a new channel allowing existing customers to open an account via the mobile application without visiting the branch."
+  },
+  {
+    "id": "KB14",
+    "topic": "الحد الأدنى لحساب التوفير",
+    "question_ar": "ما هو الحد الأدنى لفتح حساب التوفير للأفراد؟",
+    "answer_ar": "لفتح حساب توفير للأفراد، يتطلب الأمر تقديم بطاقة رقم قومي سارية وإيصال مرافق حديث. الحد الأدنى للإيداع لفتح الحساب هو 500 جنيه مصري. يتم احتساب العائد على الرصيد اليومي ويُصرف شهرياً، وتستغرق مدة تفعيل الحساب يوم عمل واحد فقط. كما نود إفادتكم بأنه يمكن للعملاء الحاليين فتح الحساب عبر تطبيق الهاتف المحمول بكل سهولة دون الحاجة لزيارة الفرع.",
+    "question_en": "What is the minimum amount required to open an individual savings account?",
+    "answer_en": "To open an individual savings account, a valid national ID and a recent utility bill are required. The minimum deposit for opening the account is 500 EGP. Interest is calculated on the daily balance and paid out monthly. Account activation takes one business day. Additionally, existing customers can conveniently open an account via the mobile application without the need to visit a branch."
+  },
+  {
+    "id": "KB15",
+    "topic": "الشهادات الادخارية والاسترداد المبكر",
+    "question_ar": "ما هي شروط وإجراءات الاسترداد المبكر للشهادات الادخارية؟",
+    "answer_ar": "يمكن للعملاء طلب الاسترداد المبكر للشهادات الادخارية عبر تطبيق الهاتف المحمول، بشرط مرور حد أدنى قدره 3 أشهر من تاريخ الشراء. تُطبق غرامة استرداد بنسبة 1% من قيمة الشهادة في حال تم الاسترداد خلال السنة الأولى، بينما لا تُطبق أي غرامة بعد انقضاء السنة الأولى. يتم صرف قيمة الشهادة المستردة في نفس يوم تقديم الطلب.",
+    "question_en": "What are the terms and procedures for the early redemption of savings certificates?",
+    "answer_en": "Customers can request the early redemption of savings certificates via the mobile application, provided that a minimum period of 3 months has passed from the purchase date. A redemption penalty of 1% of the certificate value applies if redeemed during the first year; no penalty is applied after the first year. The redeemed value is paid on the same day the request is submitted."
+  },
+  {
+    "id": "KB16",
+    "topic": "بطاقات الائتمان: الحد والفائدة",
+    "question_ar": "ما هي تفاصيل الحد الائتماني والفوائد الخاصة ببطاقات الائتمان؟",
+    "answer_ar": "بخصوص بطاقات الائتمان، يرجى العلم أن الحد الائتماني المتاح يعتمد على دراسة الملاءة المالية للعميل والسياسات الائتمانية المتبعة بالبنك. أما فيما يتعلق بالفوائد، فهي تُحتسب وفقاً للشروط والأحكام الخاصة بكل بطاقة ونوعها. نود التنويه بأنه في حال فقدان البطاقة، يجب إيقافها فوراً قبل طلب إصدار بديل، علماً بأن رسوم إصدار بطاقة الائتمان البديلة تبلغ 100 جنيه، ويتم التسليم في الفرع خلال 5 أيام عمل بعد التحقق من بطاقة الرقم القومي ورمز التحقق (OTP).",
+    "question_en": "What are the details regarding the credit limit and interest for credit cards?",
+    "answer_en": "Regarding credit cards, please note that the available credit limit depends on the customer's financial solvency and the bank's credit policies. As for interest, it is calculated according to the terms and conditions specific to each card type. We would like to point out that in case of card loss, it must be blocked immediately before requesting a replacement. Please note that the fee for issuing a replacement credit card is 100 EGP, and delivery is made at the branch within 5 working days after verifying the National ID and the One-Time Password (OTP)."
+  },
+  {
+    "id": "KB17",
+    "topic": "سداد مستحقات بطاقة الائتمان",
+    "question_ar": "كيف يمكنني سداد مستحقات بطاقة الائتمان الخاصة بي؟",
+    "answer_ar": "يمكنك سداد مستحقات بطاقة الائتمان الخاصة بك من خلال القنوات المتاحة التي يوفرها البنك لضمان سهولة وسرعة المعاملات. تتوفر خيارات متنوعة للسداد تشمل زيارة الفروع أو استخدام الخدمات المصرفية الرقمية المتاحة عبر تطبيق الهاتف المحمول. نوصي دائماً بالالتزام بمواعيد السداد المقررة لتجنب أي غرامات تأخير أو تأثير على التقييم الائتماني الخاص بك. في حال واجهت أي صعوبة في عملية السداد، يمكنك التواصل مع مركز الاتصال أو زيارة أقرب فرع للحصول على الدعم اللازم.",
+    "question_en": "How can I pay my credit card dues?",
+    "answer_en": "You can pay your credit card dues through the various channels provided by the bank to ensure ease and speed of transactions. Various payment options are available, including visiting branches or using digital banking services available via the mobile application. We always recommend adhering to the scheduled payment dates to avoid any late payment penalties or impact on your credit rating. If you encounter any difficulty during the payment process, you can contact the call center or visit the nearest branch for the necessary assistance."
+  },
+  {
+    "id": "KB18",
+    "topic": "التمويل الشخصي: المستندات",
+    "question_ar": "ما هي المستندات المطلوبة لتقديم طلب التمويل الشخصي للموظفين؟",
+    "answer_ar": "لتقديم طلب التمويل الشخصي للموظفين، يجب تقديم المستندات التالية: بطاقة الرقم القومي، خطاب من جهة العمل، وكشف حساب بنكي لآخر 3 أشهر. يرجى العلم أن الحد الأقصى للقسط الشهري هو 40% من صافي الدخل الشهري، وأقصى مدة للسداد هي 7 سنوات. يتم الرد على الطلب خلال 5 أيام عمل، مع العلم أنه يتم إجراء تحقق آلي من المستندات قبل إحالة الطلب إلى لجنة الائتمان.",
+    "question_en": "What are the documents required to apply for a personal loan for employees?",
+    "answer_en": "To apply for a personal loan for employees, the following documents must be submitted: National ID, an employment letter, and a bank statement for the last 3 months. Please note that the maximum monthly installment is 40% of the net monthly income, and the maximum repayment period is 7 years. The response to the application will be provided within 5 working days, noting that an automated verification of documents is conducted before referring the application to the credit committee."
+  },
+  {
+    "id": "KB19",
+    "topic": "التمويل الشخصي: أقصى قسط",
+    "question_ar": "ما هو أقصى قسط مسموح به عند طلب التمويل الشخصي للموظفين؟",
+    "answer_ar": "عند تقديم طلب التمويل الشخصي للموظفين، يجب تقديم المستندات التالية: بطاقة الرقم القومي، خطاب جهة العمل، وكشف حساب لآخر 3 أشهر. يبلغ أقصى قسط مسموح به 40% من صافي الدخل الشهري، وذلك بحد أقصى لمدة تمويل تصل إلى 7 سنوات. يرجى العلم أنه يتم إجراء تحقق آلي من المستندات قبل الإحالة إلى لجنة الائتمان، ويتم الرد على الطلب خلال 5 أيام عمل.",
+    "question_en": "What is the maximum installment allowed when applying for personal financing for employees?",
+    "answer_en": "When applying for personal financing for employees, the following documents are required: National ID, an employment letter, and a bank statement for the last 3 months. The maximum installment allowed is 40% of the net monthly income, with a maximum tenure of up to 7 years. Please note that an automated verification of documents is conducted before referral to the credit committee, and the response time is 5 working days."
+  },
+  {
+    "id": "KB20",
+    "topic": "تحديث البيانات الشخصية",
+    "question_ar": "كيف يمكنني تحديث بياناتي الشخصية لدى البنك؟",
+    "answer_ar": "يتعين على العملاء تحديث بياناتهم (إجراء اعرف عميلك) وفقاً للدورية التالية: كل 3 سنوات للعملاء منخفضي المخاطر، وسنوياً لمرتفعي المخاطر. يتطلب التحديث تقديم بطاقة رقم قومي سارية وإثبات عنوان. في حال انتهاء صلاحية البطاقة، يجب التحديث خلال 30 يوماً، وإلا ستُجمَّد الحركات المدينة. يمكنكم إجراء التحديث بسهولة عبر تطبيق الهاتف باستخدام خاصية التحقق بالصورة كقناة جديدة وميسرة.",
+    "question_en": "How can I update my personal information with the bank?",
+    "answer_en": "Customers must update their information (KYC procedure) according to the following frequency: every 3 years for low-risk customers, and annually for high-risk customers. Updating requires a valid National ID and proof of address. Upon ID expiration, updates must be completed within 30 days, otherwise, debit transactions will be frozen. You can conveniently update your information via the mobile application using the photo verification feature as a new and easy channel."
+  },
+  {
+    "id": "KB21",
+    "topic": "حساب القاصر",
+    "question_ar": "كيف يمكنني فتح حساب لقاصر وما هي الشروط والمستندات المطلوبة؟",
+    "answer_ar": "يمكن فتح حساب للقاصر لمن تتراوح أعمارهم من الميلاد وحتى 18 عاماً. تتطلب عملية الفتح تقديم شهادة ميلاد القاصر وبطاقة الولي الطبيعي. وتتم عمليات السحب من الحساب بتوقيع الولي الطبيعي فقط. كما يتيح البنك إصدار بطاقة مدفوعة مسبقاً للقاصر عند بلوغه سن 12 عاماً، وذلك بحد شهري قدره 3,000 جنيه.",
+    "question_en": "How can I open a minor account and what are the requirements and documents needed?",
+    "answer_en": "A minor account can be opened for individuals from birth up to 18 years old. The required documents are the minor's birth certificate and the natural guardian's ID card. Withdrawals are made by the natural guardian's signature only. Additionally, a prepaid card can be issued for the minor starting from age 12, with a monthly limit of 3,000 EGP."
+  },
+  {
+    "id": "KB22",
+    "topic": "دفتر الشيكات",
+    "question_ar": "كيف يمكنني إصدار دفتر شيكات خاص بحسابي؟",
+    "answer_ar": "يمكنك إصدار دفتر شيكات إذا مر شهر واحد على فتح حسابك الجاري بشرط عدم وجود شيكات مرتدة. يتوفر خياران لإصدار الدفتر: الأول يحتوي على 25 ورقة برسوم قدرها 60 جنيهاً، والخيار الثاني هو دفتر يحتوي على 50 ورقة برسوم قدرها 100 جنيه. تستغرق عملية الإصدار 7 أيام عمل.",
+    "question_en": "How can I issue a checkbook for my account?",
+    "answer_en": "You can issue a checkbook if one month has passed since opening your current account, provided there are no returned checks. Two options are available: a 25-leaf checkbook with a fee of 60 EGP, or a 50-leaf checkbook with a fee of 100 EGP. The issuance process takes 7 working days."
+  },
+  {
+    "id": "KB23",
+    "topic": "إغلاق الحساب",
+    "question_ar": "كيف يمكنني إغلاق حسابي البنكي؟",
+    "answer_ar": "لإيقاف الحساب بناءً على طلبك، يتطلب الأمر تقديم طلب كتابي في الفرع مع ضرورة تسوية جميع المديونيات القائمة وتسليم كافة البطاقات المرتبطة بالحساب. نود إفادتكم بأنه لا توجد رسوم لعملية إغلاق الحساب، ويتم تنفيذ الإغلاق خلال 3 أيام عمل. كما نتيح لكم خياراً جديداً لتسهيل الإجراءات، حيث يمكنكم تقديم طلب الإغلاق عبر تطبيق الهاتف المحمول ثم توقيعه إلكترونياً.",
+    "question_en": "How can I close my bank account?",
+    "answer_en": "To stop the account at your request, a written request must be submitted at the branch, along with the settlement of all outstanding debts and the surrender of all associated cards. Please note that there are no closing fees, and the closure is executed within 3 working days. We also offer a new option to facilitate the process, allowing you to submit the request via the mobile application and then sign it electronically."
+  },
+  {
+    "id": "KB24",
+    "topic": "الخصم المكرر أو غير المصرح به",
+    "question_ar": "لقد لاحظت وجود خصم مكرر من حسابي، أو خصم غير مصرح به، ماذا أفعل؟",
+    "answer_ar": "نحن نولي اهتماماً بالغاً لسلامة معاملاتكم المالية. في حال اكتشاف أي خصم مكرر أو غير مصرح به، يرجى تصعيد الشكوى فوراً عبر الفرع أو مركز الاتصال كأولوية قصوى. نود إفادتكم بأن شكاوى الاحتيال والخصم غير المصرح به تُصنف كشكاوى عاجلة، ويتم معالجتها خلال 24 ساعة من تاريخ تقديم البلاغ. نرجو منكم سرعة الإبلاغ لضمان اتخاذ الإجراءات اللازمة وحماية حساباتكم.",
+    "question_en": "I noticed a duplicate or unauthorized deduction from my account, what should I do?",
+    "answer_en": "We prioritize the security of your financial transactions. If you detect any duplicate or unauthorized deduction, please escalate the complaint immediately through the branch or the call center as a top priority. Please be advised that fraud and unauthorized deduction complaints are classified as urgent cases and are processed within 24 hours from the date the report is submitted. We urge you to report promptly to ensure necessary actions are taken and your accounts are protected."
+  },
+  {
+    "id": "KB25",
+    "topic": "الاسترداد النقدي على البطاقات",
+    "question_ar": "كيف يمكنني الاستفادة من خدمة الاسترداد النقدي على بطاقاتي البنكية؟",
+    "answer_ar": "نود التوضيح أنه لا تتوفر حالياً معلومات محددة ضمن إجراءاتنا المعتمدة بخصوص تفاصيل ميزة الاسترداد النقدي (Cashback) على البطاقات. نرجو من سيادتكم متابعة العروض الترويجية التي قد يطلقها البنك من حين لآخر عبر تطبيق الهاتف المحمول أو من خلال زيارة أقرب فرع لنا للاطلاع على أحدث المزايا والخصومات المتاحة على أنواع البطاقات المختلفة.",
+    "question_en": "How can I benefit from the cashback service on my bank cards?",
+    "answer_en": "We would like to clarify that there is currently no specific information within our approved procedures regarding the details of the cashback feature on cards. We kindly advise you to follow the promotional offers that the bank may launch from time to time via the mobile application or by visiting our nearest branch to view the latest benefits and discounts available on various card types."
+  },
+  {
+    "id": "KB26",
+    "topic": "استخدام البطاقة خارج مصر",
+    "question_ar": "كيف يمكنني استخدام بطاقتي البنكية أثناء تواجدي خارج مصر؟",
+    "answer_ar": "يمكنك استخدام بطاقاتك البنكية لإجراء المعاملات المالية أثناء تواجدك خارج جمهورية مصر العربية. لضمان تجربة استخدام سلسة، يرجى التأكد من تفعيل خاصية الاستخدام الدولي من خلال تطبيق الهاتف المحمول الخاص بالبنك أو عبر زيارة أقرب فرع لنا. في حال فقدان البطاقة أثناء سفرك، يجب عليك إبلاغنا فوراً لإيقافها، ومن ثم يمكنك طلب إصدار بديل وفقاً للإجراءات المتبعة. نرجو التأكد دائماً من متابعة حركات حسابك عبر التطبيق لضمان أمان معاملاتك الدولية.",
+    "question_en": "How can I use my bank card while I am outside Egypt?",
+    "answer_en": "You can use your bank cards to perform financial transactions while you are outside the Arab Republic of Egypt. To ensure a smooth user experience, please make sure to activate the international usage feature through our mobile banking application or by visiting our nearest branch. In the event that your card is lost during your travels, you must notify us immediately to stop it, after which you can request a replacement according to the established procedures. Please always ensure you monitor your account activity via the app to ensure the security of your international transactions."
+  },
+  {
+    "id": "KB27",
+    "topic": "التحويل اللحظي بين البنوك",
+    "question_ar": "كيف يمكنني إجراء تحويل لحظي بين البنوك؟",
+    "answer_ar": "يمكن للعملاء إجراء التحويلات اللحظية بين البنوك المختلفة لضمان وصول الأموال بشكل سريع. تتيح هذه الخدمة نقل الأموال من حسابك في بنكنا إلى حساب في بنك آخر في غضون ثوانٍ معدودة. يرجى التأكد من إدخال بيانات المستفيد بدقة، بما في ذلك رقم الحساب أو رقم الحساب الدولي، لضمان إتمام العملية بنجاح دون تأخير. تهدف هذه الخدمة إلى توفير تجربة مصرفية مرنة وسريعة تلبي احتياجاتكم اليومية.",
+    "question_en": "How can I make an instant transfer between banks?",
+    "answer_en": "Customers can perform instant transfers between different banks to ensure funds are delivered quickly. This service allows you to transfer money from your account with our bank to an account in another bank within seconds. Please ensure that the beneficiary's details are entered accurately, including the account number or IBAN, to ensure the transaction is completed successfully without delay. This service aims to provide a flexible and fast banking experience that meets your daily needs."
+  },
+  {
+    "id": "KB28",
+    "topic": "خدمة العملاء والتواصل",
+    "question_ar": "كيف يمكنني التواصل مع البنك في حال واجهت مشكلة أو رغبت في تقديم شكوى؟",
+    "answer_ar": "لضمان أفضل تجربة تواصل، يمكنكم تقديم الشكاوى عبر مستويين؛ المستوى الأول من خلال الفرع أو مركز الاتصال خلال يومي عمل، والمستوى الثاني عبر إدارة الشكاوى خلال 5 أيام عمل. وفي حال عدم الحل خلال 15 يوم عمل، يمكن التصعيد للبنك المركزي المصري. نولي اهتماماً خاصاً بالشكاوى العاجلة مثل حالات الاحتيال والخصم غير المصرح به، حيث يتم معالجتها خلال 24 ساعة فقط. نلتزم دائماً بالشفافية والسرعة في الاستجابة لضمان حقوقكم وحماية معاملاتكم المالية.",
+    "question_en": "How can I contact the bank if I encounter a problem or wish to file a complaint?",
+    "answer_en": "To ensure the best communication experience, complaints can be submitted through two levels: the first level via the branch or call center within two business days, and the second level through the Complaints Department within 5 business days. If unresolved within 15 business days, you may escalate to the Central Bank of Egypt. We pay special attention to urgent complaints, such as fraud and unauthorized deductions, which are processed within 24 hours. We are committed to transparency and rapid response to protect your rights and financial transactions."
+  },
+  {
+    "id": "KB29",
+    "topic": "التحدث مع موظف",
+    "question_ar": "كيف يمكنني التحدث مع موظف للحصول على المساعدة؟",
+    "answer_ar": "للتحدث مع موظف والحصول على الدعم اللازم، يمكنك زيارة أقرب فرع للبنك حيث يتواجد موظفونا لخدمتكم مباشرة. كما يمكنك التواصل مع مركز الاتصال الخاص بنا للحصول على المساعدة عبر الهاتف. في حال كنت ترغب في إجراء بعض العمليات مثل فتح حساب توفير أو تحديث بياناتك، يمكنك القيام بذلك بسهولة عبر تطبيق الهاتف المحمول دون الحاجة لزيارة الفرع. أما بالنسبة للشكاوى، فيمكنك تقديمها عبر الفرع أو مركز الاتصال، وفي حال عدم الحل، يتم تصعيدها لإدارة الشكاوى المختصة.",
+    "question_en": "How can I speak with an employee to get assistance?",
+    "answer_en": "To speak with an employee and receive the necessary support, you can visit your nearest bank branch where our staff are available to serve you directly. You can also contact our call center for assistance via phone. If you wish to perform certain transactions, such as opening a savings account or updating your data, you can easily do so via the mobile application without needing to visit a branch. Regarding complaints, you can submit them through the branch or the call center; if unresolved, they are escalated to the specialized Complaints Department."
+  },
+  {
+    "id": "KB30",
+    "topic": "تغيير رقم الهاتف المسجل",
+    "question_ar": "كيف يمكنني تغيير رقم الهاتف المسجل الخاص بي لدى البنك؟",
+    "answer_ar": "لتحديث رقم الهاتف المسجل في بياناتكم، يرجى زيارة أقرب فرع للبنك لضمان أمن حسابكم. يتطلب الإجراء تقديم بطاقة الرقم القومي سارية لإثبات الهوية. كما قد يطلب منكم التحقق من خلال رمز تحقق لمرة واحدة (OTP) يتم إرساله إلى رقم الهاتف القديم أو عبر وسيلة تحقق أخرى معتمدة لضمان إتمام العملية بنجاح. نهدف من خلال هذا الإجراء إلى حماية حسابكم وضمان وصول كافة الإشعارات والرموز الأمنية إلى رقمكم الصحيح.",
+    "question_en": "How can I change my registered mobile number with the bank?",
+    "answer_en": "To update your registered mobile number, please visit your nearest bank branch to ensure the security of your account. The procedure requires presenting a valid National ID for identity verification. You may also be required to verify your identity using a One-Time Password (OTP) sent to your old registered number or through another approved verification method to complete the process successfully. We implement this procedure to protect your account and ensure all notifications and security codes are sent to your correct number."
+  }
+]

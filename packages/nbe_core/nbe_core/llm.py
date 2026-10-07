@@ -77,13 +77,19 @@ class JSONOutputError(ValueError):
 
 async def chat_json(messages: list[dict], schema: dict, alias: str = "workhorse", temperature: float = 0,
                     **kw) -> tuple[dict, LLMResult]:
-    """Structured output: the model is constrained to `schema`; returns (parsed, result)."""
-    res = await chat(messages, alias, json_schema=schema, temperature=temperature, **kw)
-    text = res.text.strip().removeprefix("```json").removesuffix("```").strip()
-    try:
-        return json.loads(text), res
-    except json.JSONDecodeError as exc:
-        raise JSONOutputError(str(exc), res.text) from exc
+    """Structured output: the model is constrained to `schema`; returns (parsed, result).
+
+    Constrained decoding still occasionally yields malformed JSON (seen with both Gemma 4 and gpt-oss),
+    and at temperature 0 a retry would repeat it, so the one retry samples at 0.3 or more."""
+    for attempt, temp in ((1, temperature), (2, max(temperature, 0.3))):
+        res = await chat(messages, alias, json_schema=schema, temperature=temp, **kw)
+        text = res.text.strip().removeprefix("```json").removesuffix("```").strip()
+        try:
+            return json.loads(text), res
+        except json.JSONDecodeError as exc:
+            if attempt == 2:
+                raise JSONOutputError(str(exc), res.text) from exc
+    raise AssertionError("unreachable")
 
 
 async def stream(messages: list[dict], alias: str = "workhorse", max_tokens: int = 1024,
