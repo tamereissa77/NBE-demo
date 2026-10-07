@@ -6,6 +6,16 @@
 :80 {
 	root * /srv
 	encode gzip
+
+	# Asset files carry a content hash in their name: cache them forever.
+	@assets path /assets/*
+	header @assets Cache-Control "public, max-age=31536000, immutable"
+
+	# Everything else (index.html and the SPA routes) must be revalidated on every load,
+	# so a rebuilt portal is picked up without a hard refresh.
+	@pages not path /assets/*
+	header @pages Cache-Control "no-cache"
+
 	try_files {path} /index.html
 	file_server
 }
