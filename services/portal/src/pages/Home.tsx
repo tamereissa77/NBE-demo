@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { BRAND } from "../brand";
 import { StatusDot } from "../components/StatusDot";
 import { DEMOS, type Demo } from "../demos";
 import { useI18n } from "../i18n";
@@ -41,13 +42,15 @@ export function Home() {
         <div className="mx-auto max-w-7xl px-4 py-12 sm:py-16">
           <h1 className="max-w-3xl text-3xl font-bold leading-tight sm:text-4xl">{t.heroTitle}</h1>
           <p className="mt-4 max-w-2xl text-lg opacity-90">{t.heroSub}</p>
-          <div className="mt-6 flex flex-wrap gap-2 text-sm font-semibold">
-            {[t.poc, t.offline, t.synthetic].map((label) => (
-              <span key={label} className="rounded-full bg-accent px-3 py-1 text-ink">
-                {label}
-              </span>
-            ))}
-          </div>
+          {BRAND.heroChips !== false && (
+            <div className="mt-6 flex flex-wrap gap-2 text-sm font-semibold">
+              {[t.poc, t.offline, t.synthetic].map((label) => (
+                <span key={label} className="rounded-full bg-accent px-3 py-1 text-ink">
+                  {label}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </section>
       <div className="brand-rule" />

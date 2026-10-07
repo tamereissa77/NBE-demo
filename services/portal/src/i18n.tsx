@@ -6,7 +6,7 @@ import type { Lang } from "./demos";
 const STRINGS = {
   en: {
     appTitle: BRAND.appTitle.en,
-    heroTitle: "Seven AI use cases, live on one Dell Pro Max with GB10",
+    heroTitle: BRAND.heroTitle?.en ?? "Seven AI use cases, live on one Dell Pro Max with GB10",
     heroSub: `One demo per ${BRAND.short} use case, on one shared, fully offline platform.`,
     allDemos: "All demos",
     openDemo: "Open demo",
@@ -29,7 +29,7 @@ const STRINGS = {
   },
   ar: {
     appTitle: BRAND.appTitle.ar,
-    heroTitle: "سبع حالات استخدام للذكاء الاصطناعي على جهاز واحد Dell Pro Max with GB10",
+    heroTitle: BRAND.heroTitle?.ar ?? "سبع حالات استخدام للذكاء الاصطناعي على جهاز واحد Dell Pro Max with GB10",
     heroSub: "عرض لكل حالة استخدام، على منصة واحدة مشتركة تعمل دون اتصال بالإنترنت.",
     allDemos: "جميع العروض",
     openDemo: "افتح العرض",
