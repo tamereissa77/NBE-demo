@@ -31,4 +31,15 @@ fi
 step "platform and demo services"
 docker compose up -d --wait
 
+# First start on a fresh box: generate synthetic data and load every demo
+if [ ! -f data/generated/d1/manifest.json ] || [ ! -f data/generated/d3/customers.csv ]; then
+  step "generating synthetic data (first run)"
+  make -s data
+fi
+if ! curl -fsS "http://localhost:${NBE_PORT:-8200}/api/d2/documents" | grep -q procedure || \
+   [ "$(docker exec nbe-qdrant bash -c 'exec 3<>/dev/tcp/127.0.0.1/6333; printf "GET /collections/d2_procedures HTTP/1.0\r\n\r\n" >&3; head -1 <&3' 2>/dev/null | grep -c 200)" = "0" ]; then
+  step "loading demo data (first run)"
+  scripts/ingest.sh
+fi
+
 echo; echo "Portal: http://localhost:${NBE_PORT:-8200}"

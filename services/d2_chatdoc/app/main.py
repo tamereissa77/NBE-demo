@@ -95,6 +95,8 @@ class Ask(BaseModel):
     history: list[dict] = []
 
 
+COMPARE = re.compile(r"(تغي[ّ]?ر|اتغير|الفرق بين|الفروق|ما الجديد|إيه اللي اتغير|what changed|what's new|difference between|compare)", re.I)
+
 ANSWER_SYSTEM = {
     "ar": ("أنت مساعد موظفي فروع البنك الأهلي المصري. أجب فقط من المصادر المرفقة. اذكر المصدر بعد كل معلومة بالشكل [S1] أو [S2]. "
            "إذا لم تجد الإجابة في المصادر فقل بوضوح: \"لم أجد هذه المعلومة في الإجراءات المتاحة\" ولا تخمّن. "
@@ -144,6 +146,20 @@ async def ask(body: Ask):
     if not hits or hits[0]["rerank_score"] < 0.02:
         msg = "لم أجد هذه المعلومة في الإجراءات المتاحة." if lang == "ar" else "I could not find this in the available procedures."
         return {"answer": msg, "citations": [], "delta": None, "trace": trace.to_list(), "found": False}
+
+    # "What changed?" questions are answered from the version comparison, citing both versions
+    if COMPARE.search(body.question):
+        proc = hits[0]["file"].split("_")[0]
+        delta = await version_delta(proc, lang, trace)
+        if delta:
+            files = [f"{proc}_v1_ar.md", f"{proc}_v2_ar.md"]
+            citations = [{"label": f"S{i + 1}", "file": f, "title": DOCS[f]["title"], "version": DOCS[f]["version"], "lang": "ar",
+                          "effective": DOCS[f]["effective"], "section": "", "text": DOCS[f]["text"][:400], "rerank": None, "cited": True}
+                         for i, f in enumerate(files)]
+            head = (f"التغييرات في «{delta['title']}» بين الإصدار 1 [S1] والإصدار 2 [S2]:\n\n" if lang == "ar"
+                    else f"Changes in “{delta['title']}” between version 1 [S1] and version 2 [S2]:\n\n")
+            return {"answer": head + delta["summary"], "citations": citations, "delta": delta, "found": True, "lang": lang,
+                    "trace": trace.to_list(), "total_ms": trace.total_ms()}
 
     # Prefer the current version: if a procedure appears in both versions, put the newest first
     latest = {}

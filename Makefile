@@ -10,7 +10,7 @@ export NBE_PORT
 
 .PHONY: help up down start stop restart build rebuild ps status logs clean \
         preflight gpu verify platform-check warm models d1 d2 d3 d4 d5 d6 d7 \
-        arabic-gate models-lock hero hero-off quality-on quality-off voice-on voice-off image-on image-off
+        data ingest demo-reset ui-test record offline-check arabic-gate models-lock hero hero-off quality-on quality-off voice-on voice-off image-on image-off
 
 help:
 	@echo "NBE AI demos on GB10"
@@ -32,6 +32,12 @@ help:
 	@echo "  make platform-check  exercise every shared service through nbe_core"
 	@echo "  make warm          first request to every model, so nothing is cold on stage"
 	@echo ""
+	@echo "  make data          regenerate synthetic data (D1 documents, D3 commerce, D6 docs) in containers"
+	@echo "  make ingest        load every demo's data into Postgres/Qdrant (done automatically on first make up)"
+	@echo "  make demo-reset    between audiences: clear decisions, triage, agent sessions, mock-bank state"
+	@echo "  make ui-test       scripted walkthrough of all seven demos in the real UI (Playwright)"
+	@echo "  make record        same, recording backup videos to recordings/ (English and Arabic)"
+	@echo "  make offline-check prove nothing can reach the internet"
 	@echo "  make arabic-gate   run the week-1 Arabic gate on every candidate model (~40 min), then score at /eval"
 	@echo "  make models-lock   freeze the gate result into config/models.lock (after human scoring)"
 	@echo "  make hero          swap quality/voice/image out, gpt-oss-120b in (D6 hero moment)"
@@ -100,6 +106,34 @@ verify:
 platform-check warm:
 	@docker run --rm --network nbe-core --env-file .env -e LLM_GATEWAY_URL=http://nbe-llmgw:4000/v1 \
 	  -v $(CURDIR)/tests:/tests:ro nbe-d1:latest python /tests/platform_check.py
+
+DATAGEN := docker compose --profile tools run --rm -u $$(id -u):$$(id -g) nbe-datagen
+PW_IMAGE := mcr.microsoft.com/playwright/python:v1.55.0-noble
+PW_RUN := docker run --rm --network host -u pwuser -v $(CURDIR)/tests/ui:/tests:ro
+
+data:
+	@mkdir -p data/generated/d3/banners && chmod 777 data/generated/d3/banners
+	$(DATAGEN) python -m data.generators.d1_loan_docs
+	$(DATAGEN) python -m data.generators.d3_commerce
+	$(DATAGEN) python -m data.generators.d6_docs
+	$(DATAGEN) python -m data.generators.d5_clauses
+
+ingest:
+	@scripts/ingest.sh
+
+demo-reset:
+	@scripts/demo_reset.sh
+
+ui-test:
+	@mkdir -p ops/ui && chmod 777 ops/ui
+	$(PW_RUN) -v $(CURDIR)/ops/ui:/out $(PW_IMAGE) sh -c "pip install -q playwright==1.55.0 2>/dev/null; python /tests/walkthrough.py --lang en"
+
+record: demo-reset
+	@mkdir -p recordings && chmod 777 recordings
+	$(PW_RUN) -v $(CURDIR)/recordings:/out $(PW_IMAGE) sh -c "pip install -q playwright==1.55.0 2>/dev/null; python /tests/walkthrough.py --lang ar --record && python /tests/walkthrough.py --lang en --record"
+
+offline-check:
+	@scripts/offline_check.sh
 
 arabic-gate:
 	@mkdir -p ops && set -o pipefail && scripts/arabic_gate.sh 2>&1 | tee ops/arabic_gate.log

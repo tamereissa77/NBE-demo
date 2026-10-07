@@ -293,6 +293,10 @@ def doc_invoice(a: Applicant, rng: random.Random, total: int | None = None):
         y += 65
     vat = round(subtotal * 0.14)
     true_total = subtotal + vat
+    d.line((300, y + 5, W - 80, y + 5), fill=(150, 150, 150), width=1)
+    ar(d, W - 80, y + 20, "المجموع قبل الضريبة:", 28)          # real tax invoices print the pre-tax subtotal
+    ar(d, 400, y + 20, f"{subtotal:,}", 28)
+    y += 50
     ar(d, W - 80, y + 30, "ضريبة القيمة المضافة 14%:", 28)
     ar(d, 400, y + 30, f"{vat:,}", 28)
     tot_box = ar(d, 400, y + 110, f"{(total or true_total):,}", 32, True)

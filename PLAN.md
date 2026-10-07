@@ -3,7 +3,7 @@
 **Source brief:** *NBE AI demos on GB10*, Dell Technologies, draft of 6 Oct 2026 (17 slides)
 **Target:** seven live demos (D1 to D7), one per NBE use case, on one Dell Pro Max with GB10, fully offline and fully containerised
 **Repo:** https://github.com/tamereissa77/NBE-demo · **Local:** `~/NBE-demo`
-**Status:** Phases 0–1 done and verified (6–7 Oct). Phase 2 (Arabic gate) has run on all five models with LLM-judge pre-scores (§12); **blind human scoring at `/eval` is the remaining step** before `make models-lock` freezes the stack (target 16 Oct).
+**Status (7 Oct):** all seven demos built and passing the end-to-end UI walkthrough; platform, data, hardening and docs done (§13). Open items: blind human scoring for the Arabic gate (`/eval`), then `make models-lock`; NBE inputs in §10 item 7.
 
 ---
 
@@ -251,10 +251,10 @@ The brief's calendar (slide 14) is the external commitment. The build phases bel
 | **0. Scaffold** ✅ | Repo layout, compose skeleton, Makefile, `.env.example`, Caddy, Postgres, Qdrant, portal shell with 7 empty screens, CI-free smoke test | `make up` brings up the shell, portal reachable on :8200 | Kickoff 12 Oct |
 | **1. Platform** ✅ | vLLM workhorse (FP8), embed/rerank service, LiteLLM aliases, guardrails, mock-bank, `nbe_core`, preflight/gpu scripts, model downloads. **Validate every component on aarch64**: Docling, Piper, whisper, SDXL, FlagEmbedding, OpenCV, NeMo Guardrails | All aliases answer; memory budget measured against §5; aarch64 gap list closed or worked around | Platform + Arabic test 12–23 Oct |
 | **2. Arabic gate** 🟡 run; awaiting human scores | Run `eval/arabic_gate`, pick models, write `models.lock` | Stack frozen and documented | **Model stack frozen 16 Oct** |
-| **3. Synthetic data** | All generators: D1 docs + forgeries, D2 procedures v1/v2, D3 customers/txns/merchants, D4 bank + KB, D5 contracts + templates, D6 doc corpus, D7 500 complaints | `make data && make ingest` repeatable and deterministic (seeded) | Synthetic data 12–30 Oct |
-| **4. Wave 1** | D2 → D5 (reuses D2 RAG) → D7 → D6 | Each passes its §4 acceptance criteria and `make verify` | Wave 1 19–30 Oct |
-| **5. Wave 2** | D1 → D3 → D4 (voice last, most risk) | Same | Wave 2 26 Oct–13 Nov |
-| **6. Hardening** | `offline-check`, `demo-reset`, warm-up, failure drills (kill a model mid-demo, cold boot to ready time), talk tracks in `docs/`, backup videos via `make record` | Cold boot to all 7 demos ready measured and documented; 3 consecutive clean full run-throughs | Hardening + videos 9–18 Nov |
+| **3. Synthetic data** ✅ | All generators: D1 docs + forgeries, D2 procedures v1/v2, D3 customers/txns/merchants, D4 bank + KB, D5 contracts + templates, D6 doc corpus, D7 500 complaints | `make data && make ingest` repeatable and deterministic (seeded) | Synthetic data 12–30 Oct |
+| **4. Wave 1** ✅ | D2 → D5 (reuses D2 RAG) → D7 → D6 | Each passes its §4 acceptance criteria and `make verify` | Wave 1 19–30 Oct |
+| **5. Wave 2** ✅ | D1 → D3 → D4 (voice last, most risk) | Same | Wave 2 26 Oct–13 Nov |
+| **6. Hardening** ✅ | `offline-check`, `demo-reset`, warm-up, failure drills (kill a model mid-demo, cold boot to ready time), talk tracks in `docs/`, backup videos via `make record` | Cold boot to all 7 demos ready measured and documented; 3 consecutive clean full run-throughs | Hardening + videos 9–18 Nov |
 | **7. Dry run** | NBE dry run, fixes | Sign-off | **Dry run 19 Nov, demo-ready 20 Nov** |
 
 ---
@@ -332,3 +332,37 @@ Things the plan did not anticipate, found by running every component on this GB1
 1. **Tool calls must be enforced by the agent loop.** On egy-02 (dialect: "block my card ending 4821") the Gemma models and gpt-oss all *said* they would send the OTP but did not call `send_otp`. D4 will use `tool_choice` when an action is pending, plus a check that rejects "I will do X" replies with no call.
 2. **Customer-facing drafts need a "reply text only" instruction.** Both Gemma models wrap replies and SMS copy in a preamble and offer several alternatives, which costs format points (msa-07, egy-04, egy-09). D3 and D7 prompts will ask for exactly one output with no preamble, and validate length.
 3. **Judge reliability:** the first judge prompt over-applied a "JSON only" example to every task (fixed: only constraints the task states), and gpt-oss sometimes loops on whitespace inside the JSON schema (fixed: one retry at temperature 0.7, and old scores are cleared before a re-judge).
+
+---
+
+## 13. Build complete: measured results (7 Oct)
+
+All seven demos run live on the GB10, fully offline (`make offline-check`: 22 containers on the internal network, no egress), and pass the scripted end-to-end walkthrough in the real UI with real models (`make ui-test`: 7/7, Arabic and English). Operator guide: `docs/runbook.md`; presenter guide: `docs/talk-tracks.md`; backup videos: `make record` → `recordings/video/`.
+
+| Demo | Acceptance check (§4) | Measured |
+|---|---|---|
+| D1 Doc verification | all 10 forgeries flagged, exactly one planned false positive, evidence linked | **10/10 forgeries flagged**, 0 missed. Other flags are the genuine partner document in a cross-check mismatch (5) plus the planned false positive (A04); no unexplained flags. ~25 s per pack. |
+| D2 Chat with Document | ≥90% correct citation on the golden set; "not found" when absent | **51/52** on the 52-question golden set from the fact sheets (current values 36/37, version deltas 12/12, unanswerable 3/3). ~4-7 s per answer. |
+| D3 Campaigns | AR/EN copy for 3 channels < 30 s; planted claim caught | copy for SMS (A/B), email and social in AR/EN/dialect; **planted "guaranteed 100%" caught and auto-fixed**; SMS ≤ 160 chars; ~30 s including a live SDXL banner |
+| D4 Virtual Agent | scripted happy path, jailbreaks blocked, mock APIs only | lost card → OTP → verify → block → ticket → handoff works in Arabic and English; dialect jailbreak blocked by the input rail in ~0.1 s; 2-5 s per turn; OTP never reaches the model |
+| D5 Legal | all planted deviations found; verifiable quotes | **all 8 planted deviations found across C01-C05, no false deviations**; quotes checked verbatim; ~45 s per contract, ~18 s per ruling |
+| D6 Assistant | task routing, AR↔EN translation, file chat, OpenAI-compatible endpoint | rule + LLM routing with on-screen reason and honest fallback; `/v1` (model `nbe-auto`, bearer key) for Dataiku LLM Mesh and Open WebUI |
+| D7 Complaints | ≥85% topic agreement on held-out 100; nothing sent without approval | **94% topic accuracy, 98% severity within ±1** on 100 held-out complaints (zero-shot); drafts pass policy check and output guardrail and wait for a human |
+
+**Changes from the plan, and why.**
+- **Gemma 4 26B does vision too**, so there is no separate document VLM (saves ~10 GB).
+- **Show mode is core + voice + image.** The Arabic gate provisionally drops Gemma 4 31B, which stays optional (`MODE=full`, `make quality-on`). D5's reduce step uses `D5_REDUCE_ALIAS` (default workhorse).
+- **Open WebUI is not deployed.** D6's own portal screen carries the Model-Selection Panel; the `/v1` endpoint is ready for Open WebUI or Dataiku if NBE wants either.
+- **D1 forensics are noise consistency, duplicate-stamp detection and metadata,** with ELA shown as a visual aid only. Classic ELA and generic copy-move detection both misfired on text documents and the SPECIMEN watermark (measured), so they would have flagged every page.
+- **D5 contract clauses are written deterministically** (`data/generators/d5_clauses.py`): the LLM paraphrased the exact terms the comparison depends on. Rulings, procedures, the knowledge base and complaints are LLM-authored from fact sheets and committed (`data/seed/`, with `fact_check.json`).
+- **The D7 demo queue** is a realistic severity mix (4/6/6/4), not the 20 most severe complaints.
+
+**Fixes found by testing the real thing,** each verified after the fix:
+- D4 enforces tool calls when the model promises an action.
+- The output rail allows asking for the bank's own OTP.
+- The agent replies in the language of the customer's latest turn.
+- Gemma's thinking-channel text is stripped from replies.
+- Malformed JSON is retried once with sampling.
+- D5 changes are structured fields: arrows are ambiguous in RTL text, and the model reversed them.
+- D3's A/B plan states the detectable lift for the real audience.
+- D1 invoices print the pre-tax subtotal, so the vision model no longer adds up line items itself.
