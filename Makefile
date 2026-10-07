@@ -82,10 +82,10 @@ restart:
 	$(COMPOSE_ALL) restart
 
 build: .env
-	$(COMPOSE_ALL) build
+	$(COMPOSE_ALL) --profile tools build   # tools: the data generators (datagen) and test runners
 
 rebuild: .env
-	$(COMPOSE_ALL) build --no-cache
+	$(COMPOSE_ALL) --profile tools build --no-cache
 
 ps:
 	$(COMPOSE_ALL) ps
