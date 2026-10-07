@@ -5,6 +5,7 @@ Each call returns the text plus the metadata the "Show the work" drawer needs:
 which model actually answered (fallbacks included), tokens, latency and tokens/s.
 """
 import json
+import re
 import time
 from collections.abc import AsyncIterator
 from dataclasses import dataclass, field
@@ -38,6 +39,16 @@ class LLMResult:
                 "tokens_per_s": self.tokens_per_s}
 
 
+_CHANNEL = re.compile(r"^\s*(?:<\|?channel\|?>)?\s*thought\b.*?<channel\|>", re.S)
+
+
+def clean_text(text: str) -> str:
+    """Gemma 4 sometimes leaks its thinking channel ("thought ... <channel|>") into content after tool calls."""
+    if "<channel|>" in text:
+        text = text.rsplit("<channel|>", 1)[-1]
+    return _CHANNEL.sub("", text).strip()
+
+
 def _headers() -> dict:
     return {"Authorization": f"Bearer {settings.llm_gateway_key}"}
 
@@ -61,7 +72,7 @@ async def chat(messages: list[dict], alias: str = "workhorse", *, tools: list[di
     # the api-base header says which server actually answered.
     model = d.get("model", alias)
     served_by = r.headers.get("x-litellm-model-api-base", "")
-    return LLMResult(text=msg.get("content") or "", alias=alias, model=model, served_by=served_by,
+    return LLMResult(text=clean_text(msg.get("content") or ""), alias=alias, model=model, served_by=served_by,
                      latency_ms=int((time.time() - t) * 1000),
                      prompt_tokens=usage.get("prompt_tokens", 0), completion_tokens=usage.get("completion_tokens", 0),
                      tool_calls=msg.get("tool_calls") or [])

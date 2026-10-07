@@ -20,7 +20,7 @@ case "${1:-show}" in
     $C up -d --wait nbe-hero ;;
   hero-off)
     $C stop nbe-hero
-    "$0" quality-on && "$0" voice-on ;;
+    "$0" voice-on && "$0" image-on ;;
   quality-on)  need 40 "Gemma 4 31B"; $C up -d --wait nbe-llm-q ;;
   quality-off) $C stop nbe-llm-q ;;
   voice-on)    need 6 "whisper + Piper"; $C up -d --wait nbe-asr nbe-tts ;;

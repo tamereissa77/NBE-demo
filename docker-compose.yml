@@ -446,6 +446,9 @@ services:
     image: nbe-d3:latest
     container_name: nbe-d3
     environment: { <<: *demo-env, DEMO_ID: d3 }
+    volumes:
+      - ./data:/data:ro
+      - ./data/generated/d3/banners:/data/generated/d3/banners   # cached banner mock-ups (written by /admin/banners)
 
   nbe-d4:
     <<: *demo-api

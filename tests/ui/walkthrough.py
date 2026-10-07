@@ -17,9 +17,8 @@ TIMEOUT = 240_000
 
 
 def d1(p: Page) -> None:
-    p.get_by_role("button", name="A01").first.click()
-    p.get_by_text("A01").first.wait_for()
-    p.get_by_role("button", name="Verify").or_(p.get_by_role("button", name="تحقق")).first.click()
+    p.locator("[data-test=pack]").first.click()
+    p.locator("[data-test=verify]").click()
     p.locator("[data-test=verdict]").wait_for(timeout=TIMEOUT)
 
 

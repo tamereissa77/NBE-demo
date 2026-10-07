@@ -16,7 +16,7 @@ help:
 	@echo "NBE AI demos on GB10"
 	@echo ""
 	@echo "  make up            preflight (free the GPU), then start everything in a memory-safe order"
-	@echo "                     (MODE=show default: core + quality + voice;  MODE=core: core models only)"
+	@echo "                     (MODE=show default: core + voice + image;  MODE=full adds Gemma 4 31B;  MODE=core: core only)"
 	@echo "  make down          stop and remove containers (data volumes kept)"
 	@echo "  make start|stop    start/stop existing containers"
 	@echo "  make restart       restart all containers"

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Start the NBE stack in a memory-safe order (PLAN.md §6). vLLM sizes its KV cache from memory
 # that is free when it starts, so model servers start one at a time, each waiting for healthy.
-#   MODE=show (default): core + quality + voice     (image is switched on separately: make image-on)
+#   MODE=show (default): core + voice + image (live D3 banners)
+#   MODE=full:           show + Gemma 4 31B quality model (optional for D5; the Arabic gate provisionally drops it)
 #   MODE=core:           core models only
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -18,11 +19,13 @@ $C up -d --wait nbe-llm
 $C up -d --wait nbe-embed
 $C up -d --wait nbe-rerank
 
-if [ "$MODE" = "show" ]; then
+if [ "$MODE" = "full" ]; then
   step "quality model (Gemma 4 31B NVFP4)"
   $C up -d --wait nbe-llm-q
-  step "voice (whisper-large-v3 + Piper)"
-  $C up -d --wait nbe-asr nbe-tts
+fi
+if [ "$MODE" = "show" ] || [ "$MODE" = "full" ]; then
+  step "voice (whisper-large-v3 + Piper) and image (SDXL)"
+  $C up -d --wait nbe-asr nbe-tts nbe-sdxl
 fi
 
 step "platform and demo services"
