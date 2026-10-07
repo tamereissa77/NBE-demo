@@ -534,9 +534,13 @@ The platform is bank-neutral; a **brand pack** and a few settings decide which b
 | Bank names for the AI and data | `.env.example`: `BANK_SHORT`, `BANK_NAME_EN`, `BANK_NAME_AR` | D2, D4, D6 prompts; API titles; D1 HR letters; D5 contracts |
 | Isolation | `.env.example`: `COMPOSE_PROJECT_NAME`, `IMAGE_TAG` | Separate Postgres/Qdrant volumes and image tags per bank |
 | Banner style | `.env.example`: `BANNER_PALETTE` | D3 SDXL prompts |
-| Lender in synthetic contracts | `data/seed/d5/` (regenerate with `make data`) | D5 |
+| Country locale: currency, local dialect, ID wording, cities, names, employers, merchants, phone format, VAT, D2 sample questions | `packages/nbe_core/nbe_core/locale.py` (same names on every branch, different values) | Every service prompt, D1/D3 generators, mock bank, D2 suggestions |
+| Portal locale: currency label, dialect label, D4 demo script | `brand/brand.json` → `locale` | D1, D3, D4, eval pages |
+| Corpus facts (procedures, contract template and deviations, court rulings, KB topics, complaint grid) | `data/generators/specs.py` | D2, D4, D5, D7 seed data and golden answers |
+| Seed data and model-eval prompts | `data/seed/`, `eval/arabic_gate/prompts.yaml` (regenerate with `make data` and the author script) | D2, D4, D5, D7, Arabic gate |
+| Time zone | `.env.example`: `TZ` | Container clocks |
 
-**Adding another bank:** branch from `main`, replace `brand/`, set the brand block in `.env.example` (a new `COMPOSE_PROJECT_NAME` and `IMAGE_TAG`), regenerate `data/seed/d5`, and add a `start-XXX` entry in `scripts/switch_brand.sh` and the Makefile. Platform improvements go to `main` and reach each bank with `git merge main` on its branch.
+**Adding another bank:** branch from `main`, replace `brand/`, set the brand block in `.env.example` (a new `COMPOSE_PROJECT_NAME` and `IMAGE_TAG`); for another country also replace `locale.py`, `specs.py` and the gate prompts and re-author the seed data (`docker compose --profile tools run --rm nbe-datagen python -m data.generators.author`, then `make data`), and add a `start-XXX` entry in `scripts/switch_brand.sh` and the Makefile. Platform improvements go to `main` and reach each bank with `git merge main` on its branch.
 
 ---
 

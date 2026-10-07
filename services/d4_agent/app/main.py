@@ -1,6 +1,6 @@
 """D4 · AI Virtual Agent (PLAN.md §4 D4).
 
-A customer speaks or types (Arabic, Egyptian dialect or English). The agent authenticates with a mock
+A customer speaks or types (Arabic, local dialect or English). The agent authenticates with a mock
 OTP, blocks a card, logs a complaint and hands off to a human on request. Guardrails run on every
 input and output; a blocked turn shows a live STOP marker. Every banking action hits the mock bank.
 
@@ -22,6 +22,7 @@ from fastapi import HTTPException
 from pydantic import BaseModel
 
 from nbe_core import create_app, llm, platform, retrieval, settings
+from nbe_core import locale as L
 from nbe_core.audit import log_event
 from nbe_core.text import detect_lang
 from nbe_core.trace import Trace
@@ -52,7 +53,7 @@ TOOLS = [
 OPENAI_TOOLS = [{"type": "function", "function": t} for t in TOOLS]
 
 SYSTEM = """You are the virtual assistant of {bank} (demo). Be warm, brief and precise.
-Language: reply in the customer's language. For Arabic (including Egyptian dialect), reply in simple Modern Standard Arabic with a friendly Egyptian tone; for English, reply in English. Keep replies under 60 words: they are read aloud.
+Language: reply in the customer's language. {tone}; for English, reply in English. Keep replies under 60 words: they are read aloud.
 Rules:
 - Any card or account action, or showing the balance, needs OTP verification first: call send_otp, ask the customer for the code, then call verify_otp with the code they give.
 - If the customer reports a lost or stolen card, or unknown transactions, act at once: call send_otp in this turn without asking permission, then ask for the code.
@@ -165,14 +166,14 @@ async def turn(body: TurnIn):
     lang_rule = ("The customer's latest message is in Arabic: reply in Arabic." if lang == "ar" else
                  "The customer's latest message is in English: reply in English only.")
     system = SYSTEM.format(bank=settings.bank_en, name=s["customer"]["name_ar"] if lang == "ar" else s["customer"]["name_en"], cid=s["customer"]["id"],
-                           verified=s["verified"], lang_rule=lang_rule)
+                           verified=s["verified"], lang_rule=lang_rule, tone=L.AGENT_TONE)
     tools_called = 0
     reply = ""
     for step in range(6):
         res = await llm.chat([{"role": "system", "content": system}, *s["messages"]], tools=OPENAI_TOOLS, max_tokens=400, temperature=0.2)
         trace.llm(f"Agent step {step + 1} (workhorse)", res)
         if not res.tool_calls and PROMISE.search(res.text or "") and tools_called == 0:
-            # Promised an action without doing it (the Arabic gate's egy-02 failure): retry with a tool call required
+            # Promised an action without doing it (the Arabic gate's dialect tool-call failure): retry with a tool call required
             trace.add("rules", "Promise without a tool call: retrying with tool_choice=required", res.text)
             res = await llm.chat([{"role": "system", "content": system}, *s["messages"]], tools=OPENAI_TOOLS, max_tokens=400,
                                  temperature=0.2, tool_choice="required")
@@ -197,7 +198,7 @@ async def turn(body: TurnIn):
             await log_event("tool_call", name, {"session": body.session_id, "args": args})
             if name == "verify_otp":
                 system = SYSTEM.format(bank=settings.bank_en, name=s["customer"]["name_ar"] if lang == "ar" else s["customer"]["name_en"],
-                                       cid=s["customer"]["id"], verified=s["verified"], lang_rule=lang_rule)
+                                       cid=s["customer"]["id"], verified=s["verified"], lang_rule=lang_rule, tone=L.AGENT_TONE)
     if not reply:
         reply = "تم." if lang == "ar" else "Done."
 

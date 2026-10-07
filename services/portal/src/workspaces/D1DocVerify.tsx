@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
+import { BRAND } from "../brand";
 import { getJSON, postJSON, type TraceStep } from "../api";
 import { useI18n } from "../i18n";
 import type { WorkspaceProps } from "../pages/DemoPage";
 import { Block, Button, Chip, ErrorNote, Modal, Panel, Spinner } from "./common";
 
-interface Pack { id: string; name_ar: string; name_en: string; loan_amount_egp: number; documents: string[]; decision: Decision | null; verified: boolean }
+interface Pack { id: string; name_ar: string; name_en: string; loan_amount: number; currency: string; documents: string[]; decision: Decision | null; verified: boolean }
 interface Decision { decision: string; note: string; reviewer: string; decided_at: string }
 interface Flag { source: string; rule: string; severity: string; documents: string[]; detail_ar: string; detail_en: string; evidence: Record<string, unknown> }
 interface Doc {
@@ -12,7 +13,7 @@ interface Doc {
   forensics: { noise: { regions: { bbox: number[] }[]; page_noise: number }; stamps: { duplicate: boolean; boxes: number[][] | null; similarity: number };
                metadata: { software: string | null }; ela_score: number; image_size: number[] };
 }
-interface Result { applicant: { id: string; name_ar: string; name_en: string; loan_amount_egp: number }; verdict: string; risk: string; flags: Flag[];
+interface Result { applicant: { id: string; name_ar: string; name_en: string; loan_amount: number; currency: string }; verdict: string; risk: string; flags: Flag[];
                    documents: Doc[]; summary: { ar: string; en: string }; decision: Decision | null; trace: TraceStep[]; total_ms: number }
 
 const SEVT = { high: "red", medium: "orange", low: "neutral" } as const;
@@ -20,11 +21,11 @@ const L = {
   en: { packs: "Loan packs", verify: "Verify pack", panel: "Review decision panel", banner: "Flags for review: a human decides, never fraud-proof",
         flagged: "Flagged for review", clean: "No issues found", working: "Extracting fields, running forensics and cross-checks…", flags: "Evidence",
         approve: "Documents OK", more: "Request more documents", reject: "Reject documents", note: "Reviewer note (optional)", decided: "Decision recorded",
-        original: "Original with evidence", ela: "ELA heatmap", fields: "Extracted fields", pick: "Pick a loan pack and verify it.", egp: "EGP" },
+        original: "Original with evidence", ela: "ELA heatmap", fields: "Extracted fields", pick: "Pick a loan pack and verify it.", egp: BRAND.locale.currency.en },
   ar: { packs: "ملفات القروض", verify: "تحقق من الملف", panel: "لوحة قرار المراجعة", banner: "إشارات للمراجعة فقط: القرار للإنسان",
         flagged: "محال للمراجعة", clean: "لا توجد مؤشرات", working: "استخراج البيانات وفحص الصور والمطابقة بين المستندات…", flags: "الأدلة",
         approve: "المستندات سليمة", more: "طلب مستندات إضافية", reject: "رفض المستندات", note: "ملاحظة المراجع (اختياري)", decided: "تم تسجيل القرار",
-        original: "الأصل مع الأدلة", ela: "خريطة مستوى الخطأ", fields: "البيانات المستخرجة", pick: "اختر ملف قرض للتحقق منه.", egp: "جنيه" },
+        original: "الأصل مع الأدلة", ela: "خريطة مستوى الخطأ", fields: "البيانات المستخرجة", pick: "اختر ملف قرض للتحقق منه.", egp: BRAND.locale.currency.ar },
 };
 const DECISION: Record<string, { en: string; ar: string; tone: "green" | "orange" | "red" }> = {
   approve_docs: { en: "Documents OK", ar: "المستندات سليمة", tone: "green" }, request_more: { en: "More documents requested", ar: "طُلبت مستندات إضافية", tone: "orange" },
@@ -84,7 +85,7 @@ export default function D1DocVerify({ onTrace }: WorkspaceProps) {
                   className={`shrink-0 rounded-xl border px-3 py-2 text-start text-sm ${sel === p.id ? "border-brand bg-brand text-white" : "border-line bg-white hover:bg-canvas"}`}>
             <div className="font-bold">{p.id}</div>
             <div dir="auto" className="text-xs opacity-90">{lang === "ar" ? p.name_ar : p.name_en}</div>
-            <div className="text-xs opacity-75">{p.loan_amount_egp.toLocaleString()} {l.egp} · {p.documents.length} docs</div>
+            <div className="text-xs opacity-75">{p.loan_amount.toLocaleString()} {l.egp} · {p.documents.length} docs</div>
             {p.decision && <div className="mt-1"><Chip tone={DECISION[p.decision.decision].tone}>{DECISION[p.decision.decision][lang]}</Chip></div>}
           </button>
         ))}

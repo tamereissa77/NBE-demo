@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getJSON, postJSON, type TraceStep } from "../api";
-import { LOGO } from "../brand";
+import { BRAND, LOGO } from "../brand";
 import { useI18n } from "../i18n";
 import type { WorkspaceProps } from "../pages/DemoPage";
 import { Block, Button, Chip, ErrorNote, Panel, Spinner } from "./common";
@@ -11,14 +11,14 @@ interface Merchant { id: string; name_ar: string; category_ar: string; city: str
 interface Issue { field: string; rule: string; detail: string }
 interface Result {
   segment: { persona_ar: string; n: number; sms: number; email: number }; profile: Profile[]; merchants: Merchant[];
-  offer: { merchant: string; category_ar: string; cashback_pct: number; cap_egp: number; valid_until: string };
+  offer: { merchant: string; category_ar: string; cashback_pct: number; cap: number; currency: string; valid_until: string };
   copy: Record<string, string>; compliance: { passed: boolean; issues: Issue[]; initial_issues: Issue[]; auto_fixed: boolean };
   banner: { png_base64: string | null; source: string }; trace: TraceStep[]; total_ms: number;
   ab_test: { per_arm: number; audience_opted_in: number; min_detectable_lift: number | null; baseline_rate: number; holdout_pct: number; metric: string; note: string; variants: { A: string; B: string } };
 }
 
 const PERSONA_EN: Record<string, string> = { young_professional: "Young professionals", family: "Families", student: "Students", affluent: "Affluent", sme_owner: "SME owners" };
-const TABS: [string, string][] = [["sms_a_ar", "SMS A"], ["sms_b_ar", "SMS B"], ["sms_en", "SMS EN"], ["email_ar", "Email AR"], ["email_en", "Email EN"], ["social_egy", "Social (EGY)"]];
+const TABS: [string, string][] = [["sms_a_ar", "SMS A"], ["sms_b_ar", "SMS B"], ["sms_en", "SMS EN"], ["email_ar", "Email AR"], ["email_en", "Email EN"], ["social_local", `Social (${BRAND.locale.dialect.code})`]];
 const L = {
   en: { segment: "Segment", city: "City (optional)", all: "All cities", brief: "Marketing brief (optional)", stress: "Stress-test compliance (plant a banned claim)",
         build: "Build campaign", working: "Profiling spend, matching merchants, writing and checking copy…", profile: "Interest profile (share of spend · lift vs all customers)",
@@ -101,10 +101,10 @@ export default function D3Campaigns({ onTrace }: WorkspaceProps) {
                 {res.merchants.map((m, i) => (
                   <div key={m.id} className={`mb-2 rounded-lg p-2 text-sm ${i === 0 ? "bg-accent/15" : "bg-canvas"}`} dir="auto">
                     <b>{m.name_ar}</b> · {m.category_ar} · {m.city}
-                    {m.seg_spend !== null && <div className="text-xs text-ink-soft">{Number(m.seg_spend).toLocaleString()} EGP · {m.seg_customers} customers in segment</div>}
+                    {m.seg_spend !== null && <div className="text-xs text-ink-soft">{Number(m.seg_spend).toLocaleString()} {BRAND.locale.currency.en} · {m.seg_customers} customers in segment</div>}
                   </div>
                 ))}
-                <div className="mt-2 text-xs" dir="auto"><b>{l.offer}:</b> {res.offer.cashback_pct}% cashback · cap {res.offer.cap_egp} EGP · {res.offer.valid_until}</div>
+                <div className="mt-2 text-xs" dir="auto"><b>{l.offer}:</b> {res.offer.cashback_pct}% cashback · cap {res.offer.cap} {res.offer.currency} · {res.offer.valid_until}</div>
               </div>
             </div>
 

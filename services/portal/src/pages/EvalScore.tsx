@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { BRAND } from "../brand";
 import { Link } from "react-router-dom";
 
 // Week-1 Arabic gate: blind human scoring (PLAN.md §5). Answers are shuffled per scorer and shown as
@@ -17,7 +18,7 @@ interface Answer {
 }
 interface Item {
   id: string;
-  dialect: "msa" | "egy" | "mix";
+  dialect: "msa" | "dia" | "mix";
   demo: string;
   task: string;
   title: string;
@@ -32,7 +33,7 @@ const CRITERIA: { key: keyof Omit<Scores, "note">; label: string; hint: string }
   { key: "arabic", label: "Arabic quality", hint: "Fluent, natural; understood the dialect; right register" },
   { key: "format", label: "Format", hint: "Followed the requested format and constraints" },
 ];
-const DIALECT: Record<Item["dialect"], string> = { msa: "MSA", egy: "Egyptian", mix: "Mixed / EN" };
+const DIALECT: Record<Item["dialect"], string> = { msa: "MSA", dia: BRAND.locale.dialect.en, mix: "Mixed / EN" };
 
 // ?scorer=Name in the link wins (personal links for reviewers), then the name saved on this browser
 function loadScorer(): string {
