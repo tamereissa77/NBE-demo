@@ -9,6 +9,8 @@ export interface Brand {
   assistant: { en: string; ar: string };
   appTitle: { en: string; ar: string };
   website: string;
+  heroTitle?: { en: string; ar: string };   // home banner title (default: the GB10 headline)
+  heroChips?: boolean;                     // show the PoC / offline / synthetic chips on the home banner (default true)
   locale: {
     country: { en: string; ar: string };
     currency: { en: string; ar: string };
