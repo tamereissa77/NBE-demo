@@ -348,7 +348,7 @@ All data is synthetic and generated reproducibly in the `nbe-datagen` container 
 | D6 | Correct routing with on-screen reason; honest fallback when the hero model is off |
 | D7 | 94% topic accuracy, 98% severity within one level, on 100 held-out complaints (zero-shot) |
 
-**Arabic gate (judge scores from the first run, on the earlier Egyptian-dialect prompt set; re-run `make arabic-gate` to score the Saudi prompts):** Gemma 4 26B-A4B 4.72 at 40 tokens/s (selected workhorse); gpt-oss-120b 4.89 at 37 tokens/s (hero; skipped tool calls, so not used as an agent); Gemma 4 31B 4.52 at 10 tokens/s (optional); Qwen2.5-14B 4.57 at 9 tokens/s; Mistral-7B from the original brief's list 3.37.
+**Arabic gate on the Saudi prompt set (7 Oct 2026; judge scores by gpt-oss-120b, provisional until human scoring at `/eval`):** Gemma 4 26B-A4B 4.60 at 39 tokens/s (workhorse; Saudi-dialect items: correctness 5.0, Arabic 4.9); gpt-oss-120b 4.78 at 37 tokens/s (hero; skipped 3 of 4 tool calls, so not used as an agent); Gemma 4 31B 4.57 at 10 tokens/s (best on the D5 legal items, 4.11 vs 3.67, below the +0.5 needed to keep it); Qwen2.5-14B 4.59 at 9 tokens/s; Mistral-7B from the original brief's list 3.03. The gate's recommendation is unchanged: Gemma 4 26B as the workhorse, gpt-oss-120b as the hero. Every model missed the OTP tool call on at least one auth prompt; the D4 service enforces it (it retries with a required tool call), and the live D4 script passes.
 
 Reproduce: `make verify`, `make ui-test`, `python tests/golden_d2.py`, `GET /api/d1/evaluate`, `GET /api/d7/accuracy`, `make arabic-gate`.
 

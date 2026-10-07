@@ -323,6 +323,19 @@ Things the plan did not anticipate, found by running every component on this GB1
 - **Keep gpt-oss-120b as the hero model** for D6 code explanation and reasoning, but **not as an agent**: it failed all three tool-calling prompts, describing the action ("I'll transfer you") without calling the tool. It may be vLLM's gpt-oss tool parser rather than the model; recheck before using it in any agent flow.
 - **Mistral-7B (from the original brief's list) is not suitable** for Arabic banking use: weak Arabic, refused to help on a lost card, and told an angry customer to "stop harassing" (egy-04).
 
+**Saudi re-run (7 Oct 2026, Riyadh-Bank branch).** `make arabic-gate` on the Saudi prompt set (15 MSA, 10 Saudi dialect, 5 mixed), same five models, judge gpt-oss-120b:
+
+| Model | tok/s | Mean latency | Auto-checks | Judge C / A / F | Judge mean | MSA / Saudi / mixed | D5 legal |
+|---|---|---|---|---|---|---|---|
+| Gemma 4 26B-A4B (workhorse) | 39.2 | 5.5 s | 11/13 | 4.77 / 4.87 / 4.17 | 4.60 | 4.53 / 4.57 / 4.87 | 3.67 |
+| Gemma 4 31B (quality) | 10.1 | 26.2 s | 11/13 | 4.70 / 5.00 / 4.00 | 4.57 | 4.58 / 4.43 / 4.80 | 4.11 |
+| gpt-oss-120b (hero) | 37.4 | 7.2 s | 9/13 | 4.60 / 4.90 / 4.83 | 4.78 | 4.80 / 4.67 / 4.93 | — |
+| Qwen2.5-14B (reference) | 8.6 | 18.9 s | 13/13 | 4.50 / 4.63 / 4.63 | 4.59 | 4.87 / 4.03 / 4.87 | — |
+| Mistral-7B (reference, original brief's list) | 15.7 | 26.7 s | 9/13 | 3.00 / 2.97 / 3.13 | 3.03 | 3.27 / 2.80 / 2.80 | — |
+
+Decision unchanged: Gemma 4 26B stays the workhorse (best judge mean at ≥20 tok/s, and the strongest of the fast models on Saudi dialect); Gemma 31B stays optional (+0.44 on legal, below the +0.5 rule); gpt-oss-120b stays the hero for reasoning, not agents (missed the OTP/handoff tool calls on dia-02, dia-10 and msa-11). All candidates missed the tool call on dia-02 or msa-11; D4 enforces it in code. Human blind scoring at `/eval` still decides the final lock.
+
+
 **Caveats.**
 - The judge rates Arabic quality near the ceiling for every model except Mistral, including Qwen answers that a human reader would mark down (broken dialect verb forms, a hallucinated hotline number in egy-01).
 - The judge also scores its own answers, so gpt-oss-120b's top row is not independent.
