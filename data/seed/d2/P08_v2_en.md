@@ -5,30 +5,25 @@ Effective date: 2026-09-01
 This version supersedes version 1.
 
 ## 1. Purpose
-The purpose of this procedure is to outline the standardized process for customers to increase their daily fund transfer limits across various banking channels, ensuring security and operational efficiency.
+The purpose of this procedure is to outline the standardized process for customers to increase their daily fund transfer limits through various banking channels, ensuring security and compliance with internal controls.
 
 ## 2. Scope
-This procedure applies to all retail banking customers requesting modifications to their daily transaction limits via the mobile application or through physical branch visits.
+This procedure applies to all individual customers of the bank seeking to modify their daily transaction thresholds via the mobile application or through physical branch visits.
 
 ## 3. Steps
-1. **Mobile Application Limit Increase:**
-   - The customer accesses the mobile application to request a limit adjustment.
-   - The system prompts for identity verification via a One-Time Password (OTP).
-   - Upon successful OTP verification, the limit is updated within the application.
-2. **Branch-Based Limit Increase:**
-   - For requests exceeding the maximum mobile application threshold, the customer must visit a physical branch.
-   - The customer must complete and sign a formal written request.
-   - The branch officer processes the signed request for manual implementation.
+1. **Mobile Application (Default Limit):** Customers may perform transfers up to the default limit of 30,000 SAR via the mobile application without further action.
+2. **Mobile Application (Enhanced Limit):** To increase the limit to the maximum application threshold of 100,000 SAR, the customer must complete the verification process via the National Single Sign-On (Nafath).
+3. **Branch Request (Exceeding Maximum App Limit):** For any amounts exceeding the 100,000 SAR threshold, the customer must visit a physical branch to submit a signed formal request.
 
 ## 4. Fees and timelines
-- **Mobile Application Limit:** The maximum limit achievable via the application is 200,000 EGP.
-- **Branch Limit Implementation:** Requests submitted at the branch are effective on the following business day.
+* **Mobile Application Limits:** Immediate application upon successful Nafath verification.
+* **Branch Requests:** Requests submitted at the branch will become effective on the following business day.
 
 ## 5. Required documents
-- **Mobile Application:** Valid mobile number registered with the bank to receive the OTP.
-- **Branch Requests:** A signed formal request form provided by the bank.
+* **For Mobile Application increases:** Successful authentication through the Nafath platform.
+* **For Branch increases:** A signed written request submitted in person at the branch.
 
 ## 6. Notes
-- **Default Limit:** The standard default limit is 50,000 EGP via the mobile application.
-- **Maximum App Limit:** The maximum limit allowed through the mobile application, following OTP verification, is 200,000 EGP.
-- **Exceeding App Limits:** Any transfer amounts exceeding the 200,000 EGP threshold require a signed request submitted in person at a branch.
+* The default limit of 30,000 SAR is automatically set for all users.
+* The maximum limit achievable through digital channels is 100,000 SAR, contingent upon Nafath verification.
+* Any limit requirements beyond 100,000 SAR cannot be processed digitally and strictly require a branch visit and a signed request.

@@ -4,29 +4,31 @@ Effective date: 2026-09-01
 This version supersedes version 1.
 
 ## 1. Purpose
-The purpose of this procedure is to outline the standardized process for replacing lost bank cards to ensure security and operational efficiency.
+The purpose of this procedure is to outline the standardized process for replacing lost bank cards to ensure security and operational efficiency within the bank.
 
 ## 2. Scope
-This procedure applies to all bank employees responsible for processing card replacement requests for both debit and credit card holders.
+This procedure applies to all bank employees responsible for card services and all customers requesting a replacement for lost Mada or Credit cards.
 
 ## 3. Steps
-1. **Card Deactivation:** The employee must ensure that the lost card is officially stopped/blocked before any replacement card is issued.
-2. **Identity Verification:** The employee must verify the customer's identity by checking the National ID card and confirming a One-Time Password (OTP) sent to the customer's registered mobile phone.
-3. **Request Processing:** Once identity is confirmed and the old card is blocked, the employee shall initiate the replacement request in the system.
-4. **Fee Collection:** Collect the applicable replacement fees based on the card type (see Section 4).
-5. **Delivery Arrangement:** Inform the customer regarding the delivery timeline and location.
+1. **Card Deactivation:** Before any replacement can be issued, the customer must ensure the lost card is stopped/blocked via the mobile application or the telephone banking service.
+2. **Identity Verification:** The employee must verify the customer's identity using a valid National ID or Iqama.
+3. **Digital Authentication:** Verification must be completed through the Nafath application.
+4. **Card Issuance:** Once identity is confirmed and the lost card is blocked, the employee shall initiate the request for the replacement card.
+5. **Delivery:** The replacement card will be prepared for collection.
 
 ## 4. Fees and timelines
-* **Debit Card Fees:** 50 EGP.
-* **Credit Card Fees:** 100 EGP.
-* **Exemptions:** Salary account cards are exempt from all replacement fees.
-* **Delivery Timeline:** 5 working days.
-* **Delivery Location:** The branch.
+*   **Mada Card Fee:** 15 SAR.
+*   **Credit Card Fee:** 75 SAR.
+*   **Exemptions:** Salary account cards are exempt from all replacement fees.
+*   **Delivery Timeline:** 3 working days.
+*   **Delivery Location:** The card must be collected at the branch.
 
 ## 5. Required documents
-* Valid National ID card.
-* Access to the registered mobile phone for OTP verification.
+To process the replacement, the customer must provide:
+*   A valid National ID or a valid Iqama.
+*   Successful authentication via the Nafath application.
 
 ## 6. Notes
-* It is a mandatory condition that the lost card is stopped prior to the issuance of the replacement card to prevent unauthorized transactions.
-* All salary account holders are entitled to a fee waiver for card replacements.
+*   It is a mandatory condition that the lost card is blocked through the mobile app or telephone banking prior to the issuance of a replacement card.
+*   All replacement fees are waived for customers holding salary accounts.
+*   Ensure the customer is informed that the card will be available for pickup at the branch after the specified 3-day working period.

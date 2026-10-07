@@ -1,146 +1,23 @@
-{
-  "checked": "2026-10-07",
-  "items": [
-    {
-      "document": "D5 clause rate template",
-      "missing": [
-        "متغير مرتبط بسعر الإقراض لليلة واحدة للبنك المركزي"
-      ],
-      "resolution": "Replaced: D5 clauses are now written deterministically in d5_clauses.py with every term verbatim (checked at build)."
-    },
-    {
-      "document": "D5 clause insurance template",
-      "missing": [
-        "إلزامي طوال مدة التمويل",
-        "البنك بقدر الرصيد المستحق"
-      ],
-      "resolution": "Replaced: D5 clauses are now written deterministically in d5_clauses.py with every term verbatim (checked at build)."
-    },
-    {
-      "document": "D5 clause security template",
-      "missing": [
-        "تحويل الراتب إلى حساب لدى البنك طوال مدة التمويل"
-      ],
-      "resolution": "Replaced: D5 clauses are now written deterministically in d5_clauses.py with every term verbatim (checked at build)."
-    },
-    {
-      "document": "D2 P05 v1 ar",
-      "missing": [
-        "نموذج التحويل وسبب التحويل"
-      ],
-      "resolution": "Reviewed: the facts are present as bullet-list items rather than one comma-separated phrase."
-    },
-    {
-      "document": "D2 P05 v2 ar",
-      "missing": [
-        "نموذج التحويل وسبب التحويل"
-      ],
-      "resolution": "Reviewed: the facts are present as bullet-list items rather than one comma-separated phrase."
-    },
-    {
-      "document": "D2 P10 v1 ar",
-      "missing": [
-        "بطاقة الرقم القومي، خطاب جهة العمل، كشف حساب آخر 6 أشهر"
-      ],
-      "resolution": "Reviewed: the facts are present as bullet-list items rather than one comma-separated phrase."
-    },
-    {
-      "document": "D5 clause late template",
-      "missing": [
-        "إنذار كتابي مدته 15 يوماً قبل اعتبار القرض حالاً",
-        "لا تتجاوز 2% شهرياً على المبالغ المتأخرة"
-      ],
-      "resolution": "Replaced: D5 clauses are now written deterministically in d5_clauses.py with every term verbatim (checked at build)."
-    },
-    {
-      "document": "D5 clause termination template",
-      "missing": [
-        "بإخطار كتابي مدته 30 يوماً بعد سداد كامل المستحقات",
-        "في حالات الإخلال الجوهري بعد الإنذار"
-      ],
-      "resolution": "Replaced: D5 clauses are now written deterministically in d5_clauses.py with every term verbatim (checked at build)."
-    },
-    {
-      "document": "D5 clause law template",
-      "missing": [
-        "القانون المصري",
-        "المحاكم الاقتصادية بالقاهرة"
-      ],
-      "resolution": "Replaced: D5 clauses are now written deterministically in d5_clauses.py with every term verbatim (checked at build)."
-    },
-    {
-      "document": "D5 clause liability template",
-      "missing": [
-        "لا يُسأل البنك عن الأضرار غير المباشرة",
-        "حالات الغش أو الخطأ الجسيم"
-      ],
-      "resolution": "Replaced: D5 clauses are now written deterministically in d5_clauses.py with every term verbatim (checked at build)."
-    },
-    {
-      "document": "D2 P10 v2 ar",
-      "missing": [
-        "بطاقة الرقم القومي، خطاب جهة العمل، كشف حساب آخر 3 أشهر"
-      ],
-      "resolution": "Reviewed: the facts are present as bullet-list items rather than one comma-separated phrase."
-    },
-    {
-      "document": "D5 clause prepayment C02",
-      "missing": [
-        "لا يحق للمقترض السداد المعجل خلال السنتين الأوليين",
-        "5% من المبلغ المسدد مقدماً"
-      ],
-      "resolution": "Replaced: D5 clauses are now written deterministically in d5_clauses.py with every term verbatim (checked at build)."
-    },
-    {
-      "document": "D5 clause data template",
-      "missing": [
-        "يلتزم البنك بسرية بيانات المقترض وفق القانون رقم 194 لسنة 2020 (قانون البنك المركزي والجهاز المصرفي)",
-        "لا تُشارك البيانات مع الغير إلا بموافقة المقترض أو بموجب القانون"
-      ],
-      "resolution": "Replaced: D5 clauses are now written deterministically in d5_clauses.py with every term verbatim (checked at build)."
-    },
-    {
-      "document": "D5 clause liability C04",
-      "missing": [
-        "لا يُسأل البنك عن أي أضرار مباشرة أو غير مباشرة"
-      ],
-      "resolution": "Replaced: D5 clauses are now written deterministically in d5_clauses.py with every term verbatim (checked at build)."
-    },
-    {
-      "document": "D5 clause rate C04",
-      "missing": [
-        "يحق للبنك تعديل العائد في أي وقت دون إخطار"
-      ],
-      "resolution": "Replaced: D5 clauses are now written deterministically in d5_clauses.py with every term verbatim (checked at build)."
-    },
-    {
-      "document": "D5 clause late C01",
-      "missing": [
-        "دون حاجة إلى إنذار أو حكم قضائي",
-        "3% شهرياً على المبالغ المتأخرة"
-      ],
-      "resolution": "Replaced: D5 clauses are now written deterministically in d5_clauses.py with every term verbatim (checked at build)."
-    },
-    {
-      "document": "D5 clause data C05",
-      "missing": [
-        "يلتزم البنك بسرية بيانات المقترض"
-      ],
-      "resolution": "Replaced: D5 clauses are now written deterministically in d5_clauses.py with every term verbatim (checked at build)."
-    },
-    {
-      "document": "D5 ruling R03",
-      "missing": [
-        "بطلان شرط التحكيم الأجنبي واختصاص المحاكم المصرية"
-      ],
-      "resolution": "Reviewed: the outcome is present in different wording (R02 awards 60% / 40%; R03 voids the foreign arbitration clause)."
-    },
-    {
-      "document": "D5 ruling R02",
-      "missing": [
-        "إلزام البنك بتعويض العميل عن 60% من المبلغ لتقصيره في التحقق، وتحميل العميل 40% لإفصاحه عن رمز OTP"
-      ],
-      "resolution": "Reviewed: the outcome is present in different wording (R02 awards 60% / 40%; R03 voids the foreign arbitration clause)."
-    }
-  ]
-}
+[
+  {
+    "document": "D2 P10 v1 ar",
+    "missing": [
+      "الهوية الوطنية، تعريف بالراتب، كشف حساب آخر 6 أشهر"
+    ],
+    "review": "facts present as a bullet list (الهوية الوطنية / تعريف بالراتب / كشف حساب آخر 6 أشهر); checked by hand"
+  },
+  {
+    "document": "D5 ruling R02",
+    "missing": [
+      "إلزام البنك بتعويض العميل عن 60% من المبلغ لتقصيره في التحقق، وتحميل العميل 40% لإفصاحه عن رمز التحقق"
+    ],
+    "review": "outcome present, paraphrased (60% / 40% split, OTP disclosure); checked by hand"
+  },
+  {
+    "document": "D5 ruling R03",
+    "missing": [
+      "بطلان شرط التحكيم الأجنبي واختصاص اللجنة بنظر النزاع"
+    ],
+    "review": "outcome present, paraphrased (arbitration clause void, committee has jurisdiction); checked by hand"
+  }
+]

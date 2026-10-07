@@ -1,8 +1,8 @@
-# Talk tracks: seven demos for NBE
+# Talk tracks: seven demos for Riyad Bank
 
 One page per demo: the setup line, what to click, what to say, the honest caveat, and likely questions. Each demo takes about 4 to 6 minutes. Open the "Show the work" drawer at the end of any demo: it lists every step behind the answer, the model used and the timings.
 
-**Opening (1 minute).** "Everything you'll see runs on this one Dell Pro Max with GB10, with no internet connection: models, data and all seven demos. It's a single-user proof of concept: the point is what the AI can do with NBE's use cases, not production throughput, which we size separately on PowerEdge. All data is synthetic."
+**Opening (1 minute).** "Everything you'll see runs on this one Dell Pro Max with GB10, with no internet connection: models, data and all seven demos. It's a single-user proof of concept: the point is what the AI can do with Riyad Bank's use cases, not production throughput, which we size separately on PowerEdge. All data is synthetic."
 
 ---
 
@@ -24,7 +24,7 @@ One page per demo: the setup line, what to click, what to say, the honest caveat
 
 **Q&A.**
 - *Do you need labelled forgeries?* No. We dropped the ViT forgery classifier for exactly that reason; these checks need no training data.
-- *Real scans?* The next step is NBE-masked samples, approved in writing.
+- *Real scans?* The next step is Riyad Bank-masked samples, approved in writing.
 
 ---
 
@@ -32,7 +32,7 @@ One page per demo: the setup line, what to click, what to say, the honest caveat
 
 **Setup.** "A branch employee needs an answer from procedures that change often."
 
-**Click.** The first suggested question (card replacement fee). Then the Egyptian-dialect question about transfer limits. Then "Can the replacement card be posted to the customer's home?"
+**Click.** The first suggested question (card replacement fee). Then the Saudi-dialect question about raising the transfer limit to 150,000 riyals (above the app maximum, so the answer is a signed request at the branch). Then "Can the replacement card be posted to the customer's home?"
 
 **Say.**
 - Every sentence carries a citation. Click a chip to see the exact section.
@@ -57,7 +57,7 @@ One page per demo: the setup line, what to click, what to say, the honest caveat
 **Say.**
 - The interest profile comes from 50,000 synthetic transactions: which categories this segment over-spends on compared with everyone.
 - The merchant match is a partner merchant where they actually spend.
-- The copy comes in Arabic and English for SMS, email and an Egyptian-dialect social post, every SMS under 160 characters.
+- The copy comes in Arabic and English for SMS, email and a Saudi-dialect social post, every SMS under 160 characters.
 - The banner is generated on the box; the Arabic headline is overlaid in the design.
 - The A/B plan is sized to the real audience: with 1,224 opted-in customers, it can detect a 65% lift.
 - Stress test: we planted "guaranteed 100%". Compliance caught it and fixed it before anything was shown.
@@ -77,7 +77,7 @@ One page per demo: the setup line, what to click, what to say, the honest caveat
 2. Read the code: it's verified, and the agent finds the card and asks before blocking, because that's irreversible.
 3. Confirm: the card is blocked in the bank system (a mock). Watch the tool lane and the account state.
 4. Complaint: a ticket is logged with a number.
-5. Jailbreak, in Egyptian dialect, asking for another customer's data: STOP. The guardrail blocks it before the model even sees it.
+5. Jailbreak, in Saudi dialect, asking for another customer's data: STOP. The guardrail blocks it before the model even sees it.
 6. Human: handed off with a summary.
 
 **Caveat.** All banking actions hit mock APIs. It handles Modern Standard Arabic first and dialect as a bonus. A backup video exists for this demo.
@@ -90,7 +90,7 @@ One page per demo: the setup line, what to click, what to say, the honest caveat
 
 ## D5 · Legal Documents Summarisation
 
-**Setup.** "Legal reviews a contract that's supposed to follow NBE's approved template."
+**Setup.** "Legal reviews a contract that's supposed to follow the bank's approved tawarruq personal-finance template."
 
 **Click.** C01 → Analyze (about 45 s). Open article 6 in the template comparison. Then R02 (a ruling).
 
@@ -100,11 +100,11 @@ One page per demo: the setup line, what to click, what to say, the honest caveat
 - The template comparison: only article 6 deviates. The default period dropped from 90 to 60 days, the 15-day notice disappeared, and the penalty rose from at most 2% to 3%. All are flagged high risk.
 - The ruling summary gets the parties, amounts and the 60/40 split of liability right.
 
-**Caveat.** The clauses and rulings are synthetic; NBE legal validates outputs before demo day. All planted deviations in our five test contracts were found.
+**Caveat.** The clauses and rulings are synthetic; Riyad Bank's legal and Sharia teams validate outputs before demo day. All planted deviations in our five test contracts were found.
 
 ---
 
-## D6 · NBE AI Assistant
+## D6 · Riyad Bank AI Assistant
 
 **Setup.** "One assistant for every employee task, with the right model for each."
 
@@ -117,7 +117,7 @@ One page per demo: the setup line, what to click, what to say, the honest caveat
 
 **Optional hero moment.** `make hero` beforehand. If it's off, the panel shows the fallback honestly.
 
-**Caveat.** The Dataiku version and host are still to be confirmed with NBE.
+**Caveat.** The Dataiku version and host are still to be confirmed with Riyad Bank.
 
 ---
 
@@ -135,7 +135,7 @@ One page per demo: the setup line, what to click, what to say, the honest caveat
 - Trends: ten themes found across 500 complaints.
 - Accuracy: 94% topic agreement on 100 held-out complaints, zero-shot, with no training.
 
-**Caveat.** The policy rules are placeholders until NBE shares its real ones, and the labels are synthetic.
+**Caveat.** The policy rules are placeholders until Riyad Bank shares its real ones, and the labels are synthetic.
 
 ---
 

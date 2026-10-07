@@ -60,7 +60,7 @@ with sync_playwright() as pw:
         p.get_by_role("button", name="Close").wait_for()
         shot(p, "d2_2_citation_viewer")
         p.get_by_role("button", name="Close").click()
-        p.locator("form input").fill("لو العميل عايز يرفع حد التحويل لـ 150 ألف، يعمل إيه؟")
+        p.locator("form input").fill("لو العميل يبي يرفع حد التحويل لـ 150 ألف، وش يسوي؟")
         p.locator("form button[type=submit]").click()
         p.locator("[data-test=answer]").nth(1).wait_for(timeout=T)
         p.locator("form input").fill("هل يمكن إرسال البطاقة البديلة إلى منزل العميل بالبريد؟")

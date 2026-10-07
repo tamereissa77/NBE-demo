@@ -1,4 +1,4 @@
-# Runbook: running the NBE demos on the GB10
+# Runbook: running the Riyad Bank demos on the GB10
 
 For whoever operates the box on demo day. The talk track for each demo is in [talk-tracks.md](talk-tracks.md).
 
@@ -37,8 +37,8 @@ Open **http://localhost:8200** on the GB10, or `http://<gb10-ip>:8200` from the 
 | Microphone (D4) | Browsers allow the microphone only on `https://` or `localhost`. Run D4 voice in a browser **on the GB10**, or use the script buttons and typing from the laptop. |
 | Data | All synthetic. D1 documents carry a SPECIMEN watermark and are not real people, IDs, companies or banks. |
 | D1 | "Flagged for review", never "fraud". A04 is clean on purpose and carries one planned false positive for the officer to clear. |
-| D5 | Clauses and rulings are synthetic; NBE's legal team should validate outputs before demo day. |
-| D7 | The policy rules are placeholders until NBE supplies its real ones (the screen says so). |
+| D5 | Clauses and rulings are synthetic; Riyad Bank's legal and Sharia teams should validate outputs before demo day. |
+| D7 | The policy rules are placeholders until Riyad Bank supplies its real ones (the screen says so). |
 | Models | The Arabic gate is provisional until the human scores are in (`/eval`). Gemma 4 31B is optional (`MODE=full make up` or `make quality-on`). |
 
 ## If something breaks
