@@ -122,7 +122,7 @@ JUDGE_SCHEMA = {
 JUDGE_SYSTEM = """You are a strict bilingual (Arabic/English) evaluator for a bank's AI assistant pilot.
 Score the ANSWER to the TASK on three 1-5 scales:
 - correctness: facts, numbers and actions are right and grounded in the provided sources; nothing invented. 5 = fully correct, 1 = wrong or harmful.
-- arabic: quality of the language: fluent, natural, correct Modern Standard Arabic or appropriate Egyptian register; understood dialect input; English parts correct. 5 = native-quality.
+- arabic: quality of the language: fluent, natural, correct Modern Standard Arabic or appropriate local dialect register; understood dialect input; English parts correct. 5 = native-quality.
 - format: follows the format and constraints that THIS TASK states, and only those. Examples of constraints a task may state:
   a length limit, JSON output, a number of bullet points, citing sources, a required phrase, or (when tools are offered and
   an action is needed) calling the tool rather than only describing it. Never penalise for a constraint the task does not

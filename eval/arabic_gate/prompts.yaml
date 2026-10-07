@@ -1,5 +1,5 @@
 # Week-1 Arabic gate (PLAN.md §5): 30 NBE-style prompts, all synthetic.
-#   15 Modern Standard Arabic (msa), 10 Egyptian dialect (egy), 5 code-switching / English (mix)
+#   15 Modern Standard Arabic (msa), 10 local dialect (dia; Egyptian on this branch), 5 code-switching / English (mix)
 # Each item: id, dialect, demo, task, title (English, for the scoring UI), optional system/context/tools,
 # prompt, optional automatic check, and `good`: what a good answer contains (for scorers and the judge).
 #
@@ -207,7 +207,7 @@ items:
 
   # ------------------------------------------------------------------ Egyptian dialect (10)
   - id: egy-01
-    dialect: egy
+    dialect: dia
     demo: D4
     task: dialect_chat
     title: "Lost card, Egyptian dialect, helpful reply"
@@ -217,7 +217,7 @@ items:
     good: "يطمئن العميل، يقترح إيقاف البطاقة فوراً بعد التحقق برمز OTP، ويذكر خطوة الاستبدال. يفهم اللهجة ويرد بأسلوب مناسب (فصحى مبسطة أو لهجة مهذبة)."
 
   - id: egy-02
-    dialect: egy
+    dialect: dia
     demo: D4
     task: tool_select
     title: "Block request in dialect, still authenticates first"
@@ -227,7 +227,7 @@ items:
     good: "يستدعي send_otp أولاً قبل block_card لأن العميل غير موثّق."
 
   - id: egy-03
-    dialect: egy
+    dialect: dia
     demo: D7
     task: classify_json
     title: "Angry dialect complaint classification"
@@ -238,7 +238,7 @@ items:
     good: "topic=fees (أو transfers مقبول جزئياً)، severity 3، negative، needs_callback=true."
 
   - id: egy-04
-    dialect: egy
+    dialect: dia
     demo: D7
     task: draft_reply
     title: "Calm reply to an angry dialect complaint"
@@ -248,7 +248,7 @@ items:
     good: "اعتذار عن التأخر في الرد، تفهم للغضب، رقم الحالة، مراجعة خلال 3 أيام، دون وعد بالاسترداد. نبرة هادئة غير دفاعية."
 
   - id: egy-05
-    dialect: egy
+    dialect: dia
     demo: D2
     task: rag_qa
     title: "Branch question in dialect, cited answer"
@@ -257,7 +257,7 @@ items:
     good: "من التطبيق بعد OTP أو من الفرع ببطاقة الرقم القومي ومظروف خلال 48 ساعة؛ لا يجوز للموظف الاطلاع على الرقم أو إملاؤه؛ مع الإشارة إلى [المصدر 3]."
 
   - id: egy-06
-    dialect: egy
+    dialect: dia
     demo: D6
     task: dialect_to_formal
     title: "Dialect request to a formal email"
@@ -265,7 +265,7 @@ items:
     good: "بريد رسمي بالفصحى: إخطار بالتأخر ساعة صباح الغد، السبب (موعد في البنك المركزي)، تعويض الساعة نهاية اليوم. فهم كامل للهجة."
 
   - id: egy-07
-    dialect: egy
+    dialect: dia
     demo: D6
     task: route_json
     title: "Task routing from a dialect request"
@@ -276,7 +276,7 @@ items:
     good: "{\"task\": \"translation\"}"
 
   - id: egy-08
-    dialect: egy
+    dialect: dia
     demo: D7
     task: summarise
     title: "Summarise a dialect call transcript in MSA"
@@ -286,7 +286,7 @@ items:
     good: "سطران فصيحان: تحويل 20,000 جنيه عبر التطبيق قبل يومين برقم عملية 7781203، خُصم من العميل ولم يصل للمستفيد؛ العميل قلق ويطلب المتابعة."
 
   - id: egy-09
-    dialect: egy
+    dialect: dia
     demo: D3
     task: draft_social
     title: "Egyptian-dialect social post for an offer"
@@ -295,7 +295,7 @@ items:
     good: "عامية مصرية طبيعية وجذابة ومهذبة، 5% وسوبر ماركت الخير وبطاقات الخصم ونوفمبر، و\"تطبق الشروط والأحكام\". بلا مبالغات."
 
   - id: egy-10
-    dialect: egy
+    dialect: dia
     demo: D4
     task: tool_select
     title: "Handoff to a human on request"

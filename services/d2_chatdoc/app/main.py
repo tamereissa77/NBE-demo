@@ -1,6 +1,6 @@
 """D2 · Chat with Document (PLAN.md §4 D2).
 
-A branch employee asks about a working procedure, in Arabic, dialect or English. The answer cites the
+A branch employee asks about a working procedure, in Arabic, local dialect or English. The answer cites the
 current version, and a "what changed" panel compares it with the previous version.
 
 Retrieval is shared with D5 through nbe_core.retrieval (bge-m3 + Qdrant + bge-reranker-v2-m3).
@@ -14,6 +14,7 @@ from fastapi import HTTPException
 from pydantic import BaseModel
 
 from nbe_core import create_app, llm, retrieval, settings
+from nbe_core import locale as L
 from nbe_core.text import detect_lang
 from nbe_core.trace import Trace
 
@@ -95,13 +96,13 @@ class Ask(BaseModel):
     history: list[dict] = []
 
 
-COMPARE = re.compile(r"(تغي[ّ]?ر|اتغير|الفرق بين|الفروق|ما الجديد|إيه اللي اتغير|what changed|what's new|difference between|compare)", re.I)
+COMPARE = re.compile(r"(تغي[ّ]?ر|اتغير|الفرق بين|الفروق|ما الجديد|إيه اللي اتغير|وش اللي تغير|ايش اللي تغير|وش الفرق|what changed|what's new|difference between|compare)", re.I)
 
 ANSWER_SYSTEM = {
     "ar": (f"أنت مساعد موظفي فروع {settings.bank_ar}. أجب فقط من المصادر المرفقة. اذكر المصدر بعد كل معلومة بالشكل [S1] أو [S2]. "
            "إذا لم تجد الإجابة في المصادر فقل بوضوح: \"لم أجد هذه المعلومة في الإجراءات المتاحة\" ولا تخمّن. "
            "إذا ظهرت عدة إصدارات لنفس الإجراء فاعتمد الإصدار الأحدث وأشر إلى ذلك. أجب بالعربية الفصحى بإيجاز، "
-           "حتى لو كان السؤال بالعامية المصرية. لا تبدأ بمقدمة."),
+           f"حتى لو كان السؤال ب{L.DIALECT_AR}. لا تبدأ بمقدمة."),
     "en": (f"You assist {settings.bank_en} branch staff. Answer only from the attached sources and cite each fact as [S1], [S2]. "
            "If the answer is not in the sources, say \"I could not find this in the available procedures\" and do not guess. "
            "If several versions of a procedure appear, use the latest and say so. Answer in English, concisely, with no preamble."),
@@ -193,10 +194,4 @@ async def ask(body: Ask):
 
 @app.get("/suggested")
 def suggested():
-    return [
-        {"lang": "ar", "q": "ما رسوم استبدال بطاقة الائتمان المفقودة الآن؟ وهل تغيّرت؟"},
-        {"lang": "egy", "q": "لو العميل عايز يرفع حد التحويل لـ 150 ألف، يعمل إيه؟"},
-        {"lang": "ar", "q": "ما المستندات المطلوبة للتمويل الشخصي للموظفين؟"},
-        {"lang": "en", "q": "What is the commission on outgoing international transfers?"},
-        {"lang": "ar", "q": "هل يمكن إرسال البطاقة البديلة إلى منزل العميل بالبريد؟"},
-    ]
+    return L.D2_SUGGESTED

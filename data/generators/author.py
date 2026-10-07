@@ -14,13 +14,14 @@ import sys
 from pathlib import Path
 
 from nbe_core import llm
+from nbe_core import locale as L
 from data.generators import specs
 
 SEED_DIR = Path("/repo/data/seed")
 GOLDEN_DIR = Path("/repo/data/seed/golden")
 SEM = asyncio.Semaphore(4)
 FACT_WARNINGS: list[dict] = []   # documents that still miss a fact after 3 attempts (kept, flagged for review)
-SYSTEM = ("أنت كاتب محتوى في إدارة الإجراءات والشؤون القانونية ببنك مصري. تكتب بالعربية الفصحى الواضحة والمهنية. "
+SYSTEM = (f"أنت كاتب محتوى في إدارة الإجراءات والشؤون القانونية ببنك {L.ADJ_AR}. تكتب بالعربية الفصحى الواضحة والمهنية. "
           "هذه مواد تجريبية لعرض توضيحي. التزم حرفياً بكل القيم المعطاة (الأرقام والمدد والرسوم) ولا تضف أرقاماً أو شروطاً غير مذكورة.")
 
 
@@ -78,7 +79,7 @@ async def d2() -> None:
                       "Length 250-400 words. Do not add any other fees or timelines.")
             required = [date] + sorted({n for v in facts.values() for n in re.findall(r"\d[\d,.]*", v)})
         text = await write(prompt, required, label=f"D2 {p['id']} v{version} {lang}",
-                           system=SYSTEM if lang == "ar" else "You write clear, professional internal procedures for an Egyptian bank. Demo material. Use only the facts given.")
+                           system=SYSTEM if lang == "ar" else f"You write clear, professional internal procedures for {'an' if L.ADJ_EN[0] in 'AEIOU' else 'a'} {L.ADJ_EN} bank. Demo material. Use only the facts given.")
         fname = f"{p['id']}_v{version}_{lang}.md"
         (out / fname).write_text(text + "\n", encoding="utf-8")
         manifest.append({"file": fname, "procedure": p["id"], "version": version, "lang": lang, "effective": date,
@@ -103,8 +104,7 @@ async def d2() -> None:
             golden.append(q)
         golden.append({"procedure": p["id"], "type": "delta", "question": f"ما الذي تغيّر في {p['title_ar']} بين الإصدار 1 والإصدار 2؟",
                        "expected_changes": {k: {"v1": p["v1"].get(k), "v2": v} for k, v in p["v2"].items()}, "source": f"{p['id']}_v2_ar.md"})
-    for q in ["ما رسوم فتح حساب بالعملة الأجنبية لغير المقيمين؟", "هل يمكن إرسال البطاقة البديلة إلى منزل العميل بالبريد؟",
-              "ما سعر صرف الدولار اليوم؟"]:
+    for q in specs.D2_UNANSWERABLE:
         golden.append({"type": "unanswerable", "question": q, "expected": "not_in_documents"})
     GOLDEN_DIR.mkdir(parents=True, exist_ok=True)
     (GOLDEN_DIR / "d2.json").write_text(json.dumps(golden, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -120,7 +120,7 @@ async def d5() -> None:
     async def clause(c: dict, facts: dict, variant: str) -> None:
         prompt = (f"اكتب نص المادة {c['no']} من عقد تمويل شخصي بعنوان \"المادة {c['no']} - {c['title']}\".\n"
                   f"يجب أن يتضمن النص هذه الأحكام حرفياً:\n{fact_lines(facts)}\n"
-                  "اكتب فقرة أو فقرتين قانونيتين (80 إلى 150 كلمة) بصياغة عقود بنكية مصرية. ابدأ بسطر العنوان كما هو. لا تضف أحكاماً أخرى.")
+                  f"اكتب فقرة أو فقرتين قانونيتين (80 إلى 150 كلمة) بصياغة عقود بنكية {L.ADJ_AR}ة. ابدأ بسطر العنوان كما هو. لا تضف أحكاماً أخرى.")
         clause_text[(c["key"], variant)] = await write(prompt, list(facts.values()), max_tokens=700, label=f"D5 clause {c['key']} {variant}")
 
     tasks = [clause(c, c["facts"], "template") for c in specs.TEMPLATE_CLAUSES]
@@ -141,7 +141,7 @@ async def d5() -> None:
             if c["key"] in k.get("missing", []):
                 continue
             text = clause_text[(c["key"], k["id"] if c["key"] in devs else "template")]
-            text = text.replace("[اسم المقترض]", k["borrower"]).replace("[المبلغ]", k["amount"]).replace("[عدد الأقساط]", k["installments"])
+            text = text.replace(specs.PH_BORROWER, k["borrower"]).replace("[المبلغ]", k["amount"]).replace("[عدد الأقساط]", k["installments"])
             parts.append(text)
         body = (f"# عقد تمويل رقم {k['id']}\n\nالمقترض: {k['borrower']} · قيمة التمويل: {k['amount']} · عدد الأقساط: {k['installments']}\n\n"
                 "عقد تجريبي لأغراض العرض.\n\n" + "\n\n".join(parts) + "\n")
@@ -222,9 +222,9 @@ async def d7(n: int = 500, batch: int = 10) -> None:
             f"{j + 1}. الموضوع: {specs.COMPLAINT_TOPICS[g['topic']]}؛ الخطورة {g['severity']} ({specs.SEVERITY_DESC[g['severity']]})؛ "
             f"القناة: {specs.CHANNELS[g['channel']]}؛ اللغة: {specs.LANGS[g['lang']]}"
             + ("؛ العميل في ظرف إنساني صعب (مرض أو سن متقدم)" if g["vulnerable"] else "") for j, g in enumerate(chunk))
-        prompt = ("اكتب شكاوى عملاء بنك مصري واقعية ومتنوعة (تجريبية)، شكوى لكل سطر من المواصفات التالية، بنفس الترتيب.\n"
-                  "كل شكوى من 25 إلى 90 كلمة، بالأسلوب واللغة المحددين، وتذكر تفاصيل ملموسة (مبالغ بالجنيه، تواريخ، أسماء فروع خيالية). "
-                  "لا تذكر أرقام بطاقات كاملة أو أرقاماً قومية. customer_name اسم مصري خيالي.\n" + spec_lines +
+        prompt = (f"اكتب شكاوى عملاء بنك {L.ADJ_AR} واقعية ومتنوعة (تجريبية)، شكوى لكل سطر من المواصفات التالية، بنفس الترتيب.\n"
+                  f"كل شكوى من 25 إلى 90 كلمة، بالأسلوب واللغة المحددين، وتذكر تفاصيل ملموسة (مبالغ بال{L.CURRENCY_AR}، تواريخ، أسماء فروع خيالية). "
+                  f"لا تذكر أرقام بطاقات كاملة أو أرقام هوية. customer_name اسم {L.ADJ_AR} خيالي.\n" + spec_lines +
                   "\nأجب بـ JSON: {\"complaints\": [{\"n\": رقم السطر, \"text\": ..., \"customer_name\": ...}]}")
         for attempt in (1, 2, 3):
             try:

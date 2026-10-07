@@ -20,6 +20,7 @@ from psycopg.rows import dict_row
 from pydantic import BaseModel
 
 from nbe_core import create_app, llm, settings
+from nbe_core import locale as L
 from nbe_core.audit import log_event
 from nbe_core.text import normalize_ar
 from nbe_core.trace import Trace
@@ -71,7 +72,7 @@ def applicant(aid: str) -> dict:
 
 @app.get("/packs")
 def packs():
-    return [{"id": a["id"], "name_ar": a["name_ar"], "name_en": a["name_en"], "loan_amount_egp": a["loan_amount_egp"],
+    return [{"id": a["id"], "name_ar": a["name_ar"], "name_en": a["name_en"], "loan_amount": a.get("loan_amount", a.get("loan_amount_egp")), "currency": a.get("currency", L.CURRENCY),
              "documents": [d["file"] for d in a["documents"]], "decision": _decision(a["id"]), "verified": a["id"] in CACHE}
             for a in manifest()["applicants"]]
 
@@ -140,7 +141,7 @@ def cross_checks(app_rec: dict, ex: dict[str, dict]) -> list[dict]:
         off = [c for c in credits if abs(c["amount"] - salary) / salary > 0.15]
         if off:
             flag("salary_mismatch", "high", ["hr_letter", "bank_statement"],
-                 f"الراتب في خطاب جهة العمل {salary:,.0f} جنيه، بينما إيداعات الراتب في كشف الحساب: " + "، ".join(f"{c['amount']:,.0f}" for c in credits),
+                 f"الراتب في خطاب جهة العمل {salary:,.0f} {L.CURRENCY_AR}، بينما إيداعات الراتب في كشف الحساب: " + "، ".join(f"{c['amount']:,.0f}" for c in credits),
                  "Salary on the HR letter differs from salary credits on the bank statement", hr_salary=salary, credits=[c["amount"] for c in credits])
     if salary and abs(salary - app_rec["declared"]["salary"]) / app_rec["declared"]["salary"] > 0.15:
         flag("declared_salary_mismatch", "medium", ["hr_letter"], f"الراتب في الخطاب {salary:,.0f} يختلف عن الراتب المذكور في الطلب {app_rec['declared']['salary']:,}",
@@ -155,7 +156,7 @@ def cross_checks(app_rec: dict, ex: dict[str, dict]) -> list[dict]:
         flag("letter_date", "high" if ld > TODAY else "low", ["hr_letter"],
              f"تاريخ خطاب جهة العمل {ld} {'في المستقبل' if ld > TODAY else 'أقدم من 90 يوماً'}", "HR letter date is in the future" if ld > TODAY else "HR letter is older than 90 days")
     if hr.get("nid_last4") and idn.get("nid_masked") and not str(idn["nid_masked"]).strip().endswith(str(hr["nid_last4"]).strip()):
-        flag("nid_mismatch", "high", ["national_id", "hr_letter"], "آخر 4 أرقام من الرقم القومي في الخطاب لا تطابق بطاقة الهوية",
+        flag("nid_mismatch", "high", ["national_id", "hr_letter"], f"آخر 4 أرقام من {L.NATIONAL_ID_AR} في الخطاب لا تطابق بطاقة الهوية",
              "National ID last 4 digits on the HR letter do not match the ID card")
     ex_d = _date(ex.get("commercial_register", {}).get("expiry_date"))
     if ex_d and ex_d < TODAY:
@@ -232,7 +233,9 @@ async def verify(aid: str, refresh: bool = False):
         clean = lambda t: re.sub(r"\*+|^#+\s*", "", t, flags=re.M).strip()   # noqa: E731
         summary = {"ar": clean(m[0].replace("AR:", "")), "en": clean(m[1]) if len(m) > 1 else ""}
 
-    out = {"applicant": {k: a[k] for k in ("id", "name_ar", "name_en", "loan_amount_egp", "declared")}, "verdict": verdict,
+    out = {"applicant": {**{k: a[k] for k in ("id", "name_ar", "name_en", "declared")},
+                         "loan_amount": a.get("loan_amount", a.get("loan_amount_egp")), "currency": a.get("currency", L.CURRENCY)},
+           "verdict": verdict,
            "risk": "high" if any(f["severity"] == "high" for f in flags) else "medium" if flags else "low",
            "flags": flags, "documents": docs, "summary": summary, "decision": _decision(aid), "trace": trace.to_list(), "total_ms": trace.total_ms()}
     CACHE[aid] = out

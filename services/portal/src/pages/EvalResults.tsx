@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { BRAND } from "../brand";
 import { Link } from "react-router-dom";
 
 // Week-1 Arabic gate results: model names revealed. Human scores lead; the LLM judge is a
@@ -25,7 +26,7 @@ interface Row {
 }
 interface Results {
   models: Row[];
-  by_dialect: Record<"msa" | "egy" | "mix", Row[]>;
+  by_dialect: Record<"msa" | "dia" | "mix", Row[]>;
   legal: Row[];
   scorers: string[];
   recommendation: { source: string; workhorse: string | null; workhorse_model: string | null; keep_quality: boolean | null; notes: string[] } | null;
@@ -122,9 +123,9 @@ export function EvalResults() {
       </section>
 
       <section className="mb-6 grid gap-4 md:grid-cols-3">
-        {(["msa", "egy", "mix"] as const).map((d) => (
+        {(["msa", "dia", "mix"] as const).map((d) => (
           <div key={d} className="rounded-xl border border-line bg-white p-4">
-            <h3 className="mb-2 font-bold text-brand">{{ msa: "Modern Standard Arabic (15)", egy: "Egyptian dialect (10)", mix: "Mixed / English (5)" }[d]}</h3>
+            <h3 className="mb-2 font-bold text-brand">{{ msa: "Modern Standard Arabic (15)", dia: `${BRAND.locale.dialect.en} (10)`, mix: "Mixed / English (5)" }[d]}</h3>
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-xs text-ink-soft">
