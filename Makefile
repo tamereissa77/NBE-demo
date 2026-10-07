@@ -22,7 +22,7 @@ help:
 	@echo ""
 	@echo "  make up            preflight (free the GPU), then start everything in a memory-safe order"
 	@echo "                     (MODE=show default: core + voice + image;  MODE=full adds Gemma 4 31B;  MODE=core: core only)"
-	@echo "  make down          stop and remove containers (data volumes kept)"
+	@echo "  make down          stop the running demo stack, NBE or RYD, from either folder (data volumes kept)"
 	@echo "  make start|stop    start/stop existing containers"
 	@echo "  make restart       restart all containers"
 	@echo "  make build         build images"
@@ -69,8 +69,8 @@ brand:
 up: .env preflight
 	@scripts/up.sh
 
-down:
-	$(COMPOSE_ALL) down
+down:   ## stop whichever bank's stack is running (NBE or RYD), from either folder
+	@scripts/stop_demo.sh
 
 start:
 	$(COMPOSE_ALL) start
