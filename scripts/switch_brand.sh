@@ -51,6 +51,8 @@ for proj in $(docker ps --format '{{.Label "com.docker.compose.project"}}' | sor
   fi
 done
 
-# 4. Start this bank (builds its images on first use, generates and loads its data on first run)
+# 4. Build this bank's images from its branch (cached: quick when nothing changed), then start it
+#    (generates and loads its data on first run)
+make -s -C "$dir" build >/dev/null
 make -C "$dir" up
 echo "== $target is running from $dir"

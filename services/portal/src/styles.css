@@ -20,6 +20,7 @@
   --color-line: var(--line);
   --color-status-review: var(--status-review);
   --color-status-stop: var(--status-stop);
+  --color-status-ok: var(--status-ok);
   --color-on-accent: var(--on-accent);
   --font-sans: var(--font-ui);
 }
