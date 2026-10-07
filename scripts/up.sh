@@ -11,6 +11,10 @@ C="docker compose --profile core --profile quality --profile voice --profile ima
 
 step() { printf '\n== %s\n' "$*"; }
 
+# Bind-mounted data folders must exist (and be writable) before any container starts; otherwise Docker
+# creates them as root on a fresh checkout and the data generators cannot write into them.
+mkdir -p data/generated/d3/banners && chmod 777 data/generated/d3/banners 2>/dev/null || true
+
 step "data services"
 $C up -d --wait nbe-postgres nbe-qdrant
 
