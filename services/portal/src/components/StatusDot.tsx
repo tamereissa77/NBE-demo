@@ -2,7 +2,7 @@ import { useI18n } from "../i18n";
 import type { HealthState } from "../useHealth";
 
 const COLOR: Record<HealthState, string> = {
-  ok: "bg-brand",
+  ok: "bg-status-ok",
   degraded: "bg-status-review",
   down: "bg-status-stop",
   loading: "bg-line",

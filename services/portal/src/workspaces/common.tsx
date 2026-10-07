@@ -3,7 +3,7 @@ import type { Tone } from "../demos";
 
 const BANNER: Record<Tone, string> = {
   ok: "bg-brand text-white",
-  review: "bg-accent text-ink",
+  review: "bg-status-review text-ink",
   stop: "bg-status-stop text-white",
 };
 
