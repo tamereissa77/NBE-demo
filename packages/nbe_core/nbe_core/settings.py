@@ -6,6 +6,10 @@ from dataclasses import dataclass
 @dataclass(frozen=True)
 class Settings:
     demo_id: str = os.getenv("DEMO_ID", "dev")
+    # Brand: which bank the demos are presented for (from .env; see brand/ and the README section on brands)
+    bank_short: str = os.getenv("BANK_SHORT", "NBE")
+    bank_en: str = os.getenv("BANK_NAME_EN", "National Bank of Egypt")
+    bank_ar: str = os.getenv("BANK_NAME_AR", "البنك الأهلي المصري")
     postgres_host: str = os.getenv("POSTGRES_HOST", "nbe-postgres")
     postgres_password: str = os.getenv("POSTGRES_PASSWORD", "")
     qdrant_url: str = os.getenv("QDRANT_URL", "http://nbe-qdrant:6333")

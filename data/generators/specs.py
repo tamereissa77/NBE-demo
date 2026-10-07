@@ -3,6 +3,9 @@ Golden answers for D2/D5/D7 come from here, so they are correct by construction.
 
 All products, fees and rules are synthetic NBE-style examples, not NBE's real policies.
 """
+import os
+
+BANK_AR = os.getenv("BANK_NAME_AR", "البنك الأهلي المصري")   # the lender named in the synthetic contracts (brand)
 
 # ------------------------------------------------------------------ D2: working procedures, v1 -> v2
 # Each procedure: facts for v1, and the keys that change in v2 (with new values). Effective dates are
@@ -73,7 +76,7 @@ V1_DATE, V2_DATE = "2025-03-01", "2026-09-01"
 
 # ------------------------------------------------------------------ D5: loan agreement template and contracts
 TEMPLATE_CLAUSES = [
-    {"no": 1, "key": "parties", "title": "الأطراف", "facts": {"المقرض": "البنك الأهلي المصري (نموذج تجريبي)", "المقترض": "[اسم المقترض]"}},
+    {"no": 1, "key": "parties", "title": "الأطراف", "facts": {"المقرض": f"{BANK_AR} (نموذج تجريبي)", "المقترض": "[اسم المقترض]"}},
     {"no": 2, "key": "amount", "title": "قيمة التمويل والغرض", "facts": {"قيمة التمويل": "[المبلغ]", "الغرض": "أغراض شخصية"}},
     {"no": 3, "key": "rate", "title": "العائد", "facts": {"نوع العائد": "متغير مرتبط بسعر الإقراض لليلة واحدة للبنك المركزي", "الهامش": "2.5% سنوياً"}},
     {"no": 4, "key": "repayment", "title": "السداد", "facts": {"طريقة السداد": "أقساط شهرية متساوية", "عدد الأقساط": "[عدد الأقساط]", "تاريخ الاستحقاق": "اليوم الأول من كل شهر"}},

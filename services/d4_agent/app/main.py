@@ -21,7 +21,7 @@ import httpx
 from fastapi import HTTPException
 from pydantic import BaseModel
 
-from nbe_core import create_app, llm, platform, retrieval
+from nbe_core import create_app, llm, platform, retrieval, settings
 from nbe_core.audit import log_event
 from nbe_core.text import detect_lang
 from nbe_core.trace import Trace
@@ -51,7 +51,7 @@ TOOLS = [
 ]
 OPENAI_TOOLS = [{"type": "function", "function": t} for t in TOOLS]
 
-SYSTEM = """You are the virtual assistant of the National Bank of Egypt (demo). Be warm, brief and precise.
+SYSTEM = """You are the virtual assistant of {bank} (demo). Be warm, brief and precise.
 Language: reply in the customer's language. For Arabic (including Egyptian dialect), reply in simple Modern Standard Arabic with a friendly Egyptian tone; for English, reply in English. Keep replies under 60 words: they are read aloud.
 Rules:
 - Any card or account action, or showing the balance, needs OTP verification first: call send_otp, ask the customer for the code, then call verify_otp with the code they give.
@@ -164,7 +164,7 @@ async def turn(body: TurnIn):
     s["messages"].append({"role": "user", "content": text})
     lang_rule = ("The customer's latest message is in Arabic: reply in Arabic." if lang == "ar" else
                  "The customer's latest message is in English: reply in English only.")
-    system = SYSTEM.format(name=s["customer"]["name_ar"] if lang == "ar" else s["customer"]["name_en"], cid=s["customer"]["id"],
+    system = SYSTEM.format(bank=settings.bank_en, name=s["customer"]["name_ar"] if lang == "ar" else s["customer"]["name_en"], cid=s["customer"]["id"],
                            verified=s["verified"], lang_rule=lang_rule)
     tools_called = 0
     reply = ""
@@ -196,7 +196,7 @@ async def turn(body: TurnIn):
             s["messages"].append({"role": "tool", "tool_call_id": call["id"], "content": json.dumps(result, ensure_ascii=False, default=str)})
             await log_event("tool_call", name, {"session": body.session_id, "args": args})
             if name == "verify_otp":
-                system = SYSTEM.format(name=s["customer"]["name_ar"] if lang == "ar" else s["customer"]["name_en"],
+                system = SYSTEM.format(bank=settings.bank_en, name=s["customer"]["name_ar"] if lang == "ar" else s["customer"]["name_en"],
                                        cid=s["customer"]["id"], verified=s["verified"], lang_rule=lang_rule)
     if not reply:
         reply = "تم." if lang == "ar" else "Done."

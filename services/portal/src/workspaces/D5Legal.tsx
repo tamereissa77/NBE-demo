@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getJSON, postJSON, upload, type TraceStep } from "../api";
 import { Md } from "../components/Md";
+import { BRAND } from "../brand";
 import { useI18n } from "../i18n";
 import type { WorkspaceProps } from "../pages/DemoPage";
 import { Block, Button, Chip, ErrorNote, Modal, Panel, Spinner } from "./common";
@@ -24,7 +25,7 @@ const L = {
         clauses: "Clauses", flags: "Risk flags", diff: "Diff vs approved template", none: "Pick a contract or ruling and analyze it.",
         banner: "Shares D2's RAG pipeline · separate demo experience", working: "Map → reduce summary, clause extraction, template comparison…",
         verified: "quote verified in the document", unverified: "quote not found verbatim", planted: "Planted deviations found",
-        same: "same as template", missing: "missing", parties: "Parties", outcome: "Outcome / obligations", validate: "NBE legal validates outputs before demo day." },
+        same: "same as template", missing: "missing", parties: "Parties", outcome: "Outcome / obligations", validate: `${BRAND.short} legal validates outputs before demo day.` },
   ar: { pick: "اختر وثيقة", upload: "ارفع عقداً أو حكماً", analyze: "تحليل", card: "بطاقة الملخص القانوني", points: "أهم النقاط",
         clauses: "البنود", flags: "إشارات المخاطر", diff: "المقارنة بالنموذج المعتمد", none: "اختر عقداً أو حكماً لتحليله.",
         banner: "يشارك منظومة الاسترجاع مع D2 بتجربة مستقلة", working: "تلخيص على مراحل، واستخراج البنود، والمقارنة بالنموذج…",
@@ -60,8 +61,8 @@ export default function D5Legal({ onTrace }: WorkspaceProps) {
   return (
     <div className="grid gap-5 lg:grid-cols-3">
       <section className="space-y-4 lg:col-span-2">
-        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-nbe-border bg-white p-4">
-          <select value={sel} onChange={(e) => setSel(e.target.value)} dir="auto" className="min-w-64 flex-1 rounded-lg border border-nbe-border bg-white px-3 py-2 text-sm">
+        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-line bg-white p-4">
+          <select value={sel} onChange={(e) => setSel(e.target.value)} dir="auto" className="min-w-64 flex-1 rounded-lg border border-line bg-white px-3 py-2 text-sm">
             {docs.map((d) => <option key={d.file} value={d.file}>{d.kind === "ruling" ? "⚖️" : d.kind === "template" ? "📘" : "📄"} {d.title}</option>)}
           </select>
           <Button test="analyze" onClick={() => go(() => postJSON<Result>("/api/d5/analyze", { file: sel }))} disabled={busy}>{l.analyze}</Button>
@@ -73,16 +74,16 @@ export default function D5Legal({ onTrace }: WorkspaceProps) {
         {busy && <Spinner label={l.working} />}
 
         {res && res.clauses.length > 0 && (
-          <div className="rounded-xl border border-nbe-border bg-white p-5">
-            <h3 className="mb-3 font-bold text-nbe-green">{l.clauses}</h3>
+          <div className="rounded-xl border border-line bg-white p-5">
+            <h3 className="mb-3 font-bold text-brand">{l.clauses}</h3>
             <table className="w-full text-sm">
               <tbody>
                 {res.clauses.map((c, i) => (
-                  <tr key={i} className="border-t border-nbe-border align-top">
-                    <td className="py-2 pe-3 font-semibold whitespace-nowrap">{TYPE_AR[c.type] ?? c.type}<div className="text-xs font-normal text-nbe-text">المادة {c.article}</div></td>
+                  <tr key={i} className="border-t border-line align-top">
+                    <td className="py-2 pe-3 font-semibold whitespace-nowrap">{TYPE_AR[c.type] ?? c.type}<div className="text-xs font-normal text-ink-soft">المادة {c.article}</div></td>
                     <td className="py-2" dir="auto">
                       {c.summary}
-                      <div className="mt-1 rounded bg-nbe-bg p-2 text-xs italic">
+                      <div className="mt-1 rounded bg-canvas p-2 text-xs italic">
                         «{c.quote}» <span title={c.quote_verified ? l.verified : l.unverified}>{c.quote_verified ? "✓" : "⚠"}</span>
                       </div>
                     </td>
@@ -94,8 +95,8 @@ export default function D5Legal({ onTrace }: WorkspaceProps) {
         )}
 
         {res && res.diff.length > 0 && (
-          <div className="rounded-xl border border-nbe-border bg-white p-5">
-            <h3 className="mb-3 font-bold text-nbe-green">{l.diff}</h3>
+          <div className="rounded-xl border border-line bg-white p-5">
+            <h3 className="mb-3 font-bold text-brand">{l.diff}</h3>
             <div className="grid gap-2 sm:grid-cols-2">
               {res.diff.map((r) => (
                 <button key={r.article} onClick={() => r.status !== "same" && setViewer(r)} className="text-start">
@@ -139,7 +140,7 @@ export default function D5Legal({ onTrace }: WorkspaceProps) {
             {planted && (
               <p className="text-xs">{l.planted}: <b>{found.length}/{planted.deviations.length}</b></p>
             )}
-            <p className="text-xs text-nbe-text">{l.validate}</p>
+            <p className="text-xs text-ink-soft">{l.validate}</p>
           </>
         )}
       </Panel>
@@ -147,8 +148,8 @@ export default function D5Legal({ onTrace }: WorkspaceProps) {
       {viewer && (
         <Modal title={`${viewer.article}. ${viewer.title}`} onClose={() => setViewer(null)}>
           <table className="mb-3 w-full text-sm" dir="rtl">
-            <thead><tr className="text-xs text-nbe-text"><th className="text-start">الجانب</th><th className="text-start">النموذج المعتمد</th><th className="text-start">العقد</th></tr></thead>
-            <tbody>{viewer.changes.map((c) => <tr key={c.aspect} className="border-t border-nbe-border"><td className="py-1 font-semibold">{c.aspect}</td><td className="py-1">{c.template}</td><td className="py-1 text-status-stop">{c.contract}</td></tr>)}</tbody>
+            <thead><tr className="text-xs text-ink-soft"><th className="text-start">الجانب</th><th className="text-start">النموذج المعتمد</th><th className="text-start">العقد</th></tr></thead>
+            <tbody>{viewer.changes.map((c) => <tr key={c.aspect} className="border-t border-line"><td className="py-1 font-semibold">{c.aspect}</td><td className="py-1">{c.template}</td><td className="py-1 text-status-stop">{c.contract}</td></tr>)}</tbody>
           </table>
           <p dir="auto" className="mb-3 text-sm font-semibold">{viewer.risk}</p>
           <div className="grid gap-3 md:grid-cols-2">

@@ -31,7 +31,7 @@ fi
 echo "Platform (models, retrieval, guardrails, mock bank, documents)"
 if docker inspect -f '{{.State.Running}}' nbe-llm 2>/dev/null | grep -q true; then
   docker run --rm --network nbe-core --env-file .env -e LLM_GATEWAY_URL=http://nbe-llmgw:4000/v1 \
-    -v "$(pwd)/tests:/tests:ro" nbe-d1:latest python /tests/platform_check.py | sed 's/^/  /' || fail=1
+    -v "$(pwd)/tests:/tests:ro" nbe-d1:${IMAGE_TAG:-latest} python /tests/platform_check.py | sed 's/^/  /' || fail=1
 else
   bad "model servers not running (make up)"
 fi

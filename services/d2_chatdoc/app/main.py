@@ -13,7 +13,7 @@ from pathlib import Path
 from fastapi import HTTPException
 from pydantic import BaseModel
 
-from nbe_core import create_app, llm, retrieval
+from nbe_core import create_app, llm, retrieval, settings
 from nbe_core.text import detect_lang
 from nbe_core.trace import Trace
 
@@ -98,11 +98,11 @@ class Ask(BaseModel):
 COMPARE = re.compile(r"(تغي[ّ]?ر|اتغير|الفرق بين|الفروق|ما الجديد|إيه اللي اتغير|what changed|what's new|difference between|compare)", re.I)
 
 ANSWER_SYSTEM = {
-    "ar": ("أنت مساعد موظفي فروع البنك الأهلي المصري. أجب فقط من المصادر المرفقة. اذكر المصدر بعد كل معلومة بالشكل [S1] أو [S2]. "
+    "ar": (f"أنت مساعد موظفي فروع {settings.bank_ar}. أجب فقط من المصادر المرفقة. اذكر المصدر بعد كل معلومة بالشكل [S1] أو [S2]. "
            "إذا لم تجد الإجابة في المصادر فقل بوضوح: \"لم أجد هذه المعلومة في الإجراءات المتاحة\" ولا تخمّن. "
            "إذا ظهرت عدة إصدارات لنفس الإجراء فاعتمد الإصدار الأحدث وأشر إلى ذلك. أجب بالعربية الفصحى بإيجاز، "
            "حتى لو كان السؤال بالعامية المصرية. لا تبدأ بمقدمة."),
-    "en": ("You assist National Bank of Egypt branch staff. Answer only from the attached sources and cite each fact as [S1], [S2]. "
+    "en": (f"You assist {settings.bank_en} branch staff. Answer only from the attached sources and cite each fact as [S1], [S2]. "
            "If the answer is not in the sources, say \"I could not find this in the available procedures\" and do not guess. "
            "If several versions of a procedure appear, use the latest and say so. Answer in English, concisely, with no preamble."),
 }

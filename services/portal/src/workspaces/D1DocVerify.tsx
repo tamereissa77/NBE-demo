@@ -35,11 +35,11 @@ function Evidence({ doc }: { doc: Doc }) {
   const [w, h] = doc.forensics.image_size;
   const boxes = [
     ...doc.forensics.noise.regions.map((r) => ({ b: r.bbox, c: "border-status-stop", t: "noise" })),
-    ...(doc.forensics.stamps.duplicate && doc.forensics.stamps.boxes ? doc.forensics.stamps.boxes.map((b) => ({ b, c: "border-nbe-orange", t: "stamp" })) : []),
+    ...(doc.forensics.stamps.duplicate && doc.forensics.stamps.boxes ? doc.forensics.stamps.boxes.map((b) => ({ b, c: "border-accent", t: "stamp" })) : []),
   ];
   return (
     <div className="relative">
-      <img src={`/api/d1/doc/${doc.file}`} alt={doc.file} className="w-full rounded-lg border border-nbe-border" />
+      <img src={`/api/d1/doc/${doc.file}`} alt={doc.file} className="w-full rounded-lg border border-line" />
       {boxes.map((x, i) => (
         <div key={i} title={x.t} className={`absolute rounded border-4 ${x.c}`}
              style={{ left: `${(100 * x.b[0]) / w}%`, top: `${(100 * x.b[1]) / h}%`, width: `${(100 * (x.b[2] - x.b[0])) / w}%`, height: `${(100 * (x.b[3] - x.b[1])) / h}%` }} />
@@ -78,10 +78,10 @@ export default function D1DocVerify({ onTrace }: WorkspaceProps) {
   return (
     <div className="grid gap-5 lg:grid-cols-[220px_1fr_340px]">
       <nav className="flex gap-2 overflow-x-auto lg:flex-col">
-        <div className="hidden text-xs font-semibold uppercase text-nbe-text lg:block">{l.packs}</div>
+        <div className="hidden text-xs font-semibold uppercase text-ink-soft lg:block">{l.packs}</div>
         {packs.map((p) => (
           <button key={p.id} data-test="pack" onClick={() => pick(p.id)}
-                  className={`shrink-0 rounded-xl border px-3 py-2 text-start text-sm ${sel === p.id ? "border-nbe-green bg-nbe-green text-white" : "border-nbe-border bg-white hover:bg-nbe-bg"}`}>
+                  className={`shrink-0 rounded-xl border px-3 py-2 text-start text-sm ${sel === p.id ? "border-brand bg-brand text-white" : "border-line bg-white hover:bg-canvas"}`}>
             <div className="font-bold">{p.id}</div>
             <div dir="auto" className="text-xs opacity-90">{lang === "ar" ? p.name_ar : p.name_en}</div>
             <div className="text-xs opacity-75">{p.loan_amount_egp.toLocaleString()} {l.egp} · {p.documents.length} docs</div>
@@ -91,8 +91,8 @@ export default function D1DocVerify({ onTrace }: WorkspaceProps) {
       </nav>
 
       <section className="space-y-4">
-        <div className="flex items-center gap-3 rounded-xl border border-nbe-border bg-white p-4">
-          <span className="font-bold text-nbe-green">{sel}</span>
+        <div className="flex items-center gap-3 rounded-xl border border-line bg-white p-4">
+          <span className="font-bold text-brand">{sel}</span>
           <span dir="auto" className="text-sm">{packs.find((p) => p.id === sel)?.[lang === "ar" ? "name_ar" : "name_en"]}</span>
           <span className="ms-auto"><Button test="verify" onClick={verify} disabled={busy}>{l.verify}</Button></span>
         </div>
@@ -102,7 +102,7 @@ export default function D1DocVerify({ onTrace }: WorkspaceProps) {
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
             {res.documents.map((d) => (
               <button key={d.file} onClick={() => { setOpen(d); setTab("original"); }}
-                      className={`overflow-hidden rounded-xl border-2 bg-white text-start ${d.flags.length ? "border-status-stop/60" : "border-nbe-border"}`}>
+                      className={`overflow-hidden rounded-xl border-2 bg-white text-start ${d.flags.length ? "border-status-stop/60" : "border-line"}`}>
                 <img src={`data:image/png;base64,${d.thumb}`} alt={d.kind} className="h-44 w-full object-cover object-top" />
                 <div className="flex items-center justify-between gap-2 px-3 py-2">
                   <span className="text-sm font-semibold" dir="auto">{lang === "ar" ? d.kind_ar : d.kind.replace("_", " ")}</span>
@@ -123,7 +123,7 @@ export default function D1DocVerify({ onTrace }: WorkspaceProps) {
               <Chip tone={res.risk === "high" ? "red" : res.risk === "medium" ? "orange" : "green"}>risk: {res.risk}</Chip>
               <Chip>{(res.total_ms / 1000).toFixed(0)} s</Chip>
             </div>
-            <p dir="auto" className="text-sm leading-relaxed text-nbe-strong">{lang === "ar" ? res.summary.ar : res.summary.en || res.summary.ar}</p>
+            <p dir="auto" className="text-sm leading-relaxed text-ink">{lang === "ar" ? res.summary.ar : res.summary.en || res.summary.ar}</p>
             {res.flags.length > 0 && (
               <Block label={l.flags} accent="orange">
                 {res.flags.map((f, i) => (
@@ -132,7 +132,7 @@ export default function D1DocVerify({ onTrace }: WorkspaceProps) {
                     <div dir="auto" className="mt-1 text-xs">{lang === "ar" ? f.detail_ar : f.detail_en}</div>
                     <div className="mt-0.5 flex flex-wrap gap-1">
                       {f.documents.map((file) => (
-                        <button key={file} className="text-xs text-nbe-green underline" onClick={() => { const d = res.documents.find((x) => x.file === file); if (d) { setOpen(d); setTab("original"); } }}>{file}</button>
+                        <button key={file} className="text-xs text-brand underline" onClick={() => { const d = res.documents.find((x) => x.file === file); if (d) { setOpen(d); setTab("original"); } }}>{file}</button>
                       ))}
                     </div>
                   </div>
@@ -146,7 +146,7 @@ export default function D1DocVerify({ onTrace }: WorkspaceProps) {
               </Block>
             ) : (
               <div className="space-y-2">
-                <textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder={l.note} dir="auto" rows={2} className="w-full rounded-lg border border-nbe-border p-2 text-sm" />
+                <textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder={l.note} dir="auto" rows={2} className="w-full rounded-lg border border-line p-2 text-sm" />
                 <div className="flex flex-wrap gap-2">
                   <Button onClick={() => decide("approve_docs")}>{l.approve}</Button>
                   <Button variant="ghost" onClick={() => decide("request_more")}>{l.more}</Button>
@@ -162,7 +162,7 @@ export default function D1DocVerify({ onTrace }: WorkspaceProps) {
         <Modal title={`${open.file} · ${lang === "ar" ? open.kind_ar : open.kind}`} onClose={() => setOpen(null)}>
           <div className="mb-3 flex gap-2">
             {(["original", "ela", "fields"] as const).map((t) => (
-              <button key={t} onClick={() => setTab(t)} className={`rounded-full px-3 py-1 text-sm ${tab === t ? "bg-nbe-green text-white" : "bg-nbe-bg"}`}>{l[t]}</button>
+              <button key={t} onClick={() => setTab(t)} className={`rounded-full px-3 py-1 text-sm ${tab === t ? "bg-brand text-white" : "bg-canvas"}`}>{l[t]}</button>
             ))}
           </div>
           {tab === "original" && <Evidence doc={open} />}
@@ -176,12 +176,12 @@ export default function D1DocVerify({ onTrace }: WorkspaceProps) {
             <table className="w-full text-sm">
               <tbody>
                 {Object.entries(open.fields).map(([k, v]) => (
-                  <tr key={k} className="border-t border-nbe-border align-top">
+                  <tr key={k} className="border-t border-line align-top">
                     <td className="py-1.5 pe-3 font-semibold">{k}</td>
                     <td className="py-1.5" dir="auto">{typeof v === "object" ? <pre className="text-xs">{JSON.stringify(v, null, 1)}</pre> : String(v)}</td>
                   </tr>
                 ))}
-                <tr className="border-t border-nbe-border"><td className="py-1.5 pe-3 font-semibold">software</td><td>{open.forensics.metadata.software ?? "—"}</td></tr>
+                <tr className="border-t border-line"><td className="py-1.5 pe-3 font-semibold">software</td><td>{open.forensics.metadata.software ?? "—"}</td></tr>
               </tbody>
             </table>
           )}

@@ -300,4 +300,4 @@ async def accuracy(refresh: bool = False, n: int = 100):
 
 @app.get("/policy")
 def policy():
-    return {"rules": POLICY_RULES, "sla_hours": SLA_HOURS, "teams": TEAMS, "note": "Synthetic placeholder policy until NBE supplies its rules."}
+    return {"rules": POLICY_RULES, "sla_hours": SLA_HOURS, "teams": TEAMS, "note": f"Synthetic placeholder policy until {settings.bank_short} supplies its rules."}

@@ -12,6 +12,7 @@ duplicates, metadata edits, and cross-document inconsistencies.
 """
 import io
 import json
+import os
 import random
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -20,6 +21,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 OUT = Path("/repo/data/generated/d1")
+BANK_AR = os.getenv("BANK_NAME_AR", "البنك الأهلي المصري")   # the bank the loan pack is addressed to (brand)
 FONT_DIR = Path("/usr/share/fonts/truetype/noto")
 W, H = 1240, 1754                       # A4 at 150 dpi
 INK = (25, 25, 35)
@@ -114,7 +116,7 @@ def scan_look(img: Image.Image, rng: random.Random, heavy: bool = False) -> Imag
 
 def save_jpeg(img: Image.Image, path: Path, quality: int = 92, software: str | None = None) -> None:
     exif = Image.Exif()
-    exif[0x0110] = "NBE-Demo Scanner S1"            # Model
+    exif[0x0110] = "Demo Scanner S1"            # Model
     if software:
         exif[0x0131] = software                       # Software
     img.save(path, "JPEG", quality=quality, exif=exif.tobytes())
@@ -216,7 +218,7 @@ def doc_hr_letter(a: Applicant, rng: random.Random, date: str, salary: int | Non
     d = header(img, "خطاب تعريف بالراتب", emp_ar, a.employer_en, (90, 50, 20))
     sal = salary if salary is not None else a.salary
     ar(d, W - 80, 320, f"التاريخ: {date.replace('-', '/')}", 30)
-    ar(d, W - 80, 400, "إلى السادة / البنك الأهلي المصري", 30, True)
+    ar(d, W - 80, 400, f"إلى السادة / {BANK_AR}", 30, True)
     ar(d, W - 80, 470, "تحية طيبة وبعد،", 30)
     lines = [f"تشهد {emp_ar} بأن السيد/ة: {a.name_ar}،",
              f"رقم قومي ينتهي بـ {a.nid_last4}، يعمل/تعمل لديها بوظيفة {a.job_ar}",

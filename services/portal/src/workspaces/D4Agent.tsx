@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { getJSON, postJSON, type TraceStep } from "../api";
+import { BRAND } from "../brand";
 import { useI18n } from "../i18n";
 import type { WorkspaceProps } from "../pages/DemoPage";
 import { Block, Button, Chip, ErrorNote, Spinner } from "./common";
@@ -105,9 +106,9 @@ export default function D4Agent({ onTrace }: WorkspaceProps) {
   return (
     <div className="grid gap-5 lg:grid-cols-[1fr_380px]">
       <section className="space-y-4">
-        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-nbe-border bg-white p-3">
+        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-line bg-white p-3">
           <span className="text-sm">{l.customer}</span>
-          <select value={cid} onChange={(e) => setCid(e.target.value)} className="rounded-lg border border-nbe-border bg-white px-2 py-1.5 text-sm" dir="auto">
+          <select value={cid} onChange={(e) => setCid(e.target.value)} className="rounded-lg border border-line bg-white px-2 py-1.5 text-sm" dir="auto">
             {customers.map((c) => <option key={c.id} value={c.id}>{c.id} · {lang === "ar" ? c.name_ar : c.name_en}</option>)}
           </select>
           <Button variant="ghost" onClick={start}>{l.start}</Button>
@@ -115,62 +116,62 @@ export default function D4Agent({ onTrace }: WorkspaceProps) {
         </div>
 
         <div className="flex flex-wrap gap-1.5">
-          <span className="self-center text-xs font-semibold uppercase text-nbe-text">{l.script}</span>
+          <span className="self-center text-xs font-semibold uppercase text-ink-soft">{l.script}</span>
           {STEP_LABEL[lang].map((label, i) => (
             <button key={i} data-test="script-step" onClick={() => scriptStep(i)} disabled={busy || (i === 1 && !sms)}
-                    className={`rounded-full px-3 py-1 text-xs font-semibold disabled:opacity-40 ${i === 4 ? "bg-status-stop/10 text-status-stop" : "bg-white text-nbe-green ring-1 ring-nbe-border"}`}>
+                    className={`rounded-full px-3 py-1 text-xs font-semibold disabled:opacity-40 ${i === 4 ? "bg-status-stop/10 text-status-stop" : "bg-white text-brand ring-1 ring-line"}`}>
               {i + 1}. {label}
             </button>
           ))}
         </div>
 
-        <div className="flex min-h-[26rem] flex-col rounded-xl border border-nbe-border bg-white">
+        <div className="flex min-h-[26rem] flex-col rounded-xl border border-line bg-white">
           <div className="flex-1 space-y-3 overflow-y-auto p-4">
             {msgs.map((m, i) => m.role === "user" ? (
-              <div key={i} dir="auto" className="ms-auto w-fit max-w-[80%] rounded-2xl bg-nbe-green px-4 py-2 text-sm text-white">{m.voice && "🎙️ "}{m.text}</div>
+              <div key={i} dir="auto" className="ms-auto w-fit max-w-[80%] rounded-2xl bg-brand px-4 py-2 text-sm text-white">{m.voice && "🎙️ "}{m.text}</div>
             ) : (
-              <div key={i} data-test="agent-reply" className={`max-w-[85%] rounded-2xl px-4 py-2 text-sm ${m.blocked ? "border-2 border-status-stop bg-status-stop/5" : "bg-nbe-bg"}`}>
+              <div key={i} data-test="agent-reply" className={`max-w-[85%] rounded-2xl px-4 py-2 text-sm ${m.blocked ? "border-2 border-status-stop bg-status-stop/5" : "bg-canvas"}`}>
                 {m.blocked && <div className="mb-1 text-xs font-bold text-status-stop">⛔ {l.stop}</div>}
-                <p dir="auto" className="whitespace-pre-wrap text-nbe-strong">{m.text}</p>
-                {m.ms !== undefined && <div className="mt-1 text-xs text-nbe-text">{(m.ms / 1000).toFixed(1)} s</div>}
+                <p dir="auto" className="whitespace-pre-wrap text-ink">{m.text}</p>
+                {m.ms !== undefined && <div className="mt-1 text-xs text-ink-soft">{(m.ms / 1000).toFixed(1)} s</div>}
               </div>
             ))}
             {busy && <Spinner label={l.working} />}
             <div ref={end} />
           </div>
           <ErrorNote error={error} />
-          <form onSubmit={(e) => { e.preventDefault(); if (q.trim()) say(q); }} className="flex gap-2 border-t border-nbe-border p-3">
+          <form onSubmit={(e) => { e.preventDefault(); if (q.trim()) say(q); }} className="flex gap-2 border-t border-line p-3">
             <button type="button" onMouseDown={startRec} onMouseUp={stopRec} onTouchStart={startRec} onTouchEnd={stopRec} title={l.mic}
-                    className={`rounded-full px-4 text-lg ${rec ? "animate-pulse bg-status-stop text-white" : "bg-nbe-bg"}`}>🎙️</button>
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={rec ? l.recording : l.say} dir="auto" className="flex-1 rounded-full border border-nbe-border px-4 py-2 text-sm" />
+                    className={`rounded-full px-4 text-lg ${rec ? "animate-pulse bg-status-stop text-white" : "bg-canvas"}`}>🎙️</button>
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={rec ? l.recording : l.say} dir="auto" className="flex-1 rounded-full border border-line px-4 py-2 text-sm" />
             <Button type="submit" disabled={busy || !q.trim()}>{l.send}</Button>
           </form>
         </div>
       </section>
 
       <aside className="space-y-4">
-        <div className="rounded-[2rem] border-8 border-nbe-strong bg-white p-4 shadow-lg">
-          <div className="mb-2 text-center text-xs font-semibold text-nbe-text">📱 {l.phone}</div>
+        <div className="rounded-[2rem] border-8 border-ink bg-white p-4 shadow-lg">
+          <div className="mb-2 text-center text-xs font-semibold text-ink-soft">📱 {l.phone}</div>
           {sms ? (
-            <div className="rounded-2xl bg-nbe-bg p-3 text-sm">
-              <div className="text-xs text-nbe-text">NBE · {sms.to}</div>
+            <div className="rounded-2xl bg-canvas p-3 text-sm">
+              <div className="text-xs text-ink-soft">{BRAND.short} · {sms.to}</div>
               <div dir="rtl" className="mt-1">رمز التحقق الخاص بك هو</div>
-              <div className="my-1 text-center text-3xl font-bold tracking-[0.4em] text-nbe-green">{sms.code}</div>
-              <div className="text-xs text-nbe-text">لا تشارك هذا الرمز مع أي شخص. (mock SMS)</div>
+              <div className="my-1 text-center text-3xl font-bold tracking-[0.4em] text-brand">{sms.code}</div>
+              <div className="text-xs text-ink-soft">لا تشارك هذا الرمز مع أي شخص. (mock SMS)</div>
               <div className="mt-2 text-center"><Button onClick={() => scriptStep(1)} disabled={busy}>{l.useCode}</Button></div>
             </div>
-          ) : <p className="py-6 text-center text-sm text-nbe-text">{l.noSms}</p>}
+          ) : <p className="py-6 text-center text-sm text-ink-soft">{l.noSms}</p>}
         </div>
 
-        <div className="rounded-xl border border-nbe-border bg-white p-4">
-          <h3 className="mb-2 text-sm font-bold uppercase text-nbe-text">{l.lane}</h3>
+        <div className="rounded-xl border border-line bg-white p-4">
+          <h3 className="mb-2 text-sm font-bold uppercase text-ink-soft">{l.lane}</h3>
           <ol className="max-h-80 space-y-2 overflow-y-auto">
             {lane.filter((e) => e.type !== "sms").map((e, i) => e.type === "guardrail" ? (
               <li key={i} className="rounded-lg bg-status-stop px-3 py-2 text-xs font-bold text-white">⛔ STOP · {e.stage} guardrail · {e.rail}</li>
             ) : (
-              <li key={i} className="rounded-lg bg-nbe-bg px-3 py-2 text-xs">
-                <div className="font-mono font-semibold text-nbe-green" dir="ltr">🔧 {e.name}({Object.entries(e.args ?? {}).map(([k, v]) => `${k}=${v}`).join(", ")}) · {e.ms} ms</div>
-                <pre dir="ltr" className="mt-1 max-h-24 overflow-auto whitespace-pre-wrap text-[11px] text-nbe-strong">{JSON.stringify(e.result)}</pre>
+              <li key={i} className="rounded-lg bg-canvas px-3 py-2 text-xs">
+                <div className="font-mono font-semibold text-brand" dir="ltr">🔧 {e.name}({Object.entries(e.args ?? {}).map(([k, v]) => `${k}=${v}`).join(", ")}) · {e.ms} ms</div>
+                <pre dir="ltr" className="mt-1 max-h-24 overflow-auto whitespace-pre-wrap text-[11px] text-ink">{JSON.stringify(e.result)}</pre>
               </li>
             ))}
           </ol>
@@ -178,7 +179,7 @@ export default function D4Agent({ onTrace }: WorkspaceProps) {
 
         <Block label={l.account}>
           <Chip tone={state?.verified ? "green" : "neutral"}>{state?.verified ? l.verified : l.notVerified}</Chip>
-          {state?.cards?.map((c) => <div key={c.last4} className="mt-1 text-xs">💳 •••• {c.last4} · {c.type} · <b className={c.status === "blocked" ? "text-status-stop" : "text-nbe-green"}>{c.status}</b></div>)}
+          {state?.cards?.map((c) => <div key={c.last4} className="mt-1 text-xs">💳 •••• {c.last4} · {c.type} · <b className={c.status === "blocked" ? "text-status-stop" : "text-brand"}>{c.status}</b></div>)}
           {state?.tickets.map((t) => <div key={t.id} className="mt-1 text-xs" dir="auto">🎫 {t.id} · {t.category}</div>)}
           {state?.handoffs.map((h) => <div key={h.id} className="mt-1 text-xs">🙋 {h.id} · {h.status}</div>)}
         </Block>

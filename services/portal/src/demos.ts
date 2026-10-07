@@ -1,4 +1,6 @@
-// The seven NBE use cases, one demo each (deck slides 4 and 6-12). Content is bilingual;
+import { BRAND } from "./brand";
+
+// The seven use cases, one demo each (deck slides 4 and 6-12). Content is bilingual;
 // the decision card mirrors the panel on each slide.
 
 export type Lang = "en" | "ar";
@@ -114,7 +116,7 @@ export const DEMOS: Demo[] = [
     title: { en: "Legal Documents Summarization", ar: "تلخيص المستندات القانونية" },
     tagline: { en: "Rulings, clauses, risks, version compare", ar: "الأحكام والبنود والمخاطر ومقارنة الإصدارات" },
     story: {
-      en: "Legal uploads a ruling or contract and gets a structured summary, the key clauses, risk flags and a comparison against NBE's standard template.",
+      en: "Legal uploads a ruling or contract and gets a structured summary, the key clauses, risk flags and a comparison against the bank's standard template.",
       ar: "يرفع الفريق القانوني حكمًا أو عقدًا فيحصل على ملخص منظّم، وأهم البنود، وإشارات المخاطر، ومقارنة بالنموذج المعتمد لدى البنك.",
     },
     flow: {
@@ -132,7 +134,7 @@ export const DEMOS: Demo[] = [
   {
     id: "d6", code: "D6", wave: 1, effortDays: 5,
     fit: { en: "Strong", ar: "قوي" },
-    title: { en: "NBE AI Assistant", ar: "مساعد البنك الأهلي الذكي" },
+    title: BRAND.assistant,
     tagline: { en: "In-house employee assistant, Dataiku-integrated", ar: "مساعد داخلي للموظفين متكامل مع Dataiku" },
     story: {
       en: "An employee uses one assistant for file chat, drafting, summarisation, translation and code explanation. A panel shows which model the router chose for each task and why.",
