@@ -34,6 +34,7 @@ Seven live AI applications for the **National Bank of Egypt (NBE)**, one per NBE
 14. [Design decisions and lessons learned](#14-design-decisions-and-lessons-learned)
 15. [Production rollout on PowerEdge XE7745 and XE9780](#15-production-rollout-on-poweredge-xe7745-and-xe9780)
 16. [Known limitations](#16-known-limitations)
+17. [Brands: one platform, several banks](#17-brands-one-platform-several-banks)
 
 ---
 
@@ -512,6 +513,34 @@ Planning assumptions to validate by benchmark, not commitments.
 - **Voice:** browsers allow the microphone only on `localhost` or https; Egyptian dialect in voice is a bonus, not a guarantee.
 - **D1 forensics** flag for review and are not fraud-proof.
 - **Not deployed:** Open WebUI (the D6 portal screen replaces it; `/v1` is ready if wanted), Dataiku (version and host to be confirmed by NBE).
+
+
+---
+
+## 17. Brands: one platform, several banks
+
+The platform is bank-neutral; a **brand pack** and a few settings decide which bank it presents. Each bank is maintained on its own branch, so its branding and seed data can evolve without touching the other.
+
+| Bank | Branch | Start it | Worktree (created on first use) |
+|---|---|---|---|
+| National Bank of Egypt | `main` | `make start-NBE` | the main checkout, e.g. `~/NBE-demo` |
+| Riyad Bank | `Riyadh-Bank` | `make start-RYD` | `~/NBE-demo-Riyadh-Bank` |
+
+`make start-NBE` / `make start-RYD` work from either checkout. They find (or create) the bank's git worktree, stop the other bank's stack (containers removed, data volumes kept), and run `make up` there; the first start of a bank builds its images and generates and loads its data. `make brand` shows which bank is running. Only one bank runs at a time on the GB10.
+
+**What a brand consists of**
+
+| Piece | Where | Used by |
+|---|---|---|
+| Logo, favicon mark, full logo | `brand/logo.png`, `brand/mark.png`, `brand/logo-full.png` | Portal header, favicon, D3 banner overlay |
+| Colour and font tokens | `brand/theme.css` (`--brand`, `--accent`, `--canvas`, `--ink`, `--line`, `--font-ui`, …) | Every portal screen (Tailwind classes `bg-brand`, `text-accent`, …) |
+| Names and titles | `brand/brand.json` | Portal titles, D6 assistant name, hero text |
+| Bank names for the AI and data | `.env.example`: `BANK_SHORT`, `BANK_NAME_EN`, `BANK_NAME_AR` | D2, D4, D6 prompts; API titles; D1 HR letters; D5 contracts |
+| Isolation | `.env.example`: `COMPOSE_PROJECT_NAME`, `IMAGE_TAG` | Separate Postgres/Qdrant volumes and image tags per bank |
+| Banner style | `.env.example`: `BANNER_PALETTE` | D3 SDXL prompts |
+| Lender in synthetic contracts | `data/seed/d5/` (regenerate with `make data`) | D5 |
+
+**Adding another bank:** branch from `main`, replace `brand/`, set the brand block in `.env.example` (a new `COMPOSE_PROJECT_NAME` and `IMAGE_TAG`), regenerate `data/seed/d5`, and add a `start-XXX` entry in `scripts/switch_brand.sh` and the Makefile. Platform improvements go to `main` and reach each bank with `git merge main` on its branch.
 
 ---
 
