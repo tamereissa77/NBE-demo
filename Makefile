@@ -123,7 +123,7 @@ PW_IMAGE := mcr.microsoft.com/playwright/python:v1.55.0-noble
 PW_RUN := docker run --rm --network host -u pwuser -v $(CURDIR)/tests/ui:/tests:ro
 
 data:
-	@mkdir -p data/generated/d3/banners && chmod 777 data/generated/d3/banners
+	@mkdir -p data/generated/d3/banners && (chmod 777 data/generated/d3/banners 2>/dev/null || true)
 	$(DATAGEN) python -m data.generators.d1_loan_docs
 	$(DATAGEN) python -m data.generators.d3_commerce
 	$(DATAGEN) python -m data.generators.d6_docs
