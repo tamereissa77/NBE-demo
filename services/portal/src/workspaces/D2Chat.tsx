@@ -33,7 +33,8 @@ export default function D2Chat({ onTrace }: WorkspaceProps) {
   useEffect(() => {
     getJSON<{ lang: string; q: string }[]>("/api/d2/suggested").then(setSuggested).catch(() => {});
   }, []);
-  useEffect(() => end.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), [turns, busy]);
+  // Braces matter: newer Chrome returns a Promise from scrollIntoView, which React would call as a cleanup function
+  useEffect(() => { end.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }); }, [turns, busy]);
 
   const ask = async (question: string) => {
     if (!question.trim() || busy) return;

@@ -38,7 +38,8 @@ export default function D6Assistant({ onTrace }: WorkspaceProps) {
   const lastRoute = [...msgs].reverse().find((m) => m.reply)?.reply;
 
   useEffect(() => { getJSON<{ task: string; q: string }[]>("/api/d6/suggested").then(setSuggested).catch(() => {}); }, []);
-  useEffect(() => end.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), [msgs, busy]);
+  // Braces matter: newer Chrome returns a Promise from scrollIntoView, which React would call as a cleanup function
+  useEffect(() => { end.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }); }, [msgs, busy]);
 
   const send = async (text: string) => {
     if (!text.trim() || busy) return;

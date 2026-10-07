@@ -47,7 +47,8 @@ export default function D4Agent({ onTrace }: WorkspaceProps) {
   const end = useRef<HTMLDivElement>(null);
 
   useEffect(() => { getJSON<Customer[]>("/api/d4/customers").then(setCustomers).catch((e) => setError(String(e))); }, []);
-  useEffect(() => end.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), [msgs, busy]);
+  // Braces matter: newer Chrome returns a Promise from scrollIntoView, which React would call as a cleanup function
+  useEffect(() => { end.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }); }, [msgs, busy]);
 
   const start = async () => {
     const s = await postJSON<{ session_id: string }>("/api/d4/session", { customer_id: cid });
