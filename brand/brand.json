@@ -1,9 +1,9 @@
 {
-  "id": "nbe",
-  "short": "NBE",
-  "name": { "en": "National Bank of Egypt", "ar": "البنك الأهلي المصري" },
-  "assistant": { "en": "NBE AI Assistant", "ar": "مساعد البنك الأهلي الذكي" },
-  "appTitle": { "en": "NBE AI Demos", "ar": "عروض الذكاء الاصطناعي للبنك الأهلي المصري" },
-  "website": "https://www.nbe.com.eg",
-  "note": "Brand pack for the main branch. Logo and colours used for the NBE customer demonstration only."
+  "id": "ryd",
+  "short": "Riyad Bank",
+  "name": { "en": "Riyad Bank", "ar": "بنك الرياض" },
+  "assistant": { "en": "Riyad Bank AI Assistant", "ar": "مساعد بنك الرياض الذكي" },
+  "appTitle": { "en": "Riyad Bank AI Demos", "ar": "عروض الذكاء الاصطناعي لبنك الرياض" },
+  "website": "https://www.riyadbank.com/personal-banking",
+  "note": "Brand pack for the Riyadh-Bank branch. Logo and colours used for the Riyad Bank customer demonstration only."
 }

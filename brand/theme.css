@@ -1,25 +1,26 @@
 /*
- * Brand pack: National Bank of Egypt (branch main).
- * Every colour and the UI font of the portal come from these tokens; another bank = another brand/ folder
- * (see the Riyadh-Bank branch). Colours sampled 6 Oct 2026 from nbe.com.eg and the NBE logo.
+ * Brand pack: Riyad Bank (branch Riyadh-Bank).
+ * Colours sampled 7 Oct 2026 from riyadbank.com (personal banking) and the Riyad Bank logo:
+ * logo indigo #1f0973, headline indigo #17054b, logo/active-tab teal #00ae9a, button aqua #3fcfbe.
+ * The site's own typeface (rb-regular) is proprietary; IBM Plex Sans Arabic is bundled as the closest open match.
  */
 :root {
-  --brand: #006643;            /* primary: buttons, headings, links */
-  --brand-dark: #0c5435;       /* footer, hover */
-  --accent: #ffa100;           /* chips, highlights, active states */
-  --accent-light: #f9c40e;     /* footer accent text */
-  --accent-deep: #fd6805;
-  --accent-gradient: linear-gradient(90deg, #f9c40e 0%, #faa30b 35%, #fc7f07 70%, #fd6805 100%);
-  --on-accent: #141414;        /* text on accent fills */
+  --brand: #1f0973;            /* primary: buttons, headings, links (logo indigo) */
+  --brand-dark: #17054b;       /* footer, hover (site headline indigo) */
+  --accent: #00ae9a;           /* chips, highlights, active states (logo teal) */
+  --accent-light: #3fcfbe;     /* footer accent text (site button aqua) */
+  --accent-deep: #008a7b;
+  --accent-gradient: linear-gradient(90deg, #1f0973 0%, #553e99 45%, #00ae9a 100%);
+  --on-accent: #17054b;        /* text on accent fills */
 
-  --canvas: #f8f8f8;           /* page background */
-  --ink: #141414;              /* strong text */
-  --ink-soft: #4a4a4a;         /* body text */
-  --line: #d6d6d6;             /* borders */
+  --canvas: #f6f7f8;           /* page background (site top bar grey) */
+  --ink: #17054b;              /* strong text */
+  --ink-soft: #4b5563;         /* body text */
+  --line: #e2e3ea;             /* borders */
 
-  --status-review: #ffa100;    /* "flagged for review" */
+  --status-review: #f2a900;    /* "flagged for review" (amber, distinct from the teal accent) */
   --status-stop: #c62828;      /* guardrail STOP */
-  --status-ok: #006643;
+  --status-ok: #00ae9a;
 
-  --font-ui: "Cairo Variable", "Segoe UI", Tahoma, sans-serif;
+  --font-ui: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
 }

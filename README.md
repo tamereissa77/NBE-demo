@@ -1,5 +1,9 @@
 # NBE AI Demos on Dell AI infrastructure
 
+> **Riyad Bank edition (branch `Riyadh-Bank`).** The same seven demos and platform as `main`, presented for **Riyad Bank (بنك الرياض)**: Riyad Bank logo and colours (`brand/`), IBM Plex Sans Arabic as the UI font, and the bank's name in the portal, the model prompts, the D1 loan documents and the D5 contracts (`.env.example`: `BANK_*`, `COMPOSE_PROJECT_NAME=ryd`, `IMAGE_TAG=ryd`). Start it with `make start-RYD`; `make start-NBE` switches back. Improvements made on `main` merge into this branch with `git merge main`; brand-specific files are `brand/`, `.env.example` and `data/seed/d5/`.
+>
+> Still Egypt-specific in this edition (synthetic content, by design of "branding only"): EGP amounts, Egyptian cities and dialect in the synthetic data, mock-bank phone numbers (+20), and NBE references in the planning documents (`PLAN.md`, `docs/`).
+
 Seven live AI applications for the **National Bank of Egypt (NBE)**, one per NBE use case. They run fully offline and fully containerised: today on a single **Dell Pro Max with GB10** (the demo platform), and tomorrow on **Dell PowerEdge XE7745** or **XE9780** servers for production (see [Production rollout](#15-production-rollout-on-poweredge-xe7745-and-xe9780)).
 
 | | |
