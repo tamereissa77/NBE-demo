@@ -91,9 +91,13 @@ async def ingest():
 
 @app.post("/admin/reset")
 def reset():
-    """Between audiences: clear triage results and decisions, keep the data and the trend cache."""
+    """Between audiences: clear triage results and decisions, refresh queue arrival times; keep the data and caches."""
     with db() as conn:
         conn.execute("TRUNCATE d7.triage")
+        # Fresh arrival times for the demo queue (5 minutes apart), so SLA countdowns start fresh per audience
+        conn.execute("""UPDATE d7.complaints c SET received_at = now() - interval '5 minutes' * q.rn
+                        FROM (SELECT id, row_number() OVER (ORDER BY id) AS rn FROM d7.complaints WHERE in_queue) q
+                        WHERE c.id = q.id""")
     return {"reset": True}
 
 

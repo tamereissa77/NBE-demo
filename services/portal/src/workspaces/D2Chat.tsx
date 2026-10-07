@@ -102,7 +102,8 @@ export default function D2Chat({ onTrace }: WorkspaceProps) {
 
       <Panel title={l.card} banner={l.banner}>
         {!last && <p className="text-sm">{l.none}</p>}
-        {last && (
+        {last && !last.found && <Block accent="orange">{l.notFound}</Block>}
+        {last && last.found && (
           <>
             <div className="text-xs font-semibold uppercase text-nbe-text">{l.sources}</div>
             {last.citations.filter((c) => c.cited).concat(last.citations.filter((c) => !c.cited)).slice(0, 4).map((c) => (

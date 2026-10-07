@@ -139,8 +139,11 @@ async def ask(body: Ask):
     load_docs()
     trace = Trace()
     lang = detect_lang(body.question)
+    earlier = [m["content"] for m in body.history if m.get("role") == "user"][-2:]
+    # A short follow-up ("and if it's 300 thousand?") has no topic words: search with the previous question too
+    query = f"{earlier[-1]} {body.question}" if earlier and len(body.question.split()) < 8 else body.question
     with trace.step("retrieval", "Search procedures (bge-m3 → Qdrant → bge-reranker)") as s:
-        hits = await retrieval.search(COLLECTION, body.question, k=6, candidates=24)
+        hits = await retrieval.search(COLLECTION, query, k=6, candidates=24)
         s["detail"] = [{"title": h["title"], "version": h["version"], "lang": h["lang"], "section": h["section"],
                         "rerank": h["rerank_score"]} for h in hits]
     if not hits or hits[0]["rerank_score"] < 0.02:
@@ -169,8 +172,11 @@ async def ask(body: Ask):
     sources = hits[:5]
     context = "\n\n".join(f"[S{i + 1}] {h['title']} · الإصدار {h['version']} (ساري من {h['effective']}) · {h['section']}\n{h['text']}"
                           for i, h in enumerate(sources))
-    messages = [{"role": "system", "content": ANSWER_SYSTEM[lang]}, *body.history[-4:],
-                {"role": "user", "content": f"المصادر:\n{context}\n\n---\nالسؤال: {body.question}"}]
+    # Earlier QUESTIONS only (for follow-ups such as "and for credit cards?"). Earlier answers are left out:
+    # with them in the prompt the model copied a previous "not found" or its citation labels.
+    context_q = ("أسئلة سابقة في نفس المحادثة (للسياق فقط): " + " | ".join(earlier) + "\n") if earlier else ""
+    messages = [{"role": "system", "content": ANSWER_SYSTEM[lang]},
+                {"role": "user", "content": f"المصادر:\n{context}\n\n---\n{context_q}السؤال: {body.question}"}]
     res = await llm.chat(messages, max_tokens=700, temperature=0)
     trace.llm("Write the cited answer (workhorse)", res)
 
