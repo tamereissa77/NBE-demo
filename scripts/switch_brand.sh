@@ -15,7 +15,6 @@ case "$target" in
   RYD) branch=Riyadh-Bank ;;
   *) echo "usage: $0 NBE|RYD" >&2; exit 2 ;;
 esac
-PROFILES="--profile core --profile quality --profile voice --profile image --profile hero --profile eval --profile tools"
 
 here=$(git -C "$(dirname "$0")/.." rev-parse --show-toplevel)
 main_root=$(git -C "$here" worktree list --porcelain | awk '/^worktree /{print $2; exit}')
@@ -41,15 +40,8 @@ fi
 project=$(grep -E '^COMPOSE_PROJECT_NAME=' "$dir/.env" | cut -d= -f2)
 echo "== $target: branch $branch, folder $dir, Docker project ${project:-nbe}"
 
-# 3. Stop the other bank's stack: any running compose project that is one of these demo stacks
-for proj in $(docker ps --format '{{.Label "com.docker.compose.project"}}' | sort -u); do
-  [ -z "$proj" ] || [ "$proj" = "${project:-nbe}" ] && continue
-  wd=$(docker ps --filter "label=com.docker.compose.project=$proj" --format '{{.Label "com.docker.compose.project.working_dir"}}' | head -1)
-  if [ -f "$wd/docker-compose.yml" ] && grep -q 'container_name: nbe-gateway' "$wd/docker-compose.yml"; then
-    echo "== stopping the running $proj stack ($wd)"
-    (cd "$wd" && docker compose -p "$proj" $PROFILES down)
-  fi
-done
+# 3. Stop the other bank's stack (any running demo stack except this one)
+"$(dirname "$0")/stop_demo.sh" "${project:-nbe}"
 
 # 4. Build this bank's images from its branch (cached: quick when nothing changed), then start it
 #    (generates and loads its data on first run)
