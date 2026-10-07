@@ -10,6 +10,7 @@ import base64
 import csv
 import json
 import math
+import os
 import re
 from contextlib import asynccontextmanager
 from datetime import date, timedelta
@@ -29,6 +30,8 @@ BANNERS = DATA / "banners"
 SDXL_URL = "http://nbe-sdxl:8000"
 COLLECTION = "d3_merchants"
 TODAY = date(2026, 10, 7)
+# Banner colours follow the brand pack (BANNER_PALETTE in .env)
+PALETTE = os.getenv("BANNER_PALETTE", "warm green and golden orange colour palette")
 
 OFFER = {  # category -> cashback % and cap (synthetic offer rules)
     "grocery": (5, 300), "dining": (15, 250), "cafe": (20, 100), "fashion": (10, 500), "electronics": (7, 1500), "travel": (10, 2000),
@@ -148,7 +151,7 @@ def sample_size(p1: float, rel_lift: float, alpha_z: float = 1.96, power_z: floa
 
 
 async def banner(category: str, trace: Trace) -> dict:
-    prompt = f"commercial banking advertisement photo, {BANNER_SCENE[category]}, warm green and golden orange colour palette, bright, clean, professional, copy space on the right"
+    prompt = f"commercial banking advertisement photo, {BANNER_SCENE[category]}, {PALETTE}, bright, clean, professional, copy space on the right"
     try:
         async with httpx.AsyncClient(timeout=120) as c:
             if (await c.get(f"{SDXL_URL}/health", timeout=2)).status_code == 200:
@@ -253,7 +256,7 @@ async def make_banners():
     done = []
     async with httpx.AsyncClient(timeout=180) as c:
         for cat, scene in BANNER_SCENE.items():
-            prompt = f"commercial banking advertisement photo, {scene}, warm green and golden orange colour palette, bright, clean, professional, copy space on the right"
+            prompt = f"commercial banking advertisement photo, {scene}, {PALETTE}, bright, clean, professional, copy space on the right"
             r = (await c.post(f"{SDXL_URL}/generate", json={"prompt": prompt, "steps": 25, "seed": 11})).json()
             (BANNERS / f"{cat}.png").write_bytes(base64.b64decode(r["png_base64"]))
             done.append(cat)

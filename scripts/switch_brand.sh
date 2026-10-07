@@ -41,16 +41,6 @@ fi
 project=$(grep -E '^COMPOSE_PROJECT_NAME=' "$dir/.env" | cut -d= -f2)
 echo "== $target: branch $branch, folder $dir, Docker project ${project:-nbe}"
 
-# Brand-neutral cached banners (D3) can be shared, so a new worktree does not need SDXL to show one
-if [ ! -d "$dir/data/generated/d3/banners" ] || [ -z "$(ls -A "$dir/data/generated/d3/banners" 2>/dev/null)" ]; then
-  for src in "$main_root" "$main_root-Riyadh-Bank"; do
-    if [ -n "$(ls -A "$src/data/generated/d3/banners" 2>/dev/null)" ]; then
-      mkdir -p "$dir/data/generated/d3/banners" && cp -n "$src"/data/generated/d3/banners/*.png "$dir/data/generated/d3/banners/" && break
-    fi
-  done
-  chmod 777 "$dir/data/generated/d3/banners" 2>/dev/null || true
-fi
-
 # 3. Stop the other bank's stack: any running compose project that is one of these demo stacks
 for proj in $(docker ps --format '{{.Label "com.docker.compose.project"}}' | sort -u); do
   [ -z "$proj" ] || [ "$proj" = "${project:-nbe}" ] && continue
