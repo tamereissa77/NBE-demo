@@ -5,19 +5,47 @@ import { useI18n } from "../i18n";
 import type { WorkspaceProps } from "../pages/DemoPage";
 import { Block, Button, Chip, ErrorNote, Modal, Panel, Spinner } from "./common";
 
-interface Citation { label: string; file: string; title: string; version: number; lang: string; effective: string; section: string; text: string; cited: boolean }
+interface CropRef { id: string; page: number; type: string }
+// kind "scan": a passage of a scanned document. `crops` are the OCR blocks it was built from, shown as images of the page.
+interface Citation { label: string; kind?: "procedure" | "scan"; file: string; doc_id?: string; title: string; version: number | null; lang: string;
+                     effective: string | null; section: string; text: string; page?: number; crops?: CropRef[]; rerank: number | null; cited: boolean }
 interface Delta { title: string; from: { version: number; effective: string }; to: { version: number; effective: string }; summary: string; sections: { section: string; before: string; after: string }[] }
-interface Answer { answer: string; citations: Citation[]; delta: Delta | null; found: boolean; trace: TraceStep[]; total_ms: number }
-interface Turn { q: string; a?: Answer; error?: string }
+interface Answer { answer: string; citations: Citation[]; delta: Delta | null; found: boolean; restricted?: boolean; trace: TraceStep[]; total_ms: number }
+interface Turn { q: string; role: string; a?: Answer; error?: string }
+interface Role { id: string; ar: string; en: string; scope_ar: string; scope_en: string }
 
 const L = {
   en: { ask: "Ask about a procedure…", send: "Ask", card: "Branch answer card", sources: "Sources", delta: "Version delta: what changed",
         none: "Ask a question to see the sources and what changed.", banner: "Every answer carries source citations", open: "Open",
-        thinking: "Searching procedures and writing a cited answer…", notFound: "Not in the documents: the assistant does not guess.", sections: "Changed sections" },
+        thinking: "Searching procedures and writing a cited answer…", notFound: "Not in the documents: the assistant does not guess.", sections: "Changed sections",
+        role: "Asking as", page: "p.", relevance: "Relevance", high: "high", medium: "medium", low: "low", viewImage: "Scanned image", viewText: "Text",
+        openOriginal: "Open the original image", imgError: "The image could not be loaded", noImage: "No image for this passage.",
+        restricted: "Outside this role's access" },
   ar: { ask: "اسأل عن إجراء…", send: "اسأل", card: "بطاقة إجابة الفرع", sources: "المصادر", delta: "الفرق بين الإصدارات: ما الذي تغيّر",
         none: "اطرح سؤالاً لتظهر المصادر وما تغيّر.", banner: "كل إجابة موثّقة بمصادرها", open: "فتح",
-        thinking: "جارٍ البحث في الإجراءات وكتابة إجابة موثّقة…", notFound: "غير موجود في المستندات: المساعد لا يخمّن.", sections: "الأقسام المتغيرة" },
+        thinking: "جارٍ البحث في الإجراءات وكتابة إجابة موثّقة…", notFound: "غير موجود في المستندات: المساعد لا يخمّن.", sections: "الأقسام المتغيرة",
+        role: "السؤال بصفة", page: "ص", relevance: "ملاءمة", high: "عالية", medium: "متوسطة", low: "منخفضة", viewImage: "عرض الصورة", viewText: "عرض النص",
+        openOriginal: "عرض الصورة الأصلية", imgError: "تعذّر تحميل الصورة", noImage: "لا توجد صورة لهذا المقتطف.",
+        restricted: "خارج صلاحيات هذا الدور" },
 };
+
+// The role is part of the URL because the service checks it again before serving a crop
+const cropUrl = (c: Citation, b: CropRef, role: string) => `/api/d2/crop/${c.doc_id}/${b.id}?role=${role}`;
+// Bands for bge-reranker-v2-m3 scores (0 to 1). Provisional until calibrated on a scanned-corpus golden set.
+const relevance = (score: number | null) => (score == null ? null : score >= 0.5 ? "high" : score >= 0.1 ? "medium" : "low");
+const preview = (text: string) => text.replace(/[|#*-]+/g, " ").replace(/\s+/g, " ").trim().slice(0, 90) + "…";
+
+function CropImage({ src, alt, errorLabel }: { src: string; alt: string; errorLabel: string }) {
+  const [state, setState] = useState<"loading" | "ok" | "error">("loading");
+  if (state === "error") return <div className="rounded-lg bg-status-stop/10 p-3 text-center text-xs text-status-stop">{errorLabel}</div>;
+  return (
+    <a href={src} target="_blank" rel="noopener noreferrer" className="block">
+      {state === "loading" && <div className="h-16 animate-pulse rounded-lg bg-nbe-bg" />}
+      <img src={src} alt={alt} onLoad={() => setState("ok")} onError={() => setState("error")}
+           className={`mx-auto max-w-full rounded-lg border border-nbe-border bg-white ${state === "ok" ? "" : "hidden"}`} />
+    </a>
+  );
+}
 
 export default function D2Chat({ onTrace }: WorkspaceProps) {
   const { lang } = useI18n();
@@ -27,11 +55,22 @@ export default function D2Chat({ onTrace }: WorkspaceProps) {
   const [busy, setBusy] = useState(false);
   const [suggested, setSuggested] = useState<{ lang: string; q: string }[]>([]);
   const [viewer, setViewer] = useState<{ title: string; text: string; section: string } | null>(null);
+  // Roles exist only when the scanned corpus is installed; without it the screen is the procedures-only D2
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [role, setRole] = useState("manager");
+  // Which answer's sources the card shows (default: the latest) and which scanned source is open in it
+  const [focus, setFocus] = useState<{ turn: number; label: string } | null>(null);
+  const [view, setView] = useState<"image" | "text">("image");
   const end = useRef<HTMLDivElement>(null);
-  const last = [...turns].reverse().find((t) => t.a)?.a;
+  const shownIdx = focus?.turn ?? turns.reduce((acc, t, i) => (t.a ? i : acc), -1);
+  const shown = shownIdx >= 0 ? turns[shownIdx] : undefined;
+  const last = shown?.a;
+  const scans = last?.citations.filter((c) => c.kind === "scan") ?? [];
+  const active = scans.find((c) => c.label === focus?.label) ?? scans.find((c) => c.cited) ?? scans[0];
 
   useEffect(() => {
     getJSON<{ lang: string; q: string }[]>("/api/d2/suggested").then(setSuggested).catch(() => {});
+    getJSON<{ roles: Role[]; default_role: string }>("/api/d2/corpus").then((c) => { setRoles(c.roles); setRole(c.default_role); }).catch(() => {});
   }, []);
   // Braces matter: newer Chrome returns a Promise from scrollIntoView, which React would call as a cleanup function
   useEffect(() => { end.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }); }, [turns, busy]);
@@ -40,10 +79,11 @@ export default function D2Chat({ onTrace }: WorkspaceProps) {
     if (!question.trim() || busy) return;
     setQ("");
     setBusy(true);
+    setFocus(null);
     const history = turns.filter((t) => t.a).slice(-2).flatMap((t) => [{ role: "user", content: t.q }, { role: "assistant", content: t.a!.answer }]);
-    setTurns((ts) => [...ts, { q: question }]);
+    setTurns((ts) => [...ts, { q: question, role }]);
     try {
-      const a = await postJSON<Answer>("/api/d2/ask", { question, history });
+      const a = await postJSON<Answer>("/api/d2/ask", { question, history, role });
       setTurns((ts) => ts.map((t, i) => (i === ts.length - 1 ? { ...t, a } : t)));
       onTrace(a.trace);
     } catch (e) {
@@ -57,14 +97,32 @@ export default function D2Chat({ onTrace }: WorkspaceProps) {
     const d = await getJSON<{ title: string; text: string }>(`/api/d2/doc/${c.file}`);
     setViewer({ title: `${d.title} · v${c.version} · ${c.effective}`, text: d.text, section: c.section });
   };
-  const cite = (a: Answer) => (label: string) => {
+  // A scanned source opens in the card with its crop images; a procedure opens as Markdown, as before
+  const open = (turn: number, c: Citation) => {
+    if (c.kind !== "scan") return void openCitation(c);
+    setFocus({ turn, label: c.label });
+    setView("image");
+  };
+  const cite = (turn: number, a: Answer) => (label: string) => {
     const c = a.citations.find((x) => x.label === label);
-    if (c) openCitation(c);
+    if (c) open(turn, c);
   };
 
   return (
     <div className="grid gap-5 lg:grid-cols-3">
       <section className="flex min-h-[32rem] flex-col rounded-xl border border-nbe-border bg-white lg:col-span-2">
+        {roles.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2 border-b border-nbe-border px-5 py-2.5 text-xs">
+            <span className="font-semibold text-nbe-text">{l.role}</span>
+            {roles.map((r) => (
+              <button key={r.id} data-test={`role-${r.id}`} onClick={() => setRole(r.id)}
+                      className={`rounded-full px-3 py-1 font-semibold ${role === r.id ? "bg-nbe-green text-white" : "bg-nbe-bg text-nbe-strong hover:bg-nbe-orange/20"}`}>
+                {lang === "ar" ? r.ar : r.en}
+              </button>
+            ))}
+            <span className="text-nbe-text">{roles.filter((r) => r.id === role).map((r) => (lang === "ar" ? r.scope_ar : r.scope_en))}</span>
+          </div>
+        )}
         <div className="flex-1 space-y-4 overflow-y-auto p-5">
           {turns.length === 0 && (
             <div className="flex flex-wrap gap-2">
@@ -80,9 +138,19 @@ export default function D2Chat({ onTrace }: WorkspaceProps) {
               <div dir="auto" className="ms-auto w-fit max-w-[85%] rounded-2xl bg-nbe-green px-4 py-2 text-sm text-white">{t.q}</div>
               {t.a && (
                 <div data-test="answer" className="max-w-[92%] rounded-2xl bg-nbe-bg px-4 py-3">
-                  <Md text={t.a.answer} onCite={cite(t.a)} />
+                  <Md text={t.a.answer} onCite={cite(i, t.a)} />
+                  {t.a.citations.some((c) => c.kind === "scan") && (
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {t.a.citations.map((c) => (
+                        <button key={c.label} data-test="source-chip" onClick={() => open(i, c)} dir="auto"
+                                className={`rounded-full bg-white px-2 py-0.5 text-xs font-semibold text-nbe-green ring-1 ring-nbe-border hover:bg-nbe-orange/20 ${c.cited ? "" : "opacity-60"}`}>
+                          {c.label} · {c.title}{c.kind === "scan" ? ` · ${l.page} ${c.page}` : ""}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                   <div className="mt-2 flex flex-wrap gap-1.5 text-xs">
-                    {!t.a.found && <Chip tone="orange">{l.notFound}</Chip>}
+                    {t.a.restricted ? <Chip tone="red">{l.restricted}</Chip> : !t.a.found && <Chip tone="orange">{l.notFound}</Chip>}
                     <Chip>{(t.a.total_ms / 1000).toFixed(1)} s</Chip>
                   </div>
                 </div>
@@ -102,23 +170,70 @@ export default function D2Chat({ onTrace }: WorkspaceProps) {
 
       <Panel title={l.card} banner={l.banner}>
         {!last && <p className="text-sm">{l.none}</p>}
-        {last && !last.found && <Block accent="orange">{l.notFound}</Block>}
+        {last && last.restricted && <Block accent="red">{l.restricted}</Block>}
+        {last && !last.found && !last.restricted && <Block accent="orange">{l.notFound}</Block>}
         {last && last.found && (
           <>
             <div className="text-xs font-semibold uppercase text-nbe-text">{l.sources}</div>
-            {last.citations.filter((c) => c.cited).concat(last.citations.filter((c) => !c.cited)).slice(0, 4).map((c) => (
-              <button key={c.label} onClick={() => openCitation(c)} className={`text-start ${c.cited ? "" : "opacity-60"}`}>
+            {last.citations.filter((c) => c.cited).concat(last.citations.filter((c) => !c.cited)).slice(0, scans.length ? undefined : 4).map((c) => (
+              <button key={c.label} onClick={() => open(shownIdx, c)}
+                      className={`text-start ${c.cited ? "" : "opacity-60"} ${c.label === active?.label ? "rounded-lg ring-2 ring-nbe-green" : ""}`}>
                 <Block accent={c.cited ? "green" : "orange"}>
                   <div className="mb-1 flex flex-wrap items-center gap-1.5">
                     <Chip tone="orange">{c.label}</Chip>
-                    <Chip tone={c.version === 2 ? "green" : "neutral"}>v{c.version} · {c.effective}</Chip>
+                    {c.kind === "scan" ? (
+                      <>
+                        <Chip>{l.page} {c.page}</Chip>
+                        {relevance(c.rerank) && (
+                          <Chip tone={relevance(c.rerank) === "high" ? "green" : relevance(c.rerank) === "medium" ? "orange" : "neutral"}>
+                            {l.relevance} {l[relevance(c.rerank)!]}
+                          </Chip>
+                        )}
+                      </>
+                    ) : (
+                      <Chip tone={c.version === 2 ? "green" : "neutral"}>v{c.version} · {c.effective}</Chip>
+                    )}
                     {c.lang === "en" && <Chip>EN</Chip>}
                   </div>
                   <div dir="auto" className="font-semibold">{c.title}</div>
                   <div dir="auto" className="text-xs text-nbe-text">{c.section}</div>
+                  {c.kind === "scan" && <div dir="auto" className="mt-1 text-xs text-nbe-text">{preview(c.text)}</div>}
                 </Block>
               </button>
             ))}
+            {active && shown && (
+              <div data-test="citation-detail" className="rounded-lg border border-nbe-border p-3">
+                <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                  <div dir="auto" className="text-sm font-bold text-nbe-green">{active.title}</div>
+                  <Chip>{l.page} {active.page}</Chip>
+                </div>
+                <div className="mb-2 flex gap-1 rounded-full bg-nbe-bg p-1 text-xs font-semibold">
+                  {(["image", "text"] as const).map((m) => (
+                    <button key={m} data-test={`view-${m}`} onClick={() => setView(m)}
+                            className={`flex-1 rounded-full px-3 py-1 ${view === m ? "bg-white text-nbe-green shadow-sm" : "text-nbe-text"}`}>
+                      {m === "image" ? l.viewImage : l.viewText}
+                    </button>
+                  ))}
+                </div>
+                {view === "text" ? (
+                  <div className="max-h-96 overflow-auto"><Md text={active.text} /></div>
+                ) : active.crops?.length ? (
+                  <div className="max-h-96 space-y-1.5 overflow-y-auto">
+                    {active.crops.map((b) => (
+                      <CropImage key={cropUrl(active, b, shown.role)} src={cropUrl(active, b, shown.role)} alt={`${active.title} · ${l.page} ${b.page}`} errorLabel={l.imgError} />
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs">{l.noImage}</p>
+                )}
+                {active.crops?.[0] && (
+                  <a href={cropUrl(active, active.crops[0], shown.role)} target="_blank" rel="noopener noreferrer"
+                     className="mt-2 inline-block text-xs font-semibold text-nbe-green hover:underline">
+                    {l.openOriginal} ↗
+                  </a>
+                )}
+              </div>
+            )}
             {last.delta && (
               <Block label={l.delta} accent="orange">
                 <div className="mb-1 text-xs" dir="auto">
