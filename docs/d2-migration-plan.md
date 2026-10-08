@@ -1,6 +1,6 @@
 # D2 migration plan: bringing nbe-working into "Chat with Document"
 
-Status: draft for agreement, 8 October 2026. No code has been written.
+Status: agreed on 8 October 2026 and built through Phase 4 (first pass). Sections 1 to 5 are kept as agreed; where the build departed from them, section 7 lists the difference and [d2-migration-log.md](d2-migration-log.md) is the authoritative record. The reference documentation is [D2/ahmedsoliman/documentation/README.md](../D2/ahmedsoliman/documentation/README.md).
 Scope: D2 only. D7 follows after D2 runs on the big machine.
 Sources read: `NBE-demo` at `e8287b6` (branch `asoliman/d2-d7`), `nbe-working` at `3410e74` plus its uncommitted changes.
 
@@ -169,3 +169,15 @@ Each phase ends with a check that must pass before the next starts.
 7. **API model:** provider and model are set through `NBE_API_MODEL` and `NBE_API_KEY` in `.env`.
 
 Implementation record: [d2-migration-log.md](d2-migration-log.md).
+
+## 7. Where the build departed from this plan
+
+| Plan said | What was built | Why |
+|---|---|---|
+| Block-level chunks first (section 3.1 row 4, Phase 2) | Merged passages from the start, each keeping its block list | Decision 1 |
+| Import script at `scripts/import_nbe_working.py` (Phase 1) | `services/d2_chatdoc/tools/import_nbe_working.py` | Keeps it inside the D2 use case; confirmed by the owner |
+| Embeddings and reranker on the workstation's GPU through vLLM (Phase 0) | Both on CPU through `docker/dev-cpu-models`, same weights and endpoints | The GPU is shared and was full |
+| Two new opt-in files (section 5) | Also `.env.api.example`, `scripts/dev_api.sh`, `docker/dev-cpu-models/`, `services/d2_chatdoc/app/scans.py`, the import tool, the scanned golden set and its test | Needed by the items above and by Phase 4 |
+| Scanned golden set in Phase 4, after the portal | Written and run in the same pass (`tests/golden_d2_circulars.py`, 25 questions) | Needed to answer the calibration question |
+| The restricted reply was not specified | Chosen by rule from reranker scores, never written by the model | No forbidden text has to reach the model |
+| Portal on port 8200 | Port 8210 on the workstation (`NBE_PORT` in `.env`) | 8200 is published by another user's copy of the demo on the same server |

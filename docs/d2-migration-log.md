@@ -3,12 +3,13 @@
 Record of every change made to bring nbe-working into D2: what changed, why, and what it means for
 the temporary API setup and for the return to the fully local deployment on the big machine (GB10).
 Plan: [d2-migration-plan.md](d2-migration-plan.md).
+Reference documentation (how it works, every change, the GB10 move): [D2/ahmedsoliman/documentation/README.md](../D2/ahmedsoliman/documentation/README.md).
 
 | | |
 |---|---|
 | Branch | `asoliman/d2-d7`, based on `Efada_AI_Team` at `e8287b6` |
 | Entry date | 8 October 2026 |
-| State | Committed on `asoliman/d2-d7` in four commits (data, backend, portal, API override with docs). Not pushed |
+| State | Committed on `asoliman/d2-d7`: four commits (data, backend, portal, API override with docs) and one documentation commit. Not pushed |
 | Shared files edited | None. `packages/nbe_core`, `docker-compose.yml`, `config/litellm.yaml`, `Makefile`, existing `scripts/*`, `README.md` are untouched |
 
 ## 1. Where things stand
@@ -45,7 +46,7 @@ Plan: [d2-migration-plan.md](d2-migration-plan.md).
 | 7 | `config/litellm.api.yaml` | New | Same aliases as `config/litellm.yaml`; `workhorse`, `vision`, `quality`, `hero` point at one external model named by `NBE_API_MODEL`; `embed` stays on local bge-m3 | Demo code addresses aliases only, so switching models is configuration | Required | Not loaded |
 | 8 | `.env.api.example` | New | The three variables the API setup adds to `.env`: `NBE_API_MODEL`, `NBE_API_KEY`, `MODELS_DIR` | Keeps `.env.example` (shared) untouched | Copy into `.env` and fill in | Not needed |
 | 9 | `scripts/dev_api.sh` | New | `models`, `up`, `ingest`, `golden` (both golden sets), `down` for the API setup, starting only what D2 needs | `make up` cannot be used on the workstation: it waits for local model servers and its preflight stops every other GPU container | Entry point | Not used |
-| 10 | `docs/d2-migration-plan.md`, `docs/d2-migration-log.md` | New | Plan and this log | Documentation directive | | |
+| 10 | `docs/d2-migration-plan.md`, `docs/d2-migration-log.md`, `D2/ahmedsoliman/documentation/README.md` | New | Plan, this log, and the reference documentation: how D2 works now, every change, the development setup, the steps and checks for the GB10 | Documentation directive | | |
 | 11 | `docker/dev-cpu-models/` (`Dockerfile`, `server.py`) | New | A small CPU server with the two endpoints the demo calls on the vLLM pooling servers, `/v1/embeddings` and `/v1/rerank`, loading the same weights | No free GPU memory on the workstation. vLLM's x86 CPU build targets AVX-512, which this processor does not have, so it was not tried. Same models, so vectors, reranker scores and cut-offs carry over | Required. Retrieval takes about 9 s per question on CPU (18 s for a limited role), against well under a second on GPU | **Not used.** The GB10 serves both models with vLLM as before |
 | 12 | `data/seed/golden/d2_circulars.json`, `tests/golden_d2_circulars.py` | New | 25-question golden set for the scanned corpus: 14 answers (expected document cited with crops, expected phrase present), 4 restricted, 2 procedure questions from a limited role, 5 unanswerable. Prints top reranker scores for calibration | Phase 4: measure the scanned corpus and the role rules the way the procedures are measured. `tests/golden_d2.py` is untouched | Run by `scripts/dev_api.sh golden` | Run with `python tests/golden_d2_circulars.py` next to the existing golden test |
 
@@ -114,7 +115,19 @@ Observations for the team:
 
 **Compose:** base file alone and base plus override both pass `docker compose config`; in the merged result `nbe-llmgw` is on `nbe-core` and `nbe-egress`, `nbe-d2` on `nbe-core` only, and the embed and rerank services have no `depends_on`.
 
-## 6. Running it
+## 6. Documentation coverage
+
+Checked on 8 October 2026 by listing every file changed since `e8287b6` against section 2: all 15 paths (the corpus folder counted once) have an entry, and each of the four commits carries a message stating what changed, why, and its effect on both setups.
+
+Known gaps:
+
+| Gap | Detail | Owner |
+|---|---|---|
+| Two verification tools are not in the repository | The 37-check offline script and the mock-model portal preview cited in section 5 were written in a temporary session folder. They are evidence of what was checked, but nobody else can re-run them. The checks that can be reproduced are `tests/golden_d2.py` and `tests/golden_d2_circulars.py` | D2 |
+| Shared documents do not describe the new D2 | `README.md` (D2 design in section 7, service reference, data table, "synthetic data only"), `docs/talk-tracks.md` (the D2 presenter script has no scanned documents or roles), `docs/runbook.md` and `PLAN.md` are untouched because they are shared files | Team |
+| Unused settings in the workstation's `.env` | `NBE_EMBED_GPU_UTIL` and `NBE_RERANK_GPU_UTIL` are set there but have no effect, since both models run on CPU in this setup | D2 |
+
+## 7. Running it
 
 Temporary API setup (workstation):
 
