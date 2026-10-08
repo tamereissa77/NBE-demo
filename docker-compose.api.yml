@@ -1,0 +1,56 @@
+# TEMPORARY development override. Not used on the GB10, where the stack starts from
+# docker-compose.yml alone (`make up`) and every model is local on the GPU.
+#
+# For a workstation that cannot hold the workhorse LLM and has no free GPU memory. Chat completions
+# go to an external API; embeddings and the reranker stay local on CPU, with the same weights
+# (bge-m3, bge-reranker-v2-m3), so vectors, scores and thresholds match what the GB10 produces.
+# Nothing in the demo services changes: they still call the aliases on nbe-llmgw and the reranker
+# at nbe-rerank.
+#
+#   scripts/dev_api.sh up        # or: docker compose -f docker-compose.yml -f docker-compose.api.yml up -d ...
+#
+# What differs from the base file, and why:
+#   nbe-llmgw    reads config/litellm.api.yaml and joins nbe-egress, the one network with a route
+#                out. It is the only container that can reach the internet; `make offline-check`
+#                is expected to fail in this mode.
+#   nbe-embed,   run docker/dev-cpu-models (same endpoints as the vLLM pooling servers) instead of
+#   nbe-rerank   vLLM: no GPU reservation, and no wait for nbe-llm, which is not started here.
+# Variables (in .env, see .env.api.example): NBE_API_MODEL, NBE_API_KEY, MODELS_DIR.
+
+x-cpu-model: &cpu-model
+  image: nbe-dev-cpu-models:latest
+  build:
+    context: docker/dev-cpu-models
+  command: ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8000"]
+  healthcheck:
+    test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+    interval: 10s
+    timeout: 5s
+    retries: 60
+    start_period: 60s
+
+services:
+  nbe-llmgw:
+    command: ["--config", "/app/config.api.yaml", "--port", "4000"]
+    environment:
+      NBE_API_MODEL: ${NBE_API_MODEL:?set NBE_API_MODEL in .env (see .env.api.example)}
+      NBE_API_KEY: ${NBE_API_KEY:?set NBE_API_KEY in .env (see .env.api.example)}
+    volumes:
+      - ./config/litellm.api.yaml:/app/config.api.yaml:ro
+    networks: [nbe-core, nbe-egress]
+
+  nbe-embed:
+    <<: *cpu-model
+    depends_on: !reset {}      # the reset tags must sit on the service itself: they are ignored inside an anchor
+    deploy: !reset {}
+    environment: { MODEL_ROLE: embed, MODEL_PATH: /models/bge-m3, MODEL_NAME: bge-m3 }
+
+  nbe-rerank:
+    <<: *cpu-model
+    depends_on: !reset {}
+    deploy: !reset {}
+    environment: { MODEL_ROLE: rerank, MODEL_PATH: /models/bge-reranker-v2-m3, MODEL_NAME: bge-reranker-v2-m3 }
+
+networks:
+  nbe-egress:
+    name: nbe-egress
