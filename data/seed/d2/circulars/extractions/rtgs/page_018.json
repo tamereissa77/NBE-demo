@@ -1,0 +1,79 @@
+{
+ "doc_id": "rtgs",
+ "page_num": 18,
+ "original_size": [
+  1949,
+  2717
+ ],
+ "inference_size": [
+  1949,
+  2717
+ ],
+ "blocks": [
+  {
+   "block_id": "rtgs_p018_b00",
+   "block_type": "text",
+   "text": "",
+   "table_data": null,
+   "bbox": {
+    "x1": 850,
+    "y1": 806,
+    "x2": 1086,
+    "y2": 1103
+   },
+   "crop_path": "crops/rtgs/page_018/rtgs_p018_b00_text.png"
+  },
+  {
+   "block_id": "rtgs_p018_b01",
+   "block_type": "header",
+   "text": "البنك المركزي المصري CENTRAL BANK OF EGYPT",
+   "table_data": null,
+   "bbox": {
+    "x1": 706,
+    "y1": 1135,
+    "x2": 1233,
+    "y2": 1306
+   },
+   "crop_path": "crops/rtgs/page_018/rtgs_p018_b01_header.png"
+  },
+  {
+   "block_id": "rtgs_p018_b02",
+   "block_type": "text",
+   "text": "هذه الوثيقة للتداول الخارجي بين البنك المركزي المصري والبنوك العاملة بجمهورية مصر العربية والأطراف ذوي الصلة بنظام التسوية الخطية متعدد العملات، ولا يجوز تصوير أي جزء منها أو إعادة طبعه أو بيعه أو نقله لأي شخص، كلياً أو جزئياً، بغير إذن مكتوب من المصرف أو من خلال أي وسيلة من وسائل نقل المعلومات إلا بمقتضى تصريح كتابي مسبق من البنك المركزي المصري.",
+   "table_data": null,
+   "bbox": {
+    "x1": 371,
+    "y1": 1462,
+    "x2": 1528,
+    "y2": 1560
+   },
+   "crop_path": "crops/rtgs/page_018/rtgs_p018_b02_text.png"
+  },
+  {
+   "block_id": "rtgs_p018_b03",
+   "block_type": "text",
+   "text": "جميع الحقوق محفوظة للبنك المركزي المصري © 2021",
+   "table_data": null,
+   "bbox": {
+    "x1": 715,
+    "y1": 1581,
+    "x2": 1179,
+    "y2": 1620
+   },
+   "crop_path": "crops/rtgs/page_018/rtgs_p018_b03_text.png"
+  },
+  {
+   "block_id": "rtgs_p018_b04",
+   "block_type": "text",
+   "text": "إصدار رقم 1.0 بتاريخ 2021/02/24",
+   "table_data": null,
+   "bbox": {
+    "x1": 783,
+    "y1": 1805,
+    "x2": 1113,
+    "y2": 1842
+   },
+   "crop_path": "crops/rtgs/page_018/rtgs_p018_b04_text.png"
+  }
+ ]
+}

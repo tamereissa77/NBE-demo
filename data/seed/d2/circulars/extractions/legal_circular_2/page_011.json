@@ -1,0 +1,144 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 11,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p011_b00",
+   "block_type": "header",
+   "text": "البنك المركزي المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 1716,
+    "y1": 189,
+    "x2": 2247,
+    "y2": 277
+   },
+   "crop_path": "crops/legal_circular_2/page_011/legal_circular_2_p011_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p011_b01",
+   "block_type": "header",
+   "text": "صفحة ٩ من ٢٠",
+   "table_data": null,
+   "bbox": {
+    "x1": 491,
+    "y1": 186,
+    "x2": 811,
+    "y2": 245
+   },
+   "crop_path": "crops/legal_circular_2/page_011/legal_circular_2_p011_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p011_b02",
+   "block_type": "header",
+   "text": "خامساً: قواعد وإجراءات ارسال البيانات (الاقرار الشهرية) عن مراكز العملاء الحاصلين على تمويل أو تسهيلات انتمائية",
+   "table_data": null,
+   "bbox": {
+    "x1": 620,
+    "y1": 498,
+    "x2": 2150,
+    "y2": 666
+   },
+   "crop_path": "crops/legal_circular_2/page_011/legal_circular_2_p011_b02_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p011_b03",
+   "block_type": "text",
+   "text": "تقضي الفقرة الاخيرة من المادة ٦٥ من القانون بأنه على كل بنك إبلغ البنك المركزي ببيان عن مركز كل عميل يحصل على تمويل أو تسهيلات انتمائية ، كما تقضي الفقرة (ب) من المادة ٣٣ من اللائحة التنفيذية للقانون بأن تلتزم البنوك وشركات التأجير التمويلية وشركات التمويل العقارى بإرسال البيانات من خلال شبكة معلومات البنك المركزي في المواعيد التي يحددها قرار محافظ البنك المركزي.",
+   "table_data": null,
+   "bbox": {
+    "x1": 382,
+    "y1": 790,
+    "x2": 2140,
+    "y2": 1260
+   },
+   "crop_path": "crops/legal_circular_2/page_011/legal_circular_2_p011_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p011_b04",
+   "block_type": "text",
+   "text": "ويتم ارسال البيانات (الاقرار) عن مراكز العملاء الحاصلين على تمويل أو تسهيلات انتمائية من خلال شبكة معلومات البنك المركزي وفقاً لما يلي:",
+   "table_data": null,
+   "bbox": {
+    "x1": 377,
+    "y1": 1376,
+    "x2": 2148,
+    "y2": 1547
+   },
+   "crop_path": "crops/legal_circular_2/page_011/legal_circular_2_p011_b04_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p011_b05",
+   "block_type": "text",
+   "text": "١- يتم ارسال البيانات شهرياً في ميعاد لا تجاوز اليوم الخامس من الشهر التالي للشهر الذي تم فيه الموافقة على تقديم التمويل أو التسهيل الانتمائي أو الشهر المعد عنه تلك البيانات.",
+   "table_data": null,
+   "bbox": {
+    "x1": 377,
+    "y1": 1639,
+    "x2": 2163,
+    "y2": 1901
+   },
+   "crop_path": "crops/legal_circular_2/page_011/legal_circular_2_p011_b05_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p011_b06",
+   "block_type": "text",
+   "text": "٢- يتم الاقرار عن كل عميل يقدم له تمويل أو تسهيل انتمائي يبلغ ٣٠ ألف جنيه فأكثر ، سواء كان شخص طبيعي أو اعتباري.",
+   "table_data": null,
+   "bbox": {
+    "x1": 377,
+    "y1": 1996,
+    "x2": 2165,
+    "y2": 2178
+   },
+   "crop_path": "crops/legal_circular_2/page_011/legal_circular_2_p011_b06_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p011_b07",
+   "block_type": "text",
+   "text": "٣- يتم الاقرار عن كل عميل مصري ، والأجنبي الحاصل على ترخيص إقامة في مصر.",
+   "table_data": null,
+   "bbox": {
+    "x1": 407,
+    "y1": 2264,
+    "x2": 2165,
+    "y2": 2348
+   },
+   "crop_path": "crops/legal_circular_2/page_011/legal_circular_2_p011_b07_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p011_b08",
+   "block_type": "text",
+   "text": "٤- يتم الاقرار عن العميل الفرد الطبيعي وكل من منشأته الفردية كل على حده باقرار مستقل.",
+   "table_data": null,
+   "bbox": {
+    "x1": 377,
+    "y1": 2460,
+    "x2": 2163,
+    "y2": 2632
+   },
+   "crop_path": "crops/legal_circular_2/page_011/legal_circular_2_p011_b08_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p011_b09",
+   "block_type": "text",
+   "text": "٥- يتم الاقرار عن كل شريك متضمن أو كفيل أو مشترك في الحساب المشترك بصفته ضامناً للتمويل والتسهيلات الانتمائية المقدمة ، ويدرج قيمة القزام كل منهم بيند الكفالات في حدود التسهيلات المصرح بها للعميل.",
+   "table_data": null,
+   "bbox": {
+    "x1": 372,
+    "y1": 2723,
+    "x2": 2163,
+    "y2": 2996
+   },
+   "crop_path": "crops/legal_circular_2/page_011/legal_circular_2_p011_b09_text.png"
+  }
+ ]
+}

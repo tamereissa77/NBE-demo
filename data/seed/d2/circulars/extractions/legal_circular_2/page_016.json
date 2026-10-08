@@ -1,0 +1,105 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 16,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p016_b00",
+   "block_type": "header",
+   "text": "البنك المركزي المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 1622,
+    "y1": 165,
+    "x2": 2135,
+    "y2": 256
+   },
+   "crop_path": "crops/legal_circular_2/page_016/legal_circular_2_p016_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p016_b01",
+   "block_type": "header",
+   "text": "صفحة ١٤ من ٢٠",
+   "table_data": null,
+   "bbox": {
+    "x1": 407,
+    "y1": 165,
+    "x2": 724,
+    "y2": 224
+   },
+   "crop_path": "crops/legal_circular_2/page_016/legal_circular_2_p016_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p016_b02",
+   "block_type": "header",
+   "text": "سادسا: التقارير التي تحصل عليها البنوك من قاعدة معلومات البنك المركزي:",
+   "table_data": null,
+   "bbox": {
+    "x1": 555,
+    "y1": 379,
+    "x2": 2036,
+    "y2": 456
+   },
+   "crop_path": "crops/legal_circular_2/page_016/legal_circular_2_p016_b02_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p016_b03",
+   "block_type": "text",
+   "text": "تقوم البنوك باستخراج التقارير الآتية من خلال شبكة معلومات البنك المركزي:",
+   "table_data": null,
+   "bbox": {
+    "x1": 548,
+    "y1": 575,
+    "x2": 2036,
+    "y2": 652
+   },
+   "crop_path": "crops/legal_circular_2/page_016/legal_circular_2_p016_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p016_b04",
+   "block_type": "text",
+   "text": "١- البيانات المجمعة لمراكز عملاء البنك. ٢- بيان بأسماء العملاء والأطراف المرتبطة بهم. ٣- الأرقام الرمزية للعملاء الجدد الذين يتعاملون مع البنك. ٤- البيانات الأساسية لعملاء البنك. ٥- موقف عملاء البنك من حيث مدى انتظامهم في سداد التزاماتهم للبنوك المقدمة للتشغيل والتسهيلات الائتمانية ومن حيث الإجراءات المتخذة بشأن مديونياتهم. ٦- بيان باجمالي ارصدة التمويل والتسهيلات الائتمانية المقدمة لعملائها مقارنة باجمالي الارصدة المقدمة من مجموعة البنوك التي ينتمي اليها وموزعة وفقا",
+   "table_data": null,
+   "bbox": {
+    "x1": 298,
+    "y1": 678,
+    "x2": 1907,
+    "y2": 1432
+   },
+   "crop_path": "crops/legal_circular_2/page_016/legal_circular_2_p016_b04_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p016_b05",
+   "block_type": "text",
+   "text": "لما يلي:",
+   "table_data": null,
+   "bbox": {
+    "x1": 1630,
+    "y1": 1460,
+    "x2": 1811,
+    "y2": 1530
+   },
+   "crop_path": "crops/legal_circular_2/page_016/legal_circular_2_p016_b05_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p016_b06",
+   "block_type": "text",
+   "text": "- أنواع التسهيلات الائتمانية (مصرح ومستخدم). - النشاط الاقتصادي. - مقر إقامة العملاء. - الاشكال القانونية. - التوزيع التكراري للفئات. - بيان بعملاء البنك.",
+   "table_data": null,
+   "bbox": {
+    "x1": 771,
+    "y1": 1554,
+    "x2": 1756,
+    "y2": 2115
+   },
+   "crop_path": "crops/legal_circular_2/page_016/legal_circular_2_p016_b06_text.png"
+  }
+ ]
+}

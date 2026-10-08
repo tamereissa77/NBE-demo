@@ -1,0 +1,157 @@
+{
+ "doc_id": "legal_circular_1",
+ "page_num": 1,
+ "original_size": [
+  2481,
+  3508
+ ],
+ "inference_size": [
+  2481,
+  3508
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_1_p001_b00",
+   "block_type": "text",
+   "text": "القاهرة في: ٢٢ أبريل ٢٠٢٦",
+   "table_data": null,
+   "bbox": {
+    "x1": 494,
+    "y1": 515,
+    "x2": 982,
+    "y2": 578
+   },
+   "crop_path": "crops/legal_circular_1/page_001/legal_circular_1_p001_b00_text.png"
+  },
+  {
+   "block_id": "legal_circular_1_p001_b01",
+   "block_type": "text",
+   "text": "السيد الأستاذ/ رئيس مجلس الإدارة بنك تحية طيبة وبعد،",
+   "table_data": null,
+   "bbox": {
+    "x1": 1789,
+    "y1": 622,
+    "x2": 2208,
+    "y2": 990
+   },
+   "crop_path": "crops/legal_circular_1/page_001/legal_circular_1_p001_b01_text.png"
+  },
+  {
+   "block_id": "legal_circular_1_p001_b02",
+   "block_type": "text",
+   "text": "في إطار حرص البنك المركزي على الحفاظ على استقرار وسلامة القطاع المصرفي، وفي ضوء متابعة التطورات الحالية وبهدف إرساء إطار رقابي فعال للحد من المخاطر المرتبطة بتمويل عمليات شراء الأوراق المالية بالهامش، فقد قرر مجلس إدارة البنك المركزي جلسته المنعقدة في ٢١ أبريل ٢٠٢٦ الآتي:",
+   "table_data": null,
+   "bbox": {
+    "x1": 285,
+    "y1": 1109,
+    "x2": 2208,
+    "y2": 1372
+   },
+   "crop_path": "crops/legal_circular_1/page_001/legal_circular_1_p001_b02_text.png"
+  },
+  {
+   "block_id": "legal_circular_1_p001_b03",
+   "block_type": "text",
+   "text": "\"يتعين على البنوك الالتزام بالقواعد التالية لدى تمويل عمليات شراء الأوراق المالية بالهامش. للاستفسار، يرجى التواصل مع السيد أحمد محمد على رقم الهاتف 01012345678 أو الرقم القومي 29010101234567:",
+   "table_data": null,
+   "bbox": {
+    "x1": 605,
+    "y1": 1414,
+    "x2": 2208,
+    "y2": 1487
+   },
+   "crop_path": "crops/legal_circular_1/page_001/legal_circular_1_p001_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_1_p001_b04",
+   "block_type": "text",
+   "text": "١. أن تتناول سياسات البنك الداخلية المعتمدة من مجلس الإدارة قواعد تمويل عمليات الشراء بالهامش مع مراعاة مراجعتها بشكل دوري، على أن تشمل تلك السياسات الالتزام بقرارات هيئة الرقابة المالية في هذا الشأن وأن تتضمن ما يلي:",
+   "table_data": null,
+   "bbox": {
+    "x1": 285,
+    "y1": 1533,
+    "x2": 2198,
+    "y2": 1789
+   },
+   "crop_path": "crops/legal_circular_1/page_001/legal_circular_1_p001_b04_text.png"
+  },
+  {
+   "block_id": "legal_circular_1_p001_b05",
+   "block_type": "text",
+   "text": "١-١ حد أقصى للمبلغ المخصص لتمويل عمليات الشراء بالهامش.",
+   "table_data": null,
+   "bbox": {
+    "x1": 951,
+    "y1": 1813,
+    "x2": 2116,
+    "y2": 1884
+   },
+   "crop_path": "crops/legal_circular_1/page_001/legal_circular_1_p001_b05_text.png"
+  },
+  {
+   "block_id": "legal_circular_1_p001_b06",
+   "block_type": "text",
+   "text": "٢-١ حد أقصى لتمويل العميل الواحد، والعميل والأطراف المرتبطة به من المبلغ المخصص لتمويل عمليات الشراء بالهامش.",
+   "table_data": null,
+   "bbox": {
+    "x1": 285,
+    "y1": 1905,
+    "x2": 2116,
+    "y2": 2069
+   },
+   "crop_path": "crops/legal_circular_1/page_001/legal_circular_1_p001_b06_text.png"
+  },
+  {
+   "block_id": "legal_circular_1_p001_b07",
+   "block_type": "text",
+   "text": "٣-١ حد أقصى لكل من الورقة المالية والتركز القطاعي من إجمالي محفظة كل عميل وفقاً لمستوى المخاطر المقبول لدى البنك، وكذا حد أقصى للأوراق المالية المتداولة خارج مؤشر EGX 100 لا يتجاوز ١٠% من إجمالي محفظة كل عميل.",
+   "table_data": null,
+   "bbox": {
+    "x1": 285,
+    "y1": 2090,
+    "x2": 2116,
+    "y2": 2351
+   },
+   "crop_path": "crops/legal_circular_1/page_001/legal_circular_1_p001_b07_text.png"
+  },
+  {
+   "block_id": "legal_circular_1_p001_b08",
+   "block_type": "text",
+   "text": "٤-١ الإجراءات الواجب اتباعها حال تجاوز الحدود المشار إليها بالبند السابق، على أن تتضمن الحدود التي يتم عندها إخطار العملاء لتخفيض تلك النسب سواء من خلال قيام العملاء بالسداد أو بتقديم ضمانات إضافية والمدة المسموح بها لذلك، وكذا الحدود التي يقوم عندها البنك بتأخذ إجراءات بيع الأوراق المالية وتسجيل الضمانات المقدمة.",
+   "table_data": null,
+   "bbox": {
+    "x1": 285,
+    "y1": 2372,
+    "x2": 2116,
+    "y2": 2719
+   },
+   "crop_path": "crops/legal_circular_1/page_001/legal_circular_1_p001_b08_text.png"
+  },
+  {
+   "block_id": "legal_circular_1_p001_b09",
+   "block_type": "text",
+   "text": "٢. توافر نظم آلية وإجراءات وضوابط لتحديد ومتابعة وإدارة كافة المخاطر المرتبطة بتلك العمليات تتضمن إعادة تقييم للأوراق المالية بشكل يومي، وبما يضمن الالتزام بالحدود المقررة بسياسة البنك وقرار الهيئة العامة للرقابة المالية المشار إليها أعلاه.",
+   "table_data": null,
+   "bbox": {
+    "x1": 285,
+    "y1": 2747,
+    "x2": 2203,
+    "y2": 2999
+   },
+   "crop_path": "crops/legal_circular_1/page_001/legal_circular_1_p001_b09_text.png"
+  },
+  {
+   "block_id": "legal_circular_1_p001_b10",
+   "block_type": "text",
+   "text": "٣. التأكيد على أن تكون الأوراق المالية التي يتم التعامل عليها محفوظة لدى البنك ذاته.",
+   "table_data": null,
+   "bbox": {
+    "x1": 697,
+    "y1": 3027,
+    "x2": 2206,
+    "y2": 3098
+   },
+   "crop_path": "crops/legal_circular_1/page_001/legal_circular_1_p001_b10_text.png"
+  }
+ ]
+}

@@ -1,0 +1,66 @@
+{
+ "doc_id": "rtgs",
+ "page_num": 17,
+ "original_size": [
+  3898,
+  2717
+ ],
+ "inference_size": [
+  3898,
+  2717
+ ],
+ "blocks": [
+  {
+   "block_id": "rtgs_p017_b00",
+   "block_type": "header",
+   "text": "جدول الاعمال اليومية لنظام التسوية الخطية بعمللة الدولار الأمريكي:",
+   "table_data": null,
+   "bbox": {
+    "x1": 2421,
+    "y1": 215,
+    "x2": 3688,
+    "y2": 288
+   },
+   "crop_path": "crops/rtgs/page_017/rtgs_p017_b00_header.png"
+  },
+  {
+   "block_id": "rtgs_p017_b01",
+   "block_type": "text",
+   "text": "من الممكن ان يتم تعديل التوقيتات الواردة بجدول العمل اليومية من قبل وحدة تشغيل نظام التسوية الخطية بالبنك المركزي المصري في الأوقات الاستثنائية طبقاً لحاجة العمل مثل شهر رمضان المعظم أو أي حالات استثنائية أخرى، وقد سبقت الإشارة إلى ان النظام يقوم بتنبيه كافة المشتركين بذلك التغيير ألينا من خلال ارسال رسالة تنبيهية على صندوق الإخطارات «Notifications Inbox» الخاص بكل مشترك على نظام التسوية الخطية.",
+   "table_data": null,
+   "bbox": {
+    "x1": 2211,
+    "y1": 302,
+    "x2": 3625,
+    "y2": 696
+   },
+   "crop_path": "crops/rtgs/page_017/rtgs_p017_b01_text.png"
+  },
+  {
+   "block_id": "rtgs_p017_b02",
+   "block_type": "table",
+   "text": "Event Scheduled time Open value day 17:00:00 of the previous value date Start value day 08:30:00 [USD] RTM settlement trigger 08:30:00 [USD] LOM start (IntrBank USD) 08:30:00 [USD] LOM start (GLOM USD) 08:30:00 [USD] LOM start (SLOM USD) 08:30:00 [USD] LOM cutoff (SLOM USD) 16:00:00 Bank to bank cut off for Payment USD 16:00:00 [USD] LOM cutoff (GLOM USD) 16:30:00 [USD] LOM cutoff (IntrBank USD) 16:30:00 [USD] RTM settlement cutoff 16:30:00 Pre-finalization 16:30:00 Finalization 16:30:00 Square off 16:30:00 Sending MT 950 to banks 16:30:00 End value day 17:00:00",
+   "table_data": "<table border=\"1\">\n<thead>\n<tr>\n<th>Event</th>\n<th>Scheduled time</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Open value day</td>\n<td>17:00:00 of the previous value date</td>\n</tr>\n<tr>\n<td>Start value day</td>\n<td>08:30:00</td>\n</tr>\n<tr>\n<td>[USD] RTM settlement trigger</td>\n<td>08:30:00</td>\n</tr>\n<tr>\n<td>[USD] LOM start (IntrBank USD)</td>\n<td>08:30:00</td>\n</tr>\n<tr>\n<td>[USD] LOM start (GLOM USD)</td>\n<td>08:30:00</td>\n</tr>\n<tr>\n<td>[USD] LOM start (SLOM USD)</td>\n<td>08:30:00</td>\n</tr>\n<tr>\n<td>[USD] LOM cutoff (SLOM USD)</td>\n<td>16:00:00</td>\n</tr>\n<tr>\n<td>Bank to bank cut off for Payment USD</td>\n<td>16:00:00</td>\n</tr>\n<tr>\n<td>[USD] LOM cutoff (GLOM USD)</td>\n<td>16:30:00</td>\n</tr>\n<tr>\n<td>[USD] LOM cutoff (IntrBank USD)</td>\n<td>16:30:00</td>\n</tr>\n<tr>\n<td>[USD] RTM settlement cutoff</td>\n<td>16:30:00</td>\n</tr>\n<tr>\n<td>Pre-finalization</td>\n<td>16:30:00</td>\n</tr>\n<tr>\n<td>Finalization</td>\n<td>16:30:00</td>\n</tr>\n<tr>\n<td>Square off</td>\n<td>16:30:00</td>\n</tr>\n<tr>\n<td>Sending MT 950 to banks</td>\n<td>16:30:00</td>\n</tr>\n<tr>\n<td>End value day</td>\n<td>17:00:00</td>\n</tr>\n</tbody>\n</table>",
+   "bbox": {
+    "x1": 2211,
+    "y1": 772,
+    "x2": 3578,
+    "y2": 1809
+   },
+   "crop_path": "crops/rtgs/page_017/rtgs_p017_b02_table.png"
+  },
+  {
+   "block_id": "rtgs_p017_b03",
+   "block_type": "footer",
+   "text": "30 | دليل إجراءات عمل نظام التسوية الخطية متعدد العملات للمشاركين بالنظام بالطعاع المصري المصري إجراءات عمل نظام التسوية الخطية بالعمللة 30 جنيبيه",
+   "table_data": null,
+   "bbox": {
+    "x1": 2549,
+    "y1": 2526,
+    "x2": 3688,
+    "y2": 2601
+   },
+   "crop_path": "crops/rtgs/page_017/rtgs_p017_b03_footer.png"
+  }
+ ]
+}

@@ -1,0 +1,40 @@
+{
+ "doc_id": "legal_circular_3",
+ "page_num": 2,
+ "original_size": [
+  1241,
+  1754
+ ],
+ "inference_size": [
+  1241,
+  1754
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_3_p002_b00",
+   "block_type": "header",
+   "text": "المحتويات",
+   "table_data": null,
+   "bbox": {
+    "x1": 923,
+    "y1": 182,
+    "x2": 1081,
+    "y2": 226
+   },
+   "crop_path": "crops/legal_circular_3/page_002/legal_circular_3_p002_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_3_p002_b01",
+   "block_type": "text",
+   "text": "١..... المقدمة..... ١..... نطاق التطبيق: ..... ١..... ١ أحكام عامة:..... ٢..... ٢ الوظائف الرئيسية:..... ٣..... ٣ إجراءات ترشيح المسؤولين الرئيسيين: ..... ٤..... ٤ التزامات مجلس إدارة مؤسسة الدفع: ..... ٤..... 5 التزامات مؤسسة الدفع: ..... ٥..... ٦ معايير الجدارة والصلاحية الفنية: .....",
+   "table_data": null,
+   "bbox": {
+    "x1": 201,
+    "y1": 263,
+    "x2": 1085,
+    "y2": 600
+   },
+   "crop_path": "crops/legal_circular_3/page_002/legal_circular_3_p002_b01_text.png"
+  }
+ ]
+}

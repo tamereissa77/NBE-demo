@@ -1,0 +1,79 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 22,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p022_b00",
+   "block_type": "header",
+   "text": "البنك المركزي المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 1724,
+    "y1": 161,
+    "x2": 2244,
+    "y2": 249
+   },
+   "crop_path": "crops/legal_circular_2/page_022/legal_circular_2_p022_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p022_b01",
+   "block_type": "header",
+   "text": "صفحة ٢٠ من ٢٠",
+   "table_data": null,
+   "bbox": {
+    "x1": 504,
+    "y1": 151,
+    "x2": 826,
+    "y2": 214
+   },
+   "crop_path": "crops/legal_circular_2/page_022/legal_circular_2_p022_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p022_b02",
+   "block_type": "header",
+   "text": "عاشرة: الجزاءات المطبقة في حالة المخالفة",
+   "table_data": null,
+   "bbox": {
+    "x1": 1284,
+    "y1": 459,
+    "x2": 2153,
+    "y2": 543
+   },
+   "crop_path": "crops/legal_circular_2/page_022/legal_circular_2_p022_b02_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p022_b03",
+   "block_type": "text",
+   "text": "في حالة ثبوت عدم التزام أي من البنوك بأحكام قانون البنك المركزي والجهاز المصري والنقد رقم ٨٨ لسنة ٢٠٠٣ ولأنحته التنفيذية وقرارات مجلس إدارة البنك المركزي بشأن القواعد المنظمة لنظام تسجيل الائتمان بالبنك المركزي، يتم العرض على مجلس إدارة البنك المركزي لاتخاذ أي من الاجراءات المنصوص عليها بالفقرة أ، د من المادة ١٣٥ من القانون، بتوجيه تنبيه أو إلزام البنك المخالف بإيداع أرصدة لدى البنك المركزي دون عائد (نسبة قدرها ٥% من قيمة التسهيلات الائتمانية المقدمة للعميل موضوع المخالفة) وذلك لمدة ثلاثة أشهر عن السنة الاولى وتزايد مدة الإيداع شهر عن كل سنة إضافية أو جزء من السنة.",
+   "table_data": null,
+   "bbox": {
+    "x1": 384,
+    "y1": 561,
+    "x2": 2033,
+    "y2": 1333
+   },
+   "crop_path": "crops/legal_circular_2/page_022/legal_circular_2_p022_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p022_b04",
+   "block_type": "text",
+   "text": "*****",
+   "table_data": null,
+   "bbox": {
+    "x1": 1069,
+    "y1": 1551,
+    "x2": 1386,
+    "y2": 1596
+   },
+   "crop_path": "crops/legal_circular_2/page_022/legal_circular_2_p022_b04_text.png"
+  }
+ ]
+}

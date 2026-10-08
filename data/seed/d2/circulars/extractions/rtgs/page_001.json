@@ -1,0 +1,105 @@
+{
+ "doc_id": "rtgs",
+ "page_num": 1,
+ "original_size": [
+  1949,
+  2717
+ ],
+ "inference_size": [
+  1949,
+  2717
+ ],
+ "blocks": [
+  {
+   "block_id": "rtgs_p001_b00",
+   "block_type": "text",
+   "text": "",
+   "table_data": null,
+   "bbox": {
+    "x1": 1462,
+    "y1": 179,
+    "x2": 1643,
+    "y2": 407
+   },
+   "crop_path": "crops/rtgs/page_001/rtgs_p001_b00_text.png"
+  },
+  {
+   "block_id": "rtgs_p001_b01",
+   "block_type": "text",
+   "text": "البنك المركزي المصري CENTRAL BANK OF EGYPT",
+   "table_data": null,
+   "bbox": {
+    "x1": 1355,
+    "y1": 421,
+    "x2": 1756,
+    "y2": 557
+   },
+   "crop_path": "crops/rtgs/page_001/rtgs_p001_b01_text.png"
+  },
+  {
+   "block_id": "rtgs_p001_b02",
+   "block_type": "text",
+   "text": "",
+   "table_data": null,
+   "bbox": {
+    "x1": 0,
+    "y1": 679,
+    "x2": 1949,
+    "y2": 1793
+   },
+   "crop_path": "crops/rtgs/page_001/rtgs_p001_b02_text.png"
+  },
+  {
+   "block_id": "rtgs_p001_b03",
+   "block_type": "header",
+   "text": "دليل إجراءات عمل",
+   "table_data": null,
+   "bbox": {
+    "x1": 698,
+    "y1": 1897,
+    "x2": 1237,
+    "y2": 1984
+   },
+   "crop_path": "crops/rtgs/page_001/rtgs_p001_b03_header.png"
+  },
+  {
+   "block_id": "rtgs_p001_b04",
+   "block_type": "text",
+   "text": "نظام التسوية للحظية متعدد العملات للمشاركين بالنظام بالقطاع المصرفي المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 454,
+    "y1": 1981,
+    "x2": 1483,
+    "y2": 2132
+   },
+   "crop_path": "crops/rtgs/page_001/rtgs_p001_b04_text.png"
+  },
+  {
+   "block_id": "rtgs_p001_b05",
+   "block_type": "text",
+   "text": "إجراءات عمل نظام التسوية للحظية بالعمللة الاجنبية",
+   "table_data": null,
+   "bbox": {
+    "x1": 282,
+    "y1": 2233,
+    "x2": 1653,
+    "y2": 2314
+   },
+   "crop_path": "crops/rtgs/page_001/rtgs_p001_b05_text.png"
+  },
+  {
+   "block_id": "rtgs_p001_b06",
+   "block_type": "text",
+   "text": "مارس 2021",
+   "table_data": null,
+   "bbox": {
+    "x1": 799,
+    "y1": 2412,
+    "x2": 1134,
+    "y2": 2495
+   },
+   "crop_path": "crops/rtgs/page_001/rtgs_p001_b06_text.png"
+  }
+ ]
+}

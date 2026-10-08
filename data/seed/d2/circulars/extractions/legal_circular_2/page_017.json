@@ -1,0 +1,131 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 17,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p017_b00",
+   "block_type": "header",
+   "text": "البنك المصري المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 1649,
+    "y1": 151,
+    "x2": 2123,
+    "y2": 235
+   },
+   "crop_path": "crops/legal_circular_2/page_017/legal_circular_2_p017_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p017_b01",
+   "block_type": "header",
+   "text": "صفحة ١٥ من ٢٠",
+   "table_data": null,
+   "bbox": {
+    "x1": 523,
+    "y1": 158,
+    "x2": 813,
+    "y2": 214
+   },
+   "crop_path": "crops/legal_circular_2/page_017/legal_circular_2_p017_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p017_b02",
+   "block_type": "header",
+   "text": "سابقا: الاخطار عن العملاء غير المنتظمين في السداد",
+   "table_data": null,
+   "bbox": {
+    "x1": 1072,
+    "y1": 449,
+    "x2": 2033,
+    "y2": 519
+   },
+   "crop_path": "crops/legal_circular_2/page_017/legal_circular_2_p017_b02_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p017_b03",
+   "block_type": "text",
+   "text": "يتعين على البنوك اخطار الادارة العامة لتجميع مخاطر الائتمان المصري بأسماء العملاء* وكفلاتهم والشركاء المتضامنين المتوقنين عن السداد والمتخذ بشأن مديونياتهم أي من الاجراءات التالية ، وذلك على نموذج الاخطار المعد لهذا الغرض رقم ٦ (مرفق) ، خلال ثلاثين يوما من تاريخ اتخاذ الاجراء:",
+   "table_data": null,
+   "bbox": {
+    "x1": 422,
+    "y1": 540,
+    "x2": 2033,
+    "y2": 899
+   },
+   "crop_path": "crops/legal_circular_2/page_017/legal_circular_2_p017_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p017_b04",
+   "block_type": "header",
+   "text": "١- العملاء المتخذ بشأن مديونياتهم اجراءات قضائية من جانب البنك:",
+   "table_data": null,
+   "bbox": {
+    "x1": 801,
+    "y1": 983,
+    "x2": 2017,
+    "y2": 1056
+   },
+   "crop_path": "crops/legal_circular_2/page_017/legal_circular_2_p017_b04_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p017_b05",
+   "block_type": "text",
+   "text": "(أ) رفع دعاوى قضائية: يتعين على البنوك الافادة عن نوع الدعوى وتاريخ رفعها. (ب) رفع جنج: يتعين على البنوك الافادة عن نوع الجنحة واسم المسؤول الذي تم رفع الجنحة ضده ، وتاريخ قيد الجنحة بالنوابة. (ج) ابلغ النيابة العامة أو جهاز المدعي العام الاشتراكي، ويعتد بتاريخ قيام البنك بإبلاغ النيابة العامة أو جهاز المدعي العام الاشتراكي. (د) التقدم بطلب لاستصدار أمر حجز تحفظي قضائي أو أمر اداء ، ويعتد بتاريخ التقدم بطلب لاستصدار أمر الحجز أو أمر الاداء. (هـ) تسجيل تنبيه نزع الملكية ، ويعتد بتاريخ تسجيل تنبيه نزع الملكية.",
+   "table_data": null,
+   "bbox": {
+    "x1": 422,
+    "y1": 1074,
+    "x2": 1952,
+    "y2": 1814
+   },
+   "crop_path": "crops/legal_circular_2/page_017/legal_circular_2_p017_b05_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p017_b06",
+   "block_type": "header",
+   "text": "٢- العملاء المتخذ ضدهم اجراءات قضائية من جهات خارجية:",
+   "table_data": null,
+   "bbox": {
+    "x1": 907,
+    "y1": 1891,
+    "x2": 2023,
+    "y2": 1968
+   },
+   "crop_path": "crops/legal_circular_2/page_017/legal_circular_2_p017_b06_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p017_b07",
+   "block_type": "text",
+   "text": "(أ) فرض الحراسة على أموال العملاء أو منهم من التصرف فيها أو التحفظ عليها ، ويعتد بتاريخ ابلغ البنوك بالقرار الصادر في هذا الشأن . (ب) صدور احكام بتصفية الاعمال ، ويعتد بتاريخ صدور احكام قضائية بالتصفية. (ج) صدور احكام اشهار اقلص ضد احد العملاء ، ويعتد بتاريخ نشر حكم اشهار الإفلاس في أي من الصحف اليومية ، مع مراعاة أنه في حالة صدور حكم اشهار اقلص ضد إحدى شركات التضامن أو التوصية البسيطة يتعين الاخطار عن الشركة وكذلك أسماء الشركاء المتضامنين فيها حيث أن اشهار اقلص الشركة يوجب اشهار اقلص جميع الشركاء المتضامنين فيها ، أما في حالة صدور احكام اشهار اقلص ضد احد الشركاء المتضامنين لا يتم الاخطار عن الشركة.",
+   "table_data": null,
+   "bbox": {
+    "x1": 422,
+    "y1": 1989,
+    "x2": 1957,
+    "y2": 2905
+   },
+   "crop_path": "crops/legal_circular_2/page_017/legal_circular_2_p017_b07_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p017_b08",
+   "block_type": "text",
+   "text": "* يخلف للطاع العام والأعمال العام .",
+   "table_data": null,
+   "bbox": {
+    "x1": 1570,
+    "y1": 3053,
+    "x2": 2028,
+    "y2": 3109
+   },
+   "crop_path": "crops/legal_circular_2/page_017/legal_circular_2_p017_b08_text.png"
+  }
+ ]
+}

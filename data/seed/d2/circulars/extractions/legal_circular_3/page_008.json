@@ -1,0 +1,196 @@
+{
+ "doc_id": "legal_circular_3",
+ "page_num": 8,
+ "original_size": [
+  1241,
+  1754
+ ],
+ "inference_size": [
+  1241,
+  1754
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_3_p008_b00",
+   "block_type": "text",
+   "text": "٦-٢-١ كفاءة المرشح وقدرته على أداء مهام ومسؤوليات الوظيفة المرشح لها، وتوافر الخبرات المتخصصة والعملية الكافية.",
+   "table_data": null,
+   "bbox": {
+    "x1": 105,
+    "y1": 142,
+    "x2": 1040,
+    "y2": 223
+   },
+   "crop_path": "crops/legal_circular_3/page_008/legal_circular_3_p008_b00_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p008_b01",
+   "block_type": "text",
+   "text": "٦-٢-٢ قدرة المرشح على إتاحة الوقت الكافي لأداء مهام الوظيفة الرئيسية المرشح لها وكذا الوفاء بالواجبات والالتزامات المرتبطة بهذا المنصب على أكمل وجه.",
+   "table_data": null,
+   "bbox": {
+    "x1": 105,
+    "y1": 235,
+    "x2": 1040,
+    "y2": 317
+   },
+   "crop_path": "crops/legal_circular_3/page_008/legal_circular_3_p008_b01_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p008_b02",
+   "block_type": "text",
+   "text": "٦-٢-٣ معرفة المرشح بسوق نظم وخدمات الدفع وإدراكه لمتطلبات وظيفته والمخاطر المصاحبة لها وقدرته على اتخاذ القرارات السليمة في التوقيت المناسب.",
+   "table_data": null,
+   "bbox": {
+    "x1": 105,
+    "y1": 328,
+    "x2": 1040,
+    "y2": 412
+   },
+   "crop_path": "crops/legal_circular_3/page_008/legal_circular_3_p008_b02_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p008_b03",
+   "block_type": "text",
+   "text": "٦-٢-٤ الحصول على المؤهلات اللازمة من شهادات أكاديمية بالإضافة إلى برامج تدريبية متخصصة وأخرى في مجالات مختلفة ذات الصلة.",
+   "table_data": null,
+   "bbox": {
+    "x1": 105,
+    "y1": 431,
+    "x2": 1040,
+    "y2": 514
+   },
+   "crop_path": "crops/legal_circular_3/page_008/legal_circular_3_p008_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p008_b04",
+   "block_type": "text",
+   "text": "٦-٢-٥ توافر المهارات القيادية والاتصال الفعال والقدرة على حل المشاكل وإدارة الأزمات والأحداث غير المتوقعة.",
+   "table_data": null,
+   "bbox": {
+    "x1": 105,
+    "y1": 526,
+    "x2": 1040,
+    "y2": 607
+   },
+   "crop_path": "crops/legal_circular_3/page_008/legal_circular_3_p008_b04_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p008_b05",
+   "block_type": "header",
+   "text": "٦-٣ الوضع المالي:",
+   "table_data": null,
+   "bbox": {
+    "x1": 838,
+    "y1": 645,
+    "x2": 1062,
+    "y2": 684
+   },
+   "crop_path": "crops/legal_circular_3/page_008/legal_circular_3_p008_b05_header.png"
+  },
+  {
+   "block_id": "legal_circular_3_p008_b06",
+   "block_type": "text",
+   "text": "يتم تقييم الوضع المالي للمرشح من خلال التأكيد مما يلي - على سبيل المثال لا الحصر:",
+   "table_data": null,
+   "bbox": {
+    "x1": 304,
+    "y1": 707,
+    "x2": 1042,
+    "y2": 744
+   },
+   "crop_path": "crops/legal_circular_3/page_008/legal_circular_3_p008_b06_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p008_b07",
+   "block_type": "text",
+   "text": "٦-٣-١ ألا يكون قد تخلف عن الوفاء بالالتزامات المالية بشكل قد يؤثر على سلامة الوضع المالي للمرشح، على سبيل المثال لا الحصر: لم يتم تصنيقه عميل غير منظم.",
+   "table_data": null,
+   "bbox": {
+    "x1": 105,
+    "y1": 766,
+    "x2": 1040,
+    "y2": 849
+   },
+   "crop_path": "crops/legal_circular_3/page_008/legal_circular_3_p008_b07_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p008_b08",
+   "block_type": "text",
+   "text": "٦-٣-٢ ألا يكون طرفاً ضمن أي تسوية مع دائنين أو ما شابه من إجراءات مازالت قائمة و/ أو لم يتم تسويتها في فترة زمنية مناسبة.",
+   "table_data": null,
+   "bbox": {
+    "x1": 105,
+    "y1": 861,
+    "x2": 1040,
+    "y2": 942
+   },
+   "crop_path": "crops/legal_circular_3/page_008/legal_circular_3_p008_b08_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p008_b09",
+   "block_type": "text",
+   "text": "٦-٣-٣ ألا يكون قد تم إشهار إفلاسه أو قيامه بتقديم عريضة إفلاس أو تم الحكم عليه بالإفلاس.",
+   "table_data": null,
+   "bbox": {
+    "x1": 231,
+    "y1": 954,
+    "x2": 1040,
+    "y2": 991
+   },
+   "crop_path": "crops/legal_circular_3/page_008/legal_circular_3_p008_b09_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p008_b10",
+   "block_type": "header",
+   "text": "٦-٤ الاستقلالية وتجنب تعارض المصالح:",
+   "table_data": null,
+   "bbox": {
+    "x1": 643,
+    "y1": 1026,
+    "x2": 1062,
+    "y2": 1063
+   },
+   "crop_path": "crops/legal_circular_3/page_008/legal_circular_3_p008_b10_header.png"
+  },
+  {
+   "block_id": "legal_circular_3_p008_b11",
+   "block_type": "text",
+   "text": "٦-٤-١ يجب أن يتمتع المرشح بالاستقلالية اللازمة لأداء المهام والواجبات المنوطة بالوظيفة الرئيسية المرشح لها، وألا يكون لديه مصالح شخصية أو التزامات وظيفية أو أي ظروف أخرى قد تؤدي إلى وجود تعارض في المصالح أو قد تؤثر بأي شكل على قدرته على أداء مهام هذا المنصب باستقلالية، ويتم تقييم هذا المعيار وفقاً للمعلومات الواردة ببيان الحالة الذي يقوم المرشح باستيفائه وأية مصادر أخرى.",
+   "table_data": null,
+   "bbox": {
+    "x1": 105,
+    "y1": 1087,
+    "x2": 1031,
+    "y2": 1314
+   },
+   "crop_path": "crops/legal_circular_3/page_008/legal_circular_3_p008_b11_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p008_b12",
+   "block_type": "text",
+   "text": "٦-٤-٢ إذا وجد تعارض في المصالح أو صلة قرابة بين المرشح وأحد شاغلي المناصب الرئيسية في مؤسسة الدفع مقدمة الطلب، ينبغي على المؤسسة أن تقوم بالنظر في ترشحه بعناية، خاصة فيما يتعلق بمدى تأثير التعارض في المصالح على قدرة المرشح على أداء المهام والواجبات المنوطة به.",
+   "table_data": null,
+   "bbox": {
+    "x1": 105,
+    "y1": 1323,
+    "x2": 1031,
+    "y2": 1496
+   },
+   "crop_path": "crops/legal_circular_3/page_008/legal_circular_3_p008_b12_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p008_b13",
+   "block_type": "footer",
+   "text": "6",
+   "table_data": null,
+   "bbox": {
+    "x1": 105,
+    "y1": 1640,
+    "x2": 128,
+    "y2": 1666
+   },
+   "crop_path": "crops/legal_circular_3/page_008/legal_circular_3_p008_b13_footer.png"
+  }
+ ]
+}

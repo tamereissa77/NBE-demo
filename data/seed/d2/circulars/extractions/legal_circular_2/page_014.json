@@ -1,0 +1,92 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 14,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p014_b00",
+   "block_type": "header",
+   "text": "البنك المركزي المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 1630,
+    "y1": 210,
+    "x2": 2143,
+    "y2": 302
+   },
+   "crop_path": "crops/legal_circular_2/page_014/legal_circular_2_p014_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p014_b01",
+   "block_type": "header",
+   "text": "صفحة ١٢ من ٢٠",
+   "table_data": null,
+   "bbox": {
+    "x1": 420,
+    "y1": 203,
+    "x2": 736,
+    "y2": 263
+   },
+   "crop_path": "crops/legal_circular_2/page_014/legal_circular_2_p014_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p014_b02",
+   "block_type": "text",
+   "text": "٢١- يتعين على البنوك وشركات التأجير التمويلية وشركات التمويل العقارى فور قيامها بإرسال بيانات العملاء إلكترونيا من خلال شبكة معلومات البنك المركزي ، موافاة الادارة بالآتى:",
+   "table_data": null,
+   "bbox": {
+    "x1": 328,
+    "y1": 480,
+    "x2": 2078,
+    "y2": 762
+   },
+   "crop_path": "crops/legal_circular_2/page_014/legal_circular_2_p014_b02_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p014_b03",
+   "block_type": "text",
+   "text": "(أ) بيان يوضح أسماء العملاء الذين لم يتم الاقرار عنهم في شهر الاقرار مقارنة بالشهر السابق مع ايضاح أسباب عدم الاقرار عنهم.",
+   "table_data": null,
+   "bbox": {
+    "x1": 323,
+    "y1": 778,
+    "x2": 1837,
+    "y2": 958
+   },
+   "crop_path": "crops/legal_circular_2/page_014/legal_circular_2_p014_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p014_b04",
+   "block_type": "text",
+   "text": "(ب) تصويب الأخطاء من خلال الشاشة المخصصة لهذا الغرض.",
+   "table_data": null,
+   "bbox": {
+    "x1": 591,
+    "y1": 972,
+    "x2": 1852,
+    "y2": 1053
+   },
+   "crop_path": "crops/legal_circular_2/page_014/legal_circular_2_p014_b04_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p014_b05",
+   "block_type": "text",
+   "text": "٢٢- ولأغراض مطابقة أرصدة التمويل والتسهيلات الائتمانية من واقع الاقرارات الشهرية المرسلة من خلال شبكة معلومات البنك المركزي مع مقابليها بينود المراكز المالية الشهرية للبنوك ، يتعين على كل بنك موافاة الادارة العامة لجميع مخاطر الائتمان المصري ببيان شهري مقارن لبنود التمويل والتسهيلات الائتمانية من واقع الاقرارات مع مقابليها بينود المركز المالي للبنك موضحا به اسباب الفروق ان وجدت.",
+   "table_data": null,
+   "bbox": {
+    "x1": 339,
+    "y1": 1137,
+    "x2": 2078,
+    "y2": 1610
+   },
+   "crop_path": "crops/legal_circular_2/page_014/legal_circular_2_p014_b05_text.png"
+  }
+ ]
+}

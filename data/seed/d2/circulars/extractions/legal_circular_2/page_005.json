@@ -1,0 +1,118 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 5,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p005_b00",
+   "block_type": "header",
+   "text": "البنك المركزي المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 1704,
+    "y1": 193,
+    "x2": 2232,
+    "y2": 281
+   },
+   "crop_path": "crops/legal_circular_2/page_005/legal_circular_2_p005_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p005_b01",
+   "block_type": "header",
+   "text": "صفحة ٣ من ٢٠",
+   "table_data": null,
+   "bbox": {
+    "x1": 506,
+    "y1": 196,
+    "x2": 826,
+    "y2": 259
+   },
+   "crop_path": "crops/legal_circular_2/page_005/legal_circular_2_p005_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p005_b02",
+   "block_type": "header",
+   "text": "ثانياً: الإطلاع على البيانات المجمعة للعمليات والأطراف المرتبطة بهم",
+   "table_data": null,
+   "bbox": {
+    "x1": 739,
+    "y1": 491,
+    "x2": 2125,
+    "y2": 580
+   },
+   "crop_path": "crops/legal_circular_2/page_005/legal_circular_2_p005_b02_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p005_b03",
+   "block_type": "header",
+   "text": "قبل تقديم تمويل أو تسهيلات إتمانية",
+   "table_data": null,
+   "bbox": {
+    "x1": 1263,
+    "y1": 594,
+    "x2": 2007,
+    "y2": 671
+   },
+   "crop_path": "crops/legal_circular_2/page_005/legal_circular_2_p005_b03_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p005_b04",
+   "block_type": "text",
+   "text": "تقضي الفقرة الثانية من المادة ٦٧ من القانون بأنه على كل بنك أن يطلع على البيان المجمع الخاص بأي عميل وأطرافه المرتبطة قبل تقديمه تمويلًا أو تسهيلات إتمانية، وله أن يطلب مستخرجًا من هذا البيان، وذلك طبقًا للأوضاع والشروط التي يصدر بها قرار من مجلس إدارة البنك المركزي.",
+   "table_data": null,
+   "bbox": {
+    "x1": 364,
+    "y1": 792,
+    "x2": 2135,
+    "y2": 1158
+   },
+   "crop_path": "crops/legal_circular_2/page_005/legal_circular_2_p005_b04_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p005_b05",
+   "block_type": "text",
+   "text": "كما تقضي الفقرة الأخيرة من المادة ٣٣ من اللائحة التنفيذية للقانون بأن يعيد البنك المركزي بيانات مجمعة لما يحصل عليه كل عميل وأطرافه المرتبطة، وتلتزم البنوك بالإطلاع على هذه البيانات قبيل تقديم الائتمان أو زيادته أو تجديده أو تعديل شروطه وكذلك عند الاستعلام عن العميل.",
+   "table_data": null,
+   "bbox": {
+    "x1": 364,
+    "y1": 1277,
+    "x2": 2140,
+    "y2": 1649
+   },
+   "crop_path": "crops/legal_circular_2/page_005/legal_circular_2_p005_b05_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p005_b06",
+   "block_type": "text",
+   "text": "وبكون اطلاع البنوك وشركات التأجير التمويل وشركات التمويل العقارى على البيان المجمع الخاص بالعميل والأطراف المرتبطة وفقًا لما يلي:",
+   "table_data": null,
+   "bbox": {
+    "x1": 369,
+    "y1": 1772,
+    "x2": 2138,
+    "y2": 1947
+   },
+   "crop_path": "crops/legal_circular_2/page_005/legal_circular_2_p005_b06_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p005_b07",
+   "block_type": "text",
+   "text": "١- يكون الاطلاع من خلال شبكة ربط البنوك بنظام معلومات البنك المركزي. ٢- يكون الاطلاع بمعرفة مسؤول يخطر البنك المركزي باسمه ودرجته الوظيفية. ٣- ان يكون الاطلاع بناء على طلب مقدم من العميل للحصول على تمويل أو تسهيل إتماني، ويتعين على البنوك الاطلاع قبل اتخاذ قرار تقديم الائتمان أو عند زيادته أو تجديده أو تعديل شروطه. ٤- يكون الاطلاع من واقع مستندات اثبات الشخصية الخاصة بالعميل.",
+   "table_data": null,
+   "bbox": {
+    "x1": 374,
+    "y1": 2031,
+    "x2": 2158,
+    "y2": 2832
+   },
+   "crop_path": "crops/legal_circular_2/page_005/legal_circular_2_p005_b07_text.png"
+  }
+ ]
+}

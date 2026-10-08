@@ -1,0 +1,157 @@
+{
+ "doc_id": "rtgs",
+ "page_num": 5,
+ "original_size": [
+  3898,
+  2717
+ ],
+ "inference_size": [
+  3898,
+  2717
+ ],
+ "blocks": [
+  {
+   "block_id": "rtgs_p005_b00",
+   "block_type": "header",
+   "text": "المصطلحات المستخدمة في دليل الإجراءات:",
+   "table_data": null,
+   "bbox": {
+    "x1": 2499,
+    "y1": 225,
+    "x2": 3692,
+    "y2": 304
+   },
+   "crop_path": "crops/rtgs/page_005/rtgs_p005_b00_header.png"
+  },
+  {
+   "block_id": "rtgs_p005_b01",
+   "block_type": "table",
+   "text": "لمصطلح بالكامل الاختصار المستخدم التفسير باللغة العربية The Central Bank of Egypt CBE البنك المركزي المصري Clearing Liquidity Optimizing Mechanism CLOM قائمة الانتظار الخاصة بمناطق المقاصة على نظام التسوية الخطية Conditional Release mechanism CRM آلية الإفراج المربوط بشرط على نظام التسوية الخطية End of Day EOD نهاية يوم عمل نظام التسوية الخطية Financial Settlement Value Date FSDV يوم الحق \"يوم التسوية المضمن برسالة السوفيت الخاصة بآمر التسوية\" General Liquidity Optimizing Mechanism GLOM قائمة الانتظار الخاصة بالمدفوعات غير تلك الخاصة بقائمة عمليات الإنترنت، وقائمة ملفات المقاصة، وقائمة عمليات الأوراق المالية Liquidity Optimizing Mechanism LOM آلية الاستخدام الأمثل لتسوية \"قائمة الانتظار\" Real Time Gross Settlement System RTGS Multicurrency System نظام التسوية الخطية متعدد العملات - للتسويات بالعملات الأجنبية Real Time Mechanism RTM آلية التسوية على أساس الوقت الفعلي دونما الانتظار Securities Liquidity Optimizing Mechanism Securities SLOM قائمة الانتظار الخاصة بعمليات الأوراق المالية Start of day SOD بداية يوم عمل نظام التسوية الخطية Treasury Bills TBs أفون الخزنة Interbank Liquidity Optimizing Mechanism Interbank LOM قائمة الانتظار الخاصة بأموار الدفع منظومة الإنترنتك الدولي على نظام التسوية الخطية",
+   "table_data": "<table border=\"1\">\n<thead>\n<tr>\n<th>لمصطلح بالكامل</th>\n<th>الاختصار المستخدم</th>\n<th>التفسير باللغة العربية</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>The Central Bank of Egypt</td>\n<td>CBE</td>\n<td>البنك المركزي المصري</td>\n</tr>\n<tr>\n<td>Clearing Liquidity Optimizing Mechanism</td>\n<td>CLOM</td>\n<td>قائمة الانتظار الخاصة بمناطق المقاصة على نظام التسوية الخطية</td>\n</tr>\n<tr>\n<td>Conditional Release mechanism</td>\n<td>CRM</td>\n<td>آلية الإفراج المربوط بشرط على نظام التسوية الخطية</td>\n</tr>\n<tr>\n<td>End of Day</td>\n<td>EOD</td>\n<td>نهاية يوم عمل نظام التسوية الخطية</td>\n</tr>\n<tr>\n<td>Financial Settlement Value Date</td>\n<td>FSDV</td>\n<td>يوم الحق \"يوم التسوية المضمن برسالة السوفيت الخاصة بآمر التسوية\"</td>\n</tr>\n<tr>\n<td>General Liquidity Optimizing Mechanism</td>\n<td>GLOM</td>\n<td>قائمة الانتظار الخاصة بالمدفوعات غير تلك الخاصة بقائمة عمليات الإنترنت، وقائمة ملفات المقاصة، وقائمة عمليات الأوراق المالية</td>\n</tr>\n<tr>\n<td>Liquidity Optimizing Mechanism</td>\n<td>LOM</td>\n<td>آلية الاستخدام الأمثل لتسوية \"قائمة الانتظار\"</td>\n</tr>\n<tr>\n<td>Real Time Gross Settlement System</td>\n<td>RTGS Multicurrency System</td>\n<td>نظام التسوية الخطية متعدد العملات - للتسويات بالعملات الأجنبية</td>\n</tr>\n<tr>\n<td>Real Time Mechanism</td>\n<td>RTM</td>\n<td>آلية التسوية على أساس الوقت الفعلي دونما الانتظار</td>\n</tr>\n<tr>\n<td>Securities Liquidity Optimizing Mechanism</td>\n<td>Securities SLOM</td>\n<td>قائمة الانتظار الخاصة بعمليات الأوراق المالية</td>\n</tr>\n<tr>\n<td>Start of day</td>\n<td>SOD</td>\n<td>بداية يوم عمل نظام التسوية الخطية</td>\n</tr>\n<tr>\n<td>Treasury Bills</td>\n<td>TBs</td>\n<td>أفون الخزنة</td>\n</tr>\n<tr>\n<td>Interbank Liquidity Optimizing Mechanism</td>\n<td>Interbank LOM</td>\n<td>قائمة الانتظار الخاصة بأموار الدفع منظومة الإنترنتك الدولي على نظام التسوية الخطية</td>\n</tr>\n</tbody>\n</table>",
+   "bbox": {
+    "x1": 2213,
+    "y1": 391,
+    "x2": 3676,
+    "y2": 2211
+   },
+   "crop_path": "crops/rtgs/page_005/rtgs_p005_b01_table.png"
+  },
+  {
+   "block_id": "rtgs_p005_b02",
+   "block_type": "header",
+   "text": "التعريف:",
+   "table_data": null,
+   "bbox": {
+    "x1": 1477,
+    "y1": 225,
+    "x2": 1649,
+    "y2": 285
+   },
+   "crop_path": "crops/rtgs/page_005/rtgs_p005_b02_header.png"
+  },
+  {
+   "block_id": "rtgs_p005_b03",
+   "block_type": "text",
+   "text": "أنشأ البنك المركزي المصري نظام التسوية الخطية متعدد العملات ويتولى تشغيله، بغرض تسوية أوامر الدفع لخطياً بين البنوك (المشاركون) على حساباتهم بالعملات الأجنبية لدى البنك المركزي وبشكل مستمر خلال ساعات عمل النظام والذي يحقق الأهداف التالية:",
+   "table_data": null,
+   "bbox": {
+    "x1": 223,
+    "y1": 302,
+    "x2": 1586,
+    "y2": 560
+   },
+   "crop_path": "crops/rtgs/page_005/rtgs_p005_b03_text.png"
+  },
+  {
+   "block_id": "rtgs_p005_b04",
+   "block_type": "text",
+   "text": "1. يشكل قلب نظام الدفع القومي بالجنية المصري والعملات الأجنبية. 2. يوفر الآلية الخاصة بالتسوية النهائية وغير القابلة للرجوع فيها. الخاصة بالعمليات المالية بين البنوك. 3. يحد من مخاطر الائتمان والسيولة وكذا المخاطر النظامية والتي يمكن أن تصاحب عملية انتقال الأموال فيما بين البنوك وذلك من خلال التأكيد على نهائية التسوية لائزاسات البنوك تجاه بعضها البعض.",
+   "table_data": null,
+   "bbox": {
+    "x1": 223,
+    "y1": 576,
+    "x2": 1586,
+    "y2": 978
+   },
+   "crop_path": "crops/rtgs/page_005/rtgs_p005_b04_text.png"
+  },
+  {
+   "block_id": "rtgs_p005_b05",
+   "block_type": "text",
+   "text": "كما يساعد النظام على الحد من مخاطر الائتمان «credit risk» ومخاطر التسوية «settlement risk» فيما بين البنوك حيث تتم التسوية فقط في حالة وجود رصيد كاف لدى البنك المخصوم عليه، ويعرض النظام الرصيد الفعلي للمشاركون بشكل مستمر خلال ساعات عمل النظام من خلال شائكات مخصصة لذلك لدى جميع مستخدمي النظام وذلك للمتابعة الخطية. كما يوفر ذلك وسيلة للحد من مخاطر السيولة لدى المشاركين في النظام عن طريق إتاحة قوائم الانتظار لأوامر الدفع والسماح للبنك المشترك بإدارة أوامر الدفع الخاصة.",
+   "table_data": null,
+   "bbox": {
+    "x1": 223,
+    "y1": 1005,
+    "x2": 1586,
+    "y2": 1465
+   },
+   "crop_path": "crops/rtgs/page_005/rtgs_p005_b05_text.png"
+  },
+  {
+   "block_id": "rtgs_p005_b06",
+   "block_type": "text",
+   "text": "حيث يتبع النظام لفرق التشغيل بالبنك المشترك، إمكانية القيام بما يلي:",
+   "table_data": null,
+   "bbox": {
+    "x1": 522,
+    "y1": 1494,
+    "x2": 1586,
+    "y2": 1556
+   },
+   "crop_path": "crops/rtgs/page_005/rtgs_p005_b06_text.png"
+  },
+  {
+   "block_id": "rtgs_p005_b07",
+   "block_type": "text",
+   "text": "1. متابعة أرصدة البنك لخطياً. 2. التأكد من عدم وجود أي تعثرات في إدارة السيولة بالعمليات الأجنبية لدى المشارك. 3. متابعة عمليات السحب والإيداع للعملات الأجنبية من وإلى النظام - الـ Injection والـ Extraction -، وتتم متابعتها مع البنك المركزي المصري حتى يتم خصم أو إضافة المبالغ من وإلى حساب البنك المشترك داخل نظام التسوية الخطية. 4. التوازل فيما بين البنوك المشتركة والبنك المركزي في حال وجود أي عمليات من شأنها إدخال أي تعذيلات مقترحة على النظام.",
+   "table_data": null,
+   "bbox": {
+    "x1": 223,
+    "y1": 1573,
+    "x2": 1586,
+    "y2": 2059
+   },
+   "crop_path": "crops/rtgs/page_005/rtgs_p005_b07_text.png"
+  },
+  {
+   "block_id": "rtgs_p005_b08",
+   "block_type": "footer",
+   "text": "7",
+   "table_data": null,
+   "bbox": {
+    "x1": 223,
+    "y1": 2540,
+    "x2": 269,
+    "y2": 2584
+   },
+   "crop_path": "crops/rtgs/page_005/rtgs_p005_b08_footer.png"
+  },
+  {
+   "block_id": "rtgs_p005_b09",
+   "block_type": "footer",
+   "text": "نظام الدفع | Banking Operators & Payment Systems Sector | قطاع العمليات المصرفية ونظم الدفع | Central Bank of Egypt",
+   "table_data": null,
+   "bbox": {
+    "x1": 297,
+    "y1": 2540,
+    "x2": 1107,
+    "y2": 2598
+   },
+   "crop_path": "crops/rtgs/page_005/rtgs_p005_b09_footer.png"
+  },
+  {
+   "block_id": "rtgs_p005_b10",
+   "block_type": "footer",
+   "text": "6 | دليل إجراءات عمل نظام التسوية الخطية متعدد العملات للمشاركين بالنظام القطاع المصري المصري | إجراءات عمل نظام التسوية الخطية بالعملات الأجنبية",
+   "table_data": null,
+   "bbox": {
+    "x1": 2554,
+    "y1": 2529,
+    "x2": 3653,
+    "y2": 2598
+   },
+   "crop_path": "crops/rtgs/page_005/rtgs_p005_b10_footer.png"
+  }
+ ]
+}

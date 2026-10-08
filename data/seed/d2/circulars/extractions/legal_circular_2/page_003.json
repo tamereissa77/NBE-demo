@@ -1,0 +1,131 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 3,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p003_b00",
+   "block_type": "header",
+   "text": "البنك المركزي المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 1711,
+    "y1": 186,
+    "x2": 2217,
+    "y2": 270
+   },
+   "crop_path": "crops/legal_circular_2/page_003/legal_circular_2_p003_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p003_b01",
+   "block_type": "header",
+   "text": "صفحة ١ من ٢٠",
+   "table_data": null,
+   "bbox": {
+    "x1": 530,
+    "y1": 182,
+    "x2": 846,
+    "y2": 238
+   },
+   "crop_path": "crops/legal_circular_2/page_003/legal_circular_2_p003_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p003_b02",
+   "block_type": "header",
+   "text": "أولاً: المستندات والإقرارات المطلوبة من العملاء عند التقدم للحصول على تمويل أو تسهيلات انتمائية",
+   "table_data": null,
+   "bbox": {
+    "x1": 968,
+    "y1": 480,
+    "x2": 2115,
+    "y2": 652
+   },
+   "crop_path": "crops/legal_circular_2/page_003/legal_circular_2_p003_b02_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p003_b03",
+   "block_type": "text",
+   "text": "تقضي المادة ٦٢ من القانون بأنه على من يطلب الحصول على تمويل أو تسهيلات انتمائية من البنوك من بين الأشخاص الطبيعيين والأشخاص الاعتبارية ، أن يفصح في الطلب عن أصحاب المنشأة أو أصحاب الحصص أو نسبة المساهمة في شركات المساهمة المغلقة ودرجة القراية بينهم إن وجدت ، وأرصدة المديونية لدى البنوك الأخرى عند تقديم الطلب ولا يجوز النظر في الطلب إلا بعد تقديم هذه البيانات والإقرار بصحتها.",
+   "table_data": null,
+   "bbox": {
+    "x1": 384,
+    "y1": 764,
+    "x2": 2115,
+    "y2": 1225
+   },
+   "crop_path": "crops/legal_circular_2/page_003/legal_circular_2_p003_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p003_b04",
+   "block_type": "text",
+   "text": "ويتعين على البنوك وشركات التاجر التمولي وشركات التمويل العقارى أن تطلب من عملائها الذين يتقدمون للحصول على تمويل أو تسهيلات انتمائية تقديم المستندات والإقرارات التالية:",
+   "table_data": null,
+   "bbox": {
+    "x1": 384,
+    "y1": 1337,
+    "x2": 2115,
+    "y2": 1600
+   },
+   "crop_path": "crops/legal_circular_2/page_003/legal_circular_2_p003_b04_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p003_b05",
+   "block_type": "text",
+   "text": "١- إقرار موقع من العميل عن البنوك و شركات التاجر التمولي و شركات التمويل العقارى التي يتعامل معها وحجم تعامله مع كل منها مع إيضاح المسميات المختلفة التي يتعامل بها مع كل منها ، على أن يكون معلوما لدى العميل قبل الإقرار بهذه المعلومات ان اغفال الإقرار عن بعضها أو الإقرار ببيانات غير صحيحة يترتب عليه الحرمان من الحصول على التسهيل المطلوب.",
+   "table_data": null,
+   "bbox": {
+    "x1": 379,
+    "y1": 1684,
+    "x2": 2120,
+    "y2": 2136
+   },
+   "crop_path": "crops/legal_circular_2/page_003/legal_circular_2_p003_b05_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p003_b06",
+   "block_type": "text",
+   "text": "٢- إقرار من العميل يفصح فيه عن الأطراف المرتبطة به.",
+   "table_data": null,
+   "bbox": {
+    "x1": 975,
+    "y1": 2229,
+    "x2": 2120,
+    "y2": 2302
+   },
+   "crop_path": "crops/legal_circular_2/page_003/legal_circular_2_p003_b06_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p003_b07",
+   "block_type": "text",
+   "text": "٣- مستندات إثبات الشخصية للعملاء والأطراف المرتبطة بهم وكفلائهم والشركاء المتضامنين ، على النحو التالي:",
+   "table_data": null,
+   "bbox": {
+    "x1": 379,
+    "y1": 2390,
+    "x2": 2120,
+    "y2": 2558
+   },
+   "crop_path": "crops/legal_circular_2/page_003/legal_circular_2_p003_b07_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p003_b08",
+   "block_type": "text",
+   "text": "(أ) صورة من بطاقة الرقم القومي بالنسبة للأفراد المصريين ، وجواز السفر وترخيص الإقامة بالنسبة للاجانب.",
+   "table_data": null,
+   "bbox": {
+    "x1": 379,
+    "y1": 2646,
+    "x2": 1999,
+    "y2": 2814
+   },
+   "crop_path": "crops/legal_circular_2/page_003/legal_circular_2_p003_b08_text.png"
+  }
+ ]
+}

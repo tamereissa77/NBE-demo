@@ -1,0 +1,118 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 6,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p006_b00",
+   "block_type": "header",
+   "text": "البنك المركزي المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 1714,
+    "y1": 158,
+    "x2": 2232,
+    "y2": 249
+   },
+   "crop_path": "crops/legal_circular_2/page_006/legal_circular_2_p006_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p006_b01",
+   "block_type": "header",
+   "text": "صفحة ٤ من ٢٠",
+   "table_data": null,
+   "bbox": {
+    "x1": 499,
+    "y1": 165,
+    "x2": 816,
+    "y2": 224
+   },
+   "crop_path": "crops/legal_circular_2/page_006/legal_circular_2_p006_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p006_b02",
+   "block_type": "text",
+   "text": "٥- يتعين على كل بنك قبل تقديم تمويل أو تسهيل إلتزامي أو زيادته أو تجديده أو تعديل شروطه الاطلاع على البيان المجمع الخاص بالعمل وأطرافه المرتبطة وشركاته المتضامنين وكذلك على كل كفيل قبل قبول كفالته سواء في تاريخ تقديم التمويل أو السهيل الإلتزامي أو في أي تاريخ لاحق له ، وللبنوك الحق في الاطلاع على البيانات المجمعة الخاصة بالعملاء المتقدمين للحصول على تسهيلات إلتزامية أقل من حد الاقرار.",
+   "table_data": null,
+   "bbox": {
+    "x1": 474,
+    "y1": 407,
+    "x2": 2165,
+    "y2": 972
+   },
+   "crop_path": "crops/legal_circular_2/page_006/legal_circular_2_p006_b02_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p006_b03",
+   "block_type": "text",
+   "text": "٦- لشركات التأجير التمويلية وشركات التمويل العقاري الاطلاع على البيان المجمع الخاص بالعمل وأطراف المرتبطة به.",
+   "table_data": null,
+   "bbox": {
+    "x1": 474,
+    "y1": 1063,
+    "x2": 2165,
+    "y2": 1242
+   },
+   "crop_path": "crops/legal_circular_2/page_006/legal_circular_2_p006_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p006_b04",
+   "block_type": "text",
+   "text": "٧- أن يكون البيان المجمع الخاص بالعمل الذي يتم الاطلاع عليه قبل الموافقة على تقديم التسهيلات الإلتزامية هو آخر بيان متاح لدى قاعدة المعلومات المجمعة بالبنك المركزي.",
+   "table_data": null,
+   "bbox": {
+    "x1": 474,
+    "y1": 1330,
+    "x2": 2165,
+    "y2": 1603
+   },
+   "crop_path": "crops/legal_circular_2/page_006/legal_circular_2_p006_b04_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p006_b05",
+   "block_type": "text",
+   "text": "٨- بعد بيان الاطلاع مستندا لزاميا يتعين على السلطة المانحة الاطلاع عليه قبل اقرار تقديم الإلتزام أو زيادته أو تجديده أو تعديل شروطه ، مع ضرورة الاحتفاظ بالبيان الذي تم الحصول عليه للرجوع اليه عند المتابعة وبما يحقق الرقابة الداخلية.",
+   "table_data": null,
+   "bbox": {
+    "x1": 474,
+    "y1": 1695,
+    "x2": 2165,
+    "y2": 2059
+   },
+   "crop_path": "crops/legal_circular_2/page_006/legal_circular_2_p006_b05_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p006_b06",
+   "block_type": "text",
+   "text": "٩- يتعين على البنوك عند الاطلاع على البيانات المجمعة الخاصة بالعملاء الإلتزام بأساسيات ومحددات البحث التي تم تدريب المختصين عليها.",
+   "table_data": null,
+   "bbox": {
+    "x1": 474,
+    "y1": 2150,
+    "x2": 2165,
+    "y2": 2334
+   },
+   "crop_path": "crops/legal_circular_2/page_006/legal_circular_2_p006_b06_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p006_b07",
+   "block_type": "text",
+   "text": "١٠- على البنوك الرجوع الى الادارة العامة لتجميع مخاطر الإلتزام المصري عند وجود استفسارات عند الاطلاع على أي من العملاء أو تعذر الحصول على بيان مجمع لدى البحث عنه وذلك على نموذج الإطلاع المعد لهذا الغرض رقم ١ (مرفق) مرفقا به مستندات اثبات الشخصية الخاصة بكل عميل.",
+   "table_data": null,
+   "bbox": {
+    "x1": 474,
+    "y1": 2421,
+    "x2": 2170,
+    "y2": 2800
+   },
+   "crop_path": "crops/legal_circular_2/page_006/legal_circular_2_p006_b07_text.png"
+  }
+ ]
+}

@@ -1,0 +1,170 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 18,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p018_b00",
+   "block_type": "header",
+   "text": "البنك المركزي المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 1691,
+    "y1": 151,
+    "x2": 2205,
+    "y2": 242
+   },
+   "crop_path": "crops/legal_circular_2/page_018/legal_circular_2_p018_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p018_b01",
+   "block_type": "header",
+   "text": "صفحة ١٦ من ٢٠",
+   "table_data": null,
+   "bbox": {
+    "x1": 494,
+    "y1": 151,
+    "x2": 803,
+    "y2": 210
+   },
+   "crop_path": "crops/legal_circular_2/page_018/legal_circular_2_p018_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p018_b02",
+   "block_type": "header",
+   "text": "٣- دعوى الصلح الواقعي من الافلاس:",
+   "table_data": null,
+   "bbox": {
+    "x1": 1360,
+    "y1": 435,
+    "x2": 2093,
+    "y2": 505
+   },
+   "crop_path": "crops/legal_circular_2/page_018/legal_circular_2_p018_b02_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p018_b03",
+   "block_type": "text",
+   "text": "في حالة قيام أي من العملاء برفع دعوى صلح واقعي من الافلاس، يتعين على البنوك الإخطار عن هؤلاء العملاء بعد تصديق المحكمة على الصلح الواقعي من الافلاس، ويعتد بتاريخ نشر ملخص الحكم بأى من الصحف اليومية.",
+   "table_data": null,
+   "bbox": {
+    "x1": 390,
+    "y1": 526,
+    "x2": 2014,
+    "y2": 799
+   },
+   "crop_path": "crops/legal_circular_2/page_018/legal_circular_2_p018_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p018_b04",
+   "block_type": "header",
+   "text": "٤- الدعوى المرفوعة من العملاء:",
+   "table_data": null,
+   "bbox": {
+    "x1": 1419,
+    "y1": 892,
+    "x2": 2088,
+    "y2": 958
+   },
+   "crop_path": "crops/legal_circular_2/page_018/legal_circular_2_p018_b04_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p018_b05",
+   "block_type": "text",
+   "text": "يتعين الاخطار عن العملاء وكفالاتهم والشركاء المتضامنين المتوقنين عن سداد مديونياتهم والذين يرفعون دعوى قضائية ضد البنوك التي يتعاملون معها، مع إيضاح نوع الدعوى وتاريخ إعلان البنك بها.",
+   "table_data": null,
+   "bbox": {
+    "x1": 384,
+    "y1": 986,
+    "x2": 2017,
+    "y2": 1256
+   },
+   "crop_path": "crops/legal_circular_2/page_018/legal_circular_2_p018_b05_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p018_b06",
+   "block_type": "header",
+   "text": "٥- التصفية الرضائية:",
+   "table_data": null,
+   "bbox": {
+    "x1": 1649,
+    "y1": 1379,
+    "x2": 2088,
+    "y2": 1446
+   },
+   "crop_path": "crops/legal_circular_2/page_018/legal_circular_2_p018_b06_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p018_b07",
+   "block_type": "text",
+   "text": "في حالة الاتفاق على تصفية أى من الشركات، يتعين على البنوك الاخطار عن هذه الشركة ويعتد بتاريخ شهر اسم المصفي واتفاق الشركاء بشأن طريقة التصفية في السجل التجاري وفي صحيفة الشركات.",
+   "table_data": null,
+   "bbox": {
+    "x1": 384,
+    "y1": 1474,
+    "x2": 2012,
+    "y2": 1740
+   },
+   "crop_path": "crops/legal_circular_2/page_018/legal_circular_2_p018_b07_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p018_b08",
+   "block_type": "header",
+   "text": "٦- عملاء التسويات:",
+   "table_data": null,
+   "bbox": {
+    "x1": 1674,
+    "y1": 1835,
+    "x2": 2088,
+    "y2": 1905
+   },
+   "crop_path": "crops/legal_circular_2/page_018/legal_circular_2_p018_b08_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p018_b09",
+   "block_type": "text",
+   "text": "في حالة توقيع اتفاق بين البنك وأى من عملائه حول أسلوب سداد المديونية المستحقة للبنك (تسوية أو جدول) يتعين على البنوك الإخطار عن هؤلاء العملاء وكفالاتهم والشركاء المتضامنين، بشرط صدور قرار من السلطة المختصة بذلك وقيام العميل بالتوقيع على عقد الاتفاق مع البنك.",
+   "table_data": null,
+   "bbox": {
+    "x1": 384,
+    "y1": 1933,
+    "x2": 2014,
+    "y2": 2302
+   },
+   "crop_path": "crops/legal_circular_2/page_018/legal_circular_2_p018_b09_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p018_b10",
+   "block_type": "header",
+   "text": "٧- العملاء الذين أذمت مديونياتهم دون ابراء الذمة:",
+   "table_data": null,
+   "bbox": {
+    "x1": 1086,
+    "y1": 2421,
+    "x2": 2088,
+    "y2": 2495
+   },
+   "crop_path": "crops/legal_circular_2/page_018/legal_circular_2_p018_b10_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p018_b11",
+   "block_type": "text",
+   "text": "في حالة توقف أى من العملاء عن السداد وقيام البنك بإعدام مديونيته مع عدم ابراء الذمة، يتعين الاخطار عن العميل وكفالاته والشركاء المتضامنين، مع إيضاح تاريخ موافقة السلطة المختصة على إعدام المديونية دون ابراء الذمة.",
+   "table_data": null,
+   "bbox": {
+    "x1": 384,
+    "y1": 2523,
+    "x2": 2012,
+    "y2": 2793
+   },
+   "crop_path": "crops/legal_circular_2/page_018/legal_circular_2_p018_b11_text.png"
+  }
+ ]
+}

@@ -1,0 +1,157 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 10,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p010_b00",
+   "block_type": "header",
+   "text": "البنك المركزي المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 1714,
+    "y1": 200,
+    "x2": 2247,
+    "y2": 291
+   },
+   "crop_path": "crops/legal_circular_2/page_010/legal_circular_2_p010_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p010_b01",
+   "block_type": "header",
+   "text": "صفحة ٨ من ٢٠",
+   "table_data": null,
+   "bbox": {
+    "x1": 481,
+    "y1": 200,
+    "x2": 801,
+    "y2": 259
+   },
+   "crop_path": "crops/legal_circular_2/page_010/legal_circular_2_p010_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p010_b02",
+   "block_type": "header",
+   "text": "رابعاً: الإفصاح عن الأطراف المرتبطة بالعملاء المتقدمين للحصول على تمويل أو تسهيلات انتمانية",
+   "table_data": null,
+   "bbox": {
+    "x1": 1002,
+    "y1": 403,
+    "x2": 2135,
+    "y2": 573
+   },
+   "crop_path": "crops/legal_circular_2/page_010/legal_circular_2_p010_b02_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p010_b03",
+   "block_type": "text",
+   "text": "١- يتعين على كل بنك عند تقديم تمويل أو تسهيلات انتمانية الحصول من العميل على اقرار يفصح فيه عن الأطراف المرتبطة به وفقاً للمفهوم الوارد بقانون البنك المركزي والجهاز المصرفي والنقد رقم ٨٨ لسنة ٢٠٠٣، وذلك على النحو التالي:",
+   "table_data": null,
+   "bbox": {
+    "x1": 369,
+    "y1": 699,
+    "x2": 2130,
+    "y2": 976
+   },
+   "crop_path": "crops/legal_circular_2/page_010/legal_circular_2_p010_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p010_b04",
+   "block_type": "text",
+   "text": "(أ) الأطراف المرتبطة بالعمل الشخص الطبيعي وتشمل أقاربه حتى الدرجة الرابعة، والمنشآت الفردية التي يمتلكها وضامنيه وكفالاته.",
+   "table_data": null,
+   "bbox": {
+    "x1": 369,
+    "y1": 1088,
+    "x2": 2091,
+    "y2": 1270
+   },
+   "crop_path": "crops/legal_circular_2/page_010/legal_circular_2_p010_b04_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p010_b05",
+   "block_type": "text",
+   "text": "(ب) الأطراف المرتبطة بالعمل الشخص الاعتباري وتشمل: الشركات المتضامنين بشركات الأشخاص.",
+   "table_data": null,
+   "bbox": {
+    "x1": 897,
+    "y1": 1284,
+    "x2": 2091,
+    "y2": 1460
+   },
+   "crop_path": "crops/legal_circular_2/page_010/legal_circular_2_p010_b05_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p010_b06",
+   "block_type": "text",
+   "text": "رئيس وأعضاء مجلس إدارة الشركة المساهمة ، وكبار المساهمين فيها (كل من يمتلك بمفرده و/أو مع أطرافه المرتبطة نسبة ١٠% فأكثر من رأس المال المصدر للشركة أو أية نسبة تؤدي إلى السيطرة الفعلية عليها) ، سواء أكانوا أشخاصاً طبيعيين أو أشخاصاً اعتبارية .",
+   "table_data": null,
+   "bbox": {
+    "x1": 369,
+    "y1": 1481,
+    "x2": 1977,
+    "y2": 1849
+   },
+   "crop_path": "crops/legal_circular_2/page_010/legal_circular_2_p010_b06_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p010_b07",
+   "block_type": "text",
+   "text": "ويقصد بالسيطرة الفعلية للشخص الطبيعي أو الاعتباري أن يكون مالكا لأية نسبة من شأنها تمكنه من تعيين غالبية أعضاء مجلس إدارة الشركة أو التحكم على أي نحو في القرارات التي يصدرها مجلس إدارة الشركة أو التحكم في القرارات التي تصدر عن الجمعية العامة .",
+   "table_data": null,
+   "bbox": {
+    "x1": 369,
+    "y1": 1870,
+    "x2": 1977,
+    "y2": 2243
+   },
+   "crop_path": "crops/legal_circular_2/page_010/legal_circular_2_p010_b07_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p010_b08",
+   "block_type": "text",
+   "text": "(ج) أي شخص اعتباري آخر إذا كان تحت السيطرة الفعلية لذات الأشخاص الطبيعيين أو الأشخاص الاعتبارية (فروع - شركات تابعة).",
+   "table_data": null,
+   "bbox": {
+    "x1": 369,
+    "y1": 2264,
+    "x2": 2083,
+    "y2": 2442
+   },
+   "crop_path": "crops/legal_circular_2/page_010/legal_circular_2_p010_b08_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p010_b09",
+   "block_type": "text",
+   "text": "٢- على البنوك موافاة الإدارة العامة لجمعية مخاطر الائتمان المصري بالبيانات الخاصة بالأطراف المرتبطة بالعمل من واقع اقرار العميل ومن بيانات الاستعلام المصري، وذلك على النموذج المعد لهذا الغرض رقم ٣ (مرفق) مدعماً بالمستندات المؤيدة.",
+   "table_data": null,
+   "bbox": {
+    "x1": 369,
+    "y1": 2562,
+    "x2": 2130,
+    "y2": 2839
+   },
+   "crop_path": "crops/legal_circular_2/page_010/legal_circular_2_p010_b09_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p010_b10",
+   "block_type": "text",
+   "text": "٣- يتعين على البنوك موافاة الإدارة العامة لجمعية مخاطر الائتمان المصري بأية تطورات أو تعديلات نظراً مستقبلاً على بيانات الأطراف المرتبطة بالعمل معزراً بالمستندات المؤيدة.",
+   "table_data": null,
+   "bbox": {
+    "x1": 364,
+    "y1": 2951,
+    "x2": 2130,
+    "y2": 3221
+   },
+   "crop_path": "crops/legal_circular_2/page_010/legal_circular_2_p010_b10_text.png"
+  }
+ ]
+}

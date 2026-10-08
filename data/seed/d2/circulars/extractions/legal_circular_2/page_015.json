@@ -1,0 +1,196 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 15,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p015_b00",
+   "block_type": "header",
+   "text": "البنك المركزي المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 1635,
+    "y1": 161,
+    "x2": 2143,
+    "y2": 249
+   },
+   "crop_path": "crops/legal_circular_2/page_015/legal_circular_2_p015_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p015_b01",
+   "block_type": "header",
+   "text": "صفحة ١٣ من ٢٠",
+   "table_data": null,
+   "bbox": {
+    "x1": 426,
+    "y1": 161,
+    "x2": 744,
+    "y2": 221
+   },
+   "crop_path": "crops/legal_circular_2/page_015/legal_circular_2_p015_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p015_b02",
+   "block_type": "header",
+   "text": "بنود التمويل والتسهيلات الائتمانية وأنواع الضمانات *",
+   "table_data": null,
+   "bbox": {
+    "x1": 734,
+    "y1": 351,
+    "x2": 1646,
+    "y2": 417
+   },
+   "crop_path": "crops/legal_circular_2/page_015/legal_circular_2_p015_b02_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p015_b03",
+   "block_type": "header",
+   "text": "بند رئيسي رقم (١) : التسهيلات الائتمانية",
+   "table_data": null,
+   "bbox": {
+    "x1": 1347,
+    "y1": 435,
+    "x2": 2058,
+    "y2": 505
+   },
+   "crop_path": "crops/legal_circular_2/page_015/legal_circular_2_p015_b03_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p015_b04",
+   "block_type": "table",
+   "text": "رقم البند اسم البند الفرعي رقم البند اسم البند الفرعي ١ بدون ضمان عيني ٢ بضمان أوراق تجارية ٣ بضمان أوراق مالية ٤ بضمان محاصيل زراعية ٥ بضمان بضائع أخرى ٦ بضمان رهن عقارى ٧ بضمان رهن المحال والآلات ٨ بضمانات متنوعة ٩ خصم كمبيالات محلية وخارجية ١٠ بضمان ودائع ١١ البطاقات الائتمانية ١٢ بغرض شراء سيارات للاستخدام الشخصي ١٣ قروض شخصية لنقطة احتياجات وشراء سلع أو خدمات ١٤ قروض عقارية للسكان الشخصي (اقتناء أو تجديد وحدات سكنية) ١٥ التمويل من شركات التأجير التمويل ١٦ التمويل من شركات التمويل العقارى",
+   "table_data": "<table border=\"1\">\n<thead>\n<tr>\n<th>رقم البند</th>\n<th>اسم البند الفرعي</th>\n<th>رقم البند</th>\n<th>اسم البند الفرعي</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>١</td>\n<td>بدون ضمان عيني</td>\n<td>٢</td>\n<td>بضمان أوراق تجارية</td>\n</tr>\n<tr>\n<td>٣</td>\n<td>بضمان أوراق مالية</td>\n<td>٤</td>\n<td>بضمان محاصيل زراعية</td>\n</tr>\n<tr>\n<td>٥</td>\n<td>بضمان بضائع أخرى</td>\n<td>٦</td>\n<td>بضمان رهن عقارى</td>\n</tr>\n<tr>\n<td>٧</td>\n<td>بضمان رهن المحال والآلات</td>\n<td>٨</td>\n<td>بضمانات متنوعة</td>\n</tr>\n<tr>\n<td>٩</td>\n<td>خصم كمبيالات محلية وخارجية</td>\n<td>١٠</td>\n<td>بضمان ودائع</td>\n</tr>\n<tr>\n<td>١١</td>\n<td>البطاقات الائتمانية</td>\n<td>١٢</td>\n<td>بغرض شراء سيارات للاستخدام الشخصي</td>\n</tr>\n<tr>\n<td>١٣</td>\n<td>قروض شخصية لنقطة احتياجات وشراء سلع أو خدمات</td>\n<td>١٤</td>\n<td>قروض عقارية للسكان الشخصي (اقتناء أو تجديد وحدات سكنية)</td>\n</tr>\n<tr>\n<td>١٥</td>\n<td>التمويل من شركات التأجير التمويل</td>\n<td>١٦</td>\n<td>التمويل من شركات التمويل العقارى</td>\n</tr>\n</tbody>\n</table>",
+   "bbox": {
+    "x1": 298,
+    "y1": 505,
+    "x2": 2063,
+    "y2": 1460
+   },
+   "crop_path": "crops/legal_circular_2/page_015/legal_circular_2_p015_b04_table.png"
+  },
+  {
+   "block_id": "legal_circular_2_p015_b05",
+   "block_type": "header",
+   "text": "بند رئيسي رقم (٢) : العوائد الهامشية",
+   "table_data": null,
+   "bbox": {
+    "x1": 1401,
+    "y1": 1554,
+    "x2": 2058,
+    "y2": 1624
+   },
+   "crop_path": "crops/legal_circular_2/page_015/legal_circular_2_p015_b05_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p015_b06",
+   "block_type": "table",
+   "text": "رقم البند اسم البند الفرعي رقم البند اسم البند الفرعي ١٠ عوائد هامشية",
+   "table_data": "<table border=\"1\">\n<thead>\n<tr>\n<th>رقم البند</th>\n<th>اسم البند الفرعي</th>\n<th>رقم البند</th>\n<th>اسم البند الفرعي</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>١٠</td>\n<td>عوائد هامشية</td>\n<td></td>\n<td></td>\n</tr>\n</tbody>\n</table>",
+   "bbox": {
+    "x1": 298,
+    "y1": 1624,
+    "x2": 2063,
+    "y2": 1810
+   },
+   "crop_path": "crops/legal_circular_2/page_015/legal_circular_2_p015_b06_table.png"
+  },
+  {
+   "block_id": "legal_circular_2_p015_b07",
+   "block_type": "header",
+   "text": "بند رئيسي رقم (٣) : التزامات عرضية",
+   "table_data": null,
+   "bbox": {
+    "x1": 1394,
+    "y1": 1901,
+    "x2": 2058,
+    "y2": 1968
+   },
+   "crop_path": "crops/legal_circular_2/page_015/legal_circular_2_p015_b07_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p015_b08",
+   "block_type": "table",
+   "text": "رقم البند اسم البند الفرعي رقم البند اسم البند الفرعي ١١ اعتمادات مستندية (الجزء غير المغطى نقدا أو بودائع وما في حكمها) ١٢ خطابات ضمان (الجزء غير المغطى نقدا أو بودائع وما في حكمها) ١٣ الكمبيالات المقبولة ١٤ ارتباطات أخرى",
+   "table_data": "<table border=\"1\">\n<thead>\n<tr>\n<th>رقم البند</th>\n<th>اسم البند الفرعي</th>\n<th>رقم البند</th>\n<th>اسم البند الفرعي</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>١١</td>\n<td>اعتمادات مستندية (الجزء غير المغطى نقدا أو بودائع وما في حكمها)</td>\n<td>١٢</td>\n<td>خطابات ضمان (الجزء غير المغطى نقدا أو بودائع وما في حكمها)</td>\n</tr>\n<tr>\n<td>١٣</td>\n<td>الكمبيالات المقبولة</td>\n<td>١٤</td>\n<td>ارتباطات أخرى</td>\n</tr>\n</tbody>\n</table>",
+   "bbox": {
+    "x1": 298,
+    "y1": 1968,
+    "x2": 2063,
+    "y2": 2407
+   },
+   "crop_path": "crops/legal_circular_2/page_015/legal_circular_2_p015_b08_table.png"
+  },
+  {
+   "block_id": "legal_circular_2_p015_b09",
+   "block_type": "header",
+   "text": "بند رئيسي رقم (٤) : إجمالي التسهيلات (١ + ٢ + ٣)",
+   "table_data": null,
+   "bbox": {
+    "x1": 1136,
+    "y1": 2506,
+    "x2": 2053,
+    "y2": 2572
+   },
+   "crop_path": "crops/legal_circular_2/page_015/legal_circular_2_p015_b09_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p015_b10",
+   "block_type": "table",
+   "text": "رقم البند اسم البند الفرعي رقم البند اسم البند الفرعي ٩٩ مجموع بنود التسهيلات الائتمانية",
+   "table_data": "<table border=\"1\">\n<thead>\n<tr>\n<th>رقم البند</th>\n<th>اسم البند الفرعي</th>\n<th>رقم البند</th>\n<th>اسم البند الفرعي</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>٩٩</td>\n<td>مجموع بنود التسهيلات الائتمانية</td>\n<td></td>\n<td></td>\n</tr>\n</tbody>\n</table>",
+   "bbox": {
+    "x1": 298,
+    "y1": 2572,
+    "x2": 2063,
+    "y2": 2755
+   },
+   "crop_path": "crops/legal_circular_2/page_015/legal_circular_2_p015_b10_table.png"
+  },
+  {
+   "block_id": "legal_circular_2_p015_b11",
+   "block_type": "header",
+   "text": "بند رئيسي رقم (٥) : الكفالات",
+   "table_data": null,
+   "bbox": {
+    "x1": 1533,
+    "y1": 2849,
+    "x2": 2053,
+    "y2": 2916
+   },
+   "crop_path": "crops/legal_circular_2/page_015/legal_circular_2_p015_b11_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p015_b12",
+   "block_type": "table",
+   "text": "رقم البند اسم البند الفرعي رقم البند اسم البند الفرعي ١٣ كفالات",
+   "table_data": "<table border=\"1\">\n<thead>\n<tr>\n<th>رقم البند</th>\n<th>اسم البند الفرعي</th>\n<th>رقم البند</th>\n<th>اسم البند الفرعي</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>١٣</td>\n<td>كفالات</td>\n<td></td>\n<td></td>\n</tr>\n</tbody>\n</table>",
+   "bbox": {
+    "x1": 298,
+    "y1": 2916,
+    "x2": 2063,
+    "y2": 3098
+   },
+   "crop_path": "crops/legal_circular_2/page_015/legal_circular_2_p015_b12_table.png"
+  },
+  {
+   "block_id": "legal_circular_2_p015_b13",
+   "block_type": "text",
+   "text": "* مرفق بيان بغايمه وأسس توييب بنود التمويل والتسهيلات الائتمانية وأنواع الضمانات (موجب رقم ٥).",
+   "table_data": null,
+   "bbox": {
+    "x1": 474,
+    "y1": 3179,
+    "x2": 2041,
+    "y2": 3249
+   },
+   "crop_path": "crops/legal_circular_2/page_015/legal_circular_2_p015_b13_text.png"
+  }
+ ]
+}

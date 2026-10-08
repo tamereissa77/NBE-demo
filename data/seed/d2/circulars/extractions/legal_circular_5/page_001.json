@@ -1,0 +1,118 @@
+{
+ "doc_id": "legal_circular_5",
+ "page_num": 1,
+ "original_size": [
+  1608,
+  2274
+ ],
+ "inference_size": [
+  1414,
+  2000
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_5_p001_b00",
+   "block_type": "text",
+   "text": "القاهرة في: ٦ أبريل ٢٠٢٦",
+   "table_data": null,
+   "bbox": {
+    "x1": 233,
+    "y1": 266,
+    "x2": 535,
+    "y2": 307
+   },
+   "crop_path": "crops/legal_circular_5/page_001/legal_circular_5_p001_b00_text.png"
+  },
+  {
+   "block_id": "legal_circular_5_p001_b01",
+   "block_type": "text",
+   "text": "السيد الأستاذ /",
+   "table_data": null,
+   "bbox": {
+    "x1": 1254,
+    "y1": 334,
+    "x2": 1436,
+    "y2": 375
+   },
+   "crop_path": "crops/legal_circular_5/page_001/legal_circular_5_p001_b01_text.png"
+  },
+  {
+   "block_id": "legal_circular_5_p001_b02",
+   "block_type": "text",
+   "text": "بنك",
+   "table_data": null,
+   "bbox": {
+    "x1": 1315,
+    "y1": 398,
+    "x2": 1372,
+    "y2": 432
+   },
+   "crop_path": "crops/legal_circular_5/page_001/legal_circular_5_p001_b02_text.png"
+  },
+  {
+   "block_id": "legal_circular_5_p001_b03",
+   "block_type": "text",
+   "text": "تحية طيبة وبعد،،،",
+   "table_data": null,
+   "bbox": {
+    "x1": 1214,
+    "y1": 498,
+    "x2": 1436,
+    "y2": 539
+   },
+   "crop_path": "crops/legal_circular_5/page_001/legal_circular_5_p001_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_5_p001_b04",
+   "block_type": "text",
+   "text": "بالإشارة إلى قانون البنك المركزي والجهاز المصرفي رقم ١٩٤ لسنة ٢٠٢٠ وكذا الكتاب الدوري المؤرخ ٢٦ مارس ٢٠٢٥ بشأن تحديث القواعد المنظمة لنظام تسجيل الائتمان بالبنك المركزي المصري، حيث تم إلزام البنوك وجهات منح الائتمان بالإقرار عن الائتمان المقدم لعملائهم إلى شركات الاستعلام والتصنيف الائتماني وكذا نظام تسجيل الائتمان بالبنك المركزي وذلك وفقاً للقواعد المعمول بها في هذا الشأن.",
+   "table_data": null,
+   "bbox": {
+    "x1": 156,
+    "y1": 628,
+    "x2": 1455,
+    "y2": 850
+   },
+   "crop_path": "crops/legal_circular_5/page_001/legal_circular_5_p001_b04_text.png"
+  },
+  {
+   "block_id": "legal_circular_5_p001_b05",
+   "block_type": "text",
+   "text": "وفي ضوء ما تقدم، ونظراً لما تلاحظ من عدم التزام بعض الجهات بالإقرار على النحو المشار إليه، وحرصاً من البنك المركزي على توافر كافة المعلومات الائتمانية عن العملاء بما يعكس موقفهم الائتماني بشكل سليم، الأمر الذي ينعكس إيجاباً على قرار منح الائتمان ويعزز سلامة وإستقرار النظام المصرفي، فبرجاء التوجيه نحو عدم منح أو تجديد التسهيلات الائتمانية الممنوحة لجهات منح الائتمان غير المصرفي إلا بعد ثبات تكويدهم لدى البنك المركزي و الإقرار لدى شبكة معلومات كلاً من البنك المركزي و الشركة المصرية للاستعلام والتصنيف الائتماني، وبالنسبة للمديونيات القائمة فيتم وضعها تحت التصفية حال عدم قيام تلك الجهات بتوفيق أوضاعها خلال ٣ أشهر، ويقع على عاتق البنوك إخطار تلك الجهات بمضمون ما جاء أعلاه.",
+   "table_data": null,
+   "bbox": {
+    "x1": 156,
+    "y1": 903,
+    "x2": 1455,
+    "y2": 1298
+   },
+   "crop_path": "crops/legal_circular_5/page_001/legal_circular_5_p001_b05_text.png"
+  },
+  {
+   "block_id": "legal_circular_5_p001_b06",
+   "block_type": "text",
+   "text": "وتفضلوا بقبول فائق الاحترام،،،",
+   "table_data": null,
+   "bbox": {
+    "x1": 592,
+    "y1": 1449,
+    "x2": 970,
+    "y2": 1492
+   },
+   "crop_path": "crops/legal_circular_5/page_001/legal_circular_5_p001_b06_text.png"
+  },
+  {
+   "block_id": "legal_circular_5_p001_b07",
+   "block_type": "text",
+   "text": "طارق الخولي",
+   "table_data": null,
+   "bbox": {
+    "x1": 360,
+    "y1": 1651,
+    "x2": 535,
+    "y2": 1696
+   },
+   "crop_path": "crops/legal_circular_5/page_001/legal_circular_5_p001_b07_text.png"
+  }
+ ]
+}

@@ -1,0 +1,105 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 21,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p021_b00",
+   "block_type": "header",
+   "text": "البنك المركزي المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 1696,
+    "y1": 165,
+    "x2": 2214,
+    "y2": 252
+   },
+   "crop_path": "crops/legal_circular_2/page_021/legal_circular_2_p021_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p021_b01",
+   "block_type": "header",
+   "text": "صفحة ١٩ من ٢٠",
+   "table_data": null,
+   "bbox": {
+    "x1": 469,
+    "y1": 151,
+    "x2": 792,
+    "y2": 210
+   },
+   "crop_path": "crops/legal_circular_2/page_021/legal_circular_2_p021_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p021_b02",
+   "block_type": "header",
+   "text": "ثامناً: القوائم السلبية للعملاء الحاصلين على قروض لأغراض استهلاكية",
+   "table_data": null,
+   "bbox": {
+    "x1": 700,
+    "y1": 456,
+    "x2": 2123,
+    "y2": 536
+   },
+   "crop_path": "crops/legal_circular_2/page_021/legal_circular_2_p021_b02_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p021_b03",
+   "block_type": "text",
+   "text": "يتعين على البنوك إرسال بيانات القوائم السلبية للعملاء الحاصلين على قروض لأغراض استهلاكية شهرياً - ملف إلكتروني خاص - عبر شبكة معلومات البنك المركزي يشمل أسماء هؤلاء العملاء وكفالاتهم الذين نقل أرصدة مديونياتهم عن حد الإقرار (٣٠ ألف جنيه)، المتوقنين عن السداد لمدة ٣ شهور بعد فترة السماح المحددة من قبل كل بنك ، على أن يستمر إرسال بيانات شهرية عنهم مع إيضاح مدة التأخير في حالة عدم قياس أي منهم بالسداد ، وذلك في موعد لا يجاوز اليوم الخامس من الشهر التالي للشهر المبدء عنه البيان ، على أن يوضح موقف هؤلاء العملاء وما إذا كان متخذ بشأن مديونياتهم إجراءات قضائية أو تسويات أو دعاوى عملاء ، وتشمل القروض لأغراض استهلاكية ما يلي :",
+   "table_data": null,
+   "bbox": {
+    "x1": 354,
+    "y1": 659,
+    "x2": 2115,
+    "y2": 1418
+   },
+   "crop_path": "crops/legal_circular_2/page_021/legal_circular_2_p021_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p021_b04",
+   "block_type": "text",
+   "text": "- البطاقات الائتمانية. - القروض بغرض شراء سيارات للاستخدام الشخصي. - القروض الشخصية لتغطية احتياجات شراء سلع وخدمات . - قروض عقارية للسكان الشخصي (اقتناء أو تجديد وحدات سكنية).",
+   "table_data": null,
+   "bbox": {
+    "x1": 667,
+    "y1": 1442,
+    "x2": 2031,
+    "y2": 1817
+   },
+   "crop_path": "crops/legal_circular_2/page_021/legal_circular_2_p021_b04_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p021_b05",
+   "block_type": "header",
+   "text": "تاسعاً: تسعير الخدمة",
+   "table_data": null,
+   "bbox": {
+    "x1": 1696,
+    "y1": 1994,
+    "x2": 2111,
+    "y2": 2073
+   },
+   "crop_path": "crops/legal_circular_2/page_021/legal_circular_2_p021_b05_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p021_b06",
+   "block_type": "text",
+   "text": "يتم تحصيل ١٥ قرشا من البنوك وشركات التأجير التمويل وشركات التمويل العقارى عن كل عميل يتم الإقرار عنه شهرياً من خلال شبكة معلومات البنك المركزي.",
+   "table_data": null,
+   "bbox": {
+    "x1": 349,
+    "y1": 2201,
+    "x2": 2101,
+    "y2": 2372
+   },
+   "crop_path": "crops/legal_circular_2/page_021/legal_circular_2_p021_b06_text.png"
+  }
+ ]
+}

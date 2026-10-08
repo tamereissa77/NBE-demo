@@ -1,0 +1,87 @@
+[
+ {
+  "doc_id": "legal_circular_1",
+  "source_name": "legal_circular_1.pdf",
+  "type": "legal_circular",
+  "roles": [
+   "legal_counsel",
+   "manager"
+  ],
+  "title_ar": "تعميم قانوني رقم 1",
+  "title_en": "Legal circular no. 1",
+  "lang": "ar",
+  "pages": 2,
+  "blocks": 15
+ },
+ {
+  "doc_id": "legal_circular_2",
+  "source_name": "legal_circular_2.pdf",
+  "type": "legal_circular",
+  "roles": [
+   "legal_counsel",
+   "manager"
+  ],
+  "title_ar": "تعميم قانوني رقم 2",
+  "title_en": "Legal circular no. 2",
+  "lang": "ar",
+  "pages": 31,
+  "blocks": 244
+ },
+ {
+  "doc_id": "legal_circular_3",
+  "source_name": "legal-circular_3.pdf",
+  "type": "legal_circular",
+  "roles": [
+   "legal_counsel",
+   "manager"
+  ],
+  "title_ar": "تعميم قانوني رقم 3",
+  "title_en": "Legal circular no. 3",
+  "lang": "ar",
+  "pages": 8,
+  "blocks": 58
+ },
+ {
+  "doc_id": "legal_circular_4",
+  "source_name": "legal-circular_4.pdf",
+  "type": "legal_circular",
+  "roles": [
+   "legal_counsel",
+   "manager"
+  ],
+  "title_ar": "تعميم قانوني رقم 4",
+  "title_en": "Legal circular no. 4",
+  "lang": "ar",
+  "pages": 1,
+  "blocks": 10
+ },
+ {
+  "doc_id": "legal_circular_5",
+  "source_name": "legal-circular_5.pdf",
+  "type": "legal_circular",
+  "roles": [
+   "legal_counsel",
+   "manager"
+  ],
+  "title_ar": "تعميم قانوني رقم 5",
+  "title_en": "Legal circular no. 5",
+  "lang": "ar",
+  "pages": 1,
+  "blocks": 8
+ },
+ {
+  "doc_id": "rtgs",
+  "source_name": "egyptian_multicurrency_rtgs_procedures.pdf",
+  "type": "sop",
+  "roles": [
+   "teller",
+   "legal_counsel",
+   "manager"
+  ],
+  "title_ar": "دليل إجراءات نظام التسوية اللحظية متعدد العملات (RTGS)",
+  "title_en": "Multi-currency RTGS procedures guide",
+  "lang": "ar",
+  "pages": 19,
+  "blocks": 206
+ }
+]

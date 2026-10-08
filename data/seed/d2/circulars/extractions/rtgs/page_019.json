@@ -1,0 +1,40 @@
+{
+ "doc_id": "rtgs",
+ "page_num": 19,
+ "original_size": [
+  1940,
+  2717
+ ],
+ "inference_size": [
+  1940,
+  2717
+ ],
+ "blocks": [
+  {
+   "block_id": "rtgs_p019_b00",
+   "block_type": "header",
+   "text": "البنك المركزي المصري CENTRAL BANK OF EGYPT",
+   "table_data": null,
+   "bbox": {
+    "x1": 202,
+    "y1": 1641,
+    "x2": 1709,
+    "y2": 2122
+   },
+   "crop_path": "crops/rtgs/page_019/rtgs_p019_b00_header.png"
+  },
+  {
+   "block_id": "rtgs_p019_b01",
+   "block_type": "text",
+   "text": "54 شارع الجمهورية، وسط البلد، القاهرة، مصر 54 El Gomhoreya St., Downtown, Cairo, Egypt info@cbe.org.eg | 16777 صندوق بريد: 11511 P.O.Box:",
+   "table_data": null,
+   "bbox": {
+    "x1": 243,
+    "y1": 2169,
+    "x2": 939,
+    "y2": 2348
+   },
+   "crop_path": "crops/rtgs/page_019/rtgs_p019_b01_text.png"
+  }
+ ]
+}

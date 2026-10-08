@@ -1,0 +1,66 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 1,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p001_b00",
+   "block_type": "header",
+   "text": "البنك المركزي المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 1384,
+    "y1": 326,
+    "x2": 2115,
+    "y2": 421
+   },
+   "crop_path": "crops/legal_circular_2/page_001/legal_circular_2_p001_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p001_b01",
+   "block_type": "text",
+   "text": "قطاع الرقابة والإشراف",
+   "table_data": null,
+   "bbox": {
+    "x1": 1520,
+    "y1": 445,
+    "x2": 1997,
+    "y2": 519
+   },
+   "crop_path": "crops/legal_circular_2/page_001/legal_circular_2_p001_b01_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p001_b02",
+   "block_type": "text",
+   "text": "الإدارة العامة لتجميع مخاطر الائتمان المصرفي",
+   "table_data": null,
+   "bbox": {
+    "x1": 1332,
+    "y1": 536,
+    "x2": 2125,
+    "y2": 610
+   },
+   "crop_path": "crops/legal_circular_2/page_001/legal_circular_2_p001_b02_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p001_b03",
+   "block_type": "text",
+   "text": "قرار مجلس إدارة البنك المركزي بجلسته المنعقدة في ٢٦ إبريل ٢٠٠٥ بشأن القواعد المنظمة لنظام تسجيل الائتمان بالبنك المركزي المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 504,
+    "y1": 1400,
+    "x2": 1972,
+    "y2": 2001
+   },
+   "crop_path": "crops/legal_circular_2/page_001/legal_circular_2_p001_b03_text.png"
+  }
+ ]
+}

@@ -1,0 +1,92 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 7,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p007_b00",
+   "block_type": "header",
+   "text": "البنك المركزي المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 1746,
+    "y1": 189,
+    "x2": 2264,
+    "y2": 274
+   },
+   "crop_path": "crops/legal_circular_2/page_007/legal_circular_2_p007_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p007_b01",
+   "block_type": "header",
+   "text": "صفحة ٥ من ٢٠",
+   "table_data": null,
+   "bbox": {
+    "x1": 520,
+    "y1": 189,
+    "x2": 841,
+    "y2": 245
+   },
+   "crop_path": "crops/legal_circular_2/page_007/legal_circular_2_p007_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p007_b02",
+   "block_type": "header",
+   "text": "ثالثاً: ادخال بيانات العملاء الجدد في النظام المركزي",
+   "table_data": null,
+   "bbox": {
+    "x1": 1146,
+    "y1": 494,
+    "x2": 2180,
+    "y2": 568
+   },
+   "crop_path": "crops/legal_circular_2/page_007/legal_circular_2_p007_b02_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p007_b03",
+   "block_type": "text",
+   "text": "تقضي الفقرة (أ) من المادة ٢٣ من اللائحة التنفيذية للقانون بشأن تلتزم البنوك وشركات التأجير التمولي وشركات التمويل العقارى بإدخال بيانات كل عميل والأطراف المرتبطة به إلكترونياً في النظام ، وذلك بمعرفة مسؤول بخطر البنك المركزي باسمه ودرجته الوظيفية.",
+   "table_data": null,
+   "bbox": {
+    "x1": 410,
+    "y1": 664,
+    "x2": 2183,
+    "y2": 1032
+   },
+   "crop_path": "crops/legal_circular_2/page_007/legal_circular_2_p007_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p007_b04",
+   "block_type": "text",
+   "text": "ويكون ادخال بيانات العملاء الجدد في النظام وفقاً لما يلي:",
+   "table_data": null,
+   "bbox": {
+    "x1": 905,
+    "y1": 1158,
+    "x2": 2041,
+    "y2": 1235
+   },
+   "crop_path": "crops/legal_circular_2/page_007/legal_circular_2_p007_b04_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p007_b05",
+   "block_type": "text",
+   "text": "١- يتعين على البنوك وشركات التأجير التمولي وشركات التمويل العقارى ادخال بيانات العملاء الجدد وكفالاتهم والشركاء المتضامنين من خلال شبكة معلومات البنك المركزي أولا بأول خلال الشهر الذى تم فيه تقديم التمويل أو التسهيل الائتمانى ، وذلك للحصول على الأرقام الرمزية لهؤلاء العملاء فور تسجيل كافة بياناتهم. ٢- يتم ادخال بيانات العملاء الجدد واعتمادها بمعرفة مسؤول أو أكثر بخطر البنك المركزي باسمه ودرجته الوظيفية. ٣- يتعين ادخال أسماء العملاء الجدد والكفلاء والشركاء المتضامنين وبياناتهم الشخصية من واقع مستندات اثبات شخصية حديثة مؤيدة لصحة هذه البيانات. ٤- تكون البنوك وشركات التأجير التمولي وشركات التمويل العقارى مسؤولة مسؤولية كاملة عن بيانات العملاء التى تقوم بادخالها ، وتضع النظام اللازم لمراجعة الادخال واعتماده.",
+   "table_data": null,
+   "bbox": {
+    "x1": 410,
+    "y1": 1326,
+    "x2": 2168,
+    "y2": 2593
+   },
+   "crop_path": "crops/legal_circular_2/page_007/legal_circular_2_p007_b05_text.png"
+  }
+ ]
+}
