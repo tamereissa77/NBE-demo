@@ -9,6 +9,10 @@ A second, optional corpus holds documents that exist only as page scans (circula
 see app/scans.py. It lives in its own collection, its citations carry the crop images of the scan,
 and each document lists the roles allowed to read it. Without /data/seed/d2/circulars the service
 behaves exactly as the procedures-only D2.
+
+With that corpus come the guardrails nbe-working had, here on the local guardrails service (policy
+config/guardrails/d2): an input check before retrieval, and on every generated answer a rule that masks
+personal identifiers followed by an output check.
 """
 import difflib
 import json
@@ -21,7 +25,7 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
 from app import scans
-from nbe_core import create_app, llm, retrieval
+from nbe_core import create_app, llm, platform, retrieval
 from nbe_core.text import detect_lang
 from nbe_core.trace import Trace
 
@@ -33,6 +37,11 @@ FOUND_MIN = 0.02                    # reranker score under which nothing relevan
 # A passage the role may not read counts as "the answer exists but is restricted" from this score up.
 # Provisional until calibrated on a scanned-corpus golden set (docs/d2-migration-log.md).
 RESTRICTED_MIN = 0.3
+GUARD_CONFIG = "d2"                 # policy folder under config/guardrails, loaded by the nbe-guardrails service
+_D = "[0-9٠-٩]"
+# Personal identifiers that must not appear in an answer whatever the model does: a card number (16 digits),
+# a national ID (14 digits), an Egyptian mobile number (01x and 8 digits, or with +20), in either digit script
+PII = re.compile(rf"(?<!{_D})(?:{_D}{{16}}|{_D}{{14}}|(?:(?:\+|00)[2٢][0٠][1١]|[0٠][1١]){_D}{{9}})(?!{_D})")
 app = create_app("d2", "Chat with Document", phase="wave1")
 DOCS: dict[str, dict] = {}          # file -> manifest entry + text + sections
 DELTA_CACHE: dict[str, dict] = {}   # procedure -> delta summary
@@ -170,6 +179,15 @@ RESTRICTED = {
 }
 
 
+REDACTED = {"ar": "[محجوب]", "en": "[redacted]"}
+BLOCKED = {
+    "input": {"ar": "لا يمكنني المساعدة في هذا الطلب. يمكنني الإجابة عن الأسئلة المتعلقة بإجراءات العمل والتعميمات المصرفية.",
+              "en": "I can't help with that request. I can answer questions about working procedures and banking circulars."},
+    "output": {"ar": "تم حجب الإجابة لأنها لم تجتز فحص المحتوى. يُرجى إعادة صياغة السؤال.",
+               "en": "The answer was withheld because it did not pass the content check. Please rephrase the question."},
+}
+
+
 def is_scan(hit: dict) -> bool:
     return hit.get("kind") == "scan"
 
@@ -194,6 +212,25 @@ def restricted(lang: str, trace: Trace) -> dict:
     trace.add("rules", "Role-based access: the matching document is outside this role's scope")
     return {"answer": RESTRICTED[lang], "citations": [], "delta": None, "found": False, "restricted": True, "lang": lang,
             "trace": trace.to_list(), "total_ms": trace.total_ms()}
+
+
+def blocked(lang: str, stage: str, trace: Trace) -> dict:
+    """A guardrail stopped the question (input) or the generated answer (output): fixed reply, no sources."""
+    return {"answer": BLOCKED[stage][lang], "citations": [], "delta": None, "found": False, "blocked": True, "restricted": False,
+            "lang": lang, "trace": trace.to_list(), "total_ms": trace.total_ms()}
+
+
+async def screen_answer(answer: str, question: str, lang: str, trace: Trace) -> tuple[str, int, bool]:
+    """Guardrails on a generated answer: mask personal identifiers by rule, then the output rail.
+    Returns (answer, values masked, stopped). A no-op without the scanned corpus."""
+    if not SCANS:
+        return answer, 0, False
+    answer, masked = PII.subn(REDACTED[lang], answer)
+    if masked:
+        trace.add("guardrail", f"Masked {masked} personal identifier(s) in the answer (pattern rule)")
+    g = await platform.guard_output(answer, user=question, config=GUARD_CONFIG)
+    trace.add("guardrail", "Output guardrail (NeMo self-check)", g, g["latency_ms"])
+    return answer, masked, not g["allowed"]
 
 
 async def version_delta(procedure: str, lang: str, trace: Trace) -> dict | None:
@@ -232,6 +269,11 @@ async def ask(body: Ask):
     query = f"{earlier[-1]} {body.question}" if earlier and len(body.question.split()) < 8 else body.question
     if SCANS and body.role not in scans.ROLE_IDS:
         raise HTTPException(400, f"role must be one of {sorted(scans.ROLE_IDS)}")
+    if SCANS:
+        g = await platform.guard_input(body.question, config=GUARD_CONFIG)
+        trace.add("guardrail", "Input guardrail (NeMo self-check)", g, g["latency_ms"])
+        if not g["allowed"]:
+            return blocked(lang, "input", trace)
     hidden = 0.0
     with trace.step("retrieval", "Search procedures (bge-m3 → Qdrant → bge-reranker)") as s:
         hits = await retrieval.search(COLLECTION, query, k=6, candidates=24)
@@ -264,7 +306,10 @@ async def ask(body: Ask):
                          for i, f in enumerate(files)]
             head = (f"التغييرات في «{delta['title']}» بين الإصدار 1 [S1] والإصدار 2 [S2]:\n\n" if lang == "ar"
                     else f"Changes in “{delta['title']}” between version 1 [S1] and version 2 [S2]:\n\n")
-            return {"answer": head + delta["summary"], "citations": citations, "delta": delta, "found": True, "lang": lang,
+            answer, masked, stopped = await screen_answer(head + delta["summary"], body.question, lang, trace)
+            if stopped:
+                return blocked(lang, "output", trace)
+            return {"answer": answer, "citations": citations, "delta": delta, "found": True, "masked": masked, "lang": lang,
                     "trace": trace.to_list(), "total_ms": trace.total_ms()}
 
     # Prefer the current version: if a procedure appears in both versions, put the newest first
@@ -286,9 +331,10 @@ async def ask(body: Ask):
     trace.llm("Write the cited answer (workhorse)", res)
 
     cited = sorted({int(n) for n in re.findall(r"\[S(\d+)\]", res.text) if 0 < int(n) <= len(sources)})
+    # The text shown for a scanned source gets the same identifier mask as the answer (the crop image cannot be masked)
     citations = [{"label": f"S{i + 1}", "kind": "scan", "file": h["doc_id"], "doc_id": h["doc_id"],
                   "title": h["title_en"] if lang == "en" else h["title"], "version": None, "lang": h["lang"], "effective": None,
-                  "section": h["section"], "text": h["display"], "page": h["page"], "block_type": h["block_type"], "crops": h["blocks"],
+                  "section": h["section"], "text": PII.sub(REDACTED[lang], h["display"]), "page": h["page"], "block_type": h["block_type"], "crops": h["blocks"],
                   "rerank": h["rerank_score"], "cited": (i + 1) in cited} if is_scan(h) else
                  {"label": f"S{i + 1}", "kind": "procedure", "file": h["file"], "title": h["title"], "version": h["version"], "lang": h["lang"],
                   "effective": h["effective"], "section": h["section"], "text": h["text"].split("\n", 2)[-1],
@@ -298,9 +344,12 @@ async def ask(body: Ask):
     # The sources this role may read do not answer it, but a document outside its scope matches well
     if not_found and hidden >= RESTRICTED_MIN:
         return restricted(lang, trace)
+    answer, masked, stopped = await screen_answer(res.text.strip(), body.question, lang, trace)
+    if stopped:
+        return blocked(lang, "output", trace)
     delta = None if primary["kind"] == "scan" else await version_delta(primary["file"].split("_")[0], lang, trace)
-    return {"answer": res.text.strip(), "citations": citations, "delta": None if not_found else delta,
-            "found": not not_found, "restricted": False, "lang": lang, "trace": trace.to_list(), "total_ms": trace.total_ms()}
+    return {"answer": answer, "citations": citations, "delta": None if not_found else delta, "found": not not_found,
+            "restricted": False, "blocked": False, "masked": masked, "lang": lang, "trace": trace.to_list(), "total_ms": trace.total_ms()}
 
 
 @app.get("/suggested")

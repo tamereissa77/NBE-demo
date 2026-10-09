@@ -5,7 +5,7 @@
 # because its preflight stops every other container holding GPU memory.
 #
 #   scripts/dev_api.sh models   download bge-m3 and bge-reranker-v2-m3 into $MODELS_DIR (once)
-#   scripts/dev_api.sh up       data services, embeddings, reranker, model gateway, D2, portal, gateway; then load D2
+#   scripts/dev_api.sh up       data services, embeddings, reranker, model gateway, guardrails, D2, portal, gateway; then load D2
 #   scripts/dev_api.sh ingest   reload D2's collections (after changing seed data or chunking)
 #   scripts/dev_api.sh golden   run both D2 golden sets (procedures, scanned corpus) against the running service
 #   scripts/dev_api.sh down     stop and remove the containers (data volumes kept)
@@ -28,7 +28,7 @@ case "${1:-up}" in
     $C up -d --wait nbe-postgres nbe-qdrant
     $C up -d --wait nbe-embed
     $C up -d --wait nbe-rerank
-    $C up -d --wait --build nbe-llmgw nbe-d2 nbe-portal nbe-gateway
+    $C up -d --wait --build nbe-llmgw nbe-guardrails nbe-d2 nbe-portal nbe-gateway
     "$0" ingest
     echo; echo "Portal: http://localhost:${NBE_PORT:-8200}/d2"
     ;;

@@ -9,7 +9,7 @@ Reference documentation (how it works, every change, the GB10 move): [D2/ahmedso
 |---|---|
 | Branch | `asoliman/d2-d7`, based on `Efada_AI_Team` at `e8287b6` |
 | Entry date | 8 October 2026 |
-| State | Committed on `asoliman/d2-d7`: four commits (data, backend, portal, API override with docs) and one documentation commit. Not pushed |
+| State | Committed on `asoliman/d2-d7`: four commits (data, backend, portal, API override with docs) one documentation commit, and one commit for the guardrails of 9 October (section 7). Not pushed |
 | Shared files edited | None. `packages/nbe_core`, `docker-compose.yml`, `config/litellm.yaml`, `Makefile`, existing `scripts/*`, `README.md` are untouched |
 
 ## 1. Where things stand
@@ -21,6 +21,7 @@ Reference documentation (how it works, every change, the GB10 move): [D2/ahmedso
 | 2. Backend | Done | Offline check 37/37; real stack: section 5 |
 | 3. Portal citation panel | Done | Type-checks, builds, checked in a browser on the running stack in Arabic and English |
 | 4. Quality | First pass done | Procedures golden set 51/52 (unchanged from the README baseline); scanned-corpus golden set 25/25; cut-offs confirmed, section 4 |
+| Guardrails (added after the plan) | Done on 9 October | Section 7: scanned golden set 32/32, procedures 51/52 |
 | 5. Big machine | Not started | |
 
 ## 2. Change log
@@ -58,7 +59,8 @@ Outside the repository (workstation only): `.env` was created with `make .env` a
 |---|---|---|
 | 540 block-level chunks | 143 passages; a citation shows the crops of all its blocks, stacked | Decision 1 |
 | Footers dropped; letterheads and page counters indexed | All three dropped | Repeated on every page, never an answer |
-| Cloud NemoGuard safety before and after; keyword topic gate | Removed | Internet dependence; the keyword gate blocked "البنك الأهلي" and "سياسة". Off-topic questions fall under the "not found" cut-off |
+| Cloud NemoGuard safety before and after | Local guardrails service with a D2 policy, plus a pattern rule that masks personal identifiers (added 9 October, section 7) | Offline; tailored to a staff assistant |
+| Keyword topic gate | Removed | It blocked "البنك الأهلي" and "سياسة". Off-topic questions fall under the "not found" cut-off |
 | Citation markers `[1]` | `[S1]` | The portal, the cited-source detection and the golden test use `[S n]` |
 | Always answers in Arabic | Answers in the question's language | D2 behaviour; nbe-working's rule was a defect |
 | Token streaming with stage events | One response with the trace drawer | Decision 5 |
@@ -127,7 +129,46 @@ Known gaps:
 | Shared documents do not describe the new D2 | `README.md` (D2 design in section 7, service reference, data table, "synthetic data only"), `docs/talk-tracks.md` (the D2 presenter script has no scanned documents or roles), `docs/runbook.md` and `PLAN.md` are untouched because they are shared files | Team |
 | Unused settings in the workstation's `.env` | `NBE_EMBED_GPU_UTIL` and `NBE_RERANK_GPU_UTIL` are set there but have no effect, since both models run on CPU in this setup | D2 |
 
-## 7. Running it
+## 7. Guardrails (added 9 October 2026)
+
+nbe-working checked every question and answer through NVIDIA's cloud. The first pass of this migration removed
+those calls without a replacement. This entry restores the function on the demo's local guardrails service.
+
+| # | Path | Kind | What changed | Why | Impact on API setup | Impact on local deployment |
+|---|---|---|---|---|---|---|
+| 13 | `config/guardrails/d2/config.yml`, `prompts.yml` | New | A guardrail policy for D2: input and output self-check prompts for a staff knowledge assistant | The existing `banking` policy is written for customer service and blocks legal content and anything outside customer service. `banking` is not edited | Loaded by `nbe-guardrails`; the judging model is the hosted chat model | Loaded by `nbe-guardrails` through the existing `config/guardrails` mount; no rebuild. The judging model is the local workhorse |
+| 14 | `services/d2_chatdoc/app/main.py` | Modified | Input check before retrieval; a pattern rule that masks card numbers, national IDs and Egyptian mobile numbers in the answer and in the text shown for scanned sources; output check on every generated answer (both the normal and the version-comparison branch). New response fields `blocked` and `masked`. Active only when the scanned corpus is installed | Restores nbe-working's safety function; the mask is a rule because a pattern is more dependable than a model for identifiers | Two extra hosted-model calls per answered question | Two extra workhorse calls per answered question (the README measures 120 to 600 ms each). Stays fully offline |
+| 15 | `services/portal/src/workspaces/D2Chat.tsx` | Modified | Markers for an answer stopped by a guardrail and for masked identifiers | Make the guardrail visible on screen, as the trace drawer already does | None | None |
+| 16 | `scripts/dev_api.sh` | Modified | `up` also builds and starts `nbe-guardrails` | D2 now needs it | Required | Not used; `make up` already starts the service |
+| 17 | `data/seed/golden/d2_circulars.json`, `tests/golden_d2_circulars.py` | Modified | 7 new cases (32 in total): 4 that must be stopped (two jailbreaks, a request to bypass the role, a request to hide suspicious transfers), 1 where the source holds a phone number and a national ID that must not appear, 2 legitimate questions that must pass. New case types `blocked` and `masked` | Measure the guardrails the way retrieval is measured | Run by `scripts/dev_api.sh golden` | Run next to the existing golden test |
+| 18 | `D2/ahmedsoliman/documentation/README.md`, `docs/d2-migration-plan.md`, this log | Modified | Guardrails documented: design, policy, files, GB10 notes, results, limits | Documentation directive | | |
+
+Behaviour notes:
+
+- Without `data/seed/d2/circulars`, D2 makes no guardrail call and is still identical to the team baseline (checked against `e8287b6`).
+- The fixed replies are not sent to the output check. A restricted reply costs one input check only.
+- If `nbe-guardrails` is unreachable, `/ask` returns an error instead of an unchecked answer (as D4 and D7 do).
+- After editing `prompts.yml`, restart `nbe-guardrails`: it caches a policy after first use.
+
+Results on the running stack, 9 October:
+
+| Test | Result |
+|---|---|
+| Offline service check with a stand-in guardrails service | 48/48 |
+| `tests/golden_d2_circulars.py`, 32 questions | 32/32 on the final code: answers 14/14, restricted 4/4, open 4/4, unanswerable 5/5, stopped 4/4, masked 1/1 |
+| `tests/golden_d2.py`, 52 questions | 50/52 on the first run with guardrails, 51/52 on the final code. It was 51/52 in both runs before the guardrails |
+| Portal | Stop marker on a jailbreak; "identifiers masked" marker and `[محجوب]` in the answer about circular 1 |
+
+The procedures score moved without any guardrail acting on those answers: none of the 49 answerable questions was stopped or masked. The
+question about urgent complaints is answered with or without "within 24 hours" from one run to the next (three
+with, one without, in four repeats of the identical prompt), and the test requires the number. This is the
+hosted model's run-to-run variation, not an effect of the change; it should not occur with the local model on
+the GB10 at temperature 0.
+
+Known limits: the mask covers text, not the crop image; it catches unbroken digit runs only; the model-based
+checks are judgements measured on a small sample (4 stop cases).
+
+## 8. Running it
 
 Temporary API setup (workstation):
 

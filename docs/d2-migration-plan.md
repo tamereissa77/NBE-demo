@@ -181,3 +181,4 @@ Implementation record: [d2-migration-log.md](d2-migration-log.md).
 | Scanned golden set in Phase 4, after the portal | Written and run in the same pass (`tests/golden_d2_circulars.py`, 25 questions) | Needed to answer the calibration question |
 | The restricted reply was not specified | Chosen by rule from reranker scores, never written by the model | No forbidden text has to reach the model |
 | Portal on port 8200 | Port 8210 on the workstation (`NBE_PORT` in `.env`) | 8200 is published by another user's copy of the demo on the same server |
+| Safety and topic checks removed, with a local guardrail check as an option (section 3.2 row 15) | Added on 9 October: input check, identifier mask and output check on the local guardrails service, with a D2 policy | Parity with nbe-working, which screened every question and answer |

@@ -8,7 +8,7 @@ how it was verified, and what to do when it moves back to the fully local deploy
 | Owner | Ahmed Soliman (D2, later D7) |
 | Branch | `asoliman/d2-d7`, cut from `Efada_AI_Team` at `e8287b6` |
 | Commits | `f6ab844` data · `6468718` backend · `59ce0c7` portal · `892ee00` API setup and docs |
-| Written | 8 October 2026 |
+| Written | 8 October 2026; guardrails added 9 October 2026 |
 | Current state | Running on the development workstation with a hosted chat model. Not yet run on the GB10. Not pushed |
 | Dated records | [docs/d2-migration-plan.md](../../../docs/d2-migration-plan.md) (the agreed plan) and [docs/d2-migration-log.md](../../../docs/d2-migration-log.md) (change-by-change log) |
 
@@ -30,7 +30,8 @@ how it was verified, and what to do when it moves back to the fully local deploy
 
 D2 used to answer from 12 synthetic working procedures written as Markdown. It now also answers from
 six scanned documents taken from nbe-working (five legal circulars and the RTGS procedures guide), shows
-the crop images of the scan beside each citation, and limits what each role may read.
+the crop images of the scan beside each citation, limits what each role may read, and screens questions
+and answers with guardrails that run on the demo's own guardrails service.
 
 Three rules kept the change from disturbing the rest of the demo:
 
@@ -42,8 +43,8 @@ Measured on the development setup with Gemma 4 26B-A4B:
 
 | Test | Result |
 |---|---|
-| Procedures golden set, 52 questions | 51/52, the same as the README baseline |
-| Scanned-corpus golden set, 25 questions | 25/25 |
+| Procedures golden set, 52 questions | 51/52 before the guardrails, the same as the README baseline; 51/52 with them (section 8 explains the difference) |
+| Scanned-corpus golden set, 32 questions | 32/32, including the guardrail and role cases |
 
 ## 2. What D2 does now
 
@@ -56,6 +57,7 @@ Measured on the development setup with Gemma 4 26B-A4B:
 | Languages | Arabic, Egyptian dialect, English | Unchanged, both corpora |
 | Access by role | None | Teller, legal counsel, manager |
 | "Not found" | Yes | Unchanged, plus a separate "outside your access" reply |
+| Guardrails | None | A check on every question, a rule that masks personal identifiers in answers, and a check on every generated answer |
 
 Roles and what they may read:
 
@@ -73,6 +75,8 @@ nbe-working: the demo has no login.
 ```
 question + role
    │
+   ├─► input guardrail ─ stop ..............................................► "I can't help with that request"
+   │
    ├─► search d2_procedures ───────────────────────────┐
    ├─► search d2_circulars, filtered by role ──────────┼─► best six by reranker score
    └─► (limited role only) search d2_circulars         │        │
@@ -85,6 +89,9 @@ question + role
                                               workhorse writes a cited answer [S1]…[S5]
                                                        │
                               model says "not found" and hidden is strong ► "outside your access"
+                                                       │
+                                                       ▼
+                       mask personal identifiers (pattern rule) ─► output guardrail ─ stop ► "answer withheld"
                                                        │
                                                        ▼
                          answer + citations (procedure: text, version delta · scan: page, crops)
@@ -156,13 +163,43 @@ On the D2 screen:
 - A link opens the original image in a new tab. Source chips under the answer do the same selection.
 - Procedure sources still open the Markdown viewer, and the version-delta block is unchanged.
 
-### 3.6 API
+### 3.6 Guardrails
+
+nbe-working screened every question and answer through NVIDIA's cloud. D2 does the same job on the demo's
+local guardrails service (`nbe-guardrails`, NeMo Guardrails), so it works offline. Three layers:
+
+| Layer | When | How | On a stop |
+|---|---|---|---|
+| Input check | Before retrieval | The guardrails service judges the question with the `d2` policy | Fixed refusal, no sources, no retrieval and no answer model call |
+| Identifier mask | On every generated answer and on the text shown for a scanned source | A pattern rule, not a model: card numbers (16 digits), national IDs (14 digits) and Egyptian mobile numbers, in Western or Arabic digits, are replaced by `[محجوب]` / `[redacted]` | The answer is kept; the response reports how many values were masked |
+| Output check | After the mask | The guardrails service judges the answer with the `d2` policy | Fixed "answer withheld" reply, no sources |
+
+The `d2` policy (`config/guardrails/d2/`) is separate from the `banking` policy that D4 and D7 use. `banking` is
+written for customer service and blocks legal content and anything outside customer service, which in D2 is
+the subject matter.
+
+| The `d2` policy blocks | It explicitly allows |
+|---|---|
+| Attempts to override or reveal the assistant's instructions (jailbreaks) | Questions about procedures, fees, limits, documents and deadlines |
+| Requests to see documents outside the user's role, or to bypass access rules | Questions about what a law, circular or regulation requires, including anti-money-laundering, KYC and fraud rules |
+| Requests for help committing or concealing fraud, money laundering or other illegal acts | Off-topic or unanswerable questions (they get "not found") |
+| Requests for a named individual's personal data | Answers stating fees, dates, article numbers, SWIFT message types, and redaction markers |
+| Abusive, hateful or sexual content; answers that reveal identifiers, secrets or the system prompt | |
+
+Design points:
+
+- The guardrails switch on with the scanned corpus, like the roles. Without `data/seed/d2/circulars` D2 makes no guardrail call.
+- The fixed replies ("not found", "outside your access", the refusals) are not sent to the output check.
+- If the guardrails service is down, `/ask` fails instead of answering unchecked, as in D4 and D7.
+- Each model-based check is one call to the workhorse: two extra calls for an answered question.
+
+### 3.7 API
 
 All paths are under `/api/d2` through the gateway.
 
 | Endpoint | Change | Purpose |
 |---|---|---|
-| `POST /ask` | Accepts `role` (default `manager`). Response adds `restricted`; each citation adds `kind` | Answer a question |
+| `POST /ask` | Accepts `role` (default `manager`). Response adds `restricted`, `blocked` (a guardrail stopped it) and `masked` (identifiers replaced in the answer); each citation adds `kind` | Answer a question |
 | `POST /admin/ingest` | Also builds `d2_circulars`; response adds `scanned_passages`, `scanned_documents` | Load both collections |
 | `GET /crop/{doc_id}/{block_id}?role=` | New | One crop image, role-checked |
 | `GET /corpus` | New | Roles and scanned documents; empty lists when the corpus is absent |
@@ -189,15 +226,16 @@ Fields of a citation:
 |---|---|---|---|---|
 | `data/seed/d2/circulars/` | New, 604 files | The scanned corpus (section 3.1). Under `data/seed` because seed data is committed and mounted into D2 | Passage text is sent to the hosted chat model when retrieved (approved) | Arrives with `git pull`; nothing to copy by hand |
 | `services/d2_chatdoc/tools/import_nbe_working.py` | New | Produced the folder above from nbe-working. Normalises document ids to underscores, corrects the type of circulars 3 to 5, drops machine-specific paths | Run once | Not needed unless documents are added (section 10) |
-| `data/seed/golden/d2_circulars.json` | New | 25 test questions for the scanned corpus and the role rules | | |
+| `data/seed/golden/d2_circulars.json` | New | 32 test questions for the scanned corpus, the role rules and the guardrails | | |
 
 ### Service
 
 | Path | Kind | What and why | Dev | GB10 |
 |---|---|---|---|---|
 | `services/d2_chatdoc/app/scans.py` | New | Loads the corpus, builds passages, converts tables, defines the roles (sections 3.1 and 3.2) | Same code | Same code |
-| `services/d2_chatdoc/app/main.py` | Modified | Loads the corpus when present; ingests `d2_circulars`; `/ask` takes a role, merges both searches, applies the access rule, keeps scans out of the version logic; new `/crop` and `/corpus`; citations gain `kind`; the early "not found" reply now carries `lang` and `total_ms` (the portal printed "NaN s") | Same code | Same code |
-| `tests/golden_d2_circulars.py` | New | Runs the 25 questions and prints the top reranker scores for calibration | Run by `scripts/dev_api.sh golden` | Run directly (section 7) |
+| `services/d2_chatdoc/app/main.py` | Modified | Loads the corpus when present; ingests `d2_circulars`; `/ask` takes a role, merges both searches, applies the access rule, keeps scans out of the version logic; new `/crop` and `/corpus`; citations gain `kind`; the early "not found" reply now carries `lang` and `total_ms` (the portal printed "NaN s"); the input check, the identifier mask and the output check (section 3.6) | Same code | Same code |
+| `tests/golden_d2_circulars.py` | New | Runs the 32 questions and prints the top reranker scores for calibration | Run by `scripts/dev_api.sh golden` | Run directly (section 7) |
+| `config/guardrails/d2/` (`config.yml`, `prompts.yml`) | New | The guardrail policy for D2 (section 3.6). A new folder beside `banking`; nothing in `banking` was changed | Loaded by `nbe-guardrails` | Loaded by `nbe-guardrails`, which already mounts `config/guardrails` |
 
 The prompt for a procedure-only question is byte-identical to the previous version. One sentence about
 tables and lists is added to the system prompt only when a scanned source is in the context.
@@ -206,7 +244,7 @@ tables and lists is added to the system prompt only when a scanned source is in 
 
 | Path | Kind | What and why | Dev | GB10 |
 |---|---|---|---|---|
-| `services/portal/src/workspaces/D2Chat.tsx` | Modified | Role selector, shown only when `/corpus` reports roles; scanned sources with page, relevance and preview; the detail block with image and text tabs; source chips; the restricted marker. Arabic and English. The `data-test` hooks used by the UI walkthrough are unchanged | Same code | Same code |
+| `services/portal/src/workspaces/D2Chat.tsx` | Modified | Role selector, shown only when `/corpus` reports roles; scanned sources with page, relevance and preview; the detail block with image and text tabs; source chips; markers for a restricted reply, a guardrail stop and masked identifiers. Arabic and English. The `data-test` hooks used by the UI walkthrough are unchanged | Same code | Same code |
 
 ### Development setup only
 
@@ -215,7 +253,7 @@ tables and lists is added to the system prompt only when a scanned source is in 
 | `docker-compose.api.yml` | New | Compose override. The model gateway joins a second network that has a route out and loads the API config; the embedding and reranker services run from a CPU image | Not used |
 | `config/litellm.api.yaml` | New | Same aliases as `config/litellm.yaml`; the four chat aliases point at the model named by `NBE_API_MODEL` | Not loaded |
 | `docker/dev-cpu-models/` | New | bge-m3 and bge-reranker-v2-m3 on CPU behind the same `/v1/embeddings` and `/v1/rerank` endpoints as the vLLM servers | Not built |
-| `scripts/dev_api.sh` | New | `models`, `up`, `ingest`, `golden`, `down` | Not used |
+| `scripts/dev_api.sh` | New | `models`, `up`, `ingest`, `golden`, `down`. `up` also starts `nbe-guardrails` | Not used |
 | `.env.api.example` | New | The three variables this setup adds to `.env` | Not needed |
 
 ### Documentation
@@ -234,7 +272,8 @@ tables and lists is added to the system prompt only when a scanned source is in 
 | MinIO and nginx proxies for crops | D2 serves the crop files from `/data` | No extra service; also removes the world-readable bucket and the broken image addresses |
 | NIM containers: Llama 3.1 8B, nemotron embedding and reranker | The demo's role aliases: Gemma 4 26B-A4B, bge-m3, bge-reranker-v2-m3 | The demo addresses models by role |
 | LangChain, LangServe | Plain Python on `nbe_core` | Not installed in the demo image; no new dependency was added |
-| Cloud NemoGuard safety calls and the keyword topic gate | Removed | They needed the internet, and the keyword gate blocked "البنك الأهلي" and "سياسة". Off-topic questions fall under the "not found" cut-off |
+| Cloud NemoGuard safety calls on the question and the answer | The demo's local guardrails service with a D2 policy, plus a pattern rule that masks personal identifiers | Works offline; the checks are tailored to a staff knowledge assistant |
+| Keyword topic gate | Removed | It blocked "البنك الأهلي" and "سياسة". Off-topic questions fall under the "not found" cut-off |
 | 540 block-level chunks | 143 merged passages | Retrieval quality (section 3.2) |
 | Citation markers `[1]` | `[S1]` | The portal, the cited-source detection and the golden test use this form |
 | Always answers in Arabic | Answers in the language of the question | D2 behaviour |
@@ -255,6 +294,7 @@ with the chat model on a hosted API. This setup exists only to make progress; no
 | Chat model (`workhorse` alias) | OpenRouter `google/gemma-4-26b-a4b-it` | The same model, local, vLLM, FP8 |
 | Embeddings | bge-m3 on CPU (`docker/dev-cpu-models`) | bge-m3 on GPU, vLLM |
 | Reranker | bge-reranker-v2-m3 on CPU | bge-reranker-v2-m3 on GPU, vLLM |
+| Guardrails | `nbe-guardrails`, judging through the hosted chat model | `nbe-guardrails`, judging through the local workhorse |
 | Network | The model gateway can reach the internet | No container can |
 | Start command | `scripts/dev_api.sh up` | `make up` |
 | Published port | 8210 (8200 is used by another user on the same server) | 8200 |
@@ -316,7 +356,7 @@ machine with Docker. Run from the project folder.
 | Command | What it does | When |
 |---|---|---|
 | `scripts/dev_api.sh models` | Downloads bge-m3 and bge-reranker-v2-m3 into `MODELS_DIR` | Once per machine |
-| `scripts/dev_api.sh up` | Builds and starts Postgres, Qdrant, the two CPU model servers, the model gateway, D2, the portal and the web gateway; then ingests D2 | Every start, and after any code change |
+| `scripts/dev_api.sh up` | Builds and starts Postgres, Qdrant, the two CPU model servers, the model gateway, the guardrails service, D2, the portal and the web gateway; then ingests D2. Wait for it to finish before asking: answers come back "not found" while the index is being rebuilt | Every start, and after any code change |
 | `scripts/dev_api.sh ingest` | Rebuilds D2's two collections from the seed files | After changing seed data, or if the index was wiped |
 | `scripts/dev_api.sh golden` | Runs `tests/golden_d2.py` and `tests/golden_d2_circulars.py` | After any change to retrieval, prompts or data |
 | `scripts/dev_api.sh down` | Stops and removes the containers; the index and database volumes are kept | When finished |
@@ -349,6 +389,7 @@ cannot be used to pull the four commits; those arrive when the branch is pushed.
 | Model aliases | `config/litellm.yaml` as it is today: `workhorse` and `embed` already point at the local servers |
 | Extra GPU memory | None. D2 adds no model; it makes one more embedding call and one more reranker call per question |
 | Offline operation | Preserved. Crops are served by D2 inside the internal network; nothing in the D2 code calls out |
+| Guardrails | `make up` already starts `nbe-guardrails`, and it already mounts `config/guardrails`, so the new `d2` policy folder is picked up on first use. No image rebuild is needed for it |
 | `.env` | The GB10's own. None of the `NBE_API_*` variables |
 | Model weights | Already in `/opt/models` on the GB10. Nothing new to download for D2 |
 | Search index | Not carried over from the workstation. It is rebuilt on the GB10 by `make ingest` (step 4 below) |
@@ -407,7 +448,9 @@ Run on the GB10, in the repository folder.
 | Item | Expectation | If it differs |
 |---|---|---|
 | Procedures golden set | 51/52 | Compare the misses with the one known miss (a KYC question the model declines). Any new miss that cites a scanned source points at the merge of the two corpora |
-| Scanned golden set | 25/25, or close | The second output line prints the top reranker scores. Answer-bearing passages scored 0.92 to 1.00 on the development setup |
+| Scanned golden set | 32/32, or close | The second output line prints the top reranker scores. Answer-bearing passages scored 0.92 to 1.00 on the development setup |
+| Guardrail cases | 4/4 stopped, 4/4 legitimate questions allowed, identifiers masked | A legitimate question that is stopped points at the policy prompts in `config/guardrails/d2/prompts.yml`. Restart `nbe-guardrails` after editing them |
+| Time per answer | Two extra workhorse calls: the README measures 120 to 600 ms for each check on the GB10 | |
 | Reranker scores | The same scale, 0 to 1. Small differences from GPU half precision | If the scale differs, the three cut-offs in section 9 must be re-tuned together |
 | Answers | Locally served Gemma is quantised to FP8, the hosted one is not. Wording can differ; a few borderline answers may flip | Check the scanned golden misses first; adjust prompts before cut-offs |
 | Speed | Retrieval far faster than the 9 s seen on CPU | Not a D2 problem if slow: check the embedding and reranker servers |
@@ -429,11 +472,20 @@ Run on the GB10, in the repository folder.
 | Procedure behaviour unchanged | Old and new service code run side by side without the corpus, with stand-ins for the model and the vector store | Identical ingest result, identical prompts, identical answers apart from added fields |
 | Service logic | 37 checks with the real code and seed data and the same stand-ins: mixed retrieval, citations, crops, every role rule, the version guards | 37 pass |
 | Portal | Type check and production build; then by hand in a browser, Arabic and English | Pass |
-| Procedures golden set | `tests/golden_d2.py` on the running stack | 51/52: current values 36/37, what changed 12/12, not found 3/3 |
-| Scanned golden set | `tests/golden_d2_circulars.py` on the running stack | 25/25: answers 14/14, restricted 4/4, open 2/2, unanswerable 5/5 |
+| Service logic with guardrails | The same stand-ins plus a stand-in guardrails service, 48 checks | 48 pass, including: no guardrail call without the corpus, a jailbreak stopped before retrieval, both identifiers masked in the answer and in the source text, a withheld answer returning no sources |
+| Procedures golden set, before guardrails | `tests/golden_d2.py` on the running stack, two runs on 8 October | 51/52 both times: current values 36/37, what changed 12/12, not found 3/3 |
+| Procedures golden set, with guardrails | Same test, two runs on 9 October | 50/52, then 51/52 on the final code |
+| Scanned golden set, before guardrails | `tests/golden_d2_circulars.py`, 25 questions | 25/25 |
+| Scanned golden set, with guardrails | Same test, 32 questions | 32/32 on the final code: answers 14/14, restricted 4/4, open 4/4, unanswerable 5/5, guardrail stops 4/4, masked 1/1 |
 
-The first two checks used throw-away scripts that are not in the repository. The two golden tests are the
+The checks with stand-ins used throw-away scripts that are not in the repository. The two golden tests are the
 checks anyone can re-run.
+
+**About the 50/52.** No guardrail stopped or masked any of the 49 answerable procedures questions. The extra miss was a question about
+urgent complaints: the test expects the answer to contain "24" (hours), and the hosted model sometimes writes
+the shorter sentence without it. Asked four more times with the identical prompt, it included the 24 hours in
+three and left it out in one. The hosted model is not fully repeatable from run to run; the locally served
+model on the GB10 at temperature 0 should be. Treat 50 to 51 as the range on this setup.
 
 One defect was found and fixed by the scanned golden set: the size cap had cut the last sentence of circular 4
 ("effective from 17 August 2025") into a passage of its own, and the question about that date failed. Short
@@ -449,6 +501,9 @@ remainders now stay with the passage before them.
 | `MAX_CHARS` | 1000 | `services/d2_chatdoc/app/scans.py` | Size cap of a passage | 143 passages, median 602 characters |
 | `MIN_TAIL` | 250 | same | A shorter remainder joins the passage before it | Fixed the circular 4 miss |
 | `DEFAULT_ROLE` | `manager` | `services/d2_chatdoc/app/main.py` | Role when a caller sends none | Keeps the existing golden test unchanged |
+| `PII` pattern | 16 digits, 14 digits, Egyptian mobile numbers | same | What the identifier mask replaces | Both planted values in circular 1 are masked; amounts, dates, law numbers and SWIFT types are not touched |
+| `GUARD_CONFIG` | `d2` | same | Which policy folder the guardrails service uses for D2 | |
+| Policy wording | | `config/guardrails/d2/prompts.yml` | What the input and output checks block and allow | 4/4 stops, no legitimate question stopped among the 77 others that the tests can tell |
 
 No value needed adjusting after the runs. The evidence is 25 questions and one model, so the golden sets
 should be re-run after any model change. Changing `MAX_CHARS` or `MIN_TAIL` requires an ingest.
@@ -467,6 +522,8 @@ should be re-run after any model change. Changing `MAX_CHARS` or `MIN_TAIL` requ
 
 4. Add questions for it to `data/seed/golden/d2_circulars.json`.
 
+**Change what the guardrails block:** edit `config/guardrails/d2/prompts.yml`, then restart `nbe-guardrails` (it caches a policy after first use) and re-run the scanned golden set.
+
 **Change who may read a document:** edit `roles` in `data/seed/d2/circulars/manifest.json`, restart D2, ingest.
 
 **Switch the scanned corpus off:** remove or rename `data/seed/d2/circulars`, restart D2, ingest. D2 returns to the procedures-only behaviour.
@@ -478,6 +535,10 @@ should be re-run after any model change. Changing `MAX_CHARS` or `MIN_TAIL` requ
 - **Not yet run on the GB10.** Everything in section 7 is the expected path, not an observed one.
 - **Small evidence base.** One model, 25 scanned questions.
 - **The role is not authenticated.** It is a value the browser sends. A real deployment needs sign-on at the gateway.
+- **The mask covers text, not images.** The answer and the text shown for a source are masked. The crop image of the scan still shows whatever is printed on the page.
+- **The mask is a pattern.** It catches unbroken digit runs. A number written with spaces or dashes inside it is left to the output check.
+- **The model-based checks are judgements.** They passed every test case here, but a differently worded attack or an unusual legitimate question can be misjudged. 4 stop cases is a small sample.
+- **No answer without the guardrails service.** If `nbe-guardrails` is down, D2 returns an error, by design.
 - **No live upload.** New scanned documents go through nbe-working's OCR offline (section 10).
 - **OCR quality.** The RTGS text has systematic misspellings ("الحظية", "الخطية" for "اللحظية"). Retrieval coped in testing, but exact-word matching would not.
 - **Sample personal data.** `legal_circular_1` contains a phone number and a 14-digit national-ID-style number in its text. They read like planted test values, but they are now in the repository.

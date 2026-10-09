@@ -10,7 +10,9 @@ interface CropRef { id: string; page: number; type: string }
 interface Citation { label: string; kind?: "procedure" | "scan"; file: string; doc_id?: string; title: string; version: number | null; lang: string;
                      effective: string | null; section: string; text: string; page?: number; crops?: CropRef[]; rerank: number | null; cited: boolean }
 interface Delta { title: string; from: { version: number; effective: string }; to: { version: number; effective: string }; summary: string; sections: { section: string; before: string; after: string }[] }
-interface Answer { answer: string; citations: Citation[]; delta: Delta | null; found: boolean; restricted?: boolean; trace: TraceStep[]; total_ms: number }
+// blocked: a guardrail stopped the question or the answer. masked: personal identifiers replaced in the answer by rule.
+interface Answer { answer: string; citations: Citation[]; delta: Delta | null; found: boolean; restricted?: boolean; blocked?: boolean; masked?: number;
+                   trace: TraceStep[]; total_ms: number }
 interface Turn { q: string; role: string; a?: Answer; error?: string }
 interface Role { id: string; ar: string; en: string; scope_ar: string; scope_en: string }
 
@@ -20,13 +22,13 @@ const L = {
         thinking: "Searching procedures and writing a cited answer…", notFound: "Not in the documents: the assistant does not guess.", sections: "Changed sections",
         role: "Asking as", page: "p.", relevance: "Relevance", high: "high", medium: "medium", low: "low", viewImage: "Scanned image", viewText: "Text",
         openOriginal: "Open the original image", imgError: "The image could not be loaded", noImage: "No image for this passage.",
-        restricted: "Outside this role's access" },
+        restricted: "Outside this role's access", blocked: "Stopped by the guardrail", masked: "Personal identifiers masked" },
   ar: { ask: "اسأل عن إجراء…", send: "اسأل", card: "بطاقة إجابة الفرع", sources: "المصادر", delta: "الفرق بين الإصدارات: ما الذي تغيّر",
         none: "اطرح سؤالاً لتظهر المصادر وما تغيّر.", banner: "كل إجابة موثّقة بمصادرها", open: "فتح",
         thinking: "جارٍ البحث في الإجراءات وكتابة إجابة موثّقة…", notFound: "غير موجود في المستندات: المساعد لا يخمّن.", sections: "الأقسام المتغيرة",
         role: "السؤال بصفة", page: "ص", relevance: "ملاءمة", high: "عالية", medium: "متوسطة", low: "منخفضة", viewImage: "عرض الصورة", viewText: "عرض النص",
         openOriginal: "عرض الصورة الأصلية", imgError: "تعذّر تحميل الصورة", noImage: "لا توجد صورة لهذا المقتطف.",
-        restricted: "خارج صلاحيات هذا الدور" },
+        restricted: "خارج صلاحيات هذا الدور", blocked: "أوقفه حاجز الحماية", masked: "تم حجب بيانات شخصية" },
 };
 
 // The role is part of the URL because the service checks it again before serving a crop
@@ -150,7 +152,8 @@ export default function D2Chat({ onTrace }: WorkspaceProps) {
                     </div>
                   )}
                   <div className="mt-2 flex flex-wrap gap-1.5 text-xs">
-                    {t.a.restricted ? <Chip tone="red">{l.restricted}</Chip> : !t.a.found && <Chip tone="orange">{l.notFound}</Chip>}
+                    {t.a.blocked ? <Chip tone="red">{l.blocked}</Chip> : t.a.restricted ? <Chip tone="red">{l.restricted}</Chip> : !t.a.found && <Chip tone="orange">{l.notFound}</Chip>}
+                    {!!t.a.masked && <Chip tone="orange">{l.masked}</Chip>}
                     <Chip>{(t.a.total_ms / 1000).toFixed(1)} s</Chip>
                   </div>
                 </div>
@@ -170,8 +173,9 @@ export default function D2Chat({ onTrace }: WorkspaceProps) {
 
       <Panel title={l.card} banner={l.banner}>
         {!last && <p className="text-sm">{l.none}</p>}
+        {last && last.blocked && <Block accent="red">{l.blocked}</Block>}
         {last && last.restricted && <Block accent="red">{l.restricted}</Block>}
-        {last && !last.found && !last.restricted && <Block accent="orange">{l.notFound}</Block>}
+        {last && !last.found && !last.restricted && !last.blocked && <Block accent="orange">{l.notFound}</Block>}
         {last && last.found && (
           <>
             <div className="text-xs font-semibold uppercase text-nbe-text">{l.sources}</div>

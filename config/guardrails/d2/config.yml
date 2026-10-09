@@ -1,0 +1,19 @@
+# Guardrails for D2, the staff knowledge assistant (procedures, legal circulars, the RTGS guide).
+# Separate from `banking`, which is written for customer service: that policy blocks legal content
+# and anything outside customer service, which here is the subject matter.
+# The LLM is the workhorse alias via the internal model gateway; the key comes from OPENAI_API_KEY.
+models:
+  - type: main
+    engine: openai
+    model: workhorse
+    parameters:
+      base_url: http://nbe-llmgw:4000/v1
+      temperature: 0
+
+rails:
+  input:
+    flows:
+      - self check input
+  output:
+    flows:
+      - self check output
