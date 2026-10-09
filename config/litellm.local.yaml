@@ -1,0 +1,25 @@
+# Model aliases on a workstation (docker-compose.local.yml), where the GB10 model servers do not run.
+# The LLM is Gemma 4 26B-A4B hosted on OpenRouter (key: OPENROUTER_API_KEY in .env);
+# embeddings stay on the box (nbe-retrieval answers as nbe-embed). Demos still address aliases only.
+#
+# OpenRouter spreads one model over a dozen providers that do not behave alike: measured on D4's tool-calling
+# turn, some answered in text instead of calling the tool, some were rate-limited or 10x slower, and replies
+# sometimes came back as raw tool-call text. `provider` pins the ones that passed every trial, in order,
+# with no fallback to the rest.
+model_list:
+  - model_name: workhorse                 # chat, drafting, tool calling
+    litellm_params: { model: openai/google/gemma-4-26b-a4b-it, api_base: "https://openrouter.ai/api/v1", api_key: os.environ/OPENROUTER_API_KEY,
+                      extra_body: { provider: { order: [nextbit/bf16, io-net/bf16, novita/bf16, deepinfra/fp8], allow_fallbacks: false } } }
+  - model_name: vision                    # the hosted Gemma reads images too
+    litellm_params: { model: openai/google/gemma-4-26b-a4b-it, api_base: "https://openrouter.ai/api/v1", api_key: os.environ/OPENROUTER_API_KEY,
+                      extra_body: { provider: { order: [nextbit/bf16, io-net/bf16, novita/bf16, deepinfra/fp8], allow_fallbacks: false } } }
+  - model_name: embed                     # bge-m3, 1024-dim, multilingual
+    litellm_params: { model: hosted_vllm/bge-m3, api_base: "http://nbe-embed:8000/v1", api_key: none }
+
+router_settings:
+  num_retries: 0
+
+litellm_settings:
+  drop_params: true
+  request_timeout: 600
+  telemetry: false

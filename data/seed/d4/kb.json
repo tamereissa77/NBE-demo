@@ -97,19 +97,23 @@
   },
   {
     "id": "KB13",
-    "topic": "فتح حساب توفير",
-    "question_ar": "كيف يمكنني فتح حساب توفير وما هي المتطلبات؟",
-    "answer_ar": "لفتح حساب توفير للأفراد، يجب تقديم بطاقة رقم قومي سارية وإيصال مرافق حديث. يتطلب فتح الحساب إيداع حد أدنى قدره 500 جنيه مصري. يتم احتساب العائد على الرصيد اليومي ويُصرف بشكل شهري. تستغرق مدة تفعيل الحساب يوم عمل واحد فقط. كما نتيح للعملاء الحاليين ميزة جديدة تتيح لهم فتح الحساب عبر تطبيق الهاتف المحمول مباشرة دون الحاجة لزيارة الفرع.",
-    "question_en": "How can I open a savings account and what are the requirements?",
-    "answer_en": "To open a savings account for individuals, you must provide a valid national ID and a recent utility bill. Opening the account requires a minimum deposit of 500 EGP. Interest is calculated on the daily balance and paid out monthly. The activation period takes only one business day. Additionally, we offer a new channel allowing existing customers to open an account via the mobile application without visiting the branch."
+    "topic": "حساب التوفير: الشروط والمستندات",
+    "question_ar": "كيف أفتح حساب توفير وما الشروط والمستندات المطلوبة؟",
+    "answer_ar": "حساب التوفير بالجنيه المصري متاح للمصريين والأجانب والقُصّر (باسم القاصر تحت الولاية أو الوصاية أو الهبة). الحد الأدنى لفتح الحساب 5,000 جنيه، ويبدأ احتساب العائد من رصيد 10,001 جنيه. المستندات المطلوبة: نسخة من بطاقة الرقم القومي أو جواز السفر، وشهادة الميلاد للقُصّر. يتيح الحساب صرف العائد شهرياً أو كل ثلاثة أشهر أو كل ستة أشهر أو سنوياً، والخدمات المصرفية عبر الإنترنت، والحساب المشترك، وبطاقة خصم مباشر للسحب والشراء. عند فتح الحساب من خلال الأهلي نت أو الأهلي موبايل يُعفى العميل من مصاريف فتح الحساب ومن الحد الأدنى لفتح الحساب.",
+    "question_en": "How can I open a savings account and what are the requirements and documents?",
+    "answer_en": "The Egyptian-pound savings account is open to Egyptians, foreigners and minors (in the minor's name under guardianship, custody or gift). The minimum to open it is EGP 5,000, and a return is calculated from a balance of EGP 10,001. Documents: a copy of the national ID or passport, and the birth certificate for minors. The return can be paid monthly, quarterly, semi-annually or annually, and the account comes with internet banking, a joint-account option and a debit card for withdrawals and purchases. Opening the account through Al Ahly Net or Al Ahly Mobile waives the account-opening fees and the minimum opening balance.",
+    "source": "nbe.com.eg product pages",
+    "as_of": "2026-10-09"
   },
   {
     "id": "KB14",
-    "topic": "الحد الأدنى لحساب التوفير",
-    "question_ar": "ما هو الحد الأدنى لفتح حساب التوفير للأفراد؟",
-    "answer_ar": "لفتح حساب توفير للأفراد، يتطلب الأمر تقديم بطاقة رقم قومي سارية وإيصال مرافق حديث. الحد الأدنى للإيداع لفتح الحساب هو 500 جنيه مصري. يتم احتساب العائد على الرصيد اليومي ويُصرف شهرياً، وتستغرق مدة تفعيل الحساب يوم عمل واحد فقط. كما نود إفادتكم بأنه يمكن للعملاء الحاليين فتح الحساب عبر تطبيق الهاتف المحمول بكل سهولة دون الحاجة لزيارة الفرع.",
-    "question_en": "What is the minimum amount required to open an individual savings account?",
-    "answer_en": "To open an individual savings account, a valid national ID and a recent utility bill are required. The minimum deposit for opening the account is 500 EGP. Interest is calculated on the daily balance and paid out monthly. Account activation takes one business day. Additionally, existing customers can conveniently open an account via the mobile application without the need to visit a branch."
+    "topic": "أنواع حسابات التوفير والحد الأدنى والعائد",
+    "question_ar": "ما أنواع حسابات التوفير والحد الأدنى لكل منها وما سعر العائد؟",
+    "answer_ar": "يقدم البنك عدة حسابات توفير بالجنيه المصري: حساب التوفير بحد أدنى 5,000 جنيه؛ حساب الأهلي إكسترا توفير بحد أدنى 20,000 جنيه للبالغين والقُصّر؛ حساب توفير المستقبل بدون حد أدنى لفتح الحساب؛ حساب توفير المدخر الصغير بحد أدنى 1,000 جنيه للقُصّر المصريين؛ وحساب توفير المعاش بحد أدنى 5,000 جنيه للمصريين فقط. في حساب التوفير لا يُحتسب عائد على الأرصدة حتى 10,000 جنيه، ويتدرج العائد حسب شريحة الرصيد ودورية الصرف: يبدأ من 7.50% للأرصدة من 10,001 إلى 100,000 جنيه بصرف شهري، ويصل إلى 11.50% سنوياً للأرصدة الأكبر من 20 مليون جنيه. هذه الأسعار منشورة على موقع البنك في أكتوبر 2026 وقابلة للتغيير، ويُراجع الموقع أو الفرع لمعرفة السعر الحالي.",
+    "question_en": "What types of savings accounts are there, what is the minimum for each, and what is the return?",
+    "answer_en": "The bank offers several Egyptian-pound savings accounts: the Savings Account, minimum EGP 5,000; Al Ahly Extra Savings, minimum EGP 20,000, for adults and minors; the Future Savings account, with no minimum opening balance; the Young Saver account, minimum EGP 1,000, for Egyptian minors; and the Pension Savings account, minimum EGP 5,000, for Egyptians only. On the Savings Account no return is paid on balances up to EGP 10,000, and the return rises with the balance tier and the payout frequency: from 7.50% for balances of EGP 10,001 to 100,000 paid monthly, up to 11.50% a year for balances above EGP 20 million. These rates were published on the bank's website in October 2026 and can change; check the website or a branch for the current rate.",
+    "source": "nbe.com.eg product pages",
+    "as_of": "2026-10-09"
   },
   {
     "id": "KB15",
@@ -238,5 +242,45 @@
     "answer_ar": "لتحديث رقم الهاتف المسجل في بياناتكم، يرجى زيارة أقرب فرع للبنك لضمان أمن حسابكم. يتطلب الإجراء تقديم بطاقة الرقم القومي سارية لإثبات الهوية. كما قد يطلب منكم التحقق من خلال رمز تحقق لمرة واحدة (OTP) يتم إرساله إلى رقم الهاتف القديم أو عبر وسيلة تحقق أخرى معتمدة لضمان إتمام العملية بنجاح. نهدف من خلال هذا الإجراء إلى حماية حسابكم وضمان وصول كافة الإشعارات والرموز الأمنية إلى رقمكم الصحيح.",
     "question_en": "How can I change my registered mobile number with the bank?",
     "answer_en": "To update your registered mobile number, please visit your nearest bank branch to ensure the security of your account. The procedure requires presenting a valid National ID for identity verification. You may also be required to verify your identity using a One-Time Password (OTP) sent to your old registered number or through another approved verification method to complete the process successfully. We implement this procedure to protect your account and ensure all notifications and security codes are sent to your correct number."
+  },
+  {
+    "id": "KB31",
+    "topic": "الحساب الجاري",
+    "question_ar": "كيف أفتح حساباً جارياً وما الحد الأدنى والمستندات والمزايا؟",
+    "answer_ar": "الحساب الجاري متاح للمصريين والأجانب. الحد الأدنى لفتح الحساب 2,500 جنيه مصري، أو 100 دولار أمريكي أو ما يعادلها بالعملات الأجنبية. المستند المطلوب نسخة من بطاقة الرقم القومي أو جواز السفر. مزايا الحساب: دفتر شيكات، الخدمات المصرفية عبر الإنترنت، إمكانية الحساب المشترك، وبطاقة خصم مباشر للسحب والشراء. عند فتح الحساب من خلال الأهلي نت أو الأهلي موبايل يُعفى العميل من مصاريف فتح الحساب ومن الحد الأدنى لفتح الحساب. ويوجد أيضاً حساب فايدة بلس بحد أدنى 10,000 جنيه ويُحتسب عليه عائد من رصيد 50,000 جنيه، وحساب الأهلي اليومي بحد أدنى 500,000 جنيه.",
+    "question_en": "How do I open a current account, and what are the minimum, the documents and the features?",
+    "answer_en": "The current account is open to Egyptians and foreigners. The minimum to open it is EGP 2,500, or USD 100 or the equivalent in other foreign currencies. The document required is a copy of the national ID or passport. Features: a cheque book, internet banking, a joint-account option, and a debit card for withdrawals and purchases. Opening the account through Al Ahly Net or Al Ahly Mobile waives the account-opening fees and the minimum opening balance. There are also the Fayda Plus account, minimum EGP 10,000 with a return calculated from a balance of EGP 50,000, and the Al Ahly Daily account, minimum EGP 500,000.",
+    "source": "nbe.com.eg product pages",
+    "as_of": "2026-10-09"
+  },
+  {
+    "id": "KB32",
+    "topic": "حساب المرتبات وتحويل المرتب (برامج الأهلي للمرتبات)",
+    "question_ar": "كيف أفتح حساب مرتبات أو أحوّل مرتبي على البنك؟",
+    "answer_ar": "حساب المرتبات يُفتح من خلال جهة العمل وليس بطلب فردي من الموظف: برامج الأهلي للمرتبات خدمة يقدمها البنك للشركات والهيئات وموظفيها، وتُحوَّل بها المرتبات إلى البنك بعد تعاقد جهة العمل معه. يوجد نظامان: المرتبات على البطاقات، وفيه تصدر بطاقة خاصة لكل موظف يُحوَّل عليها المرتب مباشرة؛ والمرتبات على الحسابات الجارية، وفيه تُفتح للعاملين حسابات جارية في فروع البنك مع إصدار بطاقات خصم لهم. من المزايا: صرف المرتب إلكترونياً فور تحويله، رسائل نصية بمعاملات بطاقة المرتبات، الخدمات المصرفية الإلكترونية، مركز خدمة عملاء على مدار 24 ساعة، وشبكة واسعة من ماكينات الصراف الآلي والفروع، مع إمكانية الاستفادة من منتجات البنك مثل القروض الشخصية وقروض السيارات وبطاقات الائتمان والودائع والشهادات. لتحويل مرتبك، اسأل قسم شؤون العاملين في جهة عملك عن تعاقدها مع البنك. ويُنصح بتحديث بيانات بطاقة المرتبات في أقرب فرع بشكل دوري حتى لا تتوقف البطاقة.",
+    "question_en": "How do I open a salary account or have my salary transferred to the bank?",
+    "answer_en": "A salary account is opened through the employer, not by the employee alone: Al Ahly Payroll Programs is a service the bank gives companies, public bodies and their employees, and salaries are transferred to the bank once the employer has contracted with it. There are two systems: payroll on cards, where each employee gets a dedicated card the salary is paid onto; and payroll on current accounts, where current accounts are opened for the employees at the bank's branches and debit cards are issued to them. Benefits include electronic payment of the salary as soon as it is transferred, SMS for payroll-card transactions, electronic banking, a 24-hour customer service centre and a wide ATM and branch network, plus access to the bank's products such as personal loans, car loans, credit cards, deposits and certificates. To have your salary transferred, ask your employer's HR department about its contract with the bank. Keep your payroll-card details up to date at the nearest branch so the card is not stopped.",
+    "source": "nbe.com.eg product pages",
+    "as_of": "2026-10-09"
+  },
+  {
+    "id": "KB33",
+    "topic": "الحساب الشخصي: حسابات الأفراد والفرق بين الجاري والتوفير",
+    "question_ar": "ما الحسابات الشخصية المتاحة للأفراد وما الفرق بين الحساب الجاري وحساب التوفير؟",
+    "answer_ar": "لا يوجد منتج باسم «الحساب الشخصي»؛ حسابات الأفراد هي الحساب الجاري وحسابات التوفير. الحساب الجاري مناسب للمعاملات اليومية: حد أدنى 2,500 جنيه، ومعه دفتر شيكات وبطاقة خصم مباشر، ولم يُذكر له عائد. حساب التوفير مناسب للادخار: حد أدنى 5,000 جنيه، وعائد يُحتسب من رصيد 10,001 جنيه ويُصرف شهرياً أو كل ثلاثة أشهر أو كل ستة أشهر أو سنوياً، ومعه بطاقة خصم مباشر. ومن يريد حساباً جارياً بعائد يمكنه فتح حساب فايدة بلس بحد أدنى 10,000 جنيه، ويُحتسب عائده من رصيد 50,000 جنيه. المستند الأساسي في كل الحالات نسخة من بطاقة الرقم القومي أو جواز السفر، والحسابان متاحان للمصريين والأجانب.",
+    "question_en": "Which personal accounts can individuals open, and how do the current and savings accounts differ?",
+    "answer_en": "There is no product called a \"personal account\"; accounts for individuals are the current account and the savings accounts. The current account suits everyday transactions: minimum EGP 2,500, with a cheque book and a debit card, and no return is stated for it. The savings account suits saving: minimum EGP 5,000, with a return calculated from a balance of EGP 10,001 and paid monthly, quarterly, semi-annually or annually, and a debit card. Anyone who wants a current account that earns a return can open Fayda Plus, minimum EGP 10,000, with the return calculated from a balance of EGP 50,000. In every case the basic document is a copy of the national ID or passport, and both accounts are open to Egyptians and foreigners.",
+    "source": "nbe.com.eg product pages",
+    "as_of": "2026-10-09"
+  },
+  {
+    "id": "KB34",
+    "topic": "فتح حساب أونلاين بدون زيارة الفرع أولاً (افتح حسابك وأنت في مكانك)",
+    "question_ar": "هل يمكن تقديم طلب فتح حساب أونلاين وما الشروط والخطوات؟",
+    "answer_ar": "يمكن تقديم طلب فتح حساب من الموقع الإلكتروني للبنك من خلال خدمة «افتح حسابك وأنت في مكانك». الخدمة متاحة للأفراد المصريين من سن 21 سنة فأكثر، المقيمين داخل مصر، ممن لديهم بطاقة رقم قومي سارية ويستطيعون القراءة والكتابة، وليس لهم حساب قائم لدى البنك. وهي غير متاحة لفتح حساب بتوكيل أو لقاصر أو على سبيل الهبة. الخطوات: إدخال الرقم القومي ورقم المحمول، ثم رمز الأمان المرسل على المحمول، ثم البريد الإلكتروني ورمز الأمان المرسل عليه، ثم بيانات الطلب واختيار طريقة استكمال التوقيع والمستندات. لاستكمال الإجراءات يزور العميل أحد فروع البنك أو فروع الخدمة الإلكترونية خلال 10 أيام عمل، وإلا يُلغى الطلب تلقائياً ويمكن تقديم طلب جديد. ويمكن لكبار السن (60 سنة فأكثر) والسيدات وذوي الاحتياجات الخاصة طلب زيارة موظف البنك لهم، وهي متاحة في بعض المحافظات فقط.",
+    "question_en": "Can I apply to open an account online, and what are the conditions and steps?",
+    "answer_en": "You can apply to open an account on the bank's website through the \"Open your account from where you are\" service. It is for Egyptian individuals aged 21 or over who live in Egypt, hold a valid national ID, can read and write, and have no existing account with the bank. It is not available for opening an account by power of attorney, for a minor, or as a gift. Steps: enter your national ID number and mobile number, then the security code sent to the mobile, then your email address and the security code sent to it, then the application details and how you will complete the signature and documents. To finish, visit one of the bank's branches or electronic-service branches within 10 working days, otherwise the application is cancelled automatically and you can submit a new one. Customers aged 60 or over, women and people with special needs can ask for a bank employee to visit them; this is available in some governorates only.",
+    "source": "nbe.com.eg product pages",
+    "as_of": "2026-10-09"
   }
 ]

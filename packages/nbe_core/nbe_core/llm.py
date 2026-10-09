@@ -43,10 +43,11 @@ _CHANNEL = re.compile(r"^\s*(?:<\|?channel\|?>)?\s*thought\b.*?<channel\|>", re.
 
 
 def clean_text(text: str) -> str:
-    """Gemma 4 sometimes leaks its thinking channel ("thought ... <channel|>") into content after tool calls."""
+    """Gemma 4 sometimes leaks its thinking channel ("thought ... <channel|>") into content after tool calls.
+    Hosted Gemma leaks only the channel name: a first line that says just "thought"."""
     if "<channel|>" in text:
         text = text.rsplit("<channel|>", 1)[-1]
-    return _CHANNEL.sub("", text).strip()
+    return re.sub(r"^\s*thought[ \t]*\n", "", _CHANNEL.sub("", text)).strip()
 
 
 def _headers() -> dict:

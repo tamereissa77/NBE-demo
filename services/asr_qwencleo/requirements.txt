@@ -1,0 +1,3 @@
+# Installed into its own environment (/opt/asr, see docker/local-gpu/Dockerfile): qwen-asr pins
+# transformers 4.57, VoiceTut needs 5.x. PyTorch, FastAPI and numpy come from the image's main environment.
+qwen-asr==0.0.6

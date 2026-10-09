@@ -257,8 +257,8 @@ mic/text ─► Whisper (voice) ─► input guardrail ─STOP?─► agent loop
                                        output guardrail ─STOP?─► reply ─► Piper (voice)
 ```
 
-- **Tools:** `send_otp`, `verify_otp`, `get_cards`, `get_balance`, `block_card`, `create_ticket`, `handoff_to_human`, `search_kb`.
-- **Safety by design:** the OTP code is returned to the UI's phone mock-up only and never to the model, so it cannot leak into a reply. Card and balance tools require a verified session issued by the mock bank.
+- **Tools:** `send_otp`, `get_cards`, `get_balance`, `block_card`, `create_ticket`, `handoff_to_human`, `search_kb`.
+- **Safety by design:** the one-time code bypasses the models. It is shown only on the UI's phone mock-up; what the customer enters (keypad, chat or voice) goes straight to the bank's check, the agent and the guardrail get the message with its digits masked, and the agent is told only the verdict. Card and balance tools require a verified session issued by the mock bank, and a card is blocked only after the customer has confirmed it.
 - **Reliability fixes from evaluation:** replies that promise an action without calling the tool are retried with a mandatory tool call; the reply language follows the customer's latest message; leaked thinking-channel text is stripped.
 
 ### D5 · Legal Documents Summarisation
@@ -312,7 +312,7 @@ All data is synthetic and generated reproducibly in the `nbe-datagen` container 
 | D1 | 8 applicants, 40 scanned documents, 10 forgeries, 1 planned false positive, ground-truth manifest | Pillow with Arabic shaping (raqm, FriBiDi, Amiri font); realistic scan noise; forgeries applied **after** scanning (re-typed values, swapped photo, cloned stamp, edited dates, editing-app metadata). Every document is a fictitious layout with a SPECIMEN watermark, so nothing can serve as a real fake ID. |
 | D2 | 12 procedures × 2 versions (Arabic), 5 English versions, 52 golden questions | LLM writes prose around fact sheets (`data/generators/specs.py`); every fact checked verbatim; golden answers derived from the facts |
 | D3 | 5,000 customers in 5 personas, 100 merchants in 12 categories, 50,000 transactions | Seeded generator with persona spending weights |
-| D4 | 20 mock-bank customers, 30 knowledge-base articles (AR/EN) | Mock bank seed; LLM-authored articles constrained to the procedure facts |
+| D4 | 20 mock-bank customers, 34 knowledge-base articles (AR/EN) | Mock bank seed; LLM-authored articles constrained to the procedure facts. Six articles on accounts (current, savings, salary, opening online) are NBE's public product information, read from nbe.com.eg on 9 Oct 2026 and marked with `source` and `as_of` in `data/seed/d4/kb.json` |
 | D5 | Approved template, 5 contracts with 8 planted deviations, 3 rulings | Clauses written deterministically (`d5_clauses.py`) so every planted term is verbatim; rulings LLM-authored |
 | D6 | 48 pandas/numpy API docs | Real docstrings extracted from the installed libraries |
 | D7 | 500 labelled complaints (MSA, Egyptian, English; 4 channels), 20-item demo queue | LLM-authored from a topic × severity × channel × language grid; labels by construction |

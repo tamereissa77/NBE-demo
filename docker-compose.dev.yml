@@ -1,0 +1,25 @@
+# Development on top of docker-compose.local.yml (DEV=1 scripts/up_local.sh): service code is mounted
+# from the checkout, so a code change needs a container restart, not an image build.
+# Images built without this file stay self-contained.
+services:
+  # The portal as built in the checkout: (cd services/portal && npm ci && npm run build)
+  nbe-portal:
+    volumes:
+      - ./services/portal/dist:/srv:ro
+
+  nbe-d4:
+    volumes:
+      - ./services/d4_agent/app:/srv/app:ro
+      - ./packages/nbe_core/nbe_core:/usr/local/lib/python3.12/site-packages/nbe_core:ro
+
+  nbe-retrieval:
+    volumes:
+      - ./services/embed/app:/srv/app:ro
+
+  nbe-voicetut:
+    volumes:
+      - ./services/tts_voicetut/app:/srv/app:ro
+
+  nbe-qwencleo:
+    volumes:
+      - ./services/asr_qwencleo/app:/srv/app:ro

@@ -73,8 +73,8 @@ One page per demo: the setup line, what to click, what to say, the honest caveat
 **Click.** Script buttons 1 to 6 in order, or speak if the browser runs on the GB10. Tick "Speak replies" for voice.
 
 **Say.**
-1. Lost card: it sends an OTP straight away. The code appears on the customer's phone, never in the chat; the model itself never sees it.
-2. Read the code: it's verified, and the agent finds the card and asks before blocking, because that's irreversible.
+1. Lost card: it sends an OTP straight away. The code appears on the customer's phone, never in the chat.
+2. Enter the code on the phone's keypad: it goes to the bank's check, not to the AI. The lane shows the bank's verdict; the agent is told only "verified", finds the card and asks before blocking, because that's irreversible.
 3. Confirm: the card is blocked in the bank system (a mock). Watch the tool lane and the account state.
 4. Complaint: a ticket is logged with a number.
 5. Jailbreak, in Egyptian dialect, asking for another customer's data: STOP. The guardrail blocks it before the model even sees it.

@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+# Versions that run VoiceTut on an RTX 5090 (taken from a working install)
+torch==2.14.0
+torchaudio==2.11.0
+omnivoice==0.2.1
+voicetut-tts==0.1.1
+soundfile
+numpy
