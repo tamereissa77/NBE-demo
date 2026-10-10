@@ -36,8 +36,14 @@ export const getJSON = <T,>(url: string) => send(url).then((r) => handle<T>(r));
 export const postJSON = <T,>(url: string, body: unknown = {}) =>
   send(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }).then((r) => handle<T>(r));
 
-export const upload = <T,>(url: string, file: File) => {
+export const putJSON = <T,>(url: string, body: unknown = {}) =>
+  send(url, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }).then((r) => handle<T>(r));
+
+export const del = <T,>(url: string) => send(url, { method: "DELETE" }).then((r) => handle<T>(r));
+
+export const upload = <T,>(url: string, file: File, fields: Record<string, string> = {}) => {
   const fd = new FormData();
+  Object.entries(fields).forEach(([k, v]) => fd.append(k, v));
   fd.append("file", file);
   return send(url, { method: "POST", body: fd }).then((r) => handle<T>(r));
 };

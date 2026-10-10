@@ -8,6 +8,8 @@
 #     which answers under the names of the GB10's vLLM servers. The `core` profile is not started.
 #   - D4 speaks with VoiceTut-TTS (nbe-voicetut) and listens with QwenCleo-ASR (nbe-qwencleo), both
 #     built for Egyptian Arabic with English mixed in, instead of Piper and whisper-large-v3.
+#   - D1 reads uploaded documents with a fine-tuned Qwen3-VL (nbe-docvlm) on this machine, not with the
+#     hosted LLM.
 # The three GPU services share one image recipe (docker/local-gpu), so PyTorch and CUDA are stored once.
 # They use restart "no", as on the GB10: they never take GPU memory at boot on a shared box.
 
@@ -83,3 +85,44 @@ services:
     networks:
       nbe-core:
         aliases: [nbe-asr]
+
+  # Document reading for D1: Qwen3-VL-8B with the fine-tuned LoRA adapter (v18), served by the project that
+  # trained and measured it (NBE_DOCVLM_REPO, mounted read-only), so the prompts, image sizing and number
+  # checks are the measured ones. It runs in the shared GPU image; the packages that image lacks come from a
+  # folder on the host (scripts/docvlm_libs.sh), so nothing is built. About 17.5 GB of GPU memory.
+  # Real documents are read here and nowhere else: this service has no route out.
+  nbe-docvlm:
+    <<: *local-gpu
+    image: nbe-retrieval:latest
+    container_name: nbe-docvlm
+    working_dir: /app
+    command: ["/opt/asr/bin/python", "nbe_finetune/demo/api.py"]
+    environment:
+      VISION_API_HOST: 0.0.0.0
+      VISION_API_PORT: "8000"
+      VISION_ADAPTER_DIR: /app/nbe_finetune/output/candidates/${NBE_DOCVLM_ADAPTER:-v18}
+      # The settings the adapter was measured with: every trained type is read with the adapter, and
+      # stamp and signature are asked for
+      TRAINED_DOC_TYPES: bank_statement,birth_certificate,clinic_license,commercial_register,driving_license,electricity_bill,hr_letter,id_back,id_front,marriage_certificate,ownership_contract,pension_transfer_pledge,practice_license,salary_transfer_pledge,syndicate_card,tax_card,utility_bill,vat_certificate
+      VISION_ASK_MARKS: "1"
+      HF_HUB_CACHE: /models
+      LOAN_DEVICE: cuda:0
+    # Under WSL every GPU memory block is a file handle. The model is loaded tensor by tensor, and with the
+    # default limit of 1024 the adapter failed to load with "CUDA driver error: unknown error".
+    ulimits:
+      nofile: { soft: 65536, hard: 65536 }
+    volumes:
+      - ${MODELS_DIR:-/opt/models}:/models:ro
+      - ${NBE_DOCVLM_REPO:-./ops/docvlm-repo}/nbe_finetune:/app/nbe_finetune:ro
+      - ${NBE_DOCVLM_LIBS:-./ops/docvlm-libs}:/app/.qwen3-libs:ro
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+      start_period: 600s      # 9 GB of weights are read and expanded before the API answers
+    networks: [nbe-core]
+
+  nbe-d1:
+    environment:
+      DOCVLM_URL: http://nbe-docvlm:8000

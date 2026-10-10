@@ -1,6 +1,7 @@
 .env
 models/
 data/generated/
+data/uploads/
 recordings/
 *.safetensors
 *.gguf

@@ -1,3 +1,5 @@
 numpy
 pillow
 opencv-python-headless
+pypdfium2
+pypdf

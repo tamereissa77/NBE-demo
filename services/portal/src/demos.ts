@@ -30,12 +30,12 @@ export const DEMOS: Demo[] = [
     title: { en: "Doc verification for credit lending", ar: "التحقق من مستندات الإقراض" },
     tagline: { en: "Extract fields, detect tampering, cross-check", ar: "استخراج البيانات وكشف التلاعب والمطابقة بين المستندات" },
     story: {
-      en: "A loan officer uploads a synthetic loan pack. The system extracts fields, cross-checks them across documents and runs image forensics, then shows an evidence-backed verdict for a human to approve or override.",
-      ar: "يرفع موظف الائتمان ملف قرض تجريبيًا. يستخرج النظام البيانات ويطابقها بين المستندات ويُجري فحصًا جنائيًا للصور، ثم يعرض حكمًا مدعومًا بالأدلة ليعتمده الموظف أو يعدّله.",
+      en: "A loan officer uploads an applicant's documents. A fine-tuned model on this machine reads them, rules cross-check them against each other and the application, and readings the model was unsure of are confirmed by the officer first. The verdict is evidence-backed, for a human to approve or override. Synthetic packs with planted forgeries are included.",
+      ar: "يرفع موظف الائتمان مستندات العميل. يقرؤها نموذج مدرَّب على هذا الجهاز، وتطابقها القواعد فيما بينها ومع بيانات الطلب، ويؤكد الموظف أولاً القراءات التي لم يكن النموذج متأكداً منها. الحكم مدعوم بالأدلة ليعتمده الموظف أو يعدّله. تتضمن المنصة ملفات تجريبية مولَّدة بها تلاعب مقصود.",
     },
     flow: {
-      en: ["Synthetic loan pack", "Field extraction", "Cross-document checks", "Evidence-backed verdict", "Human review"],
-      ar: ["ملف قرض تجريبي", "استخراج البيانات", "المطابقة بين المستندات", "حكم مدعوم بالأدلة", "مراجعة بشرية"],
+      en: ["Uploaded documents", "Field extraction", "Cross-document checks", "Evidence-backed verdict", "Human review"],
+      ar: ["مستندات مرفوعة", "استخراج البيانات", "المطابقة بين المستندات", "حكم مدعوم بالأدلة", "مراجعة بشرية"],
     },
     cardTitle: { en: "Review decision panel", ar: "لوحة قرار المراجعة" },
     cardItems: {

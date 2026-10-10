@@ -426,6 +426,9 @@ services:
     image: nbe-d1:latest
     container_name: nbe-d1
     environment: { <<: *demo-env, DEMO_ID: d1 }
+    volumes:
+      - ./data:/data:ro
+      - ./data/uploads/d1:/data/uploads/d1      # documents uploaded for review: they stay on this machine
 
   nbe-d2:
     <<: *demo-api

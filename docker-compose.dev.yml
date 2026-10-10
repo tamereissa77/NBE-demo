@@ -7,6 +7,11 @@ services:
     volumes:
       - ./services/portal/dist:/srv:ro
 
+  nbe-d1:
+    volumes:
+      - ./services/d1_docverify/app:/srv/app:ro
+      - ./packages/nbe_core/nbe_core:/usr/local/lib/python3.12/site-packages/nbe_core:ro
+
   nbe-d4:
     volumes:
       - ./services/d4_agent/app:/srv/app:ro

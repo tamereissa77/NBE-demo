@@ -1,8 +1,11 @@
 """D1 · Doc verification for credit lending (PLAN.md §4 D1).
 
-A loan officer opens a synthetic loan pack. For every document the system extracts fields with the
-vision model, runs image forensics, then cross-checks the documents against each other and the
-application. The result is evidence-backed: "flagged for review", never "fraud". A human decides.
+Two ways in. A loan officer uploads an applicant's real documents (app.cases): a fine-tuned reader on this
+machine extracts the fields and deterministic rules check them. Or the officer opens one of the synthetic
+loan packs below, which carry planted forgeries: the fields are extracted, image forensics run, and the
+documents are cross-checked against each other and the application. The packs are read by the same reader
+on this machine when it is installed (nothing leaves the box), and by the `vision` alias otherwise.
+Either way the result is evidence-backed: "flagged for review", never "fraud". A human decides.
 """
 import asyncio
 import difflib
@@ -23,7 +26,7 @@ from nbe_core import create_app, llm, settings
 from nbe_core.audit import log_event
 from nbe_core.text import normalize_ar
 from nbe_core.trace import Trace
-from app import forensics
+from app import cases, forensics, nid, reader, rules
 
 DATA = Path("/data/generated/d1")
 TODAY = date.fromisoformat(os.getenv("DEMO_TODAY", "2026-10-07"))
@@ -36,11 +39,13 @@ async def lifespan(_app):
         conn.execute("""CREATE SCHEMA IF NOT EXISTS d1;
                         CREATE TABLE IF NOT EXISTS d1.decisions (applicant TEXT PRIMARY KEY, decision TEXT, note TEXT,
                             reviewer TEXT, flags INT, decided_at TIMESTAMPTZ DEFAULT now())""")
+        cases.init(conn)
     yield
 
 
 app = create_app("d1", "Doc verification for credit lending", phase="wave2")
 app.router.lifespan_context = lifespan
+app.include_router(cases.router)
 
 SCHEMAS = {
     "national_id": {"name": "full name", "address": "address", "nid_masked": "masked national ID number as printed", "issue_date": "issue date YYYY-MM-DD"},
@@ -71,6 +76,8 @@ def applicant(aid: str) -> dict:
 
 @app.get("/packs")
 def packs():
+    if not (DATA / "manifest.json").exists():      # the synthetic packs are generated data: absent until `make data`
+        return []
     return [{"id": a["id"], "name_ar": a["name_ar"], "name_en": a["name_en"], "loan_amount_egp": a["loan_amount_egp"],
              "documents": [d["file"] for d in a["documents"]], "decision": _decision(a["id"]), "verified": a["id"] in CACHE}
             for a in manifest()["applicants"]]
@@ -84,7 +91,51 @@ def doc_image(file: str):
     return FileResponse(p, media_type="image/jpeg")
 
 
+# The packs read on this machine. Each kind maps to a type the reader knows; the fields its adapter was not
+# trained on are asked of the base model. The synthetic pages print things real ones do not (the last four
+# digits of an ID, a register's expiry date), so those are asked for here only.
+_LOCAL = {
+    "national_id": ("id_front", []),
+    "utility_bill": ("electricity_bill", []),
+    "hr_letter": ("hr_letter", [("Letter_Date", "letter_date", "", ""), ("ID_Number_Last_4_Digits", "id_number_last_4_digits", "", "")]),
+    "bank_statement": ("bank_statement", None),
+    "commercial_register": ("commercial_register", [("Expiry_Date", "expiry_date", "", ""), ("Address", "address", "", "")]),
+    "invoice": ("invoice", None),
+}
+
+
+async def extract_local(kind: str, path: Path) -> tuple[dict, int]:
+    """One synthetic document through the local reader, returned in the field names of SCHEMAS."""
+    doc_type, extra = _LOCAL[kind]
+    res = await reader.read(doc_type, path.read_bytes(), extra)
+    if res.get("error"):
+        return {}, res["ms"]
+    f, num = res["fields"], rules.number
+    if kind == "national_id":
+        data = {"name": f.get("full_name"), "address": f.get("address"), "nid_masked": f.get("national_id"), "issue_date": None}
+    elif kind == "utility_bill":
+        data = {"customer_name": f.get("customer_name"), "address": f.get("address"), "account_no": f.get("meter_number"),
+                "period": f.get("bill_date"), "amount_due": num(f.get("amount"))}
+    elif kind == "hr_letter":
+        data = {"employee_name": f.get("employee_name"), "nid_last4": nid.digits(f.get("id_number_last_4_digits"))[-4:] or None,
+                "employer": f.get("company_name"), "job_title": f.get("job_title"), "monthly_salary": num(f.get("salary_amount")),
+                "hire_date": f.get("hire_date"), "letter_date": f.get("letter_date")}
+    elif kind == "bank_statement":
+        payer = f.get("salary_transfer_company") or ""
+        data = {"customer_name": f.get("account_holder"),
+                "salary_credits": [{"date": None, "amount": a, "payer": payer} for a in (num(f.get(k)) for k in rules.SALARY_CREDITS) if a]}
+    elif kind == "commercial_register":
+        data = {"business_name": f.get("company_name"), "owner_name": f.get("owner_name"), "register_no": f.get("register_number"),
+                "address": f.get("address"), "expiry_date": f.get("expiry_date")}
+    else:
+        data = {"customer": f.get("customer_name"), "subtotal": num(f.get("subtotal_amount")), "vat": num(f.get("vat_amount")),
+                "total": num(f.get("total_amount"))}
+    return data, res["ms"]
+
+
 async def extract(kind: str, path: Path) -> tuple[dict, int]:
+    if reader.configured():
+        return await extract_local(kind, path)
     fields = SCHEMAS[kind]
     schema = {"type": "object", "properties": {k: ({"type": "array", "items": {"type": "object", "properties": {
         "date": {"type": "string"}, "amount": {"type": "number"}, "payer": {"type": "string"}}, "required": ["date", "amount", "payer"]}}
@@ -100,6 +151,12 @@ async def extract(kind: str, path: Path) -> tuple[dict, int]:
 
 def same_name(a: str, b: str) -> float:
     return difflib.SequenceMatcher(None, normalize_ar(a or ""), normalize_ar(b or "")).ratio()
+
+
+def same_company(a: str, b: str) -> float:
+    """Letter-by-letter similarity, or the share of words in common when that is higher: the local reader
+    once returned a payer's name with its words in reverse order, which the first measure reads as a mismatch."""
+    return max(same_name(a, b), rules.text_similarity(a, b, rules._COMPANY_WORDS, digits=False) or 0)
 
 
 def _date(s: str | None) -> date | None:
@@ -146,7 +203,7 @@ def cross_checks(app_rec: dict, ex: dict[str, dict]) -> list[dict]:
         flag("declared_salary_mismatch", "medium", ["hr_letter"], f"الراتب في الخطاب {salary:,.0f} يختلف عن الراتب المذكور في الطلب {app_rec['declared']['salary']:,}",
              "HR-letter salary differs from the salary declared on the application")
     payers = {c.get("payer", "") for c in credits}
-    if hr.get("employer") and payers and max(same_name(hr["employer"], p) for p in payers) < 0.7:
+    if hr.get("employer") and payers and max(same_company(hr["employer"], p) for p in payers) < 0.7:
         flag("employer_mismatch", "high", ["hr_letter", "bank_statement"],
              f"جهة العمل في الخطاب «{hr['employer']}» لا تطابق جهة تحويل الراتب «{next(iter(payers))}»",
              "Employer on the HR letter is not the payer of the salary credits")
@@ -202,7 +259,9 @@ async def verify(aid: str, refresh: bool = False):
         return d, fields, f, ms
 
     results = await asyncio.gather(*(one(d) for d in a["documents"]))
-    trace.add("llm", f"Extract fields from {len(results)} documents (vision: Gemma 4)", None, max(ms for *_, ms in results))
+    local = reader.configured()
+    trace.add("llm", f"Extract fields from {len(results)} documents " + ("(fine-tuned Qwen3-VL on this machine)" if local else "(vision: Gemma 4)"),
+              None, sum(ms for *_, ms in results) if local else max(ms for *_, ms in results))
     trace.add("forensics", "Image forensics: noise consistency, duplicate stamps, metadata, ELA heatmap")
     ex = {d["kind"]: fields for d, fields, _, _ in results}
     flags = [fl for d, _, f, _ in results for fl in forensic_flags(d["file"], f)]
@@ -222,7 +281,10 @@ async def verify(aid: str, refresh: bool = False):
 
     verdict = "flagged_for_review" if flags else "no_issues_found"
     summary = {"ar": "لم يُعثر على مؤشرات تستدعي المراجعة.", "en": "No indicators requiring review were found."}
-    if flags:
+    if flags and local:      # written from the flags themselves: no model, nothing leaves the box
+        summary = rules.summarise([{**f, "status": "raised"} for f in flags], verdict)
+        trace.add("rules", "Summary written from the flags (no model)")
+    elif flags:
         res = await llm.chat([{"role": "user", "content":
             "اكتب ملخصاً لموظف الائتمان (3 إلى 4 جمل) بالعربية ثم بالإنجليزية تحت عنوانين AR: و EN:، يشرح لماذا أُحيل الملف للمراجعة البشرية، "
             "استناداً فقط إلى المؤشرات التالية. لا تستخدم كلمة احتيال ولا تُصدر حكماً؛ القرار للموظف.\n" +
@@ -236,7 +298,7 @@ async def verify(aid: str, refresh: bool = False):
            "risk": "high" if any(f["severity"] == "high" for f in flags) else "medium" if flags else "low",
            "flags": flags, "documents": docs, "summary": summary, "decision": _decision(aid), "trace": trace.to_list(), "total_ms": trace.total_ms()}
     CACHE[aid] = out
-    await log_event("verify", "vision", {"applicant": aid, "flags": len(flags)})
+    await log_event("verify", "docvlm" if local else "vision", {"applicant": aid, "flags": len(flags)})
     return out
 
 

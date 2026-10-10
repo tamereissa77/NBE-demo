@@ -3,6 +3,7 @@ import { getJSON, postJSON, type TraceStep } from "../api";
 import { useI18n } from "../i18n";
 import type { WorkspaceProps } from "../pages/DemoPage";
 import { Block, Button, Chip, ErrorNote, Modal, Panel, Spinner } from "./common";
+import D1Cases from "./D1Cases";
 
 interface Pack { id: string; name_ar: string; name_en: string; loan_amount_egp: number; documents: string[]; decision: Decision | null; verified: boolean }
 interface Decision { decision: string; note: string; reviewer: string; decided_at: string }
@@ -20,11 +21,13 @@ const L = {
   en: { packs: "Loan packs", verify: "Verify pack", panel: "Review decision panel", banner: "Flags for review: a human decides, never fraud-proof",
         flagged: "Flagged for review", clean: "No issues found", working: "Extracting fields, running forensics and cross-checks…", flags: "Evidence",
         approve: "Documents OK", more: "Request more documents", reject: "Reject documents", note: "Reviewer note (optional)", decided: "Decision recorded",
-        original: "Original with evidence", ela: "ELA heatmap", fields: "Extracted fields", pick: "Pick a loan pack and verify it.", egp: "EGP" },
+        original: "Original with evidence", ela: "ELA heatmap", fields: "Extracted fields", pick: "Pick a loan pack and verify it.", egp: "EGP",
+        none: "The synthetic packs have not been generated on this machine yet (make data)." },
   ar: { packs: "ملفات القروض", verify: "تحقق من الملف", panel: "لوحة قرار المراجعة", banner: "إشارات للمراجعة فقط: القرار للإنسان",
         flagged: "محال للمراجعة", clean: "لا توجد مؤشرات", working: "استخراج البيانات وفحص الصور والمطابقة بين المستندات…", flags: "الأدلة",
         approve: "المستندات سليمة", more: "طلب مستندات إضافية", reject: "رفض المستندات", note: "ملاحظة المراجع (اختياري)", decided: "تم تسجيل القرار",
-        original: "الأصل مع الأدلة", ela: "خريطة مستوى الخطأ", fields: "البيانات المستخرجة", pick: "اختر ملف قرض للتحقق منه.", egp: "جنيه" },
+        original: "الأصل مع الأدلة", ela: "خريطة مستوى الخطأ", fields: "البيانات المستخرجة", pick: "اختر ملف قرض للتحقق منه.", egp: "جنيه",
+        none: "لم تُولَّد الملفات التجريبية على هذا الجهاز بعد (make data)." },
 };
 const DECISION: Record<string, { en: string; ar: string; tone: "green" | "orange" | "red" }> = {
   approve_docs: { en: "Documents OK", ar: "المستندات سليمة", tone: "green" }, request_more: { en: "More documents requested", ar: "طُلبت مستندات إضافية", tone: "orange" },
@@ -48,7 +51,8 @@ function Evidence({ doc }: { doc: Doc }) {
   );
 }
 
-export default function D1DocVerify({ onTrace }: WorkspaceProps) {
+// The synthetic packs: generated documents with planted forgeries and a ground-truth manifest.
+function Packs({ onTrace }: WorkspaceProps) {
   const { lang } = useI18n();
   const l = L[lang];
   const [packs, setPacks] = useState<Pack[]>([]);
@@ -94,8 +98,9 @@ export default function D1DocVerify({ onTrace }: WorkspaceProps) {
         <div className="flex items-center gap-3 rounded-xl border border-nbe-border bg-white p-4">
           <span className="font-bold text-nbe-green">{sel}</span>
           <span dir="auto" className="text-sm">{packs.find((p) => p.id === sel)?.[lang === "ar" ? "name_ar" : "name_en"]}</span>
-          <span className="ms-auto"><Button test="verify" onClick={verify} disabled={busy}>{l.verify}</Button></span>
+          <span className="ms-auto"><Button test="verify" onClick={verify} disabled={busy || packs.length === 0}>{l.verify}</Button></span>
         </div>
+        {packs.length === 0 && !error && <p className="text-sm text-nbe-text">{l.none}</p>}
         <ErrorNote error={error} />
         {busy && <Spinner label={l.working} />}
         {res && (
@@ -187,6 +192,30 @@ export default function D1DocVerify({ onTrace }: WorkspaceProps) {
           )}
         </Modal>
       )}
+    </div>
+  );
+}
+
+const MODES = {
+  en: { files: "Uploaded documents", packs: "Demo packs (synthetic)" },
+  ar: { files: "مستندات مرفوعة", packs: "ملفات تجريبية (مولَّدة)" },
+};
+
+// Two ways in: an applicant's own documents, uploaded and read on this machine, or the synthetic packs.
+export default function D1DocVerify(props: WorkspaceProps) {
+  const { lang } = useI18n();
+  const [mode, setMode] = useState<"files" | "packs">("files");
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-2">
+        {(["files", "packs"] as const).map((m) => (
+          <button key={m} data-test={`mode-${m}`} onClick={() => { setMode(m); props.onTrace([]); }}
+                  className={`rounded-full px-4 py-1.5 text-sm font-semibold ${mode === m ? "bg-nbe-green text-white" : "bg-white text-nbe-green ring-1 ring-nbe-border"}`}>
+            {MODES[lang][m]}
+          </button>
+        ))}
+      </div>
+      {mode === "files" ? <D1Cases {...props} /> : <Packs {...props} />}
     </div>
   );
 }

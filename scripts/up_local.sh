@@ -39,6 +39,8 @@ $C up -d $BUILD_FLAG --wait nbe-postgres nbe-qdrant nbe-llmgw nbe-retrieval
 PLATFORM="nbe-mockbank nbe-guardrails"
 [ "${VOICE:-1}" = "1" ] && PLATFORM="$PLATFORM nbe-voicetut nbe-qwencleo"
 case " $DEMOS " in *" d2 "*|*" d5 "*|*" d6 "*) PLATFORM="$PLATFORM nbe-docling" ;; esac   # only these read uploads
+# D1 reads real documents with the fine-tuned Qwen3-VL (about 17.5 GB of GPU memory); DOCVLM=0 leaves it off
+case " $DEMOS " in *" d1 "*) [ "${DOCVLM:-1}" = "1" ] && PLATFORM="$PLATFORM nbe-docvlm" ;; esac
 
 step "platform and demo services: $DEMOS"
 $C up -d $BUILD_FLAG --wait $PLATFORM $(printf 'nbe-%s ' $DEMOS) nbe-portal nbe-gateway
