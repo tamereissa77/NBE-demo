@@ -125,11 +125,13 @@
   },
   {
     "id": "KB16",
-    "topic": "بطاقات الائتمان: الحد والفائدة",
-    "question_ar": "ما هي تفاصيل الحد الائتماني والفوائد الخاصة ببطاقات الائتمان؟",
-    "answer_ar": "بخصوص بطاقات الائتمان، يرجى العلم أن الحد الائتماني المتاح يعتمد على دراسة الملاءة المالية للعميل والسياسات الائتمانية المتبعة بالبنك. أما فيما يتعلق بالفوائد، فهي تُحتسب وفقاً للشروط والأحكام الخاصة بكل بطاقة ونوعها. نود التنويه بأنه في حال فقدان البطاقة، يجب إيقافها فوراً قبل طلب إصدار بديل، علماً بأن رسوم إصدار بطاقة الائتمان البديلة تبلغ 100 جنيه، ويتم التسليم في الفرع خلال 5 أيام عمل بعد التحقق من بطاقة الرقم القومي ورمز التحقق (OTP).",
-    "question_en": "What are the details regarding the credit limit and interest for credit cards?",
-    "answer_en": "Regarding credit cards, please note that the available credit limit depends on the customer's financial solvency and the bank's credit policies. As for interest, it is calculated according to the terms and conditions specific to each card type. We would like to point out that in case of card loss, it must be blocked immediately before requesting a replacement. Please note that the fee for issuing a replacement credit card is 100 EGP, and delivery is made at the branch within 5 working days after verifying the National ID and the One-Time Password (OTP)."
+    "topic": "بطاقات الائتمان: الحد الائتماني والعائد وفترة السماح",
+    "question_ar": "ما الحد الائتماني لبطاقات الائتمان وما سعر العائد وفترة السماح والحد الأدنى للسداد؟",
+    "answer_ar": "الحد الائتماني الأقصى حسب نوع البطاقة: 9,999 جنيه لفيزا كلاسيك وماستركارد استاندرد ومصر للطيران؛ 49,999 جنيه لفيزا جولد وماستركارد تيتانيوم؛ 250,000 جنيه لفيزا وماستركارد بلاتينم؛ 500,000 جنيه لماستركارد وورلد وفيزا سيغنتشر؛ ولماستركارد وورلد إيليت وفيزا إنفينيت حتى 3,000,000 جنيه للمضمونة و1,500,000 جنيه لغير المضمونة. فترة السماح حتى 55 يوماً (حتى 57 يوماً للبلاتينم وما فوقها) على المشتريات فقط. سعر العائد المدين 3.5% شهرياً، والحد الأدنى للسداد 5% شهرياً. رسوم تجاوز الحد الائتماني أو التأخير 75 جنيه. الحد الفعلي لكل عميل يحدده البنك بعد دراسة طلبه.",
+    "question_en": "What are the credit card limits, the interest rate, the grace period and the minimum payment?",
+    "answer_en": "The maximum credit limit depends on the card: EGP 9,999 for Visa Classic, Mastercard Standard and EgyptAir Mastercard; EGP 49,999 for Visa Gold and Mastercard Titanium; EGP 250,000 for Visa and Mastercard Platinum; EGP 500,000 for Mastercard World and Visa Signature; and for Mastercard World Elite and Visa Infinite up to EGP 3,000,000 secured and EGP 1,500,000 unsecured. The grace period is up to 55 days (up to 57 days for Platinum and above), on purchases only. The debit interest rate is 3.5% a month and the minimum payment is 5% a month. The over-limit or late-payment fee is EGP 75. Each customer's actual limit is set by the bank after it studies the application.",
+    "source": "nbe.com.eg product pages",
+    "as_of": "2026-10-11"
   },
   {
     "id": "KB17",
@@ -141,19 +143,23 @@
   },
   {
     "id": "KB18",
-    "topic": "التمويل الشخصي: المستندات",
-    "question_ar": "ما هي المستندات المطلوبة لتقديم طلب التمويل الشخصي للموظفين؟",
-    "answer_ar": "لتقديم طلب التمويل الشخصي للموظفين، يجب تقديم المستندات التالية: بطاقة الرقم القومي، خطاب من جهة العمل، وكشف حساب بنكي لآخر 3 أشهر. يرجى العلم أن الحد الأقصى للقسط الشهري هو 40% من صافي الدخل الشهري، وأقصى مدة للسداد هي 7 سنوات. يتم الرد على الطلب خلال 5 أيام عمل، مع العلم أنه يتم إجراء تحقق آلي من المستندات قبل إحالة الطلب إلى لجنة الائتمان.",
-    "question_en": "What are the documents required to apply for a personal loan for employees?",
-    "answer_en": "To apply for a personal loan for employees, the following documents must be submitted: National ID, an employment letter, and a bank statement for the last 3 months. Please note that the maximum monthly installment is 40% of the net monthly income, and the maximum repayment period is 7 years. The response to the application will be provided within 5 working days, noting that an automated verification of documents is conducted before referring the application to the credit committee."
+    "topic": "القرض الشخصي النقدي: الأنواع والحد الأقصى والمدة",
+    "question_ar": "ازاي آخد قرض شخصي وما أنواع القرض الشخصي النقدي والحد الأقصى للمبلغ والمدة؟",
+    "answer_ar": "القرض الشخصي النقدي له عدة برامج. بضمان تحويل المرتب أو القسط (للعاملين بالحكومة والقطاع العام وقطاع الأعمال العام، وقطاع البترول، والشركات المدرجة بالبنك): حتى 4,000,000 جنيه ومدة تصل إلى 12 سنة، مع حساب جارٍ مجاناً. بدون تحويل المرتب: حتى 500,000 جنيه و4 سنوات للحكومة والقطاع العام، 750,000 جنيه و4 سنوات لقطاع البترول، 750,000 جنيه و5 سنوات للشركات المدرجة، و3,000,000 جنيه و10 سنوات للعاملين بالبنوك. أصحاب الأعمال والمهن الحرة: حتى 3,000,000 جنيه و7 سنوات. أصحاب المعاشات: حتى 1,000,000 جنيه و10 سنوات. كل البرامج بدون ضامن ومعها تأمين مجاني على الحياة والعجز الكلي. التقديم من صفحة القرض على موقع البنك (قدّم الآن)، وللاستفسار 19623.",
+    "question_en": "How do I get a personal loan, and what are the personal cash loan types, maximum amounts and terms?",
+    "answer_en": "The personal cash loan comes in several programmes. Secured by salary or instalment transfer (employees of government and public-sector bodies, the petroleum sector, and companies listed with the bank): up to EGP 4,000,000 over up to 12 years, with a free current account. Without salary transfer: up to EGP 500,000 over 4 years for government and public sector, EGP 750,000 over 4 years for the petroleum sector, EGP 750,000 over 5 years for listed companies, and EGP 3,000,000 over 10 years for bank employees. Business owners and self-employed professionals: up to EGP 3,000,000 over 7 years. Pensioners: up to EGP 1,000,000 over 10 years. Every programme needs no guarantor and includes free life and total-disability insurance. Apply from the loan's page on the bank's website (Apply Now); for questions call 19623.",
+    "source": "nbe.com.eg product pages",
+    "as_of": "2026-10-11"
   },
   {
     "id": "KB19",
-    "topic": "التمويل الشخصي: أقصى قسط",
-    "question_ar": "ما هو أقصى قسط مسموح به عند طلب التمويل الشخصي للموظفين؟",
-    "answer_ar": "عند تقديم طلب التمويل الشخصي للموظفين، يجب تقديم المستندات التالية: بطاقة الرقم القومي، خطاب جهة العمل، وكشف حساب لآخر 3 أشهر. يبلغ أقصى قسط مسموح به 40% من صافي الدخل الشهري، وذلك بحد أقصى لمدة تمويل تصل إلى 7 سنوات. يرجى العلم أنه يتم إجراء تحقق آلي من المستندات قبل الإحالة إلى لجنة الائتمان، ويتم الرد على الطلب خلال 5 أيام عمل.",
-    "question_en": "What is the maximum installment allowed when applying for personal financing for employees?",
-    "answer_en": "When applying for personal financing for employees, the following documents are required: National ID, an employment letter, and a bank statement for the last 3 months. The maximum installment allowed is 40% of the net monthly income, with a maximum tenure of up to 7 years. Please note that an automated verification of documents is conducted before referral to the credit committee, and the response time is 5 working days."
+    "topic": "القرض الشخصي للموظفين وأصحاب المعاشات: الشروط والمستندات",
+    "question_ar": "ما شروط ومستندات القرض الشخصي للموظفين وأصحاب المعاشات؟",
+    "answer_ar": "للموظفين بضمان تحويل المرتب أو القسط: خطاب معتمد من جهة العمل موضح به الدخل الشهري وتاريخ التعيين، وتعهد جهة العمل بتحويل المرتب أو القسط للبنك حتى الانتهاء من سداد القرض، وصورة بطاقة الرقم القومي السارية. للموظفين بدون تحويل المرتب: خطاب جهة العمل بالدخل وتاريخ التعيين، وصورة بطاقة الرقم القومي السارية، وإيصال شحن أو فاتورة مرافق حديثة لم يمضِ عليها أكثر من 3 شهور، ويُطلب كشف حساب بنكي من العاملين بقطاع البترول والشركات المدرجة والبنوك (آخر 6 شهور للعاملين بالبنوك). السن في الحالتين لا يقل عن 21 سنة ولا يزيد عن 60 سنة في نهاية التمويل. لأصحاب المعاشات: صورة بطاقة الرقم القومي السارية، وتعهد بتحويل المعاش على البنك طوال مدة التمويل، وألا يزيد السن عن 65 سنة في نهاية التمويل. لا توجد مصاريف استعلام ائتماني في برنامج تحويل المرتب.",
+    "question_en": "What are the conditions and documents for a personal loan for employees and pensioners?",
+    "answer_en": "Employees with salary or instalment transfer: a certified letter from the employer stating the monthly income and hiring date, the employer's undertaking to transfer the salary or instalment to the bank until the loan is repaid, and a copy of a valid national ID. Employees without salary transfer: the employer's letter with income and hiring date, a copy of a valid national ID, and a recent top-up receipt or utility bill no more than 3 months old; a bank statement is also required from employees of the petroleum sector, listed companies and banks (the last 6 months for bank employees). In both cases the borrower must be at least 21 and no older than 60 at the end of the loan. Pensioners: a copy of a valid national ID, an undertaking to have the pension transferred to the bank for the whole term, and an age of no more than 65 at the end of the loan. The salary-transfer programme has no credit-inquiry fee.",
+    "source": "nbe.com.eg product pages",
+    "as_of": "2026-10-11"
   },
   {
     "id": "KB20",
@@ -282,5 +288,75 @@
     "answer_en": "You can apply to open an account on the bank's website through the \"Open your account from where you are\" service. It is for Egyptian individuals aged 21 or over who live in Egypt, hold a valid national ID, can read and write, and have no existing account with the bank. It is not available for opening an account by power of attorney, for a minor, or as a gift. Steps: enter your national ID number and mobile number, then the security code sent to the mobile, then your email address and the security code sent to it, then the application details and how you will complete the signature and documents. To finish, visit one of the bank's branches or electronic-service branches within 10 working days, otherwise the application is cancelled automatically and you can submit a new one. Customers aged 60 or over, women and people with special needs can ask for a bank employee to visit them; this is available in some governorates only.",
     "source": "nbe.com.eg product pages",
     "as_of": "2026-10-09"
+  },
+  {
+    "id": "KB35",
+    "topic": "الحد الأقصى للسحب النقدي اليومي بالبطاقات (فيزا / ماستركارد / ميزة)",
+    "question_ar": "ما الحد الأقصى للسحب النقدي اليومي من البطاقة (الفيزا) من ماكينات الصراف الآلي؟",
+    "answer_ar": "الحد الأقصى للسحب النقدي اليومي داخل مصر 30,000 جنيه، وهو نفس الحد لبطاقات الخصم المباشر بكل أنواعها (ميزة، كلاسيك، جولد، تيتانيوم، بلاتينم، وورلد، وورلد إيليت) ولبطاقات الائتمان بكل أنواعها. ببطاقة الخصم المباشر السحب من ماكينات البنك الأهلي المصري مجاناً، ومن ماكينات البنوك المحلية الأخرى 5 جنيه للعملية الواحدة. ببطاقة الائتمان تُحتسب على السحب النقدي عمولة 2% بحد أدنى 10 جنيه من ماكينات البنك (وبحد أدنى 20 جنيه من ماكينات البنوك المحلية الأخرى)، مع عائد من تاريخ السحب. بطاقات الخصم المباشر بالجنيه المصري لا تُستخدم خارج مصر.",
+    "question_en": "What is the maximum daily cash withdrawal from my card (Visa) at ATMs?",
+    "answer_en": "The maximum daily cash withdrawal inside Egypt is EGP 30,000. It is the same for every type of debit card (Meeza, Classic, Gold, Titanium, Platinum, World, World Elite) and every type of credit card. With a debit card, withdrawals at National Bank of Egypt ATMs are free, and at other local banks' ATMs cost EGP 5 per transaction. With a credit card, a cash withdrawal carries a 2% commission, minimum EGP 10 at the bank's ATMs (minimum EGP 20 at other local banks' ATMs), plus interest from the withdrawal date. Egyptian-pound debit cards cannot be used outside Egypt.",
+    "source": "nbe.com.eg product pages",
+    "as_of": "2026-10-11"
+  },
+  {
+    "id": "KB36",
+    "topic": "حدود المشتريات والإيداع لبطاقات الخصم المباشر",
+    "question_ar": "ما الحد الأقصى اليومي والشهري للمشتريات والإيداع ببطاقة الخصم المباشر؟",
+    "answer_ar": "الحد الأقصى اليومي للمشتريات داخل مصر ببطاقة الخصم المباشر حسب نوع البطاقة: ميزة 200,000 جنيه، كلاسيك 300,000 جنيه، جولد 400,000 جنيه، تيتانيوم 450,000 جنيه، بلاتينم 500,000 جنيه، وورلد 600,000 جنيه، وورلد إيليت 750,000 جنيه. الحد الأقصى الشهري للمشتريات: 1,000,000 جنيه لميزة وكلاسيك، 1,500,000 جنيه لجولد، 1,800,000 جنيه لتيتانيوم، و2,000,000 جنيه لبلاتينم ووورلد ووورلد إيليت. الإيداع بالبطاقة في ماكينات الصراف الآلي للبنك حتى 100,000 جنيه يومياً و500,000 جنيه شهرياً. والحد الأقصى للسحب النقدي اليومي 30,000 جنيه لكل الأنواع.",
+    "question_en": "What are the daily and monthly purchase and deposit limits on a debit card?",
+    "answer_en": "The daily purchase limit inside Egypt on a debit card depends on the card: Meeza EGP 200,000, Classic EGP 300,000, Gold EGP 400,000, Titanium EGP 450,000, Platinum EGP 500,000, World EGP 600,000, World Elite EGP 750,000. The monthly purchase limit is EGP 1,000,000 for Meeza and Classic, EGP 1,500,000 for Gold, EGP 1,800,000 for Titanium, and EGP 2,000,000 for Platinum, World and World Elite. Card deposits at the bank's ATMs are limited to EGP 100,000 a day and EGP 500,000 a month. The daily cash withdrawal limit is EGP 30,000 for every type.",
+    "source": "nbe.com.eg product pages",
+    "as_of": "2026-10-11"
+  },
+  {
+    "id": "KB37",
+    "topic": "حدود استخدام بطاقات الائتمان: المشتريات والسحب بالعملة الأجنبية",
+    "question_ar": "ما حدود المشتريات والسحب ببطاقة الائتمان داخل مصر وبالعملة الأجنبية خارجها؟",
+    "answer_ar": "داخل مصر، الحد الأقصى لمبلغ عملية الشراء الواحدة ببطاقة الائتمان: 20,000 جنيه لفيزا كلاسيك وماستركارد استاندرد ومصر للطيران، 50,000 جنيه لفيزا الذهبية وماستركارد تيتانيوم، 250,000 جنيه للبلاتينية، والحد الائتماني للبطاقة لوورلد وسيغنتشر ووورلد إيليت وإنفينيت. والسحب النقدي اليومي 30,000 جنيه لكل الأنواع. بالعملة الأجنبية خارج مصر، الحد الأقصى للسحب النقدي، يومياً وشهرياً، بما يعادل: 3,750 جنيه للكلاسيك والاستاندرد، 5,250 جنيه للذهبية والتيتانيوم، و11,250 جنيه للبلاتينية وما فوقها. هذه الحدود تشمل عمولة 3% على الاستخدام بالعملة الأجنبية، وتخضع للحد الائتماني للبطاقة أيهما أقل.",
+    "question_en": "What are the credit card purchase and withdrawal limits in Egypt and in foreign currency abroad?",
+    "answer_en": "Inside Egypt, the maximum for a single credit card purchase is EGP 20,000 for Visa Classic, Mastercard Standard and EgyptAir Mastercard, EGP 50,000 for Visa Gold and Mastercard Titanium, EGP 250,000 for Platinum cards, and the card's credit limit for World, Signature, World Elite and Infinite. Daily cash withdrawal is EGP 30,000 for every type. In foreign currency outside Egypt, the cash withdrawal limit, daily and monthly, is the equivalent of EGP 3,750 for Classic and Standard, EGP 5,250 for Gold and Titanium, and EGP 11,250 for Platinum and above. These limits include the 3% foreign-currency commission and are subject to the card's credit limit, whichever is lower.",
+    "source": "nbe.com.eg product pages",
+    "as_of": "2026-10-11"
+  },
+  {
+    "id": "KB38",
+    "topic": "القرض الشخصي لأصحاب الأعمال والمهن الحرة وبرامج الدخل الافتراضي",
+    "question_ar": "ما شروط ومستندات القرض الشخصي لأصحاب الأعمال والمهن الحرة ولمن لا يحوّل مرتبه على البنك؟",
+    "answer_ar": "قرض أصحاب الأعمال والمهن الحرة حتى 3,000,000 جنيه ومدة 7 سنوات. الشروط: مرور سنة على الأقل على بدء النشاط لعملاء البنك (ممن مضى على تعاملهم مع البنك عام على الأقل) أو سنتين لغير عملاء البنك، والسن من 21 سنة ولا يزيد عن 65 سنة في نهاية التمويل. المستندات: بطاقة الرقم القومي السارية، إيصال مرافق حديث لمقر السكن والنشاط، مستند ملكية مقر النشاط أو عقد الإيجار، البطاقة الضريبية السارية، مستخرج سجل تجاري حديث (3 شهور بحد أقصى) أو رخصة مزاولة المهنة، وكشف حساب بنكي لآخر عام. وتوجد برامج الدخل الافتراضي بصورة بطاقة الرقم القومي فقط: برنامج أرصدة المدخرات حتى 3,000,000 جنيه، وبرنامج الاستعلام الائتماني للموظفين حتى 500,000 جنيه، ومدتهما حتى 7 سنوات.",
+    "question_en": "What are the conditions and documents for a personal loan for business owners, the self-employed and people whose salary is not transferred to the bank?",
+    "answer_en": "The loan for business owners and self-employed professionals goes up to EGP 3,000,000 over 7 years. Conditions: the activity has run for at least one year for the bank's customers (with at least a year of dealings with the bank) or two years for others, and the borrower is at least 21 and no older than 65 at the end of the loan. Documents: a valid national ID, a recent utility receipt for the home and the business address, proof of ownership or a lease for the business premises, a valid tax card, a recent commercial register extract (3 months at most) or a licence to practise, and a bank statement for the last year. There are also surrogate-income programmes that need only a copy of the national ID: the savings-balances programme up to EGP 3,000,000 and the credit-inquiry programme for employees up to EGP 500,000, both over up to 7 years.",
+    "source": "nbe.com.eg product pages",
+    "as_of": "2026-10-11"
+  },
+  {
+    "id": "KB39",
+    "topic": "التمويل العقاري: الشروط (مبادرة البنك المركزي لمتوسطي الدخل 8% و12%)",
+    "question_ar": "ايه هي شروط التمويل العقاري وما سعر العائد والدفعة المقدمة ومدة القرض؟",
+    "answer_ar": "التمويل العقاري متاح ضمن مبادرات البنك المركزي المصري، للمصريين المقيمين فقط، من سن 21 سنة وحتى 65 سنة في نهاية التمويل. مبادرة 8% متناقص: صافي الدخل الشهري حتى 13,000 جنيه للفرد و18,000 جنيه للأسرة، قيمة الوحدة حتى 1,100,000 جنيه بمقدم 15% على الأقل، أو حتى 1,400,000 جنيه بمقدم 20% على الأقل، والمدة من 5 إلى 30 سنة، ومصاريف إدارية 1%. مبادرة 12% متناقص: صافي الدخل حتى 40,000 جنيه للفرد و50,000 جنيه للأسرة، قيمة الوحدة حتى 2,500,000 جنيه وتكون كاملة التشطيب، مقدم 20% على الأقل، والمدة من 5 إلى 25 سنة. في المبادرتين القسط لا يتجاوز 40% من صافي الدخل، ومدة العمل 6 أشهر على الأقل للموظفين، ولا توجد عمولة سداد معجل، مع تأمين مجاني على الحياة والعجز الكلي.",
+    "question_en": "What are the mortgage finance conditions, the interest rate, the down payment and the loan term?",
+    "answer_en": "Mortgage finance is offered under the Central Bank of Egypt's initiatives, for resident Egyptians only, aged 21 and up to 65 at the end of the loan. The 8% declining-rate initiative: net monthly income up to EGP 13,000 for an individual and EGP 18,000 for a family, a unit worth up to EGP 1,100,000 with at least 15% down, or up to EGP 1,400,000 with at least 20% down, a term of 5 to 30 years, and a 1% administrative fee. The 12% declining-rate initiative: net income up to EGP 40,000 for an individual and EGP 50,000 for a family, a fully finished unit worth up to EGP 2,500,000, at least 20% down, and a term of 5 to 25 years. In both, the instalment may not exceed 40% of net income, employees need at least 6 months in work, there is no early-settlement commission, and life and total-disability insurance is free.",
+    "source": "nbe.com.eg product pages",
+    "as_of": "2026-10-11"
+  },
+  {
+    "id": "KB40",
+    "topic": "التمويل العقاري: المستندات وقيمة التمويل وأصحاب المعاشات",
+    "question_ar": "ما المستندات المطلوبة للتمويل العقاري وما نسبة التمويل من قيمة الوحدة؟",
+    "answer_ar": "المستندات الأولية للتمويل العقاري: بطاقة رقم قومي سارية، إيصال شحن أو إيصال مرافق حديث، شهادة قيد (للذكور والإناث)، ومستندات إثبات الدخل. وإذا كان العميل متزوجاً: بطاقة الرقم القومي السارية للزوجة أو صورة من قسيمة الزواج، ومفردات دخل الزوجة إذا كانت تعمل. قيمة التمويل تصل إلى 85% من قيمة الوحدة في مبادرة 8% وإلى 80% في مبادرة 12%، وتصل إلى 60% لأصحاب المعاشات، الذين يدفعون مقدماً 40% على الأقل. وديعة الصيانة بحد أقصى 10% من سعر الوحدة ويشملها التمويل. عمولة التأخير 2% على الأقساط المستحقة. لأصحاب الأعمال والمهن الحرة مدة النشاط 12 شهراً على الأقل في مبادرة 8% و24 شهراً في مبادرة 12%. وتوجد أيضاً مبادرات لمحدودي ومتوسطي الدخل في مشروعات صندوق الإسكان الاجتماعي بعائد يبدأ من 3%.",
+    "question_en": "Which documents are needed for mortgage finance, and what share of the unit's value is financed?",
+    "answer_en": "Initial documents for mortgage finance: a valid national ID, a recent top-up or utility receipt, a registration certificate, and proof of income. If the customer is married: the wife's valid national ID or a copy of the marriage certificate, and the wife's income statement if she works. Finance reaches 85% of the unit's value under the 8% initiative and 80% under the 12% initiative, and 60% for pensioners, who pay at least 40% down. The maintenance deposit is at most 10% of the unit's price and is included in the finance. The late fee is 2% on instalments due. Business owners and the self-employed need at least 12 months of activity under the 8% initiative and 24 months under the 12% initiative. There are also initiatives for low- and middle-income customers in Social Housing Fund projects, with rates starting at 3%.",
+    "source": "nbe.com.eg product pages",
+    "as_of": "2026-10-11"
+  },
+  {
+    "id": "KB41",
+    "topic": "القرض الطبي: برنامج الأطباء وبرنامج الأهلي ميديكال",
+    "question_ar": "ازاي آخد قرض طبي؟ وهل يوجد قرض للأطباء أو لتمويل مصاريف العلاج؟",
+    "answer_ar": "لا يوجد على موقع البنك منتج باسم «القرض الطبي». المتاح: أولاً برنامج الأطباء، وهو قرض شخصي نقدي للأطباء البشريين أصحاب العيادات الخاصة والمراكز الطبية وأطباء الأسنان، حتى 2,000,000 جنيه حسب مدة مزاولة المهنة ومدة تصل إلى 7 سنوات، بدون ضامن ومع تأمين مجاني على الحياة والعجز الكلي. السن لا يقل عن 25 سنة ولا يزيد عن 65 سنة عند انتهاء السداد، والمستندات: صورة بطاقة الرقم القومي السارية، رخصة مزاولة المهنة، ترخيص العيادة أو المركز الطبي، وكارنيه النقابة. ثانياً، لمن يحتاج تمويلاً لمصاريف علاج، المتاح هو القرض الشخصي النقدي بأحد برامجه. ثالثاً برنامج الأهلي ميديكال: خصم حتى 30% على الخدمات الطبية لدى أكثر من 2000 مقدم خدمة لحاملي بطاقات البلاتينم فأعلى، والاشتراك مجاناً، وخدمة عملائه 17174.",
+    "question_en": "How do I get a medical loan? Is there a loan for doctors or to pay for treatment?",
+    "answer_en": "The bank's website has no product called a \"medical loan\". What is available: first, the Doctors Programme, a personal cash loan for physicians who own private clinics or medical centres and for dentists, up to EGP 2,000,000 depending on years in practice, over up to 7 years, with no guarantor and free life and total-disability insurance. The borrower must be at least 25 and no older than 65 when repayment ends; documents are a copy of a valid national ID, the licence to practise, the clinic or medical centre licence, and the syndicate card. Second, for treatment costs you can apply for the personal cash loan under one of its programmes. Third, the Al Ahly Medical programme: up to 30% off medical services at more than 2,000 providers for holders of Platinum cards and above, free to join, with customer service on 17174.",
+    "source": "nbe.com.eg product pages",
+    "as_of": "2026-10-11"
   }
 ]

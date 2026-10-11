@@ -143,7 +143,9 @@ async def run_tool(s: dict, name: str, args: dict, events: list) -> dict:
         return await platform.mockbank("POST", "/handoff", {"customer_id": cid, "reason": args.get("reason", "customer_request"), "summary": summary})
     if name == "search_kb":
         hits = await retrieval.search(COLLECTION, args.get("query", ""), k=2, candidates=10)
-        return {"results": [h["text"][:700] for h in hits]}
+        # Arabic question and answer come first in an article and run to about 900 characters: a shorter
+        # cut dropped the end of the longer answers
+        return {"results": [h["text"][:1000] for h in hits]}
     return {"error": f"unknown tool {name}"}
 
 
