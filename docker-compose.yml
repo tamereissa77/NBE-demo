@@ -468,7 +468,8 @@ services:
       args: { SERVICE: d5_legal }
     image: nbe-d5:latest
     container_name: nbe-d5
-    environment: { <<: *demo-env, DEMO_ID: d5 }
+    # D5_REDUCE_ALIAS=quality puts the reduce step on the 31B (make quality-on); default workhorse
+    environment: { <<: *demo-env, DEMO_ID: d5, D5_REDUCE_ALIAS: "${D5_REDUCE_ALIAS:-workhorse}" }
 
   nbe-d6:
     <<: *demo-api
