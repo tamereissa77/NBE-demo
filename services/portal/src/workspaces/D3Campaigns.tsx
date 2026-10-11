@@ -11,25 +11,44 @@ interface Issue { field: string; rule: string; detail: string }
 interface Result {
   segment: { persona_ar: string; n: number; sms: number; email: number }; profile: Profile[]; merchants: Merchant[];
   offer: { merchant: string; category_ar: string; cashback_pct: number; cap_egp: number; valid_until: string };
-  copy: Record<string, string>; compliance: { passed: boolean; issues: Issue[]; initial_issues: Issue[]; auto_fixed: boolean };
+  copy: Record<string, string>; compliance: { passed: boolean; issues: Issue[]; initial_issues: Issue[]; auto_fixed: boolean; fix_passes: number; enforced_in_code: { field: string; action: string; detail: string }[] };
   banner: { png_base64: string | null; source: string }; trace: TraceStep[]; total_ms: number;
-  ab_test: { per_arm: number; audience_opted_in: number; min_detectable_lift: number | null; baseline_rate: number; holdout_pct: number; metric: string; note: string; variants: { A: string; B: string } };
+  ab_test: { per_arm: number; audience_opted_in: number; min_detectable_lift: number | null; baseline_rate: number; baseline_note: string; min_detectable_lift_if_baseline: Record<string, number | null>; holdout_pct: number; metric: string; note: string; variants: { A: string; B: string } };
 }
 
 const PERSONA_EN: Record<string, string> = { young_professional: "Young professionals", family: "Families", student: "Students", affluent: "Affluent", sme_owner: "SME owners" };
 const TABS: [string, string][] = [["sms_a_ar", "SMS A"], ["sms_b_ar", "SMS B"], ["sms_en", "SMS EN"], ["email_ar", "Email AR"], ["email_en", "Email EN"], ["social_egy", "Social (EGY)"]];
 const L = {
   en: { segment: "Segment", city: "City (optional)", all: "All cities", brief: "Marketing brief (optional)", stress: "Stress-test compliance (plant a banned claim)",
-        build: "Build campaign", working: "Profiling spend, matching merchants, writing and checking copy…", profile: "Interest profile (share of spend · lift vs all customers)",
+        build: "Build campaign", working: "Profiling spend, matching merchants, writing and checking copy…", profile: "Interest profile (share of purchases · lift vs all customers)",
         merchants: "Partner merchant match", card: "Bilingual campaign card", banner: "AI-generated mock-up · synthetic data only", compliance: "Compliance",
         passed: "Checked", fixed: "Auto-fixed", synthetic: "Synthetic data", ab: "A/B test plan", offer: "Offer", none: "Choose a segment and build a campaign.",
-        caught: "Caught before output" },
+        caught: "Caught before output", enforced: "Fixed in code (the model could not fix these)", assumed: "assumed", customers: "customers" },
   ar: { segment: "الشريحة", city: "المدينة (اختياري)", all: "كل المدن", brief: "توجيه تسويقي (اختياري)", stress: "اختبار الامتثال (إدراج عبارة مخالفة عمداً)",
-        build: "إنشاء الحملة", working: "تحليل الإنفاق ومطابقة التجّار وكتابة النصوص وفحصها…", profile: "ملف الاهتمامات (حصة الإنفاق · مقارنة بكل العملاء)",
+        build: "إنشاء الحملة", working: "تحليل الإنفاق ومطابقة التجّار وكتابة النصوص وفحصها…", profile: "ملف الاهتمامات (حصة المشتريات · مقارنة بكل العملاء)",
         merchants: "مطابقة التجّار الشركاء", card: "بطاقة الحملة ثنائية اللغة", banner: "تصميم مُولَّد بالذكاء الاصطناعي · بيانات تجريبية فقط", compliance: "الامتثال",
         passed: "تم الفحص", fixed: "تم التصحيح آلياً", synthetic: "بيانات تجريبية", ab: "خطة اختبار A/B", offer: "العرض", none: "اختر شريحة وأنشئ حملة.",
-        caught: "رُصدت قبل الإخراج" },
+        caught: "رُصدت قبل الإخراج", enforced: "صُحّحت برمجياً (تعذّر على النموذج تصحيحها)", assumed: "افتراض", customers: "عميل" },
 };
+
+// Plain-language names for the compliance output (the API returns rule ids such as "offer_terms").
+const FIELD: Record<string, [string, string]> = {
+  sms_a_ar: ["SMS A (Arabic)", "رسالة A بالعربية"], sms_b_ar: ["SMS B (Arabic)", "رسالة B بالعربية"], sms_en: ["SMS (English)", "رسالة بالإنجليزية"],
+  email_subject_ar: ["Email subject (Arabic)", "عنوان البريد بالعربية"], email_body_ar: ["Email (Arabic)", "البريد بالعربية"],
+  email_subject_en: ["Email subject (English)", "عنوان البريد بالإنجليزية"], email_body_en: ["Email (English)", "البريد بالإنجليزية"],
+  social_egy: ["Social post", "منشور التواصل"], banner_headline_ar: ["Banner headline", "عنوان البانر"],
+};
+const RULE: Record<string, [string, string]> = {
+  offer_terms: ["Missing offer details", "تفاصيل العرض ناقصة"], required_disclaimer: ["Missing disclaimer", "العبارة القانونية ناقصة"],
+  sms_length: ["SMS too long", "رسالة SMS طويلة"], banned_claim: ["Banned claim", "عبارة محظورة"],
+};
+const ACTION: Record<string, [string, string]> = {
+  replaced_with_offer_terms: ["Replaced with the standard offer text", "استُبدلت بنص العرض القياسي"],
+  removed_claim: ["Removed banned claim", "حُذفت العبارة المحظورة"], added_disclaimer: ["Added the disclaimer", "أُضيفت العبارة القانونية"],
+  trimmed_sms: ["Shortened to fit the SMS limit", "اختُصرت لتناسب حد الرسالة"],
+};
+const tr = (m: Record<string, [string, string]>, k: string, lang: "en" | "ar") => (m[k] ? m[k][lang === "ar" ? 1 : 0] : k);
+const detail = (d: string) => d.replace(/^missing /, "");
 
 export default function D3Campaigns({ onTrace }: WorkspaceProps) {
   const { lang } = useI18n();
@@ -132,10 +151,14 @@ export default function D3Campaigns({ onTrace }: WorkspaceProps) {
               <div className="grid gap-2 sm:grid-cols-4">
                 <Block label="Audience">{res.ab_test.audience_opted_in.toLocaleString()} opted in · {res.ab_test.holdout_pct}% holdout</Block>
                 <Block label="Per arm">{res.ab_test.per_arm.toLocaleString()}</Block>
-                <Block label="Baseline">{Math.round(res.ab_test.baseline_rate * 100)}% redemption</Block>
+                <Block label="Baseline">{Math.round(res.ab_test.baseline_rate * 100)}% redemption <Chip tone="orange">{l.assumed}</Chip></Block>
                 <Block label="Detectable lift">{res.ab_test.min_detectable_lift ? `≥ ${Math.round(res.ab_test.min_detectable_lift * 100)}%` : "—"}</Block>
               </div>
               <p className="mt-2 text-xs">{res.ab_test.metric}. {res.ab_test.note}</p>
+              <p className="mt-1 text-xs text-nbe-text">
+                {res.ab_test.baseline_note}{" "}
+                {Object.entries(res.ab_test.min_detectable_lift_if_baseline).map(([b, m]) => `At ${b}: ${m ? `≥ ${Math.round(m * 100)}%` : "too small"}`).join(" · ")}
+              </p>
             </div>
           </>
         )}
@@ -154,10 +177,19 @@ export default function D3Campaigns({ onTrace }: WorkspaceProps) {
             <Block label="SMS · English"><p dir="ltr">{res.copy.sms_en}</p></Block>
             {res.compliance.initial_issues.length > 0 && (
               <Block label={l.caught} accent="red">
-                {res.compliance.initial_issues.map((i, k) => <div key={k} className="text-xs" dir="auto">• {i.field}: {i.rule} {i.detail}</div>)}
+                {res.compliance.initial_issues.map((i, k) => (
+                  <div key={k} className="text-xs">• <b>{tr(FIELD, i.field, lang)}</b>: {tr(RULE, i.rule, lang)}{i.rule === "required_disclaimer" ? "" : <> (<bdi>{detail(i.detail)}</bdi>)</>}</div>
+                ))}
               </Block>
             )}
-            <p className="text-xs text-nbe-text" dir="auto">{res.segment.persona_ar} · {res.segment.n.toLocaleString()} customers · SMS {res.segment.sms} · email {res.segment.email}</p>
+            {res.compliance.enforced_in_code.length > 0 && (
+              <Block label={l.enforced} accent="orange">
+                {res.compliance.enforced_in_code.map((a, k) => (
+                  <div key={k} className="text-xs">• <b>{tr(FIELD, a.field, lang)}</b>: {tr(ACTION, a.action, lang)}{a.action === "added_disclaimer" ? "" : <> (<bdi>{detail(a.detail)}</bdi>)</>}</div>
+                ))}
+              </Block>
+            )}
+            <p className="text-xs text-nbe-text"><bdi>{res.segment.persona_ar}</bdi> · {res.segment.n.toLocaleString()} {l.customers} · SMS {res.segment.sms.toLocaleString()} · email {res.segment.email.toLocaleString()}</p>
           </div>
         )}
       </Panel>
