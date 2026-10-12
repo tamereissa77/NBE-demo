@@ -1,0 +1,491 @@
+{
+ "_about": "Multi-turn scenarios for D6 follow-up questions (tests/d6_followups_eval.py). Each scenario tests one hypothesis; only turns with a `check` are scored. task/alias/lang are the router's decision, reply_lang is the language of the answer itself, retrieval_has is a documentation page the code lookup must have found, restored is how many earlier exchanges must come back after a page reload.",
+ "scenarios": [
+  {
+   "id": "memory-short-en",
+   "hypothesis": "memory",
+   "about": "A fact given in turn 1 is asked for in turn 5, after it has left the 6-message window.",
+   "turns": [
+    {
+     "q": "For this chat, note that my branch code is BR-417 and my team has 12 tellers. Just confirm."
+    },
+    {
+     "q": "What is a standing order?"
+    },
+    {
+     "q": "And what is a direct debit?"
+    },
+    {
+     "q": "Which of the two is better for paying monthly rent?"
+    },
+    {
+     "q": "What is my branch code?",
+     "check": {
+      "contains": [
+       [
+        "br-417"
+       ]
+      ]
+     }
+    },
+    {
+     "q": "And how many tellers are on my team?",
+     "check": {
+      "contains": [
+       [
+        "re:(?<![\\d.,])12(?![\\d]|[.,]\\d)",
+        "twelve"
+       ]
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "memory-short-ar",
+   "hypothesis": "memory",
+   "about": "The same in Arabic.",
+   "turns": [
+    {
+     "q": "للعلم خلال هذه المحادثة: رقمي الوظيفي 55231 وأعمل في فرع طنطا. أكّد فقط."
+    },
+    {
+     "q": "ما المقصود بخطاب الضمان؟"
+    },
+    {
+     "q": "وما الفرق بينه وبين الاعتماد المستندي؟"
+    },
+    {
+     "q": "أيهما يُستخدم أكثر في الاستيراد؟"
+    },
+    {
+     "q": "ما رقمي الوظيفي؟",
+     "check": {
+      "contains": [
+       [
+        "55231"
+       ]
+      ]
+     }
+    },
+    {
+     "q": "وفي أي فرع أعمل؟",
+     "check": {
+      "contains": [
+       [
+        "طنطا"
+       ]
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "memory-long",
+   "hypothesis": "memory",
+   "about": "A long conversation (six drafted e-mails) between the fact and the question: more text than a fixed window can hold.",
+   "turns": [
+    {
+     "q": "Context for this chat: I am preparing for an internal audit on 14 December 2026 and the lead auditor is Mr. Sameh Wahba. Just confirm."
+    },
+    {
+     "q": "Write an email of about 150 words to branch managers announcing a cash-handling refresher training next week."
+    },
+    {
+     "q": "Write an email of about 150 words to the IT department asking for a report of ATM downtime in November."
+    },
+    {
+     "q": "Write an email of about 150 words to all tellers reminding them of the signature verification procedure."
+    },
+    {
+     "q": "Write an email of about 150 words to the compliance team asking for the updated KYC checklist."
+    },
+    {
+     "q": "Write an email of about 150 words to HR requesting two temporary staff for the year-end period."
+    },
+    {
+     "q": "Write an email of about 150 words to the facilities team about repairing the queue-management screen."
+    },
+    {
+     "q": "Remind me: on what date is the audit, and who is the lead auditor?",
+     "check": {
+      "contains": [
+       [
+        "14"
+       ],
+       [
+        "december",
+        "dec"
+       ],
+       [
+        "wahba"
+       ]
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "route-draft-ar",
+   "hypothesis": "routing",
+   "about": "Refining a draft: the follow-ups carry no drafting keyword.",
+   "turns": [
+    {
+     "q": "اكتب بريداً رسمياً لمديري الفروع عن صيانة نظام الحوالات يوم الجمعة من 1 إلى 5 صباحاً",
+     "check": {
+      "task": "drafting"
+     }
+    },
+    {
+     "q": "اجعله أقصر",
+     "check": {
+      "task": "drafting"
+     }
+    },
+    {
+     "q": "أضف جملة اعتذار عن الإزعاج في النهاية",
+     "check": {
+      "task": "drafting"
+     }
+    }
+   ]
+  },
+  {
+   "id": "route-draft-en",
+   "hypothesis": "routing",
+   "about": "The same in English.",
+   "turns": [
+    {
+     "q": "Draft an email to branch managers about the transfers system maintenance on Friday from 1 to 5 am.",
+     "check": {
+      "task": "drafting"
+     }
+    },
+    {
+     "q": "Make it shorter.",
+     "check": {
+      "task": "drafting"
+     }
+    },
+    {
+     "q": "Change the tone to be more formal.",
+     "check": {
+      "task": "drafting"
+     }
+    }
+   ]
+  },
+  {
+   "id": "route-code",
+   "hypothesis": "routing",
+   "about": "Questions about code just explained: no code keyword, so they risk leaving the code model.",
+   "turns": [
+    {
+     "q": "Explain this:\n```python\ndf.groupby('branch')['amount'].agg('sum').sort_values(ascending=False).head(5)\n```",
+     "check": {
+      "task": "code",
+      "alias": "hero"
+     }
+    },
+    {
+     "q": "Why is that faster than a loop?",
+     "check": {
+      "task": "code",
+      "alias": "hero"
+     }
+    },
+    {
+     "q": "What does the ascending argument do there?",
+     "check": {
+      "task": "code",
+      "alias": "hero"
+     }
+    }
+   ]
+  },
+  {
+   "id": "code-lookup",
+   "hypothesis": "code lookup",
+   "about": "A follow-up that names no function: the documentation search has only the latest message to go on.",
+   "turns": [
+    {
+     "q": "Explain numpy.linspace with a short example.",
+     "check": {
+      "task": "code",
+      "retrieval_has": "linspace"
+     }
+    },
+    {
+     "q": "And what does the endpoint argument do?",
+     "check": {
+      "task": "code",
+      "retrieval_has": "linspace"
+     }
+    },
+    {
+     "q": "What happens if I set it to False?",
+     "check": {
+      "task": "code",
+      "retrieval_has": "linspace"
+     }
+    }
+   ]
+  },
+  {
+   "id": "language",
+   "hypothesis": "language",
+   "about": "An Arabic conversation; follow-ups that are only an acronym or only code carry no language of their own.",
+   "turns": [
+    {
+     "q": "ما هي أهم إجراءات اعرف عميلك عند فتح حساب جديد؟",
+     "check": {
+      "lang": "ar"
+     }
+    },
+    {
+     "q": "OTP?",
+     "check": {
+      "lang": "ar",
+      "reply_lang": "ar"
+     }
+    },
+    {
+     "q": "SWIFT vs IBAN?",
+     "check": {
+      "lang": "ar",
+      "reply_lang": "ar"
+     }
+    },
+    {
+     "q": "```python\ntotal = sum(x for x in amounts if x > 0)\n```",
+     "check": {
+      "lang": "ar",
+      "reply_lang": "ar"
+     }
+    }
+   ]
+  },
+  {
+   "id": "control-language-switch",
+   "hypothesis": "controls",
+   "about": "CONTROL: a real English sentence in an Arabic conversation should still be answered in English.",
+   "turns": [
+    {
+     "q": "ما المقصود بالشمول المالي؟",
+     "check": {
+      "lang": "ar"
+     }
+    },
+    {
+     "q": "Could you explain that again in English, please?",
+     "check": {
+      "lang": "en",
+      "reply_lang": "en"
+     }
+    }
+   ]
+  },
+  {
+   "id": "control-topic-switch",
+   "hypothesis": "controls",
+   "about": "CONTROL: a new, unrelated request must not inherit the previous task.",
+   "turns": [
+    {
+     "q": "Draft an email to all staff about the new working hours during Ramadan.",
+     "check": {
+      "task": "drafting"
+     }
+    },
+    {
+     "q": "What is the capital of Egypt?",
+     "check": {
+      "task": "general",
+      "contains": [
+       [
+        "cairo"
+       ]
+      ]
+     }
+    },
+    {
+     "q": "ترجم للإنجليزية: تم تفعيل بطاقتك بنجاح.",
+     "check": {
+      "task": "translation"
+     }
+    },
+    {
+     "q": "Explain what this does:\n```python\nprint(len([1, 2, 3]))\n```",
+     "check": {
+      "task": "code"
+     }
+    }
+   ]
+  },
+  {
+   "id": "control-file",
+   "hypothesis": "controls",
+   "about": "CONTROL: follow-ups about an attached file already work (the file is in every prompt) and must keep working.",
+   "file": "../chat-files-test/branch_loans.xlsx",
+   "turns": [
+    {
+     "q": "What is the total loan amount for the Giza branch?",
+     "check": {
+      "task": "file_chat",
+      "contains": [
+       [
+        "3936000"
+       ]
+      ]
+     }
+    },
+    {
+     "q": "And for Mansoura?",
+     "check": {
+      "task": "file_chat",
+      "contains": [
+       [
+        "5815000"
+       ]
+      ]
+     }
+    },
+    {
+     "q": "وكم عدد القروض المرفوضة؟",
+     "check": {
+      "task": "file_chat",
+      "contains": [
+       [
+        "re:(?<![\\d.,])8(?![\\d]|[.,]\\d)",
+        "ثماني",
+        "ثمانيه"
+       ]
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "refresh",
+   "hypothesis": "refresh",
+   "about": "The page is reloaded mid-conversation: can the conversation be fetched back and continued?",
+   "reload_before_turn": 3,
+   "turns": [
+    {
+     "q": "For this chat: the meeting with the regional manager is on Tuesday at 11:30 in the Alexandria office. Just confirm."
+    },
+    {
+     "q": "What should I prepare for a quarterly performance review? Three points only."
+    },
+    {
+     "q": "Where and when is the meeting I mentioned?",
+     "check": {
+      "restored": 2,
+      "contains": [
+       [
+        "11:30",
+        "11.30"
+       ],
+       [
+        "alexandria"
+       ]
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "summary-then-email-ar",
+   "hypothesis": "hand-off",
+   "about": "The buttons under a summary: more detail keeps it a summary, 'turn into an e-mail' must become a draft built on it.",
+   "turns": [
+    {
+     "q": "لخّص في ثلاث نقاط:\nتقرر تأجيل تحديث نظام البطاقات من 16 أكتوبر إلى 23 أكتوبر بسبب تأخر المورد في تسليم الخوادم الجديدة. خلال فترة التحديث يمكن إصدار بطاقات الخصم فقط، أما بطاقات الائتمان فيتوقف إصدارها حتى 25 أكتوبر. على مديري الفروع إبلاغ العملاء الذين لديهم طلبات معلقة وعددهم 1,240 عميلاً، وتقديم تقرير يومي إلى إدارة البطاقات قبل الساعة 3 عصراً. تكلفة التأجيل المقدرة 850 ألف جنيه يتحملها المورد وفق البند 7 من العقد.",
+     "check": {
+      "task": "summarise"
+     }
+    },
+    {
+     "q": "أضف تفاصيل أكثر.",
+     "check": {
+      "task": "summarise",
+      "contains": [
+       [
+        "1240"
+       ]
+      ]
+     }
+    },
+    {
+     "q": "اكتب بريداً إلكترونياً ينقل هذا الملخص إلى [المستلم].",
+     "check": {
+      "task": "drafting",
+      "contains": [
+       [
+        "re:(?<![\\d.,])23(?![\\d]|[.,]\\d)"
+       ],
+       [
+        "1240"
+       ]
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "summary-then-email-en",
+   "hypothesis": "hand-off",
+   "about": "The same in English.",
+   "turns": [
+    {
+     "q": "Summarise in three points:\nتقرر تأجيل تحديث نظام البطاقات من 16 أكتوبر إلى 23 أكتوبر بسبب تأخر المورد في تسليم الخوادم الجديدة. خلال فترة التحديث يمكن إصدار بطاقات الخصم فقط، أما بطاقات الائتمان فيتوقف إصدارها حتى 25 أكتوبر. على مديري الفروع إبلاغ العملاء الذين لديهم طلبات معلقة وعددهم 1,240 عميلاً، وتقديم تقرير يومي إلى إدارة البطاقات قبل الساعة 3 عصراً. تكلفة التأجيل المقدرة 850 ألف جنيه يتحملها المورد وفق البند 7 من العقد.",
+     "check": {
+      "task": "summarise",
+      "reply_lang": "en"
+     }
+    },
+    {
+     "q": "Make it shorter.",
+     "check": {
+      "task": "summarise"
+     }
+    },
+    {
+     "q": "Draft an e-mail that passes this summary on to [recipient].",
+     "check": {
+      "task": "drafting",
+      "contains": [
+       [
+        "1240",
+        "850"
+       ]
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "control-first-keyword",
+   "hypothesis": "controls",
+   "about": "CONTROL: the first task word decides, in both orders.",
+   "turns": [
+    {
+     "q": "Summarise this draft e-mail in one line: Dear team, the Giza branch closes at 1 pm on Thursday for a system upgrade. Please plan your work and inform your customers in advance. Regards, Operations.",
+     "check": {
+      "task": "summarise",
+      "contains": [
+       [
+        "giza"
+       ]
+      ]
+     }
+    },
+    {
+     "q": "Write an email to all staff with a summary of the new working hours: 8:30 to 15:00, Sunday to Thursday.",
+     "check": {
+      "task": "drafting"
+     }
+    }
+   ]
+  }
+ ]
+}

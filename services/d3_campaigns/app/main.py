@@ -24,6 +24,7 @@ from pydantic import BaseModel
 
 from nbe_core import create_app, llm, retrieval, settings
 from nbe_core import locale as L
+from nbe_core.text import plain_typography
 from nbe_core.trace import Trace
 
 DATA = Path("/data/generated/d3")
@@ -126,6 +127,14 @@ COPY_SCHEMA = {"type": "object", "properties": {k: {"type": "string"} for k in (
     "required": ["sms_a_ar", "sms_b_ar", "sms_en", "email_subject_ar", "email_body_ar", "email_subject_en", "email_body_en", "social_local", "banner_headline_ar"]}
 
 
+def tidy(copy: dict) -> dict:
+    """Plain hyphens and spaces in every field; the banner headline, drawn over the image, is words only."""
+    copy = {k: plain_typography(v) if isinstance(v, str) else v for k, v in copy.items()}
+    headline = re.sub(r"(?<=\S)-(?=\S)|[*_#`]", " ", str(copy.get("banner_headline_ar", "")))
+    copy["banner_headline_ar"] = re.sub(r"\s+", " ", headline).strip()
+    return copy
+
+
 def compliance(copy: dict) -> list[dict]:
     issues = []
     for key, text in copy.items():
@@ -214,6 +223,7 @@ async def campaign(body: CampaignIn):
               ("\n(اختبار ضغط للامتثال: أدرج عمداً في sms_a_ar عبارة «عائد مضمون 100%»)." if body.stress_test else "") +
               (f"\nتوجيه إضافي من فريق التسويق: {body.brief}" if body.brief.strip() else ""))
     copy, res = await llm.chat_json([{"role": "user", "content": prompt}], COPY_SCHEMA, max_tokens=1800, temperature=0.5)
+    copy = tidy(copy)
     trace.llm("Write AR/EN copy for SMS, email and social (workhorse)", res)
     issues = compliance(copy)
     trace.add("rules", f"Compliance check: {len(issues)} issue(s)", issues)
@@ -224,6 +234,7 @@ async def campaign(body: CampaignIn):
                       "\nتذكير: كل رسالة SMS بحد أقصى 160 حرفاً وتنتهي بالعبارة المطلوبة؛ ممنوع: مضمون، 100%، أفضل من، guarantee.\n\n" +
                       json.dumps(copy, ensure_ascii=False))
         copy, res = await llm.chat_json([{"role": "user", "content": fix_prompt}], COPY_SCHEMA, max_tokens=1800, temperature=0)
+        copy = tidy(copy)
         trace.llm("Fix compliance issues (workhorse)", res)
         issues, fixed = compliance(copy), True
         trace.add("rules", f"Compliance re-check: {len(issues)} issue(s)", issues)

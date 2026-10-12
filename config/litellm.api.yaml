@@ -1,0 +1,34 @@
+# Model aliases for API mode (docker-compose.api.yml): the LLMs are served from outside this machine (a
+# remote GB10 and external APIs), so the stack runs without the GB10's memory. Same aliases as litellm.yaml;
+# no demo code changes. The one key still used comes from .env (NVIDIA_API_KEY).
+model_list:
+  # Gemma 4 26B-A4B, the GB10's workhorse, served by vLLM on a remote GB10 (FP8, 32k context, no key:
+  # the address is reachable on the private network only).
+  - model_name: workhorse
+    litellm_params: { model: hosted_vllm/gemma-4-26b-a4b, api_base: "http://100.69.85.46:8000/v1", api_key: none }
+  - model_name: vision                    # same server: Gemma 4 handles images natively
+    litellm_params: { model: hosted_vllm/gemma-4-26b-a4b, api_base: "http://100.69.85.46:8000/v1", api_key: none }
+  # Second choice when the GB10 does not answer: a Gemma model on NVIDIA's free catalogue.
+  # (google/gemma-4-31b-it is listed there too, but timed out on every request on 9 Oct 2026.)
+  - model_name: gemma-nvidia
+    litellm_params: { model: openai/google/diffusiongemma-26b-a4b-it, api_base: "https://integrate.api.nvidia.com/v1", api_key: os.environ/NVIDIA_API_KEY }
+  - model_name: hero                      # gpt-oss-120b on the remote GB10 (port 8001, 16k context), D6 code explanation
+    litellm_params: { model: hosted_vllm/gpt-oss-120b, api_base: "http://100.69.85.46:8001/v1", api_key: none }
+  - model_name: standin                   # last resort for workhorse text work; low effort leaves room for the answer
+    litellm_params: { model: hosted_vllm/gpt-oss-120b, api_base: "http://100.69.85.46:8001/v1", api_key: none, reasoning_effort: low }
+  - model_name: embed                     # bge-m3 stays local (nbe-embed)
+    litellm_params: { model: hosted_vllm/bge-m3, api_base: "http://nbe-embed:8000/v1", api_key: none }
+
+router_settings:
+  # Tried in order; the UI shows the model that answered. gpt-oss-120b does not read images, so `vision`
+  # stops at the NVIDIA model.
+  fallbacks:
+    - hero: [workhorse]
+    - workhorse: [gemma-nvidia, standin]
+    - vision: [gemma-nvidia]
+  num_retries: 0
+
+litellm_settings:
+  drop_params: true
+  request_timeout: 600
+  telemetry: false

@@ -4,6 +4,12 @@
 # next one grow, so every non-NBE GPU consumer is stopped in a single `docker stop`.
 set -euo pipefail
 
+# API mode runs on an ordinary workstation: nobody else's containers are stopped, and there is no 95 GB budget.
+if [ "${MODE:-}" = "api" ]; then
+  echo "preflight: API mode, nothing to free"
+  exit 0
+fi
+
 declare -A victims=()
 
 # 1. Known neighbours on this box

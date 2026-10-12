@@ -1,4 +1,5 @@
 .env
+api_keys.md
 models/
 data/generated/
 recordings/
@@ -10,3 +11,5 @@ dist/
 .venv/
 ops/
 *.tsbuildinfo
+D6_OPTIMISATIONS_REPORT.md
+test-cases/*/results/

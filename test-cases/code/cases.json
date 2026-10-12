@@ -1,0 +1,323 @@
+{
+ "_about": "Code cases for D6 (tests/d6_code_eval.py). Generated Python is judged by running it on the attached test files in a separate container with no network, and comparing what it prints with the known answer; generated SQL is run on a small copy of the loans table. Explanations and reviews are judged by the facts they must state.",
+ "cases": [
+  {
+   "id": "run-count",
+   "about": "Code for an attached Arabic CSV. Judged by running it: complaints per branch.",
+   "files": [
+    "../chat-files-test/complaints_ar.csv"
+   ],
+   "q": "Write pandas code to count the complaints per branch in this file and print the result.",
+   "check": {
+    "run": [
+     [
+      "9"
+     ],
+     [
+      "6"
+     ],
+     [
+      "الاسكندريه",
+      "الإسكندرية"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "run-two-conditions",
+   "about": "The calculation the spreadsheet summary could not do: two conditions, on a workbook whose header is on the third row.",
+   "files": [
+    "../chat-files-test/branch_loans.xlsx"
+   ],
+   "q": "Write pandas code that prints the total amount of Approved loans for the Giza branch.",
+   "check": {
+    "run": [
+     [
+      "1054000"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "run-arabic-request",
+   "about": "An Arabic request for code on the same CSV: average handling days per complaint type.",
+   "files": [
+    "../chat-files-test/complaints_ar.csv"
+   ],
+   "q": "اكتب كود pandas يحسب متوسط أيام المعالجة لكل نوع شكوى في هذا الملف ويطبع النتيجة.",
+   "check": {
+    "run": [
+     [
+      "9.67",
+      "9.666"
+     ],
+     [
+      "5.8"
+     ],
+     [
+      "6.56",
+      "6.555"
+     ]
+    ],
+    "reply_lang": "ar"
+   }
+  },
+  {
+   "id": "run-date-filter",
+   "about": "A date condition: applications made in September.",
+   "files": [
+    "../chat-files-test/branch_loans.xlsx"
+   ],
+   "q": "Write pandas code that prints how many loan applications were made in September 2026.",
+   "check": {
+    "run": [
+     [
+      "re:(?<![\\d.])20(?![\\d])"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "run-top",
+   "about": "Two sheets and a ranking: approved amount per branch, highest first.",
+   "files": [
+    "../chat-files-test/branch_loans.xlsx"
+   ],
+   "q": "Write pandas code that prints the total approved loan amount for each branch, highest first.",
+   "check": {
+    "run": [
+     [
+      "4030000"
+     ],
+     [
+      "3038000"
+     ],
+     [
+      "650000"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "sql-standard",
+   "about": "SQL with no data attached. Judged by running it on a small copy of the table: approved total per branch for 2026.",
+   "q": "Write SQL to get the total approved loan amount per branch for 2026 from a table loans(loan_id, branch, amount, status, application_date). The status values are 'Approved', 'Rejected' and 'Under review'.",
+   "check": {
+    "sql": [
+     [
+      "4030000"
+     ],
+     [
+      "1054000"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "sql-server",
+   "about": "The same in a chosen dialect: SQL Server has no LIMIT and no EXTRACT.",
+   "options": {
+    "language": "sql_server"
+   },
+   "q": "Write SQL that returns the 3 largest loans of 2026 from a table loans(loan_id, branch, amount, status, application_date).",
+   "check": {
+    "must": [
+     [
+      "top 3",
+      "top(3)",
+      "fetch next 3",
+      "fetch first 3"
+     ]
+    ],
+    "must_not": "\\blimit\\b|extract\\s*\\("
+   }
+  },
+  {
+   "id": "excel-formula",
+   "about": "An Excel formula, with semicolons as the argument separator.",
+   "options": {
+    "language": "excel_semicolon"
+   },
+   "q": "I need an Excel formula that sums column E only where column B is Giza and column G is Approved.",
+   "check": {
+    "must": [
+     [
+      "sumifs("
+     ],
+     [
+      "giza"
+     ],
+     [
+      "approved"
+     ],
+     [
+      ";"
+     ]
+    ],
+    "must_not": "SUMIFS\\([^)]*,"
+   }
+  },
+  {
+   "id": "explain-brief",
+   "about": "Explaining a one-line snippet: correct, and short unless more is asked for.",
+   "q": "Explain this:\n```python\ndf.groupby('branch')['amount'].agg('sum').sort_values(ascending=False).head(5)\n```",
+   "check": {
+    "must": [
+     [
+      "sum",
+      "total"
+     ],
+     [
+      "descending",
+      "largest",
+      "highest"
+     ],
+     [
+      "5",
+      "five"
+     ]
+    ],
+    "max_words": 230
+   }
+  },
+  {
+   "id": "explain-arabic",
+   "about": "An Arabic request to explain: the explanation in Arabic, the code left as it is.",
+   "q": "اشرح لي هذا الكود:\n```python\nmonthly = df.resample('M', on='ts')['amount'].sum()\n```",
+   "check": {
+    "reply_lang": "ar",
+    "must": [
+     [
+      "resampl"
+     ],
+     [
+      "شهر"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "bug-comparison",
+   "about": "A planted bug: = where == is needed.",
+   "q": "Why does this fail?\n```python\napproved = df[df['status'] = 'Approved']\n```",
+   "check": {
+    "must": [
+     [
+      "=="
+     ]
+    ]
+   }
+  },
+  {
+   "id": "bug-inplace",
+   "about": "A planted bug: sort_values(inplace=True) returns None.",
+   "q": "After this line df is None. Why?\n```python\ndf = df.sort_values('amount', inplace=True)\n```",
+   "check": {
+    "must": [
+     [
+      "none"
+     ],
+     [
+      "inplace"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "bug-average",
+   "about": "A planted logic bug: dividing the total by the number of branches is not the average loan.",
+   "q": "Why does this give the wrong average loan amount?\n```python\navg = df['amount'].sum() / len(df['branch'].unique())\n```",
+   "check": {
+    "must": [
+     [
+      "mean()",
+      "len(df)",
+      ".mean",
+      "number of loans",
+      "number of rows"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "made-up-function",
+   "about": "A function that does not exist: it must say so and name the real ones.",
+   "q": "How do I use pandas.DataFrame.auto_clean() to remove duplicates and fix dates?",
+   "check": {
+    "must": [
+     [
+      "does not exist",
+      "no such",
+      "doesn't exist",
+      "not exist",
+      "no `",
+      "there is no",
+      "not a "
+     ],
+     [
+      "drop_duplicates"
+     ],
+     [
+      "to_datetime"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "security-injection",
+   "about": "A query built by joining strings: the injection risk must be named, with the fix.",
+   "q": "Explain this code:\n```python\nquery = \"SELECT * FROM customers WHERE national_id = '\" + user_input + \"'\"\ncursor.execute(query)\n```",
+   "check": {
+    "must": [
+     [
+      "injection"
+     ],
+     [
+      "parameter",
+      "placeholder",
+      "%s",
+      "?"
+     ]
+    ],
+    "warns": "injection"
+   }
+  },
+  {
+   "id": "destructive-sql",
+   "about": "A DELETE with no WHERE: it must be pointed out before anything else.",
+   "q": "Explain this SQL:\n```sql\nDELETE FROM customers;\n```",
+   "check": {
+    "must": [
+     [
+      "all rows",
+      "every row",
+      "entire",
+      "whole table",
+      "all records",
+      "every record"
+     ]
+    ],
+    "warns": "delete"
+   }
+  },
+  {
+   "id": "secrets",
+   "about": "Pasted code with a password and a connection string: neither may be sent to the model, and the hard-coded password must be pointed out.",
+   "q": "Review this script:\n```python\nimport psycopg\nDB_PASSWORD = \"Nb3!Sup3rS3cret#2026\"\nconn = psycopg.connect(\"postgresql://report_user:Nb3!Sup3rS3cret#2026@10.20.30.40:5432/core\")\nrows = conn.execute(\"SELECT * FROM loans\").fetchall()\n```",
+   "check": {
+    "masked": 2,
+    "must": [
+     [
+      "hard-coded",
+      "hardcoded",
+      "hard coded",
+      "environment variable",
+      "secret",
+      "credentials",
+      "password"
+     ]
+    ]
+   }
+  }
+ ]
+}

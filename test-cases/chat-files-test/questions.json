@@ -1,0 +1,1018 @@
+{
+ "_about": "D6 file-chat test set. Run with tests/d6_files_eval.py. `expect` is a list of groups: the answer must contain at least one alternative from EVERY group (after normalising digits, diacritics and case). `absent: true` marks a question whose answer is NOT in the file: the assistant should say so.",
+ "files": [
+  {
+   "file": "test_cirular.pdf",
+   "kind": "Scanned PDF, Arabic, 3 pages, no text layer (pages are physically in the order 1, 3, 2)",
+   "questions": [
+    {
+     "id": "scan-1",
+     "q": "ما تاريخ هذا الكتاب؟",
+     "answer": "17 أغسطس 2026",
+     "page": 1,
+     "expect": [
+      [
+       "17"
+      ],
+      [
+       "أغسطس",
+       "اغسطس",
+       "august"
+      ],
+      [
+       "2026"
+      ]
+     ]
+    },
+    {
+     "id": "scan-2",
+     "q": "ما تاريخ الكتاب الدوري الخاص بتعليمات حماية حقوق عملاء البنوك المشار إليه في بداية الكتاب؟",
+     "answer": "19 فبراير 2019",
+     "page": 1,
+     "expect": [
+      [
+       "19"
+      ],
+      [
+       "فبراير",
+       "february"
+      ],
+      [
+       "2019"
+      ]
+     ]
+    },
+    {
+     "id": "scan-3",
+     "q": "متى يجب إرسال التقرير الدوري ربع السنوي عن الأنشطة المنفذة؟",
+     "answer": "قبل نهاية الشهر الأول من الربع التالي",
+     "page": 2,
+     "expect": [
+      [
+       "الشهر الاول"
+      ],
+      [
+       "الربع التالي"
+      ]
+     ]
+    },
+    {
+     "id": "scan-4",
+     "q": "ما الأمثلة المذكورة للعاملين الذين تُوفَّر لهم برامج تدريبية بصفة دورية؟",
+     "answer": "موظفو مراكز الاتصال وخدمة عملاء الفروع",
+     "page": 3,
+     "expect": [
+      [
+       "مراكز الاتصال"
+      ],
+      [
+       "خدمه عملاء",
+       "الفروع"
+      ]
+     ]
+    },
+    {
+     "id": "scan-5",
+     "q": "من وقّع هذا الكتاب؟",
+     "answer": "طارق الخولي",
+     "page": 2,
+     "expect": [
+      [
+       "طارق الخولي"
+      ]
+     ]
+    },
+    {
+     "id": "scan-6",
+     "q": "Which English term does the document give as an example of interactive financial education?",
+     "answer": "Gamification",
+     "page": 3,
+     "expect": [
+      [
+       "gamification"
+      ]
+     ]
+    },
+    {
+     "id": "scan-7",
+     "q": "ما قيمة الغرامة المالية التي تُفرض على البنوك غير الملتزمة؟",
+     "answer": "(not in the file)",
+     "absent": true
+    },
+    {
+     "id": "st-scan-1",
+     "topic": "structure",
+     "q": "في أي صفحة من الملف يوجد توقيع طارق الخولي؟ اذكر رقم الصفحة.",
+     "answer": "الصفحة 2",
+     "page": 2,
+     "expect": [
+      [
+       "page 2",
+       "p. 2",
+       "p.2",
+       "second page",
+       "صفحه 2",
+       "صفحه رقم 2",
+       "الصفحه الثانيه",
+       "[page 2]"
+      ]
+     ]
+    },
+    {
+     "id": "st-scan-2",
+     "topic": "structure",
+     "q": "On which page of the file is the term Gamification mentioned? Give the page number.",
+     "answer": "Page 3",
+     "page": 3,
+     "expect": [
+      [
+       "page 3",
+       "p. 3",
+       "p.3",
+       "third page",
+       "صفحه 3",
+       "صفحه رقم 3",
+       "الصفحه الثالثه",
+       "[page 3]"
+      ]
+     ]
+    },
+    {
+     "id": "st-scan-3",
+     "topic": "structure",
+     "q": "ما عنوان البند رقم ٣ في الكتاب؟",
+     "answer": "بناء قدرات العاملين بالبنك",
+     "page": 3,
+     "expect": [
+      [
+       "بناء قدرات العاملين"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "file": "banking_compare.png",
+   "kind": "Image of a table, English (a tooltip covers part of the first two rows)",
+   "questions": [
+    {
+     "id": "img-1",
+     "q": "What is the P/B multiple of Wells Fargo?",
+     "answer": "1.42x",
+     "page": 1,
+     "expect": [
+      [
+       "1.42"
+      ]
+     ]
+    },
+    {
+     "id": "img-2",
+     "q": "Which bank has the highest P/B multiple, and what is it?",
+     "answer": "The Charles Schwab Corp, 3.83x",
+     "page": 1,
+     "expect": [
+      [
+       "schwab"
+      ],
+      [
+       "3.83"
+      ]
+     ]
+    },
+    {
+     "id": "img-3",
+     "q": "Which bank has the lowest P/B multiple, and what is it?",
+     "answer": "Bank of China Ltd, 0.40x",
+     "page": 1,
+     "expect": [
+      [
+       "bank of china"
+      ],
+      [
+       "0.40",
+       "0.4x"
+      ]
+     ]
+    },
+    {
+     "id": "img-4",
+     "q": "What is the ticker symbol of China Construction Bank Corp?",
+     "answer": "CICHY",
+     "page": 1,
+     "expect": [
+      [
+       "cichy"
+      ]
+     ]
+    },
+    {
+     "id": "img-5",
+     "q": "As of what date are these figures?",
+     "answer": "December 16, 2024",
+     "page": 1,
+     "expect": [
+      [
+       "december",
+       "dec",
+       "ديسمبر"
+      ],
+      [
+       "16"
+      ],
+      [
+       "2024"
+      ]
+     ]
+    },
+    {
+     "id": "img-6",
+     "q": "What is the P/B multiple of HSBC?",
+     "answer": "(not in the file)",
+     "absent": true
+    },
+    {
+     "id": "st-img-1",
+     "topic": "structure",
+     "q": "List every bank in the table whose P/B multiple is above 2.",
+     "answer": "JP Morgan Chase 2.08x, The Charles Schwab Corp 3.83x, Morgan Stanley 2.19x, Royal Bank of Canada 2.12x",
+     "page": 1,
+     "expect": [
+      [
+       "jp morgan",
+       "jpmorgan"
+      ],
+      [
+       "schwab"
+      ],
+      [
+       "morgan stanley"
+      ],
+      [
+       "royal bank"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "file": "mixed_text_scan.pdf",
+   "kind": "Mixed PDF, 2 pages: page 1 typed English text, page 2 a scanned Arabic page (built from the two files above)",
+   "questions": [
+    {
+     "id": "mixed-1",
+     "q": "What is the reference number of the circular on the first page?",
+     "answer": "AML/CFT-CIRC/2026/09",
+     "page": 1,
+     "expect": [
+      [
+       "aml/cft-circ/2026/09"
+      ]
+     ]
+    },
+    {
+     "id": "mixed-2",
+     "q": "ما التاريخ المكتوب في أعلى الكتاب العربي في الصفحة الثانية؟",
+     "answer": "17 أغسطس 2026",
+     "page": 2,
+     "expect": [
+      [
+       "17"
+      ],
+      [
+       "أغسطس",
+       "اغسطس",
+       "august"
+      ],
+      [
+       "2026"
+      ]
+     ]
+    },
+    {
+     "id": "mixed-3",
+     "q": "ما تاريخ الكتاب الدوري بشأن إلزام البنوك بإنشاء إدارة مستقلة للشمول المالي؟",
+     "answer": "5 مارس 2020",
+     "page": 2,
+     "expect": [
+      [
+       "5"
+      ],
+      [
+       "مارس",
+       "march"
+      ],
+      [
+       "2020"
+      ]
+     ]
+    },
+    {
+     "id": "st-mixed-1",
+     "topic": "structure",
+     "q": "في أي صفحة من الملف ورد تاريخ 5 مارس 2020؟ اذكر رقم الصفحة.",
+     "answer": "الصفحة 2",
+     "page": 2,
+     "expect": [
+      [
+       "page 2",
+       "p. 2",
+       "p.2",
+       "second page",
+       "صفحه 2",
+       "صفحه رقم 2",
+       "الصفحه الثانيه",
+       "[page 2]"
+      ]
+     ]
+    },
+    {
+     "id": "st-mixed-2",
+     "topic": "structure",
+     "q": "On which page of the file is the list of official electronic gazette publications? Give the page number.",
+     "answer": "Page 1",
+     "page": 1,
+     "expect": [
+      [
+       "page 1",
+       "p. 1",
+       "p.1",
+       "first page",
+       "صفحه 1",
+       "صفحه رقم 1",
+       "الصفحه الاولي",
+       "[page 1]"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "file": "normal_file.pdf",
+   "kind": "CONTROL: typed Arabic PDF, 1 page (already read by the vision model today)",
+   "questions": [
+    {
+     "id": "ar-1",
+     "q": "ما تاريخ هذا الكتاب؟",
+     "answer": "28 سبتمبر 2026",
+     "page": 1,
+     "expect": [
+      [
+       "28"
+      ],
+      [
+       "سبتمبر",
+       "september"
+      ],
+      [
+       "2026"
+      ]
+     ]
+    },
+    {
+     "id": "ar-2",
+     "q": "متى صدرت إجراءات العناية الواجبة السابقة لشركات تحويل الأموال؟",
+     "answer": "فبراير 2020",
+     "page": 1,
+     "expect": [
+      [
+       "فبراير",
+       "february"
+      ],
+      [
+       "2020"
+      ]
+     ]
+    },
+    {
+     "id": "ar-3",
+     "q": "إلى من وُجِّه هذا الكتاب؟",
+     "answer": "رئيس مجلس الإدارة (شركة)",
+     "page": 1,
+     "expect": [
+      [
+       "رئيس مجلس الاداره",
+       "رئيس مجلس اداره"
+      ]
+     ]
+    },
+    {
+     "id": "ar-4",
+     "q": "بخصوص أي فئة من الأشخاص صدرت الإرشادات الجديدة للمؤسسات المالية؟",
+     "answer": "الأشخاص ذوو المخاطر بحكم مناصبهم العامة",
+     "page": 1,
+     "expect": [
+      [
+       "ذوي المخاطر",
+       "ذوو المخاطر",
+       "politically exposed"
+      ],
+      [
+       "مناصبهم العامه",
+       "politically exposed"
+      ]
+     ]
+    },
+    {
+     "id": "ar-5",
+     "q": "من وقّع هذا الكتاب؟",
+     "answer": "طارق الخولي",
+     "page": 1,
+     "expect": [
+      [
+       "طارق الخولي"
+      ]
+     ]
+    },
+    {
+     "id": "ar-6",
+     "q": "ما الحد الأقصى اليومي لقيمة التحويلات المسموح بها لشركات تحويل الأموال؟",
+     "answer": "(not in the file)",
+     "absent": true
+    }
+   ]
+  },
+  {
+   "file": "Reg_circular.pdf",
+   "kind": "CONTROL: typed English PDF, 3 pages with tables (read by Docling today)",
+   "questions": [
+    {
+     "id": "en-1",
+     "q": "What is the reference number of this circular?",
+     "answer": "AML/CFT-CIRC/2026/09",
+     "page": 1,
+     "expect": [
+      [
+       "aml/cft-circ/2026/09"
+      ]
+     ]
+    },
+    {
+     "id": "en-2",
+     "q": "Down to what equity percentage must ultimate beneficial owners be verified for general bank customers?",
+     "answer": "10%",
+     "page": 2,
+     "expect": [
+      [
+       "10%",
+       "10 %",
+       "10 percent"
+      ]
+     ]
+    },
+    {
+     "id": "en-3",
+     "q": "How long is the cooling-off period for politically exposed persons after leaving office?",
+     "answer": "12 months",
+     "page": 2,
+     "expect": [
+      [
+       "12"
+      ],
+      [
+       "month"
+      ]
+     ]
+    },
+    {
+     "id": "en-4",
+     "q": "What is the mandatory deadline for Phase 3, Core IT Integration?",
+     "answer": "March 31, 2027",
+     "page": 3,
+     "expect": [
+      [
+       "march"
+      ],
+      [
+       "31"
+      ],
+      [
+       "2027"
+      ]
+     ]
+    },
+    {
+     "id": "en-5",
+     "q": "Under which law are sanctions applied to non-compliant institutions?",
+     "answer": "Law No. 80 of 2002",
+     "page": 3,
+     "expect": [
+      [
+       "80"
+      ],
+      [
+       "2002"
+      ]
+     ]
+    },
+    {
+     "id": "en-6",
+     "q": "ما الموعد النهائي لتقديم تقرير تقييم الفجوات (المرحلة الأولى)؟",
+     "answer": "30 نوفمبر 2026",
+     "page": 3,
+     "expect": [
+      [
+       "30"
+      ],
+      [
+       "نوفمبر",
+       "november"
+      ],
+      [
+       "2026"
+      ]
+     ]
+    },
+    {
+     "id": "en-7",
+     "q": "What is the maximum fine amount in Egyptian pounds for non-compliance?",
+     "answer": "(not in the file)",
+     "absent": true
+    },
+    {
+     "id": "st-en-1",
+     "topic": "structure",
+     "q": "On which page is the compliance timeline table with the four milestone phases? Give the page number.",
+     "answer": "Page 3",
+     "page": 3,
+     "expect": [
+      [
+       "page 3",
+       "p. 3",
+       "p.3",
+       "third page",
+       "صفحه 3",
+       "صفحه رقم 3",
+       "الصفحه الثالثه",
+       "[page 3]"
+      ]
+     ]
+    },
+    {
+     "id": "st-en-2",
+     "topic": "structure",
+     "q": "On which page is the 12-month cooling-off period for politically exposed persons described? Give the page number.",
+     "answer": "Page 2",
+     "page": 2,
+     "expect": [
+      [
+       "page 2",
+       "p. 2",
+       "p.2",
+       "second page",
+       "صفحه 2",
+       "صفحه رقم 2",
+       "الصفحه الثانيه",
+       "[page 2]"
+      ]
+     ]
+    },
+    {
+     "id": "st-en-3",
+     "topic": "structure",
+     "q": "What is the title of Annex II?",
+     "answer": "Special Regulatory Focus Frameworks",
+     "page": 2,
+     "expect": [
+      [
+       "special regulatory focus frameworks"
+      ]
+     ]
+    },
+    {
+     "id": "st-en-4",
+     "topic": "structure",
+     "q": "List the four milestone phases with the mandatory deadline of each.",
+     "answer": "Nov 30 2026; Jan 15 2027; Mar 31 2027; Jun 30 2027",
+     "page": 3,
+     "expect": [
+      [
+       "november",
+       "nov"
+      ],
+      [
+       "january",
+       "jan"
+      ],
+      [
+       "march",
+       "mar"
+      ],
+      [
+       "june",
+       "jun"
+      ]
+     ]
+    },
+    {
+     "id": "st-en-5",
+     "topic": "structure",
+     "q": "What is the date of this circular?",
+     "answer": "September 28, 2026 (in the page header)",
+     "page": 1,
+     "expect": [
+      [
+       "28"
+      ],
+      [
+       "september",
+       "sept"
+      ],
+      [
+       "2026"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "file": "mix_en_ar.pdf",
+   "kind": "Bilingual Arabic/English brochure, 7 pages, typed but with an unreliable Arabic text layer (read from that text layer today)",
+   "questions": [
+    {
+     "id": "bi-1",
+     "q": "On what date did the CBE issue the consumer protection regulations?",
+     "answer": "February 13, 2019",
+     "page": 1,
+     "expect": [
+      [
+       "13"
+      ],
+      [
+       "february",
+       "فبراير"
+      ],
+      [
+       "2019"
+      ]
+     ]
+    },
+    {
+     "id": "bi-2",
+     "q": "Within how many business days may a customer cancel an application for a banking product that has not been activated?",
+     "answer": "Two (2) business days",
+     "page": 2,
+     "expect": [
+      [
+       "two",
+       "2"
+      ],
+      [
+       "day"
+      ]
+     ]
+    },
+    {
+     "id": "bi-3",
+     "q": "ما رقم مركز الاتصال؟",
+     "answer": "19623",
+     "page": 3,
+     "expect": [
+      [
+       "19623"
+      ]
+     ]
+    },
+    {
+     "id": "bi-4",
+     "q": "ما رقم الفاكس؟",
+     "answer": "+202 25945221",
+     "page": 3,
+     "expect": [
+      [
+       "25945221"
+      ]
+     ]
+    },
+    {
+     "id": "bi-5",
+     "q": "What is the maximum standard period for replying to a customer complaint?",
+     "answer": "15 business days",
+     "page": 3,
+     "expect": [
+      [
+       "15"
+      ],
+      [
+       "day"
+      ]
+     ]
+    },
+    {
+     "id": "bi-6",
+     "q": "في أي حالتين يحق للعميل تصعيد الشكوى إلى البنك المركزي المصري مباشرة؟",
+     "answer": "عدم الرد خلال 15 يوم عمل، أو عدم قبول العميل لرد البنك النهائي",
+     "page": 4,
+     "expect": [
+      [
+       "15"
+      ],
+      [
+       "النهائي"
+      ]
+     ]
+    },
+    {
+     "id": "bi-7",
+     "q": "What may the Bank do if a customer offends the Bank or harms its reputation on social media?",
+     "answer": "Close the account and take all necessary banking and legal actions",
+     "page": 7,
+     "expect": [
+      [
+       "clos"
+      ],
+      [
+       "legal"
+      ]
+     ]
+    },
+    {
+     "id": "bi-8",
+     "q": "What is the interest rate on savings accounts?",
+     "answer": "(not in the file)",
+     "absent": true
+    },
+    {
+     "id": "st-bi-1",
+     "topic": "structure",
+     "q": "On which page are the complaint channels (call centre number, e-mail, fax) listed? Give the page number.",
+     "answer": "Page 3",
+     "page": 3,
+     "expect": [
+      [
+       "page 3",
+       "p. 3",
+       "p.3",
+       "third page",
+       "صفحه 3",
+       "صفحه رقم 3",
+       "الصفحه الثالثه",
+       "[page 3]"
+      ]
+     ]
+    },
+    {
+     "id": "st-bi-2",
+     "topic": "structure",
+     "q": "في أي صفحة ورد حق العميل في تصعيد الشكوى إلى البنك المركزي المصري؟ اذكر رقم الصفحة.",
+     "answer": "الصفحة 4",
+     "page": 4,
+     "expect": [
+      [
+       "page 4",
+       "p. 4",
+       "p.4",
+       "fourth page",
+       "صفحه 4",
+       "صفحه رقم 4",
+       "الصفحه الرابعه",
+       "[page 4]"
+      ]
+     ]
+    },
+    {
+     "id": "st-bi-3",
+     "topic": "structure",
+     "q": "What is the heading of the section that lists what customers are required to do?",
+     "answer": "Customers Are Kindly Required to",
+     "page": 6,
+     "expect": [
+      [
+       "customers are kindly required"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "file": "branch_loans.xlsx",
+   "kind": "Excel workbook, 2 sheets: 40 loans (title row above the header) and 6 branches. Synthetic, generated by make_spreadsheets.py",
+   "questions": [
+    {
+     "id": "xl-1",
+     "topic": "spreadsheet",
+     "q": "What is the amount of loan L-1017?",
+     "answer": "124,000 EGP",
+     "expect": [
+      [
+       "124000"
+      ]
+     ]
+    },
+    {
+     "id": "xl-2",
+     "topic": "spreadsheet",
+     "q": "Who is the customer of loan L-1017?",
+     "answer": "Ahmed Saad",
+     "expect": [
+      [
+       "ahmed saad"
+      ]
+     ]
+    },
+    {
+     "id": "xl-3",
+     "topic": "spreadsheet",
+     "q": "Who is the manager of the Alexandria branch?",
+     "answer": "Sherif Lotfy",
+     "expect": [
+      [
+       "sherif lotfy"
+      ]
+     ]
+    },
+    {
+     "id": "xl-4",
+     "topic": "spreadsheet",
+     "q": "Which sheet contains the annual targets of the branches?",
+     "answer": "Branches",
+     "expect": [
+      [
+       "branches"
+      ]
+     ]
+    },
+    {
+     "id": "xl-5",
+     "topic": "spreadsheet",
+     "q": "How many loans are listed in the file?",
+     "answer": "40",
+     "expect": [
+      [
+       "re:(?<![\\d.,])40(?![\\d]|[.,]\\d)",
+       "forty"
+      ]
+     ]
+    },
+    {
+     "id": "xl-6",
+     "topic": "spreadsheet",
+     "q": "How many loans have the status Rejected?",
+     "answer": "8",
+     "expect": [
+      [
+       "re:(?<![\\d.,])8(?![\\d]|[.,]\\d)",
+       "eight"
+      ]
+     ]
+    },
+    {
+     "id": "xl-7",
+     "topic": "spreadsheet",
+     "q": "كم عدد القروض التي حالتها Approved؟",
+     "answer": "23",
+     "expect": [
+      [
+       "re:(?<![\\d.,])23(?![\\d]|[.,]\\d)"
+      ]
+     ]
+    },
+    {
+     "id": "xl-8",
+     "topic": "spreadsheet",
+     "q": "What is the total amount of all loans?",
+     "answer": "21,973,000 EGP",
+     "expect": [
+      [
+       "21973000",
+       "21.973 million",
+       "21.97 million"
+      ]
+     ]
+    },
+    {
+     "id": "xl-9",
+     "topic": "spreadsheet",
+     "q": "Which loan has the largest amount, how much is it, and at which branch?",
+     "answer": "L-1015, 2,674,000 EGP, Cairo Main",
+     "expect": [
+      [
+       "l-1015"
+      ],
+      [
+       "2674000"
+      ],
+      [
+       "cairo main"
+      ]
+     ]
+    },
+    {
+     "id": "xl-10",
+     "topic": "spreadsheet",
+     "q": "What is the total loan amount for the Giza branch?",
+     "answer": "3,936,000 EGP (7 loans)",
+     "expect": [
+      [
+       "3936000",
+       "3.936 million"
+      ]
+     ]
+    },
+    {
+     "id": "xl-11",
+     "topic": "spreadsheet",
+     "q": "What is the credit score of the customer Ahmed Saad?",
+     "answer": "(not in the file)",
+     "absent": true
+    }
+   ]
+  },
+  {
+   "file": "complaints_ar.csv",
+   "kind": "CSV, Arabic headers and values, 30 complaints, UTF-8 with byte-order mark as Excel saves it. Synthetic",
+   "questions": [
+    {
+     "id": "csv-1",
+     "topic": "spreadsheet",
+     "q": "كم عدد الشكاوى في الملف؟",
+     "answer": "30",
+     "expect": [
+      [
+       "re:(?<![\\d.,])30(?![\\d]|[.,]\\d)",
+       "ثلاثون",
+       "ثلاثين"
+      ]
+     ]
+    },
+    {
+     "id": "csv-2",
+     "topic": "spreadsheet",
+     "q": "ما حالة الشكوى رقم C-2026-012؟",
+     "answer": "مغلقة",
+     "expect": [
+      [
+       "مغلقه"
+      ]
+     ]
+    },
+    {
+     "id": "csv-3",
+     "topic": "spreadsheet",
+     "q": "ما الفرع المسجل في الشكوى رقم C-2026-012؟",
+     "answer": "الجيزة",
+     "expect": [
+      [
+       "الجيزه"
+      ]
+     ]
+    },
+    {
+     "id": "csv-4",
+     "topic": "spreadsheet",
+     "q": "كم عدد الشكاوى من نوع البطاقات؟",
+     "answer": "7",
+     "expect": [
+      [
+       "re:(?<![\\d.,])7(?![\\d]|[.,]\\d)",
+       "سبع"
+      ]
+     ]
+    },
+    {
+     "id": "csv-5",
+     "topic": "spreadsheet",
+     "q": "كم عدد الشكاوى المُصعَّدة؟",
+     "answer": "6",
+     "expect": [
+      [
+       "re:(?<![\\d.,])6(?![\\d]|[.,]\\d)",
+       "ست"
+      ]
+     ]
+    },
+    {
+     "id": "csv-6",
+     "topic": "spreadsheet",
+     "q": "ما متوسط أيام المعالجة؟",
+     "answer": "7.07 يوم",
+     "expect": [
+      [
+       "7.07",
+       "7.1"
+      ]
+     ]
+    },
+    {
+     "id": "csv-7",
+     "topic": "spreadsheet",
+     "q": "What is the longest handling time in days?",
+     "answer": "14",
+     "expect": [
+      [
+       "re:(?<![\\d.,])14(?![\\d]|[.,]\\d)",
+       "fourteen"
+      ]
+     ]
+    },
+    {
+     "id": "csv-8",
+     "topic": "spreadsheet",
+     "q": "ما اسم الموظف الذي عالج الشكوى رقم C-2026-012؟",
+     "answer": "(not in the file)",
+     "absent": true
+    }
+   ]
+  }
+ ]
+}
