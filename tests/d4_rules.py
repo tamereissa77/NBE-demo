@@ -242,7 +242,7 @@ async def main() -> int:
     check("تلاتين نوفمبر ألفين وستة وعشرين" in say("العرض لحد 2026-11-30", "ar") and "سنة ألفين وخمسة وعشرين" in say("من سنة 2025", "ar"), "a date and a year are said, not read digit by digit")
     check(lex.get("وعشرين") == "وَعِشْرِين" and lex.get("لتلاتين") == "لِتَلَاتِين" and lex.get("التمنية") == "التَّمَنْيَة" and lex.get("الأقصى") == "الْأَقْصَى",
           "number words carry their vowels in every joined form, and so does الأقصى")
-    check(lex.get("تلتاشر") == "تَلَتَاشَّر" and lex.get("وتلتاشر") == "وَتَلَتَاشَّر" and lex.get("دخل") == "دَخْلْ" and lex.get("الصراف") == "الصَرَّاف"
+    check(lex.get("تلتاشر") == "تَلَتَّاشَر" and lex.get("وتلتاشر") == "وَتَلَتَّاشَر" and lex.get("دخل") == "دَخْلْ" and lex.get("الصراف") == "الصَرَّاف"
           and lex.get("للصراف") == "لِلصَرَّاف" and lex.get("هبعتلك") == "هَبْعتلَكْ", "words corrected by ear are said as they were written down")
     check(lex.get("المية") == "الْمِيَّة" and lex.get("ونص") == "وَنُصّ" and lex.get("وميت") == "وَمِيت", "the words written for a percentage, a half and a joined hundred carry their vowels")
     check(lex.get("مقدم") == "مُقَدَّم" and lex.get("والمقدم") == "وَالْمُقَدَّم" and lex.get("بمقدم") == "بِمُقَدَّم" and lex.get("للمقدم") == "لِلْمُقَدَّم",
