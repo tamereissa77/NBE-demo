@@ -12,10 +12,10 @@ model_list:
   # (google/gemma-4-31b-it is listed there too, but timed out on every request on 9 Oct 2026.)
   - model_name: gemma-nvidia
     litellm_params: { model: openai/google/diffusiongemma-26b-a4b-it, api_base: "https://integrate.api.nvidia.com/v1", api_key: os.environ/NVIDIA_API_KEY }
-  - model_name: hero                      # gpt-oss-120b on the remote GB10 (port 8001, 16k context), D6 code explanation
-    litellm_params: { model: hosted_vllm/gpt-oss-120b, api_base: "http://100.69.85.46:8001/v1", api_key: none }
+  - model_name: hero                      # gpt-oss-20b on the remote GB10 (port 8001, 16k context), D6 code explanation
+    litellm_params: { model: hosted_vllm/gpt-oss-20b, api_base: "http://100.69.85.46:8001/v1", api_key: none }
   - model_name: standin                   # last resort for workhorse text work; low effort leaves room for the answer
-    litellm_params: { model: hosted_vllm/gpt-oss-120b, api_base: "http://100.69.85.46:8001/v1", api_key: none, reasoning_effort: low }
+    litellm_params: { model: hosted_vllm/gpt-oss-20b, api_base: "http://100.69.85.46:8001/v1", api_key: none, reasoning_effort: low }
   - model_name: embed                     # bge-m3 stays local (nbe-embed)
     litellm_params: { model: hosted_vllm/bge-m3, api_base: "http://nbe-embed:8000/v1", api_key: none }
 

@@ -7,8 +7,9 @@ model_list:
     litellm_params: { model: hosted_vllm/gemma-4-26b-a4b, api_base: "http://nbe-llm:8000/v1", api_key: none }
   - model_name: quality                   # Gemma 4 31B NVFP4 (profile: quality), legal-grade summaries
     litellm_params: { model: hosted_vllm/gemma-4-31b, api_base: "http://nbe-llm-q:8000/v1", api_key: none }
-  - model_name: hero                      # gpt-oss-120b (profile: hero), D6 code explanation
-    litellm_params: { model: hosted_vllm/gpt-oss-120b, api_base: "http://nbe-hero:8000/v1", api_key: none }
+  - model_name: hero                      # gpt-oss-120b (profile: hero), D6 code explanation. NBE_HERO_MODEL names what
+    # nbe-hero serves: docker-compose.gb10.yml runs the smaller gpt-oss-20b there, beside the other models
+    litellm_params: { model: os.environ/NBE_HERO_MODEL, api_base: "http://nbe-hero:8000/v1", api_key: none }
   - model_name: embed                     # bge-m3, 1024-dim, multilingual
     litellm_params: { model: hosted_vllm/bge-m3, api_base: "http://nbe-embed:8000/v1", api_key: none }
   # Arabic gate references (profile: eval), PLAN.md §5. Mistral-7B is on NBE's requested-model list.

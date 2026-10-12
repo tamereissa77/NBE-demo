@@ -7,13 +7,15 @@
 #     under the names of the GB10's Piper and Whisper services, which are not started.
 #   - D1 reads uploaded documents with the fine-tuned Qwen3-VL (nbe-docvlm).
 #   - D2's extraction service (nbe-d2-extract) finds Chandra OCR in EFADA_MODELS_DIR.
+#   - The hero model (D6, alias `hero`) is gpt-oss-20b, about 17 GB, so it runs beside every other model.
+#     gpt-oss-120b needs 72 GB and would have to replace the document reader, the voice services and SDXL.
 # What does not change: the workhorse, embeddings and reranker are the GB10's own vLLM servers, and the model
 # gateway uses config/litellm.yaml. Nothing is hosted, and every service here is on the internal network only,
 # so `make offline-check` holds.
 #
 # The three services are defined once, in docker-compose.local.yml, and extended here. Their models are not in
 # /opt/models (root-owned on the shared box) but in EFADA_MODELS_DIR:
-#   QwenCleo-ASR/  models--mohammedaly22--VoiceTut-TTS/  models--Qwen--Qwen3-VL-8B-Instruct-FP8/  chandra-ocr-2/
+#   QwenCleo-ASR/  models--mohammedaly22--VoiceTut-TTS/  models--Qwen--Qwen3-VL-8B-Instruct-FP8/  chandra-ocr-2/  gpt-oss-20b/
 
 services:
   nbe-voicetut:
@@ -37,6 +39,30 @@ services:
   nbe-d1:
     environment:
       DOCVLM_URL: http://nbe-docvlm:8000
+
+  nbe-hero:
+    command:
+      - vllm
+      - serve
+      - /hero/gpt-oss-20b
+      - --served-model-name=gpt-oss-20b
+      - --max-model-len=16384
+      - --max-num-seqs=2
+      - --max-num-batched-tokens=4096
+      - '--compilation-config={"max_cudagraph_capture_size": 16}'
+      # 14 GB of weights, the rest for two 16k conversations: a fraction of the 121 GB pool
+      - --gpu-memory-utilization=${NBE_HERO_GPU_UTIL:-0.14}
+      - --enable-auto-tool-choice
+      - --tool-call-parser=openai
+      - --reasoning-parser=openai_gptoss
+      - --host=0.0.0.0
+      - --port=8000
+    volumes:
+      - ${EFADA_MODELS_DIR:?set EFADA_MODELS_DIR in .env}/gpt-oss-20b:/hero/gpt-oss-20b:ro
+
+  nbe-llmgw:
+    environment:
+      NBE_HERO_MODEL: hosted_vllm/gpt-oss-20b
 
   nbe-d2-extract:
     image: nbe-d2-extract:${IMAGE_TAG:-latest}

@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 # Start the Efada build on the GB10 (docker-compose.gb10.yml): every model on the box, nothing hosted.
 # Models start one at a time, vLLM first: it sizes itself from the memory that is free when it starts.
-#   MODE=show (default)   workhorse, embeddings, reranker, Egyptian voice, document reader, SDXL
+#   MODE=show (default)   workhorse, embeddings, reranker, hero (gpt-oss-20b), Egyptian voice, document reader, SDXL
 #   MODE=core             the same without SDXL
-#   MODE=hero             gpt-oss-120b (about 71 GB) for D6 in place of the document reader, the voice services and
-#                         SDXL, which do not fit beside it: they are stopped if they are running
-#   VOICE=0 / DOCVLM=0    leave the voice services / the document reader off
+#   VOICE=0 / DOCVLM=0 / HERO=0   leave the voice services / the document reader / the hero model off
 #   HUB=1                 also serve the models to the team's workstations (docker-compose.hub.yml): development only
 #   EXTRACT=1             also start D2's document extraction (Chandra OCR, about 10 GB); it is stopped by hand
 #   BUILD=1               rebuild images first (missing images are always built)
@@ -16,7 +14,6 @@ MODE=${MODE:-show}
 C="docker compose -f docker-compose.yml -f docker-compose.d2-extract.yml -f docker-compose.gb10.yml"
 [ "${HUB:-0}" = "1" ] && C="$C -f docker-compose.hub.yml"
 C="$C --profile core --profile image --profile extract --profile hero"
-if [ "$MODE" = "hero" ]; then DOCVLM=0; VOICE=0; fi
 BUILD_FLAG=""
 [ "${BUILD:-0}" = "1" ] && BUILD_FLAG="--build"
 env_value() { grep -E "^$1=" .env 2>/dev/null | tail -1 | cut -d= -f2- || true; }
@@ -42,7 +39,7 @@ if ! docker inspect -f '{{.State.Running}}' nbe-llm 2>/dev/null | grep -q true; 
   done | { grep -v '^nbe-' || true; } | sort -u | xargs)
   [ -n "$gpu_users" ] && echo "Other containers are using the GPU: $gpu_users"
   avail=$(free -g | awk '/^Mem:/ {print $7}')
-  need=${NBE_MIN_FREE_GB:-95}
+  need=${NBE_MIN_FREE_GB:-110}
   echo "${avail} GB of memory available (this build needs about ${need} GB)"
   if [ "$avail" -lt "$need" ]; then
     echo "Not enough free memory to start the models. Ask the owner of the containers above, or set NBE_MIN_FREE_GB." >&2
@@ -61,17 +58,9 @@ $C up -d --wait nbe-llm
 $C up -d --wait nbe-embed
 $C up -d --wait nbe-rerank
 
-if [ "$MODE" = "hero" ]; then
-  step "hero model (gpt-oss-120b) in place of the document reader, voice and SDXL"
-  $C stop nbe-docvlm nbe-qwencleo nbe-voicetut nbe-sdxl nbe-d2-extract >/dev/null 2>&1 || true
-  if ! docker inspect -f '{{.State.Running}}' nbe-hero 2>/dev/null | grep -q true; then
-    avail=$(free -g | awk '/^Mem:/ {print $7}')
-    [ "$avail" -ge 72 ] || { echo "Only ${avail} GB of memory available: gpt-oss-120b needs about 72 GB." >&2; exit 1; }
-  fi
+if [ "${HERO:-1}" = "1" ]; then
+  step "hero model (gpt-oss-20b)"
   $C up -d --wait nbe-hero
-else
-  # The hero model and the full show do not fit together: a hero left running would starve what starts next
-  $C stop nbe-hero >/dev/null 2>&1 || true
 fi
 
 if [ "${DOCVLM:-1}" = "1" ]; then

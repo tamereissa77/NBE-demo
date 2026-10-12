@@ -44,9 +44,9 @@ servers' names, so the demos call the same addresses as on the GB10 (`docker-com
 needs `NBE_HUB_URL` and the GB10's `NBE_HUB_KEY`. The hub also keeps the workhorse on port 8000 without a
 key, the address the earlier development setups use (`config/litellm.gb10.yaml`).
 
-`MODE=hero HUB=1 scripts/up_gb10.sh` puts gpt-oss-120b on the box for D6 (port 8001 through the hub, alias
-`hero`). It needs about 71 GB, so the document reader, the voice services and SDXL are stopped while it
-runs; the same command without `MODE=hero` stops it and brings them back.
+The hero model on this build is gpt-oss-20b (`gpt-oss-20b/` in `EFADA_MODELS_DIR`, about 17 GB), on port 8001
+through the hub and behind the alias `hero`. gpt-oss-120b needs 72 GB: with the workhorse it fills the box,
+so it cannot run beside the document reader, the voice services and SDXL.
 
 The hub is for development. With it up the models are reachable from the network and `make offline-check`
 fails on purpose; for the demonstration start without `HUB=1`.

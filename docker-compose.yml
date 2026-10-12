@@ -331,6 +331,7 @@ services:
       LITELLM_LOCAL_MODEL_COST_MAP: "True"    # offline: do not fetch the cost map at start
       LITELLM_TELEMETRY: "False"
       LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:?set LITELLM_MASTER_KEY in .env}
+      NBE_HERO_MODEL: hosted_vllm/gpt-oss-120b      # the model name nbe-hero serves (config/litellm.yaml, alias hero)
     volumes:
       - ./config/litellm.yaml:/app/config.yaml:ro
     networks: [nbe-core]
