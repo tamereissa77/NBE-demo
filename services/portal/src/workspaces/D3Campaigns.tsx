@@ -22,10 +22,8 @@ interface Result {
 
 const PERSONA_EN: Record<string, string> = { young_professional: "Young professionals", family: "Families", student: "Students", affluent: "Affluent", sme_owner: "SME owners" };
 const TABS: [string, string][] = [["sms_a_ar", "SMS A"], ["sms_b_ar", "SMS B"], ["sms_en", "SMS EN"], ["email_ar", "Email AR"], ["email_en", "Email EN"], ["social_local", `Social (${BRAND.locale.dialect.code})`]];
-const DEFAULT_BASELINE = 8;   // % — the API default (CampaignIn.baseline_rate)
 const L = {
   en: { segment: "Segment", city: "City (optional)", all: "All cities", brief: "Marketing brief (optional)", stress: "Stress-test compliance (plant a banned claim)",
-        baselineField: "Assumed redemption rate for the A/B plan (%)",
         build: "Build campaign", working: "Profiling spend, matching merchants, writing and checking copy…", profile: "Interest profile (share of purchases · lift vs all customers)",
         merchants: "Partner merchant match", card: "Bilingual campaign card", banner: "AI-generated mock-up · synthetic data only", compliance: "Compliance",
         passed: "Checked", fixed: "Auto-fixed", synthetic: "Synthetic data", ab: "A/B test plan", offer: "Offer", none: "Choose a segment and build a campaign.",
@@ -36,7 +34,6 @@ const L = {
         audience: "Audience", optedIn: "opted in", holdout: "holdout", perArm: "Per arm", baseline: "Baseline", redemption: "redemption", lift: "Detectable lift",
         at: "At", tooSmall: "too small", smsCount: "SMS", emailCount: "email" },
   ar: { segment: "الشريحة", city: "المدينة (اختياري)", all: "كل المدن", brief: "توجيه تسويقي (اختياري)", stress: "اختبار الامتثال (إدراج عبارة مخالفة عمداً)",
-        baselineField: "معدل الاستفادة المفترض لخطة A/B (%)",
         build: "إنشاء الحملة", working: "تحليل الإنفاق ومطابقة التجّار وكتابة النصوص وفحصها…", profile: "ملف الاهتمامات (حصة المشتريات · مقارنة بكل العملاء)",
         merchants: "مطابقة التجّار الشركاء", card: "بطاقة الحملة ثنائية اللغة", banner: "تصميم مُولَّد بالذكاء الاصطناعي · بيانات تجريبية فقط", compliance: "الامتثال",
         passed: "تم الفحص", fixed: "تم التصحيح آلياً", synthetic: "بيانات تجريبية", ab: "خطة اختبار A/B", offer: "العرض", none: "اختر شريحة وأنشئ حملة.",
@@ -93,7 +90,6 @@ export default function D3Campaigns({ onTrace, onProgress }: WorkspaceProps) {
   const [city, setCity] = useState("");
   const [brief, setBrief] = useState("");
   const [stress, setStress] = useState(false);
-  const [baseline, setBaseline] = useState(String(DEFAULT_BASELINE));
   const [res, setRes] = useState<Result | null>(null);
   const [tab, setTab] = useState("sms_a_ar");
   const [busy, setBusy] = useState(false);
@@ -113,10 +109,8 @@ export default function D3Campaigns({ onTrace, onProgress }: WorkspaceProps) {
     const poll = window.setInterval(() => {
       getJSON<{ step: number | null }>(`/api/d3/campaign/progress/${runId}`).then((p) => { if (running && p.step !== null) onProgress?.(p.step); }).catch(() => {});
     }, 400);
-    const pct = Number(baseline);
     try {
-      const r = await postJSON<Result>("/api/d3/campaign", { persona, city: city || null, brief, stress_test: stress, run_id: runId,
-                                                             baseline_rate: (pct >= 1 && pct <= 49 ? pct : DEFAULT_BASELINE) / 100 });
+      const r = await postJSON<Result>("/api/d3/campaign", { persona, city: city || null, brief, stress_test: stress, run_id: runId });
       setRes(r); onTrace(r.trace);
     } catch (e) { setRes(null); setError((e as Error).message); } finally {
       running = false; window.clearInterval(poll); onProgress?.(null); setBusy(false);
@@ -147,11 +141,8 @@ export default function D3Campaigns({ onTrace, onProgress }: WorkspaceProps) {
           <label className="text-sm sm:col-span-2">{l.brief}
             <input value={brief} onChange={(e) => setBrief(e.target.value)} dir="auto" placeholder="مثال: عروض الصيف للسفر" className="mt-1 w-full rounded-lg border border-line px-3 py-2" />
           </label>
-          <label className="text-sm">{l.baselineField}
-            <input data-test="baseline" type="number" min={1} max={49} step={1} value={baseline} onChange={(e) => setBaseline(e.target.value)} dir="ltr" className="mt-1 w-full rounded-lg border border-line px-3 py-2" />
-          </label>
-          <label className="flex items-center gap-2 self-end pb-2 text-sm"><input type="checkbox" checked={stress} onChange={(e) => setStress(e.target.checked)} />{l.stress}</label>
-          <div className="text-end sm:col-span-2"><Button test="run-campaign" onClick={build} disabled={busy}>{l.build}</Button></div>
+          <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={stress} onChange={(e) => setStress(e.target.checked)} />{l.stress}</label>
+          <div className="text-end"><Button test="run-campaign" onClick={build} disabled={busy}>{l.build}</Button></div>
         </div>
         <ErrorNote error={error} />
         {busy && <Spinner label={l.working} />}
