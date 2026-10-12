@@ -20,7 +20,7 @@ done
 [ "$(docker network inspect -f '{{.Internal}}' nbe-core)" = "true" ] && pass "nbe-core is internal (no route out)" || bad "nbe-core is not internal"
 
 echo "Egress attempts from inside (must all fail)"
-for c in nbe-d1 nbe-llmgw nbe-llm nbe-guardrails; do
+for c in nbe-d1 nbe-llmgw nbe-llm nbe-guardrails nbe-docvlm nbe-voicetut nbe-qwencleo; do
   docker inspect "$c" >/dev/null 2>&1 || continue
   if docker exec "$c" sh -c 'command -v curl >/dev/null && curl -s --max-time 5 -o /dev/null https://huggingface.co || python3 -c "import urllib.request;urllib.request.urlopen(\"https://huggingface.co\",timeout=5)"' >/dev/null 2>&1; then
     bad "$c reached the internet"
@@ -30,7 +30,7 @@ for c in nbe-d1 nbe-llmgw nbe-llm nbe-guardrails; do
 done
 
 echo "Model servers offline mode"
-for c in $(docker ps --filter name=nbe- --format '{{.Names}}' | grep -E '^nbe-(llm|llm-q|embed|rerank|hero|asr|ref-.*)$'); do
+for c in $(docker ps --filter name=nbe- --format '{{.Names}}' | grep -E '^nbe-(llm|llm-q|embed|rerank|hero|asr|ref-.*|docvlm|voicetut|qwencleo)$'); do
   docker exec "$c" printenv HF_HUB_OFFLINE 2>/dev/null | grep -q 1 && pass "$c HF_HUB_OFFLINE=1" || bad "$c HF_HUB_OFFLINE not set"
 done
 [ $fail -eq 0 ] && echo "offline-check: passed" || { echo "offline-check: FAILED"; exit 1; }

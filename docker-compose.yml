@@ -11,7 +11,7 @@
 name: nbe
 
 x-demo-api: &demo-api
-  image: nbe-demo-api:latest
+  image: nbe-demo-api:${IMAGE_TAG:-latest}
   restart: unless-stopped
   env_file: .env
   environment: &demo-env
@@ -78,7 +78,7 @@ services:
     build:
       context: .
       dockerfile: docker/portal/Dockerfile
-    image: nbe-portal:latest
+    image: nbe-portal:${IMAGE_TAG:-latest}
     container_name: nbe-portal
     restart: unless-stopped
     networks: [nbe-core]
@@ -260,7 +260,7 @@ services:
       context: .
       dockerfile: docker/gpu-python/Dockerfile
       args: { SERVICE: asr }
-    image: nbe-asr:latest
+    image: nbe-asr:${IMAGE_TAG:-latest}
     container_name: nbe-asr
     profiles: [voice]
     restart: "no"
@@ -284,7 +284,7 @@ services:
     build:
       context: .
       dockerfile: docker/tts/Dockerfile
-    image: nbe-tts:latest
+    image: nbe-tts:${IMAGE_TAG:-latest}
     container_name: nbe-tts
     profiles: [voice]
     restart: "no"
@@ -303,7 +303,7 @@ services:
       context: .
       dockerfile: docker/gpu-python/Dockerfile
       args: { SERVICE: sdxl }
-    image: nbe-sdxl:latest
+    image: nbe-sdxl:${IMAGE_TAG:-latest}
     container_name: nbe-sdxl
     profiles: [image]
     restart: "no"
@@ -348,7 +348,7 @@ services:
       context: .
       dockerfile: docker/demo-api/Dockerfile
       args: { SERVICE: mockbank }
-    image: nbe-mockbank:latest
+    image: nbe-mockbank:${IMAGE_TAG:-latest}
     container_name: nbe-mockbank
     environment: { <<: *demo-env, DEMO_ID: mockbank }
 
@@ -356,7 +356,7 @@ services:
     build:
       context: .
       dockerfile: docker/guardrails/Dockerfile
-    image: nbe-guardrails:latest
+    image: nbe-guardrails:${IMAGE_TAG:-latest}
     container_name: nbe-guardrails
     restart: unless-stopped
     environment:
@@ -377,7 +377,7 @@ services:
     build:
       context: .
       dockerfile: docker/docling/Dockerfile
-    image: nbe-docling:latest
+    image: nbe-docling:${IMAGE_TAG:-latest}
     container_name: nbe-docling
     restart: unless-stopped
     networks: [nbe-core]
@@ -394,7 +394,7 @@ services:
       context: .
       dockerfile: docker/demo-api/Dockerfile
       args: { SERVICE: eval }
-    image: nbe-eval:latest
+    image: nbe-eval:${IMAGE_TAG:-latest}
     container_name: nbe-eval
     environment: { <<: *demo-env, DEMO_ID: eval }
     volumes:
@@ -405,7 +405,7 @@ services:
     build:
       context: .
       dockerfile: docker/datagen/Dockerfile
-    image: nbe-datagen:latest
+    image: nbe-datagen:${IMAGE_TAG:-latest}
     container_name: nbe-datagen
     profiles: [tools]
     env_file: .env
@@ -423,7 +423,7 @@ services:
       context: .
       dockerfile: docker/demo-api/Dockerfile
       args: { SERVICE: d1_docverify }
-    image: nbe-d1:latest
+    image: nbe-d1:${IMAGE_TAG:-latest}
     container_name: nbe-d1
     environment: { <<: *demo-env, DEMO_ID: d1 }
     volumes:
@@ -436,7 +436,7 @@ services:
       context: .
       dockerfile: docker/demo-api/Dockerfile
       args: { SERVICE: d2_chatdoc }
-    image: nbe-d2:latest
+    image: nbe-d2:${IMAGE_TAG:-latest}
     container_name: nbe-d2
     environment: { <<: *demo-env, DEMO_ID: d2 }
 
@@ -446,7 +446,7 @@ services:
       context: .
       dockerfile: docker/demo-api/Dockerfile
       args: { SERVICE: d3_campaigns }
-    image: nbe-d3:latest
+    image: nbe-d3:${IMAGE_TAG:-latest}
     container_name: nbe-d3
     environment: { <<: *demo-env, DEMO_ID: d3 }
     volumes:
@@ -459,7 +459,7 @@ services:
       context: .
       dockerfile: docker/demo-api/Dockerfile
       args: { SERVICE: d4_agent }
-    image: nbe-d4:latest
+    image: nbe-d4:${IMAGE_TAG:-latest}
     container_name: nbe-d4
     environment: { <<: *demo-env, DEMO_ID: d4 }
 
@@ -469,7 +469,7 @@ services:
       context: .
       dockerfile: docker/demo-api/Dockerfile
       args: { SERVICE: d5_legal }
-    image: nbe-d5:latest
+    image: nbe-d5:${IMAGE_TAG:-latest}
     container_name: nbe-d5
     environment: { <<: *demo-env, DEMO_ID: d5 }
 
@@ -479,7 +479,7 @@ services:
       context: .
       dockerfile: docker/demo-api/Dockerfile
       args: { SERVICE: d6_assistant }
-    image: nbe-d6:latest
+    image: nbe-d6:${IMAGE_TAG:-latest}
     container_name: nbe-d6
     environment: { <<: *demo-env, DEMO_ID: d6 }
 
@@ -489,7 +489,7 @@ services:
       context: .
       dockerfile: docker/demo-api/Dockerfile
       args: { SERVICE: d7_complaints }
-    image: nbe-d7:latest
+    image: nbe-d7:${IMAGE_TAG:-latest}
     container_name: nbe-d7
     environment: { <<: *demo-env, DEMO_ID: d7 }
 

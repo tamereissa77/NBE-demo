@@ -6,7 +6,7 @@ COMPOSE := docker compose
 # Management commands see every profile, so on-demand model servers are included in ps/stop/down/logs
 COMPOSE_ALL := docker compose --profile core --profile quality --profile voice --profile image --profile hero --profile eval
 -include .env
-export NBE_PORT
+export NBE_PORT IMAGE_TAG COMPOSE_PROJECT_NAME
 
 .PHONY: help up down start stop restart build rebuild ps status logs clean \
         preflight gpu verify platform-check warm models d1 d2 d3 d4 d5 d6 d7 \
@@ -105,7 +105,7 @@ verify:
 
 platform-check warm:
 	@docker run --rm --network nbe-core --env-file .env -e LLM_GATEWAY_URL=http://nbe-llmgw:4000/v1 \
-	  -v $(CURDIR)/tests:/tests:ro nbe-d1:latest python /tests/platform_check.py
+	  -v $(CURDIR)/tests:/tests:ro nbe-d1:$(or $(IMAGE_TAG),latest) python /tests/platform_check.py
 
 DATAGEN := docker compose --profile tools run --rm -u $$(id -u):$$(id -g) nbe-datagen
 PW_IMAGE := mcr.microsoft.com/playwright/python:v1.55.0-noble

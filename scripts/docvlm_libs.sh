@@ -8,7 +8,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 DIR=${NBE_DOCVLM_LIBS:-ops/docvlm-libs}
-IMAGE=${NBE_DOCVLM_IMAGE:-nbe-retrieval:latest}
+IMAGE=${NBE_DOCVLM_IMAGE:-nbe-retrieval:${IMAGE_TAG:-latest}}
 mkdir -p "$DIR"
 DIR=$(cd "$DIR" && pwd)
 

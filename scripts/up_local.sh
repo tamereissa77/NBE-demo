@@ -19,6 +19,9 @@ NBE_PORT=${NBE_PORT:-$(grep -E '^NBE_PORT=' .env 2>/dev/null | cut -d= -f2)}
 
 step() { printf '\n== %s\n' "$*"; }
 
+# The workhorse is hosted on a workstation (config/litellm.local.yaml)
+[ -n "${OPENROUTER_API_KEY:-$(grep -E '^OPENROUTER_API_KEY=' .env 2>/dev/null | cut -d= -f2)}" ] || { echo "Set OPENROUTER_API_KEY in .env" >&2; exit 1; }
+
 # Docker's disk only grows, and a build costs several times the image size (layers, build cache and, on
 # WSL, the Windows pagefile). Refuse to build when the drive that holds it is short: a full system drive
 # takes Docker and everything else on the machine down with it.

@@ -31,7 +31,9 @@ x-local-gpu: &local-gpu
 services:
   nbe-llmgw:
     environment:
-      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:?set OPENROUTER_API_KEY in .env}
+      # Checked by scripts/up_local.sh, not required here: docker-compose.gb10.yml extends services of this file
+      # on a machine that has no hosted model and no key
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
     volumes:
       - ./config/litellm.local.yaml:/app/config.yaml:ro
     networks: [nbe-core, nbe-edge]
@@ -43,7 +45,7 @@ services:
       context: .
       dockerfile: docker/local-gpu/Dockerfile
       args: { SERVICE: embed, BASE: "${NBE_GPU_BASE:-python:3.12-slim}" }
-    image: nbe-retrieval:latest
+    image: nbe-retrieval:${IMAGE_TAG:-latest}
     container_name: nbe-retrieval
     environment:
       RETRIEVAL_DEVICE: ${NBE_RETRIEVAL_DEVICE:-cuda}
@@ -58,7 +60,7 @@ services:
       context: .
       dockerfile: docker/local-gpu/Dockerfile
       args: { SERVICE: tts_voicetut, BASE: "${NBE_GPU_BASE:-python:3.12-slim}" }
-    image: nbe-voicetut:latest
+    image: nbe-voicetut:${IMAGE_TAG:-latest}
     container_name: nbe-voicetut
     environment:
       TTS_DEVICE: ${NBE_TTS_DEVICE:-cuda}
@@ -76,7 +78,7 @@ services:
       context: .
       dockerfile: docker/local-gpu/Dockerfile
       args: { SERVICE: asr_qwencleo, BASE: "${NBE_GPU_BASE:-python:3.12-slim}" }
-    image: nbe-qwencleo:latest
+    image: nbe-qwencleo:${IMAGE_TAG:-latest}
     container_name: nbe-qwencleo
     command: ["/opt/asr/bin/python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
     environment:
@@ -93,7 +95,7 @@ services:
   # Real documents are read here and nowhere else: this service has no route out.
   nbe-docvlm:
     <<: *local-gpu
-    image: nbe-retrieval:latest
+    image: nbe-retrieval:${IMAGE_TAG:-latest}
     container_name: nbe-docvlm
     working_dir: /app
     command: ["/opt/asr/bin/python", "nbe_finetune/demo/api.py"]

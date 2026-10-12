@@ -61,7 +61,7 @@ build it first, and again after a portal change, with `npm ci && npm run build` 
 ## Tests for D4
 
 ```bash
-docker run --rm -v ./tests:/tests:ro nbe-d4 python /tests/d4_rules.py                      # no models needed
+docker run --rm -v ./tests:/tests:ro -v ./data:/data:ro nbe-d4 python /tests/d4_rules.py   # no models needed
 docker run --rm --network nbe-core -v ./tests:/tests:ro nbe-d4 python /tests/d4_script.py  # real models, mock bank
 ```
 

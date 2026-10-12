@@ -17,6 +17,7 @@ TIMEOUT = 240_000
 
 
 def d1(p: Page) -> None:
+    p.locator("[data-test=mode-packs]").click()      # D1 opens on the upload flow; the synthetic packs are the second tab
     p.locator("[data-test=pack]").first.click()
     p.locator("[data-test=verify]").click()
     p.locator("[data-test=verdict]").wait_for(timeout=TIMEOUT)

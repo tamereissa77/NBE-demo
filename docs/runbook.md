@@ -2,6 +2,29 @@
 
 For whoever operates the box on demo day. The talk track for each demo is in [talk-tracks.md](talk-tracks.md).
 
+## The Efada build (fine-tuned reader, Egyptian voice)
+
+`docker-compose.gb10.yml` adds D1's fine-tuned reader (`nbe-docvlm`) and D4's Egyptian voice (`nbe-voicetut`,
+`nbe-qwencleo`) to the GB10's own models. Nothing is hosted: the workhorse is the local Gemma, and the three
+services sit on the internal network like every other, so `make offline-check` covers them.
+
+Once, online:
+
+1. In `.env`, set the block at the end of `.env.example`: a project name and image tag of its own (a second
+   checkout on a shared box keeps its own images and data), `COMPOSE_FILE` so every `make` target sees the
+   overlay, and `EFADA_MODELS_DIR`.
+2. Into `EFADA_MODELS_DIR`: `QwenCleo-ASR/` (a plain folder), and in Hugging Face cache layout
+   `models--mohammedaly22--VoiceTut-TTS` (with `eustlb/higgs-audio-v2-tokenizer` as `audio_tokenizer/` inside
+   its snapshot) and `models--Qwen--Qwen3-VL-8B-Instruct-FP8`. Each cache folder needs `refs/main` holding
+   the snapshot's revision, or the offline load does not find it.
+3. Into `NBE_DOCVLM_REPO`: the fine-tune project's `nbe_finetune/` (its `*.py`, `demo/` and
+   `output/candidates/v18`).
+4. `scripts/docvlm_libs.sh`, after the first build.
+
+Start with `scripts/up_gb10.sh`, not `make up`: it starts the models one at a time (about 95 GB in all, the
+reader 18 GB of it) and never stops another team's containers. `make down`, `status`, `gpu`, `verify`,
+`offline-check` and `ui-test` work as below.
+
 ## The day before
 
 1. `make up`: about 4 minutes from cold. It stops other GPU users on the shared box first, starts the models one at a time, then the apps, and on a fresh box generates and loads the demo data.
