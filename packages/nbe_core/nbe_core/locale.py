@@ -100,3 +100,30 @@ D3_CITIES = [("القاهرة", 0.38), ("الجيزة", 0.18), ("الإسكند�
              ("الإسماعيلية", 0.04), ("الأقصر", 0.04), ("الغردقة", 0.03)]
 D3_FIRST = ["أحمد", "محمد", "محمود", "مصطفى", "عمر", "يوسف", "كريم", "خالد", "طارق", "حسن", "منى", "سارة", "نور", "ليلى", "هدى", "مريم", "ياسمين", "دينا", "رنا", "آية"]
 D3_LAST = ["حسن", "عبد الله", "السيد", "إبراهيم", "فهمي", "سليمان", "رمضان", "النجار", "الشريف", "منصور", "عزت", "رضوان", "فوزي", "عادل", "شاكر"]
+
+# ------------------------------------------------------------------ the bank's own facts (D6 drafting)
+# What a drafted letter may state about the bank without being told: (label, value). Taken from the bank's public
+# customer-rights brochure; to be confirmed by the bank before real use. Anything not listed here (working hours,
+# addresses, fees, names of officers) is NOT known to the assistant and is left as a placeholder in a draft.
+BANK_FACTS = [
+    ("Call centre / مركز الاتصال", "19623"),
+    ("Website / الموقع الإلكتروني", "www.nbe.com.eg"),
+    ("Customer service e-mail / البريد الإلكتروني لخدمة العملاء", "customer.service@nbe.com.eg"),
+    ("Fax / فاكس", "+202 25945221"),
+]
+WEEKEND = (4, 5)          # Friday and Saturday (Monday = 0): shown on the calendar a draft is given
+
+# ------------------------------------------------------------------ the bank's terms (D6 translation)
+# (Arabic, English): how a term is written in each language when the assistant translates. Standard banking usage,
+# to be confirmed and extended by the bank; a term that is not listed is translated as the model sees fit.
+GLOSSARY = [
+    ("البنك الأهلي المصري", "National Bank of Egypt"), ("البنك المركزي المصري", "Central Bank of Egypt"),
+    ("اعرف عميلك", "Know Your Customer (KYC)"), ("العناية الواجبة بالعملاء", "customer due diligence"),
+    ("مكافحة غسل الأموال", "anti-money laundering"), ("تمويل الإرهاب", "terrorist financing"), ("الشمول المالي", "financial inclusion"),
+    ("خطاب الضمان", "letter of guarantee"), ("الاعتماد المستندي", "letter of credit"), ("الأمر المستديم", "standing order"),
+    ("الخصم المباشر", "direct debit"), ("بطاقة الخصم", "debit card"), ("بطاقة الائتمان", "credit card"),
+    ("ماكينة الصراف الآلي", "ATM"), ("مركز الاتصال", "call centre"), ("المصروفات النثرية", "petty cash"),
+    ("مدير الفرع", "Branch Manager"), ("مدير المنطقة", "Regional Manager"), ("الإدارة العليا", "senior management"),
+    ("المراجعة الداخلية", "internal audit"), ("إدارة الالتزام", "Compliance Department"), ("إدارة الخزانة", "Treasury Department"),
+    ("أيام عمل", "business days"), ("صراف", "teller"), ("المستفيد", "beneficiary"),
+]

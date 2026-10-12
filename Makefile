@@ -6,7 +6,7 @@ COMPOSE := docker compose
 # Management commands see every profile, so on-demand model servers are included in ps/stop/down/logs
 COMPOSE_ALL := docker compose --profile core --profile quality --profile voice --profile image --profile hero --profile eval
 -include .env
-export NBE_PORT IMAGE_TAG COMPOSE_PROJECT_NAME BRAND
+export NBE_PORT IMAGE_TAG COMPOSE_PROJECT_NAME BRAND MODE
 
 .PHONY: start-NBE start-RYD brand help up down start stop restart build rebuild ps status logs clean \
         preflight gpu verify platform-check warm models d1 d2 d3 d4 d5 d6 d7 \
@@ -22,6 +22,7 @@ help:
 	@echo ""
 	@echo "  make up            preflight (free the GPU), then start everything in a memory-safe order"
 	@echo "                     (MODE=show default: core + voice + image;  MODE=full adds Gemma 4 31B;  MODE=core: core only)"
+	@echo "                     (MODE=api in .env: LLMs on external APIs, only D3 and D6 started; see .env.example)"
 	@echo "  make down          stop the running demo stack, NBE or RYD, from either folder (data volumes kept)"
 	@echo "  make start|stop    start/stop existing containers"
 	@echo "  make restart       restart all containers"

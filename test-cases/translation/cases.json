@@ -1,0 +1,343 @@
+{
+ "_about": "Translation cases for D6 (tests/d6_translation_eval.py), Arabic and English in both directions. Checks are computed in the test: recognised as a translation; in the right language; every number, date and code of the source present; nothing dropped at the end; the bank's terms used; layout kept; no citation or page marks; and, from the service's report, source and translation aligned paragraph by paragraph.",
+ "cases": [
+  {
+   "id": "ar-en-sentence",
+   "about": "An Arabic policy sentence into English: limits, days and job titles.",
+   "q": "ترجم للإنجليزية: يعتمد مدير الفرع العمليات حتى 1,000 جنيه، والعمليات من 1,000 إلى 2,000 جنيه يعتمدها مدير المنطقة، وتُسوّى عهدة المصروفات النثرية خلال 5 أيام عمل من نهاية كل شهر.",
+   "check": {
+    "to": "en",
+    "figures": "1000 2000",
+    "terms": [
+     [
+      "branch manager"
+     ],
+     [
+      "regional manager"
+     ],
+     [
+      "petty cash"
+     ],
+     [
+      "working days",
+      "business days"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "en-ar-terms",
+   "about": "English banking terms into Arabic: the bank's own terms must be used.",
+   "q": "Translate to Arabic: The customer must complete the KYC form before the letter of guarantee is issued; a standing order cannot replace a direct debit, and the IBAN must match the beneficiary name.",
+   "check": {
+    "to": "ar",
+    "terms": [
+     [
+      "اعرف عميلك"
+     ],
+     [
+      "خطاب الضمان",
+      "خطاب ضمان"
+     ],
+     [
+      "مستديم"
+     ],
+     [
+      "الخصم المباشر",
+      "خصم مباشر"
+     ],
+     [
+      "iban"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "en-ar-letter",
+   "about": "A short customer letter into Arabic: reference, amount, date and the line layout.",
+   "q": "Translate into Arabic:\nDear Mr. Ahmed Saad,\nWe refer to your complaint no. C-2026-031 dated 28 September 2026. The amount of EGP 4,750 will be credited to your account within 3 business days.\nYours sincerely,\nSherif Lotfy\nBranch Manager",
+   "check": {
+    "to": "ar",
+    "figures": "c-2026-031 28 2026 4750",
+    "min_lines": 4,
+    "terms": [
+     [
+      "مدير الفرع"
+     ],
+     [
+      "ايام عمل"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "ar-en-dialect",
+   "about": "Egyptian dialect into English.",
+   "q": "ترجم للإنجليزي: العميل زعلان عشان الفيزا بتاعته اتسحبت في الماكينة ومحدش رد عليه في الكول سنتر",
+   "check": {
+    "to": "en",
+    "terms": [
+     [
+      "atm",
+      "machine"
+     ],
+     [
+      "call cent"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "auto-direction",
+   "about": "No language named: Arabic text goes to English.",
+   "q": "translate: تم تفعيل بطاقتك بنجاح، ويمكنك استخدامها في جميع ماكينات الصراف الآلي.",
+   "check": {
+    "to": "en",
+    "terms": [
+     [
+      "card"
+     ],
+     [
+      "activat"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "en-ar-contacts",
+   "about": "Addresses, numbers and codes must pass through untouched.",
+   "q": "Translate to Arabic: For card problems call 19623, write to customer.service@nbe.com.eg or visit www.nbe.com.eg and quote reference DSP-88214.",
+   "check": {
+    "to": "ar",
+    "figures": "19623 dsp-88214",
+    "keep": [
+     "customer.service@nbe.com.eg",
+     "www.nbe.com.eg"
+    ]
+   }
+  },
+  {
+   "id": "en-ar-arabic-digits",
+   "about": "Option: Arabic-Indic numerals in the Arabic text.",
+   "options": {
+    "numerals": "arabic_indic"
+   },
+   "q": "Translate to Arabic: The branch closes at 15:00 on 28 September 2026 and reopens on 4 October 2026 with 12 new tellers.",
+   "check": {
+    "to": "ar",
+    "figures": "28 2026 12",
+    "arabic_digits": true
+   }
+  },
+  {
+   "id": "file-ar-en-minutes",
+   "about": "A whole Arabic file (meeting minutes) into English: complete, every figure, names, the task list still a list, no stray marks.",
+   "files": [
+    "../summaries/docs/meeting_ar.txt"
+   ],
+   "q": "ترجم هذا الملف إلى الإنجليزية.",
+   "check": {
+    "to": "en",
+    "source": "../summaries/docs/meeting_ar.txt",
+    "complete": [
+     [
+      "next meeting"
+     ],
+     [
+      "8"
+     ],
+     [
+      "november"
+     ]
+    ],
+    "terms": [
+     [
+      "mona"
+     ],
+     [
+      "sherif"
+     ],
+     [
+      "noha"
+     ],
+     [
+      "treasury"
+     ]
+    ],
+    "min_lines": 12,
+    "clean": true,
+    "aligned": true
+   }
+  },
+  {
+   "id": "file-ar-en-policy",
+   "about": "An Arabic policy with headings into English: headings stay headings, every limit kept.",
+   "files": [
+    "../summaries/docs/policy_ar.md"
+   ],
+   "q": "ترجم هذا الملف إلى الإنجليزية.",
+   "check": {
+    "to": "en",
+    "source": "../summaries/docs/policy_ar.md",
+    "complete": [
+     [
+      "internal audit"
+     ]
+    ],
+    "terms": [
+     [
+      "petty cash"
+     ],
+     [
+      "branch manager"
+     ],
+     [
+      "regional manager"
+     ]
+    ],
+    "headings": 4,
+    "clean": true,
+    "aligned": true
+   }
+  },
+  {
+   "id": "file-ar-en-thread",
+   "about": "An Arabic e-mail thread into English.",
+   "files": [
+    "../summaries/docs/thread_ar.txt"
+   ],
+   "q": "ترجم هذا الملف إلى الإنجليزية.",
+   "check": {
+    "to": "en",
+    "source": "../summaries/docs/thread_ar.txt",
+    "complete": [
+     [
+      "3"
+     ],
+     [
+      "business days",
+      "working days"
+     ]
+    ],
+    "figures": "dsp-88214 c-2026-031 4750",
+    "clean": true,
+    "aligned": true
+   }
+  },
+  {
+   "id": "file-en-ar-circular",
+   "about": "A three-page English circular with tables into Arabic. Before, this stopped half way through.",
+   "files": [
+    "../chat-files-test/Reg_circular.pdf"
+   ],
+   "q": "Translate this file into Arabic.",
+   "check": {
+    "to": "ar",
+    "figures": "aml/cft-circ/2026/09 2026 2020 2027 2002",
+    "complete": [
+     [
+      "2002"
+     ],
+     [
+      "طارق",
+      "الخولي",
+      "el-kholy"
+     ]
+    ],
+    "terms": [
+     [
+      "العنايه الواجبه"
+     ],
+     [
+      "غسل الاموال"
+     ]
+    ],
+    "table_rows": 6,
+    "clean": true,
+    "aligned": true
+   }
+  },
+  {
+   "id": "file-ar-en-scan",
+   "about": "A scanned Arabic letter into English (the page is read by the vision model first).",
+   "files": [
+    "../chat-files-test/test_cirular.pdf"
+   ],
+   "q": "ترجم هذا الكتاب إلى الإنجليزية.",
+   "check": {
+    "to": "en",
+    "figures": "2026 2019 2020",
+    "complete": [
+     [
+      "call cent"
+     ],
+     [
+      "branch"
+     ]
+    ],
+    "terms": [
+     [
+      "financial inclusion"
+     ],
+     [
+      "financial literacy",
+      "financial education",
+      "financial culture",
+      "financial awareness"
+     ]
+    ],
+    "clean": true,
+    "aligned": true
+   }
+  },
+  {
+   "id": "nothing-to-translate",
+   "about": "No text: it must ask for it.",
+   "q": "ترجم للإنجليزية.",
+   "check": {
+    "asks": true
+   }
+  },
+  {
+   "id": "answer-not-file",
+   "about": "A file is attached and summarised; 'translate into English' must translate the summary, not the whole file.",
+   "files": [
+    "../chat-files-test/test_cirular.pdf"
+   ],
+   "q": "لخّص هذا الكتاب في ثلاث نقاط.",
+   "then": "translate into English",
+   "check": {
+    "to": "en",
+    "of": "answer"
+   }
+  },
+  {
+   "id": "answer-not-file-ar",
+   "about": "The same, asked in Arabic with a pronoun.",
+   "files": [
+    "../summaries/docs/policy_ar.md"
+   ],
+   "q": "لخّص هذه السياسة في ثلاث نقاط.",
+   "then": "ترجمه إلى الإنجليزية.",
+   "check": {
+    "to": "en",
+    "of": "answer",
+    "figures": "25000"
+   }
+  },
+  {
+   "id": "file-when-named",
+   "about": "After the same summary, naming the file must translate the whole file.",
+   "files": [
+    "../summaries/docs/policy_ar.md"
+   ],
+   "q": "لخّص هذه السياسة في ثلاث نقاط.",
+   "then": "ترجم الملف كله إلى الإنجليزية.",
+   "check": {
+    "to": "en",
+    "of": "file",
+    "source": "../summaries/docs/policy_ar.md"
+   }
+  }
+ ]
+}

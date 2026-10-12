@@ -38,9 +38,10 @@ async def convert_document(filename: str, data: bytes) -> dict:
         return r.json()
 
 
-async def render_pdf(data: bytes, dpi: int = 150) -> list[str]:
-    """PDF pages as base64 PNGs, for vision-LLM transcription of Arabic PDFs."""
+async def render_pdf(data: bytes, dpi: int = 150, pages: list[int] | None = None) -> list[str]:
+    """PDF pages as base64 PNGs, for vision-LLM transcription of Arabic and scanned pages. `pages` (1-based) limits it."""
+    form = {"dpi": str(dpi), "pages": ",".join(map(str, pages or []))}
     async with httpx.AsyncClient(timeout=_TIMEOUT) as client:
-        r = await client.post(f"{settings.docling_url}/render", files={"file": ("doc.pdf", data)}, data={"dpi": str(dpi)})
+        r = await client.post(f"{settings.docling_url}/render", files={"file": ("doc.pdf", data)}, data=form)
         r.raise_for_status()
         return r.json()["pages"]

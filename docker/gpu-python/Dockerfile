@@ -1,6 +1,7 @@
 # GPU Python services (ASR, SDXL) on NVIDIA's vLLM image: it already ships PyTorch built for
 # GB10 (sm_121, aarch64), which avoids the aarch64 wheel gaps flagged in PLAN.md §9.
-FROM nvcr.io/nvidia/vllm:26.05-py3
+ARG BASE_IMAGE=nvcr.io/nvidia/vllm:26.05-py3
+FROM ${BASE_IMAGE}
 
 ARG SERVICE
 ENV PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1

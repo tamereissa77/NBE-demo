@@ -1,0 +1,287 @@
+{
+ "_about": "Multi-file sets for D6 file chat (tests/d6_files_eval.py multi <label>). All files of a set are attached together; `expect` includes the file names the answer must cite.",
+ "sets": [
+  {
+   "set": "letters",
+   "about": "Three letters: an English AML circular (typed), an Arabic AML letter (typed), an Arabic financial-literacy letter (scanned).",
+   "files": [
+    "Reg_circular.pdf",
+    "normal_file.pdf",
+    "test_cirular.pdf"
+   ],
+   "questions": [
+    {
+     "id": "mf-let-1",
+     "q": "Which of the attached files is dated 17 August 2026? Give the file name.",
+     "answer": "test_cirular.pdf",
+     "expect": [
+      [
+       "test_cirular"
+      ]
+     ]
+    },
+    {
+     "id": "mf-let-2",
+     "q": "What is the reference number of the English circular, and what is the date of the scanned Arabic letter? Name the file for each.",
+     "answer": "AML/CFT-CIRC/2026/09 (Reg_circular.pdf); 17 August 2026 (test_cirular.pdf)",
+     "expect": [
+      [
+       "aml/cft-circ/2026/09"
+      ],
+      [
+       "17"
+      ],
+      [
+       "august",
+       "أغسطس",
+       "اغسطس"
+      ],
+      [
+       "reg_circular"
+      ],
+      [
+       "test_cirular"
+      ]
+     ]
+    },
+    {
+     "id": "mf-let-3",
+     "q": "Two of the files are dated 28 September 2026. Which files are they, and are they signed by the same person?",
+     "answer": "Reg_circular.pdf and normal_file.pdf; both signed by Tarek El-Kholy (طارق الخولي)",
+     "expect": [
+      [
+       "reg_circular"
+      ],
+      [
+       "normal_file"
+      ],
+      [
+       "kholy",
+       "الخولي"
+      ]
+     ]
+    },
+    {
+     "id": "mf-let-4",
+     "q": "أي من الملفات المرفقة يتناول التثقيف المالي، وأيها يتناول مكافحة غسل الأموال؟ اذكر أسماء الملفات.",
+     "answer": "التثقيف المالي: test_cirular.pdf؛ غسل الأموال: Reg_circular.pdf و normal_file.pdf",
+     "expect": [
+      [
+       "test_cirular"
+      ],
+      [
+       "reg_circular"
+      ],
+      [
+       "normal_file"
+      ]
+     ]
+    },
+    {
+     "id": "mf-let-5",
+     "q": "Which file mentions a 12-month cooling-off period, and on which page?",
+     "answer": "Reg_circular.pdf, page 2",
+     "expect": [
+      [
+       "reg_circular"
+      ],
+      [
+       "page 2",
+       "p. 2",
+       "second page"
+      ]
+     ]
+    },
+    {
+     "id": "mf-let-6",
+     "q": "Which file states the bank's capital adequacy ratio?",
+     "answer": "(none of the files)",
+     "absent": true
+    }
+   ]
+  },
+  {
+   "set": "branch-data",
+   "about": "A workbook, an Arabic CSV and a Word document about the same branches.",
+   "files": [
+    "branch_loans.xlsx",
+    "complaints_ar.csv",
+    "bad-uploads/ok_small.docx"
+   ],
+   "questions": [
+    {
+     "id": "mf-br-1",
+     "q": "What is the total loan amount for the Giza branch, and how many complaints were recorded for الجيزة? Name the file for each figure.",
+     "answer": "3,936,000 EGP (branch_loans.xlsx); 9 complaints (complaints_ar.csv)",
+     "expect": [
+      [
+       "3936000"
+      ],
+      [
+       "re:(?<![\\d.,])9(?![\\d]|[.,]\\d)",
+       "nine"
+      ],
+      [
+       "branch_loans"
+      ],
+      [
+       "complaints_ar"
+      ]
+     ]
+    },
+    {
+     "id": "mf-br-2",
+     "q": "Who manages the Cairo Main branch, and what are its opening hours on Saturday? Name the file for each answer.",
+     "answer": "Hany Mansour (branch_loans.xlsx); 10:00 to 14:00 (ok_small.docx)",
+     "expect": [
+      [
+       "hany mansour"
+      ],
+      [
+       "10:00",
+       "10 am",
+       "10am"
+      ],
+      [
+       "14:00",
+       "2 pm",
+       "2pm",
+       "2:00"
+      ],
+      [
+       "branch_loans"
+      ],
+      [
+       "ok_small"
+      ]
+     ]
+    },
+    {
+     "id": "mf-br-3",
+     "q": "كم عدد الشكاوى المُصعَّدة، وكم عدد القروض المرفوضة؟ اذكر اسم الملف لكل رقم.",
+     "answer": "6 شكاوى (complaints_ar.csv)؛ 8 قروض (branch_loans.xlsx)",
+     "expect": [
+      [
+       "re:(?<![\\d.,])6(?![\\d]|[.,]\\d)",
+       "ست"
+      ],
+      [
+       "re:(?<![\\d.,])8(?![\\d]|[.,]\\d)",
+       "ثماني",
+       "ثمانيه"
+      ],
+      [
+       "complaints_ar"
+      ],
+      [
+       "branch_loans"
+      ]
+     ]
+    },
+    {
+     "id": "mf-br-4",
+     "q": "Which file contains complaint C-2026-012, and what is its status?",
+     "answer": "complaints_ar.csv; مغلقة (closed)",
+     "expect": [
+      [
+       "complaints_ar"
+      ],
+      [
+       "مغلقه",
+       "closed"
+      ]
+     ]
+    },
+    {
+     "id": "mf-br-5",
+     "q": "What is the amount of loan L-1017?",
+     "answer": "124,000 EGP (branch_loans.xlsx)",
+     "expect": [
+      [
+       "124000"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "set": "two-versions",
+   "about": "Two versions of one fee schedule that disagree on two values and differ by one row.",
+   "files": [
+    "multi/fees_2025.md",
+    "multi/fees_2026.md"
+   ],
+   "questions": [
+    {
+     "id": "mf-ver-1",
+     "q": "What is the debit card replacement fee?",
+     "answer": "50 EGP in fees_2025.md, 75 EGP in fees_2026.md",
+     "expect": [
+      [
+       "re:(?<![\\d.,])50(?![\\d]|[.,]\\d)"
+      ],
+      [
+       "re:(?<![\\d.,])75(?![\\d]|[.,]\\d)"
+      ],
+      [
+       "fees_2025",
+       "2025"
+      ],
+      [
+       "fees_2026",
+       "2026"
+      ]
+     ]
+    },
+    {
+     "id": "mf-ver-2",
+     "q": "What changed between the two fee schedules?",
+     "answer": "Card replacement 50 to 75 EGP; daily ATM limit 20,000 to 30,000 EGP; new row: instant card issuance 100 EGP",
+     "expect": [
+      [
+       "re:(?<![\\d.,])75(?![\\d]|[.,]\\d)"
+      ],
+      [
+       "30000"
+      ],
+      [
+       "instant card"
+      ]
+     ]
+    },
+    {
+     "id": "mf-ver-3",
+     "q": "Is the cheque book fee the same in both files?",
+     "answer": "Yes, 120 EGP in both",
+     "expect": [
+      [
+       "re:(?<![\\d.,])120(?![\\d]|[.,]\\d)"
+      ],
+      [
+       "same",
+       "both",
+       "unchanged",
+       "yes"
+      ]
+     ]
+    },
+    {
+     "id": "mf-ver-4",
+     "q": "On what date was the 2025 schedule approved?",
+     "answer": "10 December 2024 (fees_2025.md)",
+     "expect": [
+      [
+       "10"
+      ],
+      [
+       "december"
+      ],
+      [
+       "2024"
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}

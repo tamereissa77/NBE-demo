@@ -5,7 +5,7 @@ import type { Health } from "../useHealth";
 
 const ICON: Record<string, string> = {
   llm: "🧠", retrieval: "🔎", guardrail: "🛡️", tool: "🔧", rules: "📏", route: "🧭", chunk: "✂️", cache: "♻️", ingest: "📥",
-  forensics: "🔬", asr: "🎙️", tts: "🔊", image: "🖼️", sql: "🗄️",
+  forensics: "🔬", asr: "🎙️", tts: "🔊", image: "🖼️", sql: "🗄️", file: "📄", files: "📚", evidence: "✅", memory: "📝", code: "🧪",
 };
 
 // "Show the work": every step behind the last response, with timings, plus live service health.

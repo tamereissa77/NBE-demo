@@ -4,6 +4,7 @@
 #   MODE=show (default): core + voice + image (live D3 banners)
 #   MODE=full:           show + Gemma 4 31B quality model (optional for D5; the Arabic gate provisionally drops it)
 #   MODE=core:           core models only
+#   MODE=api:            LLMs on external APIs (docker-compose.api.yml); only D3 and D6 are started
 set -euo pipefail
 cd "$(dirname "$0")/.."
 MODE=${MODE:-show}
@@ -17,6 +18,33 @@ mkdir -p data/generated/d3/banners && chmod 777 data/generated/d3/banners 2>/dev
 
 step "data services"
 $C up -d --wait nbe-postgres nbe-qdrant
+
+if [ "$MODE" = "api" ]; then
+  has_collection() {
+    docker exec nbe-qdrant bash -c "exec 3<>/dev/tcp/127.0.0.1/6333; printf 'GET /collections/$1 HTTP/1.0\r\n\r\n' >&3; head -1 <&3" 2>/dev/null | grep -q 200
+  }
+  DATAGEN="docker compose --profile tools run --rm -u $(id -u):$(id -g) nbe-datagen"
+
+  step "local models: embeddings -> reranker -> SDXL (sequential)"
+  $C up -d --wait nbe-embed
+  $C up -d --wait nbe-rerank
+  $C up -d --wait nbe-sdxl || echo "SDXL did not start (free GPU memory? see 'make gpu'): D3 runs without a live banner"
+
+  step "model gateway, documents, D3, D6, portal"
+  $C up -d --wait nbe-llmgw nbe-docling nbe-d3 nbe-d6 nbe-portal nbe-gateway
+
+  if [ ! -f data/generated/d3/customers.csv ] || [ ! -f data/generated/d6/docs.jsonl ]; then
+    step "generating synthetic data for D3 and D6 (first run)"
+    $DATAGEN python -m data.generators.d3_commerce
+    $DATAGEN python -m data.generators.d6_docs
+  fi
+  if ! has_collection d3_merchants || ! has_collection d6_docs; then
+    step "loading D3 and D6 data (first run)"
+    DEMOS="d3 d6" scripts/ingest.sh
+  fi
+  echo; echo "Portal: http://localhost:${NBE_PORT:-8200}  (API mode: D3 and D6)"
+  exit 0
+fi
 
 step "core models: workhorse -> embeddings -> reranker (sequential)"
 $C up -d --wait nbe-llm
