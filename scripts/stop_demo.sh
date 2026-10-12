@@ -4,7 +4,7 @@
 # data volumes and images are kept. scripts/switch_brand.sh passes the bank it is about to start.
 set -euo pipefail
 keep="${1:-}"
-PROFILES="--profile core --profile quality --profile voice --profile image --profile hero --profile eval --profile tools"
+PROFILES="--profile core --profile quality --profile voice --profile image --profile hero --profile eval --profile tools --profile extract"
 stopped=0
 for proj in $(docker ps --format '{{.Label "com.docker.compose.project"}}' | sort -u); do
   { [ -z "$proj" ] || [ "$proj" = "$keep" ]; } && continue

@@ -4,7 +4,7 @@ SHELL := /bin/bash
 
 COMPOSE := docker compose
 # Management commands see every profile, so on-demand model servers are included in ps/stop/down/logs
-COMPOSE_ALL := docker compose --profile core --profile quality --profile voice --profile image --profile hero --profile eval
+COMPOSE_ALL := docker compose --profile core --profile quality --profile voice --profile image --profile hero --profile eval --profile extract
 -include .env
 export NBE_PORT IMAGE_TAG COMPOSE_PROJECT_NAME BRAND MODE
 
