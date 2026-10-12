@@ -335,7 +335,7 @@ async def say(text: str) -> tuple[str, str, int]:
     spoken = speech.normalize(text, lang)
     async with httpx.AsyncClient(timeout=120) as c:
         r = await c.post(f"{TTS_URL}/tts", json={"text": spoken, "lang": lang, "lexicon": speech.lexicon() if lang == "ar" else {},
-                                                 "careful": speech.careful(spoken)})
+                                                 "careful_words": speech.careful_words(spoken) if lang == "ar" else []})
         r.raise_for_status()
     return base64.b64encode(r.content).decode(), r.headers.get("X-Model", "Piper"), int(r.headers.get("X-Latency-Ms", 0))
 

@@ -9,10 +9,13 @@ An operator edits /data/seed/d4/pronunciation.ini by ear; it is re-read whenever
 - [careful]: words that need the voice's slower, more exact setting; one word per line.
 - [wording]: words the agent should not use at all, replaced in the reply itself.
 
-On top of that, in Arabic, amounts of money are spelled out the way they are said in Egypt ("500 جنيه" is
-خمسميت جنيه, not خمسمية), a half, a quarter and three quarters are said as such ("2.5 مليون" is 2 ونص مليون,
-"22.5%" is 22 ونص في المية), and numbers that are identifiers rather than amounts (card endings, one-time
-codes, ticket and handoff numbers, phone numbers) are spaced out so the voice reads them digit by digit.
+On top of that, in Arabic every number is written out in Egyptian words: no digit is left for the voice, which
+dropped or slurred the ones it had to read itself and never read a number joined to a particle (و18,000).
+Amounts are said the way they are said in Egypt ("500 جنيه" is خمسميت جنيه, "1.4 مليون" and "1,400,000" are
+مليون وربعميت ألف), a half, a quarter and three quarters are said as such ("2.5 مليون" is اتنين ونص مليون,
+"22.5%" is اتنين وعشرين ونص في المية), and numbers that are identifiers rather than amounts (card endings,
+one-time codes, ticket and handoff numbers, phone numbers) are read digit by digit. A sentence that holds a
+number is spoken on the voice's slower, exact setting: on the fast one spelled-out numbers smear.
 
 In English every number is written out in English words. The voice's own text preparation is Arabic only: it
 reads any digit it is given as an Arabic word, in an English sentence too, so for English it is switched off
@@ -33,13 +36,25 @@ ARABIC_WORD = re.compile(r"[ء-ي]+")
 # 2.5, 8.25, 0.75: said with ونص، وربع، وتلات أرباع. Any other fraction is left to the voice ("فاصلة").
 FRACTION = re.compile(r"(?<![\d.,])(\d+)\.(50?|25|75)(?!\d)")
 FRACTIONS = {"5": "ونص", "50": "ونص", "25": "وربع", "75": "وتلات أرباع"}
-# A round hundred right before what it counts: "100 ألف" is ميت ألف. The voice would say مية ألف.
-HUNDRED_OF = re.compile(r"(?<![\d.,])([1-9]00)\s+(?=(?:ألف|مليون|مليار)(?![ء-ي]))")
+# A particle written joined to a number: و18,000, لـ 30, الـ 8%, بـ50. It is joined to the number's first word.
+JOINER = "\u2060"
+JOINED = re.compile(r"(?<![ء-يـ\d])(وال|بال|ال|لل|وب|ول|[وفبلك])(?:ـ+\s*|(?=\d))(?=\d)")
+INT = r"\d{1,3}(?:,\d{3})+|\d+"
+# 13 ألف, 1.4 مليون, 100 ألف, 3 آلاف: said as one number (مليون وربعميت ألف), a hundred taking its Egyptian ending
+SCALES = {"ألف": 10 ** 3, "آلاف": 10 ** 3, "الاف": 10 ** 3, "مليون": 10 ** 6, "ملايين": 10 ** 6, "مليار": 10 ** 9}
+SCALED = re.compile(rf"(?<![\d.,:/])({INT})(?:\.(\d+))?\s*(ألف|آلاف|الاف|مليون|ملايين|مليار)(?![ء-ي])")
+DECIMAL = re.compile(rf"(?<![\d.,:/])({INT})\.(\d+)(?![\d:/])")
+PLAIN = re.compile(rf"(?<![\d.,:/])({INT})(?![\d:/]|[.,]\d)")          # a time (3:30) is left to the voice
+MONTHS = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"]
+DATE = re.compile(r"(?<![\d/-])(?:(\d{4})-(\d{1,2})-(\d{1,2})|(\d{1,2})/(\d{1,2})/(\d{4}))(?![\d/-])")
+YEAR = re.compile(r"((?:سنة|عام|" + "|".join(MONTHS) + r")\s+)((?:19|20)\d\d)(?!\d)")
+# A word after a number that the number does not count: "5 لـ 30", "13,000 أو", "65 في نهاية"
+NOT_COUNTED = frozenset("و أو او في من على عن إلى الى لحد لغاية حتى ل ولا بس كل ده دي هو هي يعني ثم مع عند قبل بعد زي غير".split())
 PERCENT = re.compile(r"\s*[%٪]")
 _cache: tuple[float, dict[str, list[tuple[re.Pattern, str]]], dict[str, str], frozenset[str]] = (0.0, {}, {}, frozenset())
 
 # Egyptian Arabic numbers. A hundred that stands right before what it counts ends in ت: ميت جنيه, خمسميت ألف.
-ONES = ["", "واحد", "اتنين", "تلاتة", "أربعة", "خمسة", "ستة", "سبعة", "تمانية", "تسعة", "عشرة",
+ONES = ["", "واحد", "اتنين", "تلاتة", "أربعة", "خمسة", "ستة", "سبعة", "تمنية", "تسعة", "عشرة",
         "حداشر", "اتناشر", "تلتاشر", "أربعتاشر", "خمستاشر", "ستاشر", "سبعتاشر", "تمنتاشر", "تسعتاشر"]
 TENS = ["", "", "عشرين", "تلاتين", "أربعين", "خمسين", "ستين", "سبعين", "تمانين", "تسعين"]
 HUNDREDS = ["", "مية", "ميتين", "تلتمية", "ربعمية", "خمسمية", "ستمية", "سبعمية", "تمنمية", "تسعمية"]
@@ -50,6 +65,16 @@ NUMERALS = {"مية": "مِيَّة", "ميت": "مِيت", "ميتين": "مِ�
             "خمسمية": "خُمْسُمِيَّة", "خمسميت": "خُمْسُمِيت", "ستمية": "سُتُمِيَّة", "ستميت": "سُتُمِيت",
             "سبعمية": "سُبْعُمِيَّة", "سبعميت": "سُبْعُمِيت", "تمنمية": "تُمْنُمِيَّة", "تمنميت": "تُمْنُمِيت",
             "تسعمية": "تُسْعُمِيَّة", "تسعميت": "تُسْعُمِيت"}
+# How the other number words are vowelled. Taken from the avatar project, where they were picked by ear
+# (تَمَنْيَة, not تمانية: the long form read wrong in 28 and 58); the short forms before تلاف are this file's own.
+NUMBER_VOWELS = {
+    "واحد": "وَاحِد", "اتنين": "اِتْنَيْن", "تلاتة": "تَلَاتَة", "أربعة": "أَرْبَعَة", "خمسة": "خَمْسَة", "ستة": "سِتَّة",
+    "سبعة": "سَبْعَة", "تمنية": "تَمَنْيَة", "تسعة": "تِسْعَة", "عشرة": "عَشَرَة", "حداشر": "حِدَاشَر", "اتناشر": "اِتْنَاشَر",
+    "تلتاشر": "تَلَتَاشَر", "أربعتاشر": "أَرْبَعَتَاشَر", "خمستاشر": "خَمَسْتَاشَر", "ستاشر": "سِتَّاشَر", "سبعتاشر": "سَبَعْتَاشَر",
+    "تمنتاشر": "تَمَنْتَاشَر", "تسعتاشر": "تِسَعْتَاشَر", "عشرين": "عِشْرِين", "تلاتين": "تَلَاتِين", "أربعين": "أَرْبَعِين",
+    "خمسين": "خَمْسِين", "ستين": "سِتِّين", "سبعين": "سَبْعِين", "تمانين": "تَمَانِين", "تسعين": "تِسْعِين",
+    "ألف": "أَلْف", "ألفين": "أَلْفَيْن", "تلاف": "تَلَاف", "مليون": "مِلْيُون", "مليار": "مِلْيَار", "صفر": "صِفْر", "فاصلة": "فَاصْلَة",
+    "تلات": "تَلَات", "أربع": "أَرْبَع", "خمس": "خَمَس", "ست": "سِتّ", "سبع": "سَبَع", "تمن": "تَمَن", "تسع": "تِسَع", "عشر": "عَشَر"}
 # Words this file writes for a percentage and a fraction. Bare, "في المية" came out as "في الماية" now and then.
 SPOKEN = {"المية": "الْمِيَّة", "ونص": "وَنُصّ", "نص": "نُصّ", "وربع": "وَرُبْع", "ربع": "رُبْع", "وتلات": "وَتَلَات", "أرباع": "أَرْبَاع"}
 # Particles written joined to the next word, and the letters that take the ل of ال into themselves
@@ -94,12 +119,15 @@ def _below_1000(n: int, counting: bool) -> str:
 
 
 def egyptian_number(n: int, counting: bool = False) -> str:
-    """`n` in Egyptian Arabic words, up to hundreds of millions."""
+    """`n` in Egyptian Arabic words; `counting` when the counted thing follows directly (ميت جنيه)."""
     if n == 0:
         return "صفر"
+    billions, n = divmod(n, 10 ** 9)
     millions, rest = divmod(n, 1_000_000)
     thousands, units = divmod(rest, 1000)
     parts = []
+    if billions:
+        parts.append("مليار" if billions == 1 else f"{ONES[billions] if billions <= 10 else _below_1000(billions, True)} مليار")
     if millions:
         parts.append("مليون" if millions == 1 else f"{ONES[millions] if millions <= 10 else _below_1000(millions, True)} مليون")
     if thousands:
@@ -126,11 +154,67 @@ def _money(m: re.Match) -> str:
 
 
 def _fraction(m: re.Match) -> str:
-    """2.5 -> 2 ونص. The whole part stays in digits for the voice to read, unless _digits would spell it out."""
+    """2.5 -> اتنين ونص, 0.75 -> تلات أرباع."""
     whole, fraction = int(m.group(1)), FRACTIONS[m.group(2)]
-    if not whole:
-        return fraction[1:]
-    return f"{m.group(1) if whole < 1000 else egyptian_number(whole)} {fraction}"
+    return f"{egyptian_number(whole)} {fraction}" if whole else fraction[1:]
+
+
+def _counts(text: str, end: int) -> bool:
+    """Whether the number that ends at `end` is followed by what it counts (5 سنين, 500 عميل), not by a
+    particle, a conjunction or the end of the phrase (من 5 لـ 30, 13,000 أو, 18,000 للأسرة)."""
+    m = re.match(r"\s+([ء-ي]+)", text[end:])
+    if not m or text[end + m.end():end + m.end() + 1] in (JOINER, "ـ"):
+        return False
+    word = m.group(1)
+    return word not in NOT_COUNTED and not word.startswith(("و", "لل"))
+
+
+def _whole(n: int, text: str, end: int) -> str:
+    """`n` as it is said before what follows it: خمس سنين, خمسميت عميل, but خمسة and خمسمية on their own."""
+    counted = _counts(text, end)
+    return FEW[n] if counted and 3 <= n <= 10 else egyptian_number(n, counting=counted)
+
+
+def _digit_words(token: str) -> str:
+    """An identifier, digit by digit; a long one in threes with a pause between, or the voice runs them together."""
+    groups = [token] if len(token) <= 4 else [token[i:i + 3] for i in range(0, len(token), 3)]
+    return "، ".join(" ".join(ONES[int(d)] or "صفر" for d in g) for g in groups)
+
+
+def _scaled(m: re.Match) -> str:
+    """13 ألف, 1.4 مليون, 100 ألف جنيه: the number and its ألف / مليون as one spoken number."""
+    whole, decimals, word = int(m.group(1).replace(",", "")), m.group(2) or "", m.group(3)
+    scale = SCALES[word]
+    if decimals in FRACTIONS:                  # مليون ونص, اتنين ونص مليون
+        name = "ألف" if scale == 1000 else word
+        if whole <= 1:
+            return f"{name} {FRACTIONS[decimals]}" if whole else f"{FRACTIONS[decimals][1:]} {name}"
+        return f"{egyptian_number(whole)} {FRACTIONS[decimals]} {name}"
+    if len(decimals) > len(str(scale)) - 1:    # more decimals than the unit holds: read as written
+        return f"{egyptian_number(whole)} فاصلة {' '.join(ONES[int(d)] or 'صفر' for d in decimals)} {word}"
+    total = whole * scale + (int(decimals) * scale // 10 ** len(decimals) if decimals else 0)
+    return egyptian_number(total, counting=_counts(m.string, m.end()))
+
+
+def _decimal(m: re.Match) -> str:
+    """8.4 -> تمنية فاصلة أربعة."""
+    return f"{egyptian_number(int(m.group(1).replace(',', '')))} فاصلة {' '.join(ONES[int(d)] or 'صفر' for d in m.group(2))}"
+
+
+def _plain(m: re.Match) -> str:
+    """A whole number: an amount in words, an identifier (four digits or more, no separators, no unit) digit by digit."""
+    token = m.group(1)
+    if "," not in token and len(token) >= 4 and not UNIT.match(m.string, m.end()):
+        return _digit_words(token)
+    return _whole(int(token.replace(",", "")), m.string, m.end())
+
+
+def _date(m: re.Match) -> str:
+    """2026-11-30 and 30/11/2026 -> تلاتين نوفمبر ألفين وستة وعشرين."""
+    year, month, day = (int(m.group(1)), int(m.group(2)), int(m.group(3))) if m.group(1) else (int(m.group(6)), int(m.group(5)), int(m.group(4)))
+    if not (1 <= month <= 12 and 1 <= day <= 31):
+        return m.group(0)
+    return f"{egyptian_number(day)} {MONTHS[month - 1]} {egyptian_number(year)}"
 
 
 def _forms(word: str, marked: str) -> dict[str, str]:
@@ -197,18 +281,36 @@ def _file() -> tuple[dict[str, list[tuple[re.Pattern, str]]], dict[str, str], fr
     return _cache[1], _cache[2], _cache[3]
 
 
+def _number_forms() -> dict[str, str]:
+    """Every number word with its vowels, alone and behind the particles joined to it (وعشرين, بخمسين, لتلاتين, التمنية)."""
+    forms: dict[str, str] = {}
+    for word, vowelled in {**NUMBER_VOWELS, **NUMERALS}.items():
+        for form, spoken in _forms(word, vowelled).items():
+            forms.setdefault(form, spoken)
+    return forms
+
+
+NUMBER_FORMS = _number_forms()
+
+
 def lexicon() -> dict[str, str]:
-    """{bare word: word with diacritics} for the voice engine: the number words, alone and after و or ب
+    """{bare word: word with diacritics} for the voice engine: the number words in every joined form
     (ألف وميت جنيه), the fraction words, and the file's [diacritics]."""
-    numerals = {particle + w: vowelled + v for w, v in NUMERALS.items() for particle, vowelled in (("", ""), ("و", "وَ"), ("ب", "بِ"))}
-    return {**numerals, **SPOKEN, **_file()[1]}
+    return {**NUMBER_FORMS, **SPOKEN, **_file()[1]}
+
+
+def careful_words(spoken: str) -> list[str]:
+    """The words of `spoken` (the output of normalize) that need the voice's slower, exact setting: the file's
+    [careful] words (the fast setting turned the ق of بدقة into a hamza even with its vowels) and every
+    spelled-out number, which the fast setting slurs or drops. The voice service uses the exact setting for
+    the sentences that hold one of them and the fast one for the rest."""
+    slow = _file()[2]
+    return sorted({w for w in ARABIC_WORD.findall(spoken) if w in slow or w in NUMBER_FORMS or w in SPOKEN})
 
 
 def careful(spoken: str) -> bool:
-    """Whether `spoken` (the output of normalize) holds one of the file's [careful] words: those the fast voice
-    setting gets wrong even with their vowels (it turned the ق of بدقة into a hamza)."""
-    words = _file()[2]
-    return any(w in words for w in ARABIC_WORD.findall(spoken))
+    """Whether any part of `spoken` needs the exact setting."""
+    return bool(careful_words(spoken))
 
 
 def _digits(m: re.Match) -> str:
@@ -244,8 +346,13 @@ def normalize(text: str, lang: str) -> str:
     """`text` as it should be handed to the TTS engine, for a sentence in `lang` (ar | en)."""
     text = re.sub(r"[*#_`]", "", text).translate(AR_DIGITS)          # Markdown marks are not spoken
     text = re.sub(r"[()\[\]]", " ", text)                               # nor are brackets, and the voice skipped what was inside
-    text = re.sub(r"(?<=[A-Za-z0-9])-(?=\d)", ", ", text)              # T-261008-17063 -> T, 261008, 17063
-    text = PHONE.sub(lambda m: " ".join(re.sub(r"\D", "", m.group(0))), text)
+    if lang == "ar":
+        text = DATE.sub(_date, text)                                    # before the hyphens of a ticket number are read
+        text = re.sub(r"(?<=[A-Za-z0-9])-(?=\d)", "، ", text)             # T-261008-17063 -> T، 261008، 17063
+        text = PHONE.sub(lambda m: " ".join(ONES[int(d)] or "صفر" for d in re.sub(r"\D", "", m.group(0))), text)
+    else:
+        text = re.sub(r"(?<=[A-Za-z0-9])-(?=\d)", ", ", text)          # T-261008-17063 -> T, 261008, 17063
+        text = PHONE.sub(lambda m: " ".join(re.sub(r"\D", "", m.group(0))), text)
     if lang == "en":                                                    # EGP 20,000 is said "twenty thousand Egyptian pounds"
         text = re.sub(r"\b(EGP|USD|EUR|SAR)\s*(\d[\d,.]*\d|\d)", r"\2 \1", text)
     for pattern, spoken in _file()[0].get(lang, []):                 # before the amounts: EGP becomes جنيه first
@@ -253,6 +360,10 @@ def normalize(text: str, lang: str) -> str:
     if lang == "en":
         text = NUMBER.sub(_digits_en, ORDINAL.sub(_ordinal_en, text)).replace("%", " percent")
     else:
-        text = HUNDRED_OF.sub(lambda m: egyptian_number(int(m.group(1)), counting=True) + " ", FRACTION.sub(_fraction, MONEY.sub(_money, text)))
-        text = PERCENT.sub(" في المية", NUMBER.sub(_digits, text))
+        text = JOINED.sub(lambda m: m.group(1) + JOINER, text)
+        text = YEAR.sub(lambda m: m.group(1) + egyptian_number(int(m.group(2))), text)
+        for pattern, spell in ((MONEY, _money), (SCALED, _scaled), (FRACTION, _fraction), (DECIMAL, _decimal), (PLAIN, _plain)):
+            text = pattern.sub(spell, text)
+        text = PERCENT.sub(" في المية", text)
+        text = re.sub(JOINER + r"(?=\d)", "ـ ", text).replace(JOINER, "")       # a time is still in digits: leave it apart
     return re.sub(r"[ \t]+", " ", text).strip()

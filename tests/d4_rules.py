@@ -227,18 +227,32 @@ async def main() -> int:
     lex = d4.speech.lexicon()
     check(lex.get("ميت") == "مِيت" and lex.get("ميتين") == "مِيتِين" and lex.get("بدقة") == "بِدِقَة", "the vowels go to the voice as a lexicon: it deletes them from the text")
     spoken = say("مبادرة الـ 8%: الوحدة لحد مليون و100 ألف جنيه أو 2.5 مليون جنيه، والمقدم 22.5% أو 8.4٪", "ar")
-    check("8 في المية" in spoken and "22 ونص في المية" in spoken and "8.4 في المية" in spoken and "%" not in spoken and "٪" not in spoken,
-          "a percentage is always في المية, and a half is ونص")
-    check("2 ونص مليون جنيه" in spoken and "مليون وميت ألف جنيه" in spoken, "2.5 million is 2 ونص مليون, and a hundred before ألف takes its Egyptian ending")
-    check("اتنين جنيه ونص" in say("2.5 جنيه", "ar") and "19 وربع" in say("19.25%", "ar") and "27 وتلات أرباع" in say("27.75%", "ar"), "quarters too, and in money: جنيه ونص, not خمسين قرش")
+    check("مبادرة التمنية في المية" in spoken and "اتنين وعشرين ونص في المية" in spoken and "تمنية فاصلة أربعة في المية" in spoken and "%" not in spoken and "٪" not in spoken,
+          "a percentage is always في المية, a half is ونص, and الـ is joined to the number")
+    check("اتنين ونص مليون جنيه" in spoken and "مليون وميت ألف جنيه" in spoken, "2.5 million is اتنين ونص مليون, and a hundred before ألف takes its Egyptian ending")
+    check("اتنين جنيه ونص" in say("2.5 جنيه", "ar") and "تسعتاشر وربع" in say("19.25%", "ar") and "سبعة وعشرين وتلات أرباع" in say("27.75%", "ar"), "quarters too, and in money: جنيه ونص, not خمسين قرش")
+    loan = say("من سن 21 لحد 65 سنة. لصافي دخل لحد 13,000 جنيه للفرد و18,000 للأسرة، وقيمة الوحدة لحد 1,100,000 أو 1,400,000 جنيه، والمدة من 5 لـ 30 سنة.", "ar")
+    check("من سن واحد وعشرين لحد خمسة وستين سنة" in loan and "تلتاشر ألف جنيه للفرد وتمنتاشر ألف للأسرة" in loan
+          and "مليون وميت ألف أو مليون وربعميت ألف جنيه" in loan and "من خمسة لتلاتين سنة" in loan and not any(ch.isdigit() for ch in loan),
+          "every number is written out in Egyptian words, also one joined to و or لـ: none is left for the voice to read")
+    check("مليون وربعميت ألف جنيه" in say("قيمة الوحدة 1.4 مليون جنيه", "ar") and "مليون ونص" in say("1.5 مليون", "ar") and "تلتاشر ألف" in say("13 ألف", "ar")
+          and "تلات تلاف" in say("3 آلاف", "ar"), "1.4 million is مليون وربعميت ألف: a number and its ألف or مليون are said as one number")
+    check("خلال خمس أيام عمل" in say("هيوصلك خلال 5 أيام عمل", "ar") and "خمسميت عميل" in say("عندنا 500 عميل", "ar") and "وبتلات كروت" in say("وبـ 3 كروت", "ar"),
+          "a number takes its short form before what it counts")
+    check("تلاتين نوفمبر ألفين وستة وعشرين" in say("العرض لحد 2026-11-30", "ar") and "سنة ألفين وخمسة وعشرين" in say("من سنة 2025", "ar"), "a date and a year are said, not read digit by digit")
+    check(lex.get("وعشرين") == "وَعِشْرِين" and lex.get("لتلاتين") == "لِتَلَاتِين" and lex.get("التمنية") == "التَّمَنْيَة" and lex.get("الأقصى") == "الْأَقْصَى",
+          "number words carry their vowels in every joined form, and so does الأقصى")
     check(lex.get("المية") == "الْمِيَّة" and lex.get("ونص") == "وَنُصّ" and lex.get("وميت") == "وَمِيت", "the words written for a percentage, a half and a joined hundred carry their vowels")
     check(lex.get("مقدم") == "مُقَدَّم" and lex.get("والمقدم") == "وَالْمُقَدَّم" and lex.get("بمقدم") == "بِمُقَدَّم" and lex.get("للمقدم") == "لِلْمُقَدَّم",
           "a listed word keeps its vowels behind و، ب، ل and ال: the down payment is مُقَدَّم however it is joined")
     check(lex.get("للسحب") == "لِلسَّحْب" and lex.get("الدخل") == "الدَّخْل" and lex.get("وللدخل") == "وَلِلدَّخْل", "ال is doubled into a sun letter, also for a word listed with its article")
-    check(not d4.speech.careful(say("المقدم 15% والقسط على 20 سنة", "ar")), "listed banking words do not slow the voice down: only [careful] words do")
-    check(d4.speech.careful(say("هراجع بياناتك بدقة", "ar")) and not d4.speech.careful(say("الرسوم 500 جنيه", "ar")), "a sentence with a listed word is spoken on the exact setting")
+    check(not d4.speech.careful(say("المقدم والقسط على مدة القرض", "ar")), "listed banking words do not slow the voice down: only [careful] words and numbers do")
+    check(d4.speech.careful(say("هراجع بياناتك بدقة", "ar")) and d4.speech.careful_words(say("الحد الأقصى للسحب", "ar")) == ["الأقصى"],
+          "a sentence with a [careful] word is spoken on the exact setting")
+    check(d4.speech.careful_words(say("الرسوم 500 جنيه والمقدم 15%", "ar")) == ["المية", "خمستاشر", "خمسميت"], "and so is a sentence with a number: the fast setting slurs or drops it")
     check(say("رصيدك 247193.44 جنيه", "ar").endswith("جنيه وأربعة وأربعين قرش"), "piastres are named")
-    check("9 8 4 7" in say("بطاقة آخرها 9847", "ar"), "a card ending is read digit by digit")
+    check("آخرها تسعة تمنية أربعة سبعة" in say("بطاقة آخرها 9847", "ar") and "T، اتنين ستة واحد، صفر واحد واحد" in say("رقم الطلب T-261011-30551", "ar"),
+          "a card ending and a ticket number are read digit by digit")
     en = say("Your card ending 4821 is blocked. The fee is 500 EGP, or EGP 20,000 a day at 2.5%, by the 21st. Ticket T-261011-30551.", "en")
     check("ending four eight two one is" in en and "five hundred Egyptian pounds" in en and "or twenty thousand Egyptian pounds a day" in en
           and "two point five percent" in en and "twenty-first" in en and "T, two six one, zero one one, three zero five, five one" in en

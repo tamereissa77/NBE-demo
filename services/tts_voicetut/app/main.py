@@ -23,6 +23,7 @@ person, a man. Three things hold the voice still:
 import glob
 import io
 import os
+import re
 import threading
 import time
 
@@ -41,6 +42,7 @@ SPEAKER = os.getenv("TTS_SPEAKER", "Hanan")
 NUM_STEP = int(os.getenv("TTS_NUM_STEP", "6"))
 CAREFUL_STEPS = int(os.getenv("TTS_CAREFUL_STEPS", "32"))       # the library's own default
 GUIDANCE_SCALE = float(os.getenv("TTS_GUIDANCE_SCALE", "2.0"))
+SPEED = float(os.getenv("TTS_SPEED", "0.9"))                    # below 1 is slower: at the engine's own pace banking replies ran together
 # A flow-matching model rushes and drops word endings over long spans: longer text is spoken
 # sentence by sentence and joined
 CHUNK_CHARS = int(os.getenv("TTS_CHUNK_CHARS", "90"))
@@ -130,14 +132,15 @@ class Req(BaseModel):
     lang: str = "ar"
     speaker: str | None = None
     lexicon: dict[str, str] = {}
-    careful: bool = False
+    careful: bool = False                 # the whole text on the exact setting
+    careful_words: list[str] = []         # or only the sentences that hold one of these words (numbers, listed words)
     overrides: dict[str, float] = {}      # for tuning by ear: num_step, guidance_scale, speed, pitch_tolerance, ...
 
 
 @app.get("/health")
 def health():
     return {"status": "ok", "device": DEVICE, "speaker": SPEAKER, "speakers": speakers,
-            "steps": {"fast": NUM_STEP, "careful": CAREFUL_STEPS}, "lexicon_words": len(lexicon),
+            "steps": {"fast": NUM_STEP, "careful": CAREFUL_STEPS}, "speed": SPEED, "lexicon_words": len(lexicon),
             "voice": {"seed": SEED, "pitch_hz": round(target_pitch(SPEAKER), 1), "tolerance": PITCH_TOLERANCE, "tries": PITCH_TRIES}}
 
 
@@ -153,8 +156,16 @@ def tts(r: Req):
     steps = CAREFUL_STEPS if r.careful else NUM_STEP
     # The engine's text preparation is Arabic only: in an English sentence it turns digits, currency codes, %
     # and first names into Arabic words. English is spoken as it arrives; the caller writes its numbers out.
-    kwargs = dict(speaker=speaker, language=LANGS[r.lang], normalize=r.lang == "ar", num_step=steps, guidance_scale=GUIDANCE_SCALE)
+    kwargs = dict(speaker=speaker, language=LANGS[r.lang], normalize=r.lang == "ar", num_step=steps, guidance_scale=GUIDANCE_SCALE, speed=SPEED)
     kwargs.update({k: int(v) if k == "num_step" else v for k, v in overrides.items()})
+    slow = set(r.careful_words)
+
+    def setting(piece: str) -> dict:
+        """The exact setting for a piece that holds a word the fast one gets wrong; the request's setting otherwise."""
+        if "num_step" in overrides or r.careful or not slow.intersection(re.findall(r"[ء-ي]+", piece)):
+            return kwargs
+        return {**kwargs, "num_step": CAREFUL_STEPS}
+
     t = time.time()
     with lock:
         new = {word: spoken for word, spoken in r.lexicon.items() if lexicon.get(word) != spoken}
@@ -162,11 +173,13 @@ def tts(r: Req):
             engine.add_lexicon(new)
             lexicon.update(new)
         target = target_pitch(speaker)
-        spoken = [speak(piece, target, tolerance, kwargs) for piece in chunks(r.text)]
+        pieces = chunks(r.text)
+        used = [setting(piece) for piece in pieces]
+        spoken = [speak(piece, target, tolerance, k) for piece, k in zip(pieces, used)]
     gap = np.zeros(int(RATE * GAP_MS / 1000), dtype=np.float32)
     wav = np.concatenate([part for audio, _, _ in spoken for part in (audio, gap)][:-1])
     buf = io.BytesIO()
     sf.write(buf, wav, RATE, format="WAV", subtype="PCM_16")
     return Response(buf.getvalue(), media_type="audio/wav",
-                    headers={"X-Latency-Ms": str(int((time.time() - t) * 1000)), "X-Model": "VoiceTut-TTS", "X-Steps": str(kwargs["num_step"]),
+                    headers={"X-Latency-Ms": str(int((time.time() - t) * 1000)), "X-Model": "VoiceTut-TTS", "X-Steps": ",".join(str(k["num_step"]) for k in used), "X-Speed": str(kwargs["speed"]),
                              "X-Pitch-Hz": ",".join(str(round(p)) for _, p, _ in spoken), "X-Takes": ",".join(str(n) for _, _, n in spoken)})
