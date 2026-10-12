@@ -12,7 +12,7 @@ Once, online:
 
 1. In `.env`, set the block at the end of `.env.example`: a project name and image tag of its own (a second
    checkout on a shared box keeps its own images and data), `COMPOSE_FILE` so every `make` target sees the
-   overlay, and `EFADA_MODELS_DIR`.
+   overlays, and `EFADA_MODELS_DIR`.
 2. Into `EFADA_MODELS_DIR`: `QwenCleo-ASR/` (a plain folder), and in Hugging Face cache layout
    `models--mohammedaly22--VoiceTut-TTS` (with `eustlb/higgs-audio-v2-tokenizer` as `audio_tokenizer/` inside
    its snapshot) and `models--Qwen--Qwen3-VL-8B-Instruct-FP8`. Each cache folder needs `refs/main` holding
@@ -24,6 +24,28 @@ Once, online:
 Start with `scripts/up_gb10.sh`, not `make up`: it starts the models one at a time (about 95 GB in all, the
 reader 18 GB of it) and never stops another team's containers. `make down`, `status`, `gpu`, `verify`,
 `offline-check` and `ui-test` work as below.
+
+D2's extraction service (Chandra OCR 2, `chandra-ocr-2/` in `EFADA_MODELS_DIR`) is part of this build through
+`docker-compose.d2-extract.yml`. It holds about 10 GB while it runs, so it starts only on request:
+`EXTRACT=1 scripts/up_gb10.sh`, and `docker stop nbe-d2-extract` when the documents are in.
+
+### Model hub: the team develops against the GB10's models
+
+During development the GB10 can serve every model to the team's workstations, so each developer runs only
+the apps and the databases and nobody needs a hosted API.
+
+| Where | Start | What runs there |
+|---|---|---|
+| GB10 | `HUB=1 scripts/up_gb10.sh` | everything, plus `nbe-hub`: one port (8210) for the gateway and each model server, behind `NBE_HUB_KEY` |
+| Workstation | `scripts/up_remote.sh` | portal, the seven demos, Postgres, Qdrant, guardrails, Docling; no model |
+
+On the workstation the service called `nbe-llmgw` is a proxy to the hub that also answers under the model
+servers' names, so the demos call the same addresses as on the GB10 (`docker-compose.remote.yml`). Its `.env`
+needs `NBE_HUB_URL` and the GB10's `NBE_HUB_KEY`. The hub also keeps the workhorse on port 8000 without a
+key, the address the earlier development setups use (`config/litellm.gb10.yaml`).
+
+The hub is for development. With it up the models are reachable from the network and `make offline-check`
+fails on purpose; for the demonstration start without `HUB=1`.
 
 ## The day before
 
