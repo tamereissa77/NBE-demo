@@ -247,7 +247,7 @@ async def main() -> int:
     check(lex.get("المية") == "الْمِيَّة" and lex.get("ونص") == "وَنُصّ" and lex.get("وميت") == "وَمِيت", "the words written for a percentage, a half and a joined hundred carry their vowels")
     check(lex.get("مقدم") == "مُقَدَّم" and lex.get("والمقدم") == "وَالْمُقَدَّم" and lex.get("بمقدم") == "بِمُقَدَّم" and lex.get("للمقدم") == "لِلْمُقَدَّم",
           "a listed word keeps its vowels behind و، ب، ل and ال: the down payment is مُقَدَّم however it is joined")
-    check(lex.get("للسحب") == "لِلسَّحْب" and lex.get("الدخل") == "الدَّخْل" and lex.get("وللدخل") == "وَلِلدَّخْل", "ال is doubled into a sun letter, also for a word listed with its article")
+    check(lex.get("للسحب") == "لِلسَّحْب" and lex.get("الدخل") == "الدَّخْلْ" and lex.get("وللدخل") == "وَلِلدَّخْلْ", "ال is doubled into a sun letter, also for a word listed with its article")
     check(not d4.speech.careful(say("المقدم والقسط على مدة القرض", "ar")), "listed banking words do not slow the voice down: only [careful] words and numbers do")
     check(d4.speech.careful(say("هراجع بياناتك بدقة", "ar")) and d4.speech.careful_words(say("الحد الأقصى للسحب", "ar")) == ["الأقصى"],
           "a sentence with a [careful] word is spoken on the exact setting")
