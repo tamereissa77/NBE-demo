@@ -138,11 +138,11 @@ demo-reset:
 
 ui-test:
 	@mkdir -p ops/ui && chmod 777 ops/ui
-	$(PW_RUN) -v $(CURDIR)/ops/ui:/out $(PW_IMAGE) sh -c "pip install -q playwright==1.55.0 2>/dev/null; python /tests/walkthrough.py --lang en"
+	$(PW_RUN) -v $(CURDIR)/ops/ui:/out $(PW_IMAGE) sh -c "pip install -q playwright==1.55.0 2>/dev/null; python /tests/walkthrough.py --base http://localhost:$${NBE_PORT:-8200} --lang en"
 
 record: demo-reset
 	@mkdir -p recordings && chmod 777 recordings
-	$(PW_RUN) -v $(CURDIR)/recordings:/out $(PW_IMAGE) sh -c "pip install -q playwright==1.55.0 2>/dev/null; python /tests/walkthrough.py --lang ar --record && python /tests/walkthrough.py --lang en --record"
+	$(PW_RUN) -v $(CURDIR)/recordings:/out $(PW_IMAGE) sh -c "pip install -q playwright==1.55.0 2>/dev/null; python /tests/walkthrough.py --base http://localhost:$${NBE_PORT:-8200} --lang ar --record && python /tests/walkthrough.py --base http://localhost:$${NBE_PORT:-8200} --lang en --record"
 
 offline-check:
 	@scripts/offline_check.sh
