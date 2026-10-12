@@ -179,3 +179,112 @@ Temporary API setup (workstation):
 5. After changing `services/d2_chatdoc/app/scans.py` or the seed data: `scripts/dev_api.sh up` (rebuilds D2 and reloads its data).
 
 Return to the local deployment (big machine): pull the branch, `make up` (no override file), `make ingest`, `make verify`, `python tests/golden_d2.py`, `python tests/golden_d2_circulars.py`, `make ui-test`, `make offline-check`. Nothing from section 2 items 6 to 9 and 11 is involved.
+
+## 9. Document intake (added 12 October 2026)
+
+**What changed.** A new scanned PDF can be added to D2 by upload, without an ingest and without rebuilding
+either collection. nbe-working's Chandra extraction service was ported as `services/d2_extraction`
+(compose profile `extract`, off by default). D2 gained `app/intake.py` (`POST /upload`, manager only), a
+loader that reads the seed corpus plus uploaded documents, and `index_doc()`, which replaces one
+document's passages in `d2_circulars` and touches nothing else. The parts are wired by a new override file,
+`docker-compose.d2-extract.yml`, and driven by `scripts/d2_upload.sh`.
+
+**Why.** The owner asked for the extraction step to be available in case a client wants a new document
+added, as a back-office task, with the same passages and crop citations as the six existing documents.
+D2 has no MinIO, which nbe-working used as the upload trigger and as the crop store: the upload endpoint
+replaces the first, the existing `/crop` endpoint already replaced the second.
+
+**Evidence.** `tests/d2_intake_equivalence.py` takes nbe-working's extraction output for all six seed
+documents through the intake code and gets the seed corpus back exactly: 62 page files and 541 crops byte
+for byte, 143 identical passages. An end-to-end upload on the running D2, with a stand-in that replays an
+existing extraction in place of the OCR model, left the collection at 143 passages for a document already
+present (identical payloads and vectors) and took it to 145 for a new one, with the procedures collection at
+203 throughout. Full table: reference documentation, section 12.6.
+
+**Not done.** The extraction image was not built and the OCR model was not run: the workstation GPU was full.
+A fresh OCR run may not reproduce circulars 1 and 2 and the RTGS guide block for block, because those were
+extracted by the earlier notebook at full page size. No portal screen.
+
+**Effect on the temporary API setup.** D2 runs with the override; the uploads volume is empty. No shared file
+was edited. `scripts/dev_api.sh` does not include the override.
+
+**Effect on the GB10.** None unless the override file is used. To use it there: the model folder under
+`$MODELS_DIR/chandra-ocr-2`, a build of `nbe-d2-extract`, and one real document checked before relying on it.
+
+**Later on 12 October: the service made ready to run on the GB10 while D2 stays on the workstation.** The
+owner will download the model on the GB10. A shared volume cannot span two machines, so D2 and the service
+now exchange the PDF and the result (a zip) over HTTP, with an optional token. New:
+`services/d2_extraction/docker-compose.yml` and `README.md` (stand-alone start on the GB10, port 8010) and
+`docker-compose.d2-extract-remote.yml` (workstation: D2 joins the egress network and points at the GB10).
+Re-tested with the stand-in on the egress network: same results as above, and a wrong token is refused.
+Not verified: build, model load and a real extraction on the GB10. Detail: reference documentation, section 12.8.
+
+## 10. Where the models run (changed 12 October 2026)
+
+**What changed.** The development stack no longer uses the hosted API. The chat models are served by the
+GB10 over the network, and the embedding and reranker models run on this workstation's GPU.
+
+| Model role | Before | Now |
+|---|---|---|
+| workhorse, vision | OpenRouter, `google/gemma-4-26b-a4b-it` | GB10, `gemma-4-26b-a4b` at `http://100.69.85.46:8000/v1` |
+| hero | same hosted model | GB10, `gpt-oss-120b` at `http://100.69.85.46:8001/v1` |
+| quality | same hosted model | GB10 workhorse model (the 31B server is not running there) |
+| embed (bge-m3), reranker (bge-reranker-v2-m3) | this workstation, CPU | this workstation, GPU, half precision |
+
+| File | Status | Purpose |
+|---|---|---|
+| `config/litellm.gb10.yaml` | new | The aliases mapped to the two GB10 servers |
+| `docker-compose.gb10.yml` | new | Makes `nbe-llmgw` load that config. Used on top of `docker-compose.api.yml` |
+| `docker-compose.gpu-models.yml` | new | Builds the embedding and reranker server with the CUDA build of torch (`nbe-dev-gpu-models`, 11.9 GB) and gives both containers the GPU |
+| `docker/dev-cpu-models/server.py` | changed | `DEVICE` setting: `cpu` (default, as before), `cuda`, or `auto` (GPU if the model fits, else CPU). `/health` reports the device used and why |
+| `docker/dev-cpu-models/Dockerfile` | changed | A build argument for the torch wheel index; the default is still the CPU build |
+
+No shared file was edited, `.env` was not changed, and nothing was started on the GB10: both servers were
+already running there.
+
+**Why.** The owner asked for the GB10 to serve the chat models and for retrieval to be faster. The GB10
+serves the same model the final deployment uses, with no hosted service involved.
+
+**What the GB10 endpoint supports** (called directly): JSON-schema output, tool calling, and identical text on
+a repeated prompt at temperature 0. Image input was not tested. It generates 22 to 40 tokens per second, against
+about 60 from the hosted API.
+
+**Results.**
+
+| Measure | Hosted API, CPU retrieval | GB10, GPU retrieval |
+|---|---|---|
+| `tests/golden_d2_circulars.py` | 32/32 | 32/32 |
+| `tests/golden_d2.py` | 51/52 | 51/52 (the one miss is the customer-data-update question, answered "not found") |
+| Both golden sets, duration | about 19 minutes | 3 minutes 36 seconds |
+| Reranker score range on scanned answers | 0.9153 to 0.9999 | 0.9152 to 0.9999 |
+| One D2 question, end to end | 17 to 27 s | 1.8 to 4.5 s |
+| D7 queue of 20: topic, severity exact; policy and guardrail pass | 20, 17; 20, 20 | 20, 17; 20, 20 |
+| D7 accuracy on 100: topic; severity within one | 96%; 99% | 95%; 98% |
+| D7 triage of one complaint | 8 s | 8.3 s |
+| D7 trends rebuild (500 embeddings) | 36 to 50 s | 5.6 s |
+
+The collections were not re-embedded: stored vectors came from the CPU in full precision, questions are now
+embedded on the GPU in half precision. The reranker score range shows the effect is in the fourth decimal.
+
+**Commands.**
+
+```bash
+C="docker compose -f docker-compose.yml -f docker-compose.api.yml"
+$C -f docker-compose.gb10.yml --profile core up -d --wait --no-deps nbe-llmgw                  # chat models from the GB10
+$C -f docker-compose.gpu-models.yml --profile core up -d --wait --no-deps nbe-embed nbe-rerank # retrieval on the GPU
+$C --profile core up -d --wait --no-deps nbe-llmgw nbe-embed nbe-rerank                        # back to hosted API and CPU
+```
+
+**Limits.**
+
+- `scripts/dev_api.sh up` does not include the new override files: it puts the gateway back on the hosted API
+  and retrieval back on CPU.
+- The workstation GPU is shared. The two models went onto it when about 11 GB was free; an hour earlier 330 MB
+  was. If the memory is not there when the containers start, they run on CPU and say so in `/health`; restart
+  them when memory is free.
+- The stack now depends on the GB10 being reachable at that address and on its two servers staying up.
+- The GB10 address is in `docker-compose.gb10.yml` as a default; `NBE_GB10_LLM_BASE` and `NBE_GB10_HERO_BASE`
+  in `.env` override it.
+
+**Effect on the GB10 deployment.** None. These files are for the workstation; on the GB10 the stack starts
+from `docker-compose.yml` alone and every alias points at a local server.

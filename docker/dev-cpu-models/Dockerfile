@@ -3,7 +3,9 @@
 FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1
-RUN pip install torch --index-url https://download.pytorch.org/whl/cpu \
+# CPU wheels by default. docker-compose.gpu-models.yml builds a second image from this file with the CUDA wheels.
+ARG TORCH_INDEX=https://download.pytorch.org/whl/cpu
+RUN pip install torch --index-url ${TORCH_INDEX} \
  && pip install "sentence-transformers>=3.3" "fastapi>=0.115" "uvicorn>=0.30"
 
 WORKDIR /srv

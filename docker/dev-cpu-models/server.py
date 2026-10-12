@@ -17,19 +17,48 @@ from pydantic import BaseModel
 
 ROLE, PATH, NAME = os.environ["MODEL_ROLE"], os.environ["MODEL_PATH"], os.environ["MODEL_NAME"]
 BATCH = int(os.getenv("BATCH", "8"))
-app = FastAPI(title=f"NBE dev CPU {ROLE}")
+# DEVICE: cpu (default, as before) | cuda (GPU or fail) | auto (GPU if the model fits, else CPU). Set to auto by
+# docker-compose.gpu-models.yml, with the CUDA build of torch. On a shared GPU the memory may not be there:
+# /health says which device the model actually ended up on, and why.
+DEVICE = os.getenv("DEVICE", "cpu")
+HALF = os.getenv("GPU_HALF", "1") == "1"       # half precision on the GPU: half the memory, as vLLM serves these models
+app = FastAPI(title=f"NBE dev {ROLE}")
 
-if ROLE == "embed":
-    from sentence_transformers import SentenceTransformer
-    model = SentenceTransformer(PATH, device="cpu")
-else:
-    from sentence_transformers import CrossEncoder
-    model = CrossEncoder(PATH, device="cpu", max_length=8192)     # single-logit model: predict() applies a sigmoid
+
+def load(device: str):
+    if ROLE == "embed":
+        from sentence_transformers import SentenceTransformer
+        m = SentenceTransformer(PATH, device=device)
+    else:
+        from sentence_transformers import CrossEncoder
+        m = CrossEncoder(PATH, device=device, max_length=8192)    # single-logit model: predict() applies a sigmoid
+    if device == "cuda":
+        if HALF:
+            (m if ROLE == "embed" else m.model).half()
+        # one real call, so a GPU too full to work is found now and not on the first question
+        m.encode(["warm-up"]) if ROLE == "embed" else m.predict([("warm-up", "warm-up")])
+    return m
+
+
+device, note = "cpu", ""
+if DEVICE in ("cuda", "auto"):
+    import torch
+    try:
+        if not torch.cuda.is_available():
+            raise RuntimeError("no CUDA device is visible in this container")
+        model, device = load("cuda"), "cuda"
+    except Exception as exc:                    # typically: out of memory on a GPU other users have filled
+        if DEVICE == "cuda":
+            raise
+        note = f"GPU not used: {str(exc).splitlines()[0][:200]}"
+        torch.cuda.empty_cache()
+if device == "cpu":
+    model = load("cpu")
 
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "role": ROLE, "model": NAME, "device": "cpu"}
+    return {"status": "ok", "role": ROLE, "model": NAME, "device": device, **({"note": note} if note else {})}
 
 
 @app.get("/v1/models")

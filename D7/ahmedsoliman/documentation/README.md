@@ -307,3 +307,24 @@ The comment above the list says advice of this kind is meant to be allowed. This
 code and is not caused by the changes above. The item was left in that state in the queue as a live example.
 
 Likely fix: do not match when the phrase is preceded by a negation ("do not", "never", "لا").
+
+---
+
+## Re-check on the GB10 model (12 October 2026)
+
+The development stack moved from the hosted API to the chat model served by the GB10, with embeddings and the
+reranker on the workstation GPU (`docs/d2-migration-log.md`, section 10). No D7 code changed. The same 20
+queue complaints were triaged again:
+
+| Measure | Hosted API (10 October) | GB10 (12 October) |
+|---|---|---|
+| Topic matches label; severity matches label | 20; 17 | 20; 17 |
+| Drafts passing the policy check; the guardrail | 20; 20 | 20; 20 |
+| English drafts with the official team name; with another department name | 4; 0 | 4; 0 |
+| Social drafts naming the customer; inviting a private message | 0; 8 | 0; 8 |
+| Drafts promising a final reply | 0 | 0 |
+| `/accuracy` on 100: topic; severity within one level | 96%; 99% | 95%; 98% |
+| "Triage all" | 54 s | 69 s (retrieval still on CPU at that point) |
+| Trends | 9 clusters | 9 clusters; one complaint changed cluster with GPU embeddings |
+
+All five findings hold on the model the GB10 deployment will use.

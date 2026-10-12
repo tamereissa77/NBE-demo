@@ -1,0 +1,19 @@
+# Development override: the chat models come from the GB10 over the network instead of a hosted API.
+# Used ON TOP of docker-compose.api.yml (which keeps embeddings and the reranker local on CPU and gives
+# the gateway a route out). Not used on the GB10 itself.
+#
+#   C="docker compose -f docker-compose.yml -f docker-compose.api.yml -f docker-compose.gb10.yml --profile core"
+#   $C up -d --wait --no-deps nbe-llmgw        # switch to the GB10
+#   docker compose -f docker-compose.yml -f docker-compose.api.yml --profile core up -d --wait --no-deps nbe-llmgw   # back to the hosted API
+#
+# Only nbe-llmgw changes; no demo service is restarted. The addresses can be overridden in .env
+# (NBE_GB10_LLM_BASE, NBE_GB10_HERO_BASE). No key is sent: the GB10's vLLM servers take none.
+
+services:
+  nbe-llmgw:
+    command: ["--config", "/app/config.gb10.yaml", "--port", "4000"]
+    environment:
+      NBE_GB10_LLM_BASE: ${NBE_GB10_LLM_BASE:-http://100.69.85.46:8000/v1}
+      NBE_GB10_HERO_BASE: ${NBE_GB10_HERO_BASE:-http://100.69.85.46:8001/v1}
+    volumes:
+      - ./config/litellm.gb10.yaml:/app/config.gb10.yaml:ro

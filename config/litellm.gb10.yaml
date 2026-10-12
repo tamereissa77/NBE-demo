@@ -1,0 +1,31 @@
+# Development gateway config: chat models served by the GB10 over the network, loaded only through
+# docker-compose.gb10.yml. On the GB10 itself the stack uses config/litellm.yaml (local container names).
+#
+# Same aliases as litellm.yaml and the same served model names, so no demo code changes and the answers are
+# the ones the GB10 deployment gives. What the GB10 serves today (GET <base>/models):
+#   NBE_GB10_LLM_BASE   gemma-4-26b-a4b   -> workhorse, vision
+#   NBE_GB10_HERO_BASE  gpt-oss-120b      -> hero
+# `quality` (Gemma 4 31B) is not served there now: it is answered by the workhorse model, which is what
+# litellm.yaml's fallback does when that server is down.
+# `embed` stays on the workstation's CPU bge-m3 server (same weights), and nbe_core calls nbe-rerank directly.
+model_list:
+  - model_name: workhorse
+    litellm_params: { model: hosted_vllm/gemma-4-26b-a4b, api_base: os.environ/NBE_GB10_LLM_BASE, api_key: none }
+  - model_name: vision
+    litellm_params: { model: hosted_vllm/gemma-4-26b-a4b, api_base: os.environ/NBE_GB10_LLM_BASE, api_key: none }
+  - model_name: quality
+    litellm_params: { model: hosted_vllm/gemma-4-26b-a4b, api_base: os.environ/NBE_GB10_LLM_BASE, api_key: none }
+  - model_name: hero
+    litellm_params: { model: hosted_vllm/gpt-oss-120b, api_base: os.environ/NBE_GB10_HERO_BASE, api_key: none }
+  - model_name: embed
+    litellm_params: { model: hosted_vllm/bge-m3, api_base: "http://nbe-embed:8000/v1", api_key: none }
+
+router_settings:
+  fallbacks:
+    - hero: [workhorse]
+  num_retries: 0
+
+litellm_settings:
+  drop_params: true
+  request_timeout: 600
+  telemetry: false
