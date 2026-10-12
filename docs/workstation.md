@@ -76,7 +76,25 @@ as `http://localhost:<port>` there.
 `data/seed/d4/pronunciation.ini` maps written terms to how they should be spoken, per language
 (`OTP = أو تي بي`, `EGP = Egyptian pounds`). It is applied to spoken replies and to the listen button on
 each chat message, and is re-read when it changes: edit, save, listen again. Card endings, one-time codes,
-ticket numbers and phone numbers are read digit by digit; amounts are read as numbers.
+ticket numbers and phone numbers are read digit by digit; amounts are read as numbers. A half, a quarter and
+three quarters are said as such (`2.5 مليون` is "2 ونص مليون", `22.5%` is "22 ونص في المية").
+
+- **Vowels:** the voice deletes diacritics from the text, so a word that is spelled like another (مقدم: the
+  down payment مُقَدَّم, or the one who presents مُقَدِّم) is fixed in the file's `[diacritics]` section. One
+  line per word covers it behind ال and the joined particles (والمقدم، بمقدم، للمقدم). The banking words there
+  were vowelled from the dictionary, not checked one by one by ear: correct a line if one sounds wrong.
+- **One voice:** the model samples, and the same three words came out anywhere from 158 to 258 Hz, a low
+  take sounding like another speaker. `nbe-voicetut` now generates every chunk from one seed (`TTS_SEED`),
+  speaks a short sentence together with its neighbour, and regenerates a chunk whose pitch is more than
+  `TTS_PITCH_TOLERANCE` (15%) off the speaker's reference recording. Twelve test sentences: 177 to 216 Hz.
+- **A recording that was not heard:** with the language fixed, QwenCleo-ASR cannot answer "no speech" and
+  writes a sentence nobody said (room noise: «انا بحب اعمل ازاي»; silence or a hum: one phrase repeated to
+  its token limit, 8 s). `nbe-qwencleo` returns `heard: false` for a silent recording (not transcribed), a
+  looping one (stopped at the third repeat) and one the model was unsure of (`ASR_MIN_CONFIDENCE`, 0.6). D4
+  then shows no transcript, calls no model, and asks the customer to repeat or type. On 24 test recordings
+  made from the voice's own clips: the 10 it transcribed correctly, including speech in room noise, scored
+  0.79 to 0.99 and were heard; noise, three voices at once and speech under louder noise scored 0.35 to 0.58
+  and were not. Real callers' voices were not measured: lower the threshold if clear speech is turned away.
 
 ## D1: reading real documents
 

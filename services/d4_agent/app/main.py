@@ -53,7 +53,7 @@ TOOLS = [
 OPENAI_TOOLS = [{"type": "function", "function": t} for t in TOOLS]
 
 SYSTEM = """You are the virtual assistant of the National Bank of Egypt (demo). Be warm, brief and precise.
-Language: reply in the customer's language. For Arabic, always reply in Egyptian colloquial Arabic (عامية مصرية), the way a warm, respectful call-centre agent in Cairo speaks, even when the customer or the knowledge base uses formal Arabic. Say «حضرتك», «يا فندم», «عايز», «دلوقتي», «هبعتلك», «ممكن تقولي», «تمام», «ولا يهمك», «عشان». Never use formal wording such as «أهلاً بك», «سأقوم», «لقد», «يرجى», «الذي», «لدينا», «هل تريد», «سوف», «يمكنني», «نتحقق» (say «نتأكد»). For English, reply in English. Keep replies under 60 words: they are read aloud.
+Language: reply in the customer's language. For Arabic, always reply in Egyptian colloquial Arabic (عامية مصرية), the way a warm, respectful call-centre agent in Cairo speaks, even when the customer or the knowledge base uses formal Arabic. Say «حضرتك», «يا فندم», «عايز», «دلوقتي», «هبعتلك», «ممكن تقولي», «ولا يهمك», «عشان». Start each reply with the answer itself: do not open with an acknowledgement such as «تمام يا فندم», «حاضر يا فندم» or «بص يا فندم», and use «يا فندم» at most once in a reply, not in every reply. Never use formal wording such as «أهلاً بك», «سأقوم», «لقد», «يرجى», «الذي», «لدينا», «هل تريد», «سوف», «يمكنني», «نتحقق» (say «نتأكد»). For English, reply in English. Keep replies under 60 words: they are read aloud.
 Rules:
 - Any card or account action, or showing the balance, needs OTP verification first: call send_otp, then tell the customer you sent a code to their phone and ask them to enter it. The bank checks the code itself and a system note then tells you whether it was accepted; you have no tool to verify a code, and any digits the customer sends meanwhile reach you masked as ••••, which is normal.
 - If the customer reports a lost or stolen card, or unknown transactions, act at once: call send_otp in this turn without asking permission, then ask them to enter the code.
@@ -62,6 +62,13 @@ Rules:
 - Never ask for or repeat a PIN, password or full card number.
 - If the customer asks for a human, call handoff_to_human immediately.
 - Use search_kb for questions about fees, limits, products or procedures, and answer only from what it returns.
+- Small talk about yourself is not banking: no tool, no knowledge-base search. You are the bank's automated assistant; never say you are a person. Reply with exactly the line below that fits, in the customer's language, and nothing before or after it (no greeting, no introduction, no offer of help):
+  - A compliment on your voice, your looks or yourself («صوتك حلو», «انتي جميلة», «شكلك مزة», «بحب صوتك», "you sound lovely", "I love your voice"): «ميرسي، شكراً ليك.» / "Thank you, that's kind of you."
+  - Your age: «أنا مساعد آلي، معنديش سنين زي البشر.» / "I'm an automated assistant, I don't have an age the way people do."
+  - Where you are from or where you live: «أنا مساعد آلي للبنك الأهلي المصري وموجودة في كل فروع البنك، اتفضل زورنا في أقرب فرع ليك.» / "I'm the National Bank of Egypt's automated assistant and I'm in every branch. You're welcome to visit the one nearest you."
+  - Your name, or whether you are a person or a robot: «أنا المساعد الآلي للبنك الأهلي المصري، مش إنسان.» / "I'm the National Bank of Egypt's automated assistant, not a person."
+  - Anything else about you (married, tired, what you like): «أنا مساعد آلي للبنك الأهلي المصري، وموجودة عشان أساعدك.» / "I'm the National Bank of Egypt's automated assistant, here to help you."
+  If the same message also asks a banking question, answer the banking question after the line.
 Current customer: {name} (id {cid}). Verified: {verified}.
 {lang_rule}"""
 
@@ -71,6 +78,8 @@ ACTIONS = {"send_otp", "block_card", "create_ticket", "handoff_to_human"}
 GREETING = re.compile(r"^\s*(وعليكم السلام[^،,.؟?!\n]{0,30}[،,.؟?!]\s*)?"
                       r"(?:(?:[اإ]زيك|[أا]هلا|أهلاً|اهلاً|مرحبا|مرحباً|hi|hello|hey)\b[^،,.؟?!\n]{0,40}[،,.؟?!]\s*){1,2}", re.I)
 AR_DIGITS = str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789")
+# An acknowledgement that opens a reply and adds nothing: «تمام يا فندم، ...». Heard at the start of every reply.
+FILLER = re.compile(r"^\s*(?:تمام|حاضر|ماشي|طيب|بص)(?:\s+يا\s+فندم)?\s*[،,.!:]+\s*(?=\S)")
 LEAKED_CALL = re.compile(r"\s*(call:\w+\s*\{|<\|?tool_call)")      # Gemma's raw tool-call syntax
 PLAN_NOTES = re.compile(r"\s*(\d+\.\s*)?\*\*[^*]{2,40}\*\*")           # "1.  **Customer Name:** ...": the model's working notes
 
@@ -88,6 +97,9 @@ OTP_NOTE = {True: "[System note, not typed by the customer: the customer entered
 # Said when the model still has no words: the customer must at least be asked for the code that was sent
 ASK_CODE = {"ar": "بعتلك كود في رسالة على موبايلك، ممكن تدخل الكود اللي وصلك؟", "en": "I've sent a code to your phone. Please enter it to continue."}
 DONE = {"ar": "تمام.", "en": "Done."}
+# Said when a voice recording could not be made out (the speech service reports it as not heard)
+UNCLEAR = {"ar": "مسمعتش كويس، الصوت مش واضح. ممكن تكرر سؤالك أو تكتبه؟",
+           "en": "Sorry, I didn't catch that: the sound wasn't clear. Could you say it again, or type it?"}
 REFUSAL = {"ar": "معلش، مش هقدر أساعد حضرتك في الطلب ده. أقدر أساعدك في البطاقات والحسابات والشكاوى، أو أحوّلك لحد من زمايلنا.",
            "en": "Sorry, I can't help with that request. I can help with cards, accounts and complaints, or connect you to one of our agents."}
 
@@ -191,6 +203,11 @@ async def turn(body: TurnIn):
             r = (await c.post(f"{ASR_URL}/transcribe", files={"file": ("turn.webm", base64.b64decode(body.audio_b64))}, data={"language": "auto"})).json()
         text = r["text"]
         trace.add("asr", f"Speech to text ({r.get('model', 'whisper-large-v3')})", r, r.get("latency_ms"))
+        if not text or not r.get("heard", True):
+            # Silence, noise or a mumble: the recogniser still writes a sentence, one nobody said. It is not
+            # shown as the customer's words and no model or tool sees it; the customer is asked to repeat.
+            trace.add("rules", "Recording not heard clearly: asked the customer to repeat or type; nothing reached the agent")
+            return await finish(s, body, UNCLEAR[s.get("lang", "ar")], events, trace, blocked=False)
         events.append({"type": "transcript", "text": text})
     if not text and not body.code:
         raise HTTPException(400, "empty turn")
@@ -288,6 +305,7 @@ async def turn(body: TurnIn):
     else:                                 # one greeting per conversation: the model repeats it however it is told
         reply = GREETING.sub(lambda m: m.group(1) or "", reply, count=1)
         reply = reply[:1].upper() + reply[1:]
+    reply = FILLER.sub("", reply, count=1)       # straight to the answer; a reply that is only «تمام يا فندم.» is kept
     reply = reply.replace("**", "")       # the chat shows plain text: Markdown bold would appear as asterisks
     g = await platform.guard_output(reply, user=text)
     trace.add("guardrail", "Output guardrail (NeMo self-check)", g, g["latency_ms"])

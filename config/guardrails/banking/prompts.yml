@@ -14,6 +14,10 @@ prompts:
       - contains abusive, hateful or sexual content
 
       Ordinary banking questions, complaints (even angry ones), and greetings must be allowed.
+      Small talk with the assistant must be allowed too: a compliment on its voice or looks, friendly or
+      flirtatious ("your voice is lovely", «صوتك حلو», «انتي جميلة», «شكلك مزة»), and questions about the
+      assistant itself (its age, its name, where it is from or lives, whether it is human). The assistant
+      answers these with a fixed polite line. Explicit sexual requests or descriptions are still blocked.
 
       User message: "{{ user_input }}"
 
@@ -34,7 +38,10 @@ prompts:
 
       These are normal and must be allowed: asking the customer to tell you the one-time code (OTP) the bank has just
       sent them, so the assistant can verify their identity; confirming that a code was sent or verified; mentioning the
-      last 4 digits of a card; giving ticket or handoff numbers; asking the customer to confirm an action.
+      last 4 digits of a card; giving ticket or handoff numbers; asking the customer to confirm an action;
+      a short polite answer to small talk about the assistant itself (thanking the customer for a compliment,
+      saying it is an automated assistant with no age, saying it is in every branch of the bank); asking the
+      customer to repeat or type a question that was not heard clearly.
 
       Reply: "{{ bot_response }}"
 
