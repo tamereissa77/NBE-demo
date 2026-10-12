@@ -375,12 +375,14 @@ async def build_campaign(body: CampaignIn):
         if not offer_cats:
             raise HTTPException(409, "this segment has no spending in a category with an offer rule")
         at(2)
-        with trace.step("sql", "Merchant match: partner merchants where this segment spends most") as s:
+        # Ranked by the category's place in the interest profile, then by spend: ranking on spend alone let a
+        # big-ticket category the segment rarely buys (one restaurant bill) outrank its top interest (many coffees).
+        with trace.step("sql", "Merchant match: partner merchants in the segment's top interests, by spend") as s:
             merchants = conn.execute("""SELECT m.id, m.name_ar, m.category, m.category_ar, m.category_en, m.city, round(sum(t.amount)) AS seg_spend, count(DISTINCT t.customer_id) AS seg_customers
                 FROM d3.transactions t JOIN d3.customers c ON c.id = t.customer_id JOIN d3.merchants m ON m.id = t.merchant_id
                 WHERE c.persona = %s AND (%s::text IS NULL OR c.city = %s) AND m.partner AND m.category = ANY(%s)
-                GROUP BY 1, 2, 3, 4, 5, 6 ORDER BY seg_spend DESC LIMIT 3""",
-                (body.persona, body.city, body.city, offer_cats)).fetchall()
+                GROUP BY 1, 2, 3, 4, 5, 6 ORDER BY array_position(%s::text[], m.category::text), seg_spend DESC LIMIT 3""",
+                (body.persona, body.city, body.city, offer_cats, offer_cats)).fetchall()
             s["detail"] = merchants
     if body.brief.strip():
         with trace.step("retrieval", "Brief → merchant search (bge-m3)") as s:
