@@ -26,7 +26,7 @@ pipe = StableDiffusionXLPipeline.from_pretrained(MODEL_DIR, torch_dtype=torch.fl
 # to 27 GB on the GB10 and it kept them.
 LOW_MEMORY = os.getenv("SDXL_LOW_MEMORY", "0") == "1"
 if LOW_MEMORY:
-    pipe.enable_vae_tiling()
+    pipe.vae.enable_tiling()
 
 
 class Req(BaseModel):
