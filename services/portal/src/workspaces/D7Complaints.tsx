@@ -10,6 +10,7 @@ interface Triage {
   language: string; team: string; sla_hours: number; sla_due: string; similar: { id: string; text: string; topic: string }[];
   draft: string; policy_ok: boolean; policy_violations: string[]; guardrail: { allowed: boolean; rail: string | null };
   labels: { topic: string; severity: number }; trace: TraceStep[];
+  team_en?: string | null; public_reply?: boolean; guardrail_gate?: boolean;   // present when data/seed/d7/policy.json is in use
 }
 interface Item { id: string; channel: string; lang: string; customer_name: string; text: string; received_at: string; status: string; triage: Triage | null; final_reply: string | null }
 interface Trends { total: number; clusters: { cluster: number; name: string; count: number; avg_severity: number; top_topic: string; examples: string[] }[]; by_topic: Record<string, number>; topic_ar: Record<string, string> }
@@ -22,12 +23,14 @@ const L = {
         banner: "Human review before any action", sla: "SLA", team: "Team", status: "Status", draft: "Draft reply", similar: "Similar past complaints",
         approve: "Approve & send", edit: "Save edit & send", escalate: "Escalate", awaiting: "Awaiting human", policy: "Policy check", guard: "Guardrail",
         select: "Select a complaint.", policyNote: `Synthetic placeholder policy until ${BRAND.short} supplies its rules.`, vulnerable: "Vulnerable customer", callback: "Call back",
-        runAcc: "Run on 100 held-out complaints", label: "Synthetic label" },
+        runAcc: "Run on 100 held-out complaints", label: "Synthetic label", publicReply: "Public reply",
+        blocked: "The guardrail blocked this draft. Edit it or escalate." },
   ar: { queue: "قائمة الشكاوى", trends: "الاتجاهات", accuracy: "الدقة", triageAll: "فرز الكل", triage: "فرز", panel: "لوحة فرز الشكاوى",
         banner: "مراجعة بشرية قبل أي إجراء", sla: "مستوى الخدمة", team: "الفريق", status: "الحالة", draft: "مسودة الرد", similar: "شكاوى سابقة مشابهة",
         approve: "اعتماد وإرسال", edit: "حفظ التعديل وإرسال", escalate: "تصعيد", awaiting: "بانتظار الموظف", policy: "فحص السياسة", guard: "الحماية",
         select: "اختر شكوى.", policyNote: "سياسة تجريبية مؤقتة إلى أن يوفر البنك قواعده.", vulnerable: "عميل في ظرف صعب", callback: "اتصال هاتفي",
-        runAcc: "تشغيل على 100 شكوى خارج العينة", label: "التصنيف التجريبي" },
+        runAcc: "تشغيل على 100 شكوى خارج العينة", label: "التصنيف التجريبي", publicReply: "رد عام",
+        blocked: "أوقفت الحماية هذه المسودة. عدّلها أو صعّد الشكوى." },
 };
 const STATUS: Record<string, { en: string; ar: string; tone: "neutral" | "orange" | "green" | "red" }> = {
   new: { en: "New", ar: "جديدة", tone: "neutral" }, awaiting_human: { en: "Awaiting human", ar: "بانتظار الموظف", tone: "orange" },
@@ -125,13 +128,14 @@ export default function D7Complaints({ onTrace }: WorkspaceProps) {
                         {item.triage.needs_callback && <Chip tone="orange">{l.callback}</Chip>}
                         <Chip>{item.triage.sla_hours} h · {due(item.triage.sla_due)}</Chip>
                       </div>
-                      <div className="mt-1 font-semibold" dir="auto">{item.triage.team}</div>
+                      <div className="mt-1 font-semibold" dir="auto">{lang === "en" && item.triage.team_en ? item.triage.team_en : item.triage.team}</div>
                       <div className="mt-1 text-xs text-ink-soft" dir="auto">{item.triage.summary}</div>
                       <div className="mt-1 text-xs text-ink-soft">{l.label}: {item.triage.labels.topic} / S{item.triage.labels.severity}</div>
                     </Block>
                     <div>
                       <div className="mb-1 flex items-center gap-1.5 text-xs font-semibold uppercase text-ink-soft">
                         {l.draft}
+                        {item.triage.public_reply && <Chip tone="orange">{l.publicReply}</Chip>}
                         <Chip tone={item.triage.policy_ok ? "green" : "red"}>{l.policy} {item.triage.policy_ok ? "✓" : "✗"}</Chip>
                         <Chip tone={item.triage.guardrail.allowed ? "green" : "red"}>{l.guard} {item.triage.guardrail.allowed ? "✓" : "✗"}</Chip>
                       </div>
@@ -141,10 +145,12 @@ export default function D7Complaints({ onTrace }: WorkspaceProps) {
                     </div>
                     {item.status === "awaiting_human" ? (
                       <div className="flex flex-wrap gap-2">
-                        <Button onClick={() => run("d", () => postJSON(`/api/d7/decision/${item.id}`, draft === item.triage!.draft ? { action: "approve" } : { action: "edit", text: draft }))} disabled={!!busy}>
+                        <Button onClick={() => run("d", () => postJSON(`/api/d7/decision/${item.id}`, draft === item.triage!.draft ? { action: "approve" } : { action: "edit", text: draft }))}
+                                disabled={!!busy || (!!item.triage.guardrail_gate && !item.triage.guardrail.allowed && draft === item.triage.draft)}>
                           {draft === item.triage.draft ? l.approve : l.edit}
                         </Button>
                         <Button variant="ghost" onClick={() => run("d", () => postJSON(`/api/d7/decision/${item.id}`, { action: "escalate" }))} disabled={!!busy}>{l.escalate}</Button>
+                        {item.triage.guardrail_gate && !item.triage.guardrail.allowed && <p className="w-full text-xs text-red-700">{l.blocked}</p>}
                       </div>
                     ) : (
                       <Chip tone={STATUS[item.status].tone}>{STATUS[item.status][lang]}</Chip>

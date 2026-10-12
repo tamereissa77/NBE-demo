@@ -1,0 +1,79 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 9,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p009_b00",
+   "block_type": "header",
+   "text": "البنك المركزي المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 1724,
+    "y1": 168,
+    "x2": 2242,
+    "y2": 259
+   },
+   "crop_path": "crops/legal_circular_2/page_009/legal_circular_2_p009_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p009_b01",
+   "block_type": "header",
+   "text": "صفحة ٧ من ٢٠",
+   "table_data": null,
+   "bbox": {
+    "x1": 499,
+    "y1": 175,
+    "x2": 821,
+    "y2": 238
+   },
+   "crop_path": "crops/legal_circular_2/page_009/legal_circular_2_p009_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p009_b02",
+   "block_type": "text",
+   "text": "٦- يتعين على البنوك وشركات التأجير التمويلية وشركات التمويل العقارى المتابعة المستمرة لكافة بيانات العملاء والكفلاء والشركاء المتضامنين ، وتحديث هذه البيانات من واقع المستندات المؤيدة لذلك ، والالتزام بإيلاج الإدارة العامة لتجميع مخاطر الائتمان المصري عن أية تعديلات تطرأ على هذه البيانات أو لا بأسول معززا بالمستندات المؤيدة للتعديل وعلى الأخص:",
+   "table_data": null,
+   "bbox": {
+    "x1": 387,
+    "y1": 445,
+    "x2": 2150,
+    "y2": 920
+   },
+   "crop_path": "crops/legal_circular_2/page_009/legal_circular_2_p009_b02_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p009_b03",
+   "block_type": "text",
+   "text": "- تعديل اسم العميل أو عنوانه أو تغيير النشاط أو الشكل القانوني. - تخرج أحد الشركاء المتضامنين. - انتهاء الكفالة. - الاندماج. - وفاة العميل.",
+   "table_data": null,
+   "bbox": {
+    "x1": 655,
+    "y1": 937,
+    "x2": 1959,
+    "y2": 1407
+   },
+   "crop_path": "crops/legal_circular_2/page_009/legal_circular_2_p009_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p009_b04",
+   "block_type": "text",
+   "text": "٧- على البنوك وشركات التأجير التمويلية وشركات التمويل العقارى عند فتح فرع جديد التقم للإدارة العامة لتجميع مخاطر الائتمان المصري للحصول على الرقم الرمزي المخصص لهذا الفرع من خلال شبكة معلومات البنك المركزي.",
+   "table_data": null,
+   "bbox": {
+    "x1": 387,
+    "y1": 1495,
+    "x2": 2158,
+    "y2": 1775
+   },
+   "crop_path": "crops/legal_circular_2/page_009/legal_circular_2_p009_b04_text.png"
+  }
+ ]
+}

@@ -1,0 +1,157 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 12,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p012_b00",
+   "block_type": "header",
+   "text": "البنك المركزي المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 1746,
+    "y1": 186,
+    "x2": 2264,
+    "y2": 270
+   },
+   "crop_path": "crops/legal_circular_2/page_012/legal_circular_2_p012_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p012_b01",
+   "block_type": "header",
+   "text": "صفحة ١٠ من ٢٠",
+   "table_data": null,
+   "bbox": {
+    "x1": 509,
+    "y1": 186,
+    "x2": 826,
+    "y2": 242
+   },
+   "crop_path": "crops/legal_circular_2/page_012/legal_circular_2_p012_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p012_b02",
+   "block_type": "text",
+   "text": "٦- إذا كان الشريك المتضامن أو الكفيل له أكثر من كفالة (ضمانه) بالفروع الواحد ، يتم الاقرار عن كل شريك متضامن أو كفيل باقرار مستقل ، وان تعددت ضماناته أو كفالاته بالفروع الواحد.",
+   "table_data": null,
+   "bbox": {
+    "x1": 395,
+    "y1": 459,
+    "x2": 2185,
+    "y2": 734
+   },
+   "crop_path": "crops/legal_circular_2/page_012/legal_circular_2_p012_b02_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p012_b03",
+   "block_type": "text",
+   "text": "٧- يتم الاقرار عن عملاء كل فرع على حدة.",
+   "table_data": null,
+   "bbox": {
+    "x1": 1277,
+    "y1": 853,
+    "x2": 2185,
+    "y2": 927
+   },
+   "crop_path": "crops/legal_circular_2/page_012/legal_circular_2_p012_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p012_b04",
+   "block_type": "text",
+   "text": "٨- في حالة تعامل العميل برصيد تسهيلات اقل من حد الاقرار مع اكثر من فروع بالبنك الواحد وبلغ مجموع تسهيلاته بالبنك حد الاقرار يتعين الاقرار عنه.",
+   "table_data": null,
+   "bbox": {
+    "x1": 397,
+    "y1": 1021,
+    "x2": 2185,
+    "y2": 1197
+   },
+   "crop_path": "crops/legal_circular_2/page_012/legal_circular_2_p012_b04_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p012_b05",
+   "block_type": "text",
+   "text": "٩- في حالة القروض المشتركة يقوم كل بنك بالإقرار عن نصيبه في التمويل أو التسهيلات الائتمانية المقدمة للعميل.",
+   "table_data": null,
+   "bbox": {
+    "x1": 415,
+    "y1": 1316,
+    "x2": 2185,
+    "y2": 1484
+   },
+   "crop_path": "crops/legal_circular_2/page_012/legal_circular_2_p012_b05_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p012_b06",
+   "block_type": "text",
+   "text": "١٠- يستمر الاقرار عن الشركة تحت النصفية مع اضافة عبارة (تحت النصفية) لاحقة لاسم الشركة.",
+   "table_data": null,
+   "bbox": {
+    "x1": 395,
+    "y1": 1610,
+    "x2": 2190,
+    "y2": 1779
+   },
+   "crop_path": "crops/legal_circular_2/page_012/legal_circular_2_p012_b06_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p012_b07",
+   "block_type": "text",
+   "text": "١١- في حالة وفاة العميل يستمر الاقرار عنه مع اضافة كلمة \" متوفى \" ملحقة باسم العميل.",
+   "table_data": null,
+   "bbox": {
+    "x1": 426,
+    "y1": 1905,
+    "x2": 2190,
+    "y2": 1989
+   },
+   "crop_path": "crops/legal_circular_2/page_012/legal_circular_2_p012_b07_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p012_b08",
+   "block_type": "text",
+   "text": "١٢- في حالة تقديم تمويل أو تسهيل ائتماني لأي من وحدات الحكومة أو القطاع العام أو الأعمال العام بغرض تقديم سلفيات أو شراء سلع معمرة للعميلين بأي منها يتم الاقرار عن الوحدة مسبوقة بكلمة \" العاملين \".",
+   "table_data": null,
+   "bbox": {
+    "x1": 397,
+    "y1": 2101,
+    "x2": 2198,
+    "y2": 2372
+   },
+   "crop_path": "crops/legal_circular_2/page_012/legal_circular_2_p012_b08_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p012_b09",
+   "block_type": "text",
+   "text": "١٣- يكون الاقرار وفقاً لأرصدة نهاية كل شهر عن كل عميل يحصل على تمويل أو تسهيل ائتماني.",
+   "table_data": null,
+   "bbox": {
+    "x1": 395,
+    "y1": 2464,
+    "x2": 2198,
+    "y2": 2639
+   },
+   "crop_path": "crops/legal_circular_2/page_012/legal_circular_2_p012_b09_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p012_b10",
+   "block_type": "text",
+   "text": "١٤- يتم الإقرار عن الارصدة المدينة بالحسابات الدائنة متى بلغت حد الإقرار في نهاية الشهر الذي ظهرت فيه هذه الارصدة.",
+   "table_data": null,
+   "bbox": {
+    "x1": 390,
+    "y1": 2762,
+    "x2": 2190,
+    "y2": 2933
+   },
+   "crop_path": "crops/legal_circular_2/page_012/legal_circular_2_p012_b10_text.png"
+  }
+ ]
+}

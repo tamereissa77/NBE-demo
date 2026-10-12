@@ -1,0 +1,183 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 24,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p024_b00",
+   "block_type": "header",
+   "text": "(تمودج رقم ٢ من ٦)",
+   "table_data": null,
+   "bbox": {
+    "x1": 119,
+    "y1": 88,
+    "x2": 489,
+    "y2": 154
+   },
+   "crop_path": "crops/legal_circular_2/page_024/legal_circular_2_p024_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p024_b01",
+   "block_type": "header",
+   "text": "البانك المصري المصري المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 229,
+    "y1": 175,
+    "x2": 888,
+    "y2": 249
+   },
+   "crop_path": "crops/legal_circular_2/page_024/legal_circular_2_p024_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p024_b02",
+   "block_type": "text",
+   "text": "قطاع الرقابة والادخراء",
+   "table_data": null,
+   "bbox": {
+    "x1": 334,
+    "y1": 266,
+    "x2": 787,
+    "y2": 330
+   },
+   "crop_path": "crops/legal_circular_2/page_024/legal_circular_2_p024_b02_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p024_b03",
+   "block_type": "text",
+   "text": "الادارة العامة لجميع مخطرات الامان المصرفي",
+   "table_data": null,
+   "bbox": {
+    "x1": 235,
+    "y1": 361,
+    "x2": 843,
+    "y2": 417
+   },
+   "crop_path": "crops/legal_circular_2/page_024/legal_circular_2_p024_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p024_b04",
+   "block_type": "text",
+   "text": "البنك : الرقم :",
+   "table_data": null,
+   "bbox": {
+    "x1": 1255,
+    "y1": 189,
+    "x2": 2289,
+    "y2": 249
+   },
+   "crop_path": "crops/legal_circular_2/page_024/legal_circular_2_p024_b04_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p024_b05",
+   "block_type": "text",
+   "text": "الفروع : الرقم :",
+   "table_data": null,
+   "bbox": {
+    "x1": 1255,
+    "y1": 277,
+    "x2": 2289,
+    "y2": 337
+   },
+   "crop_path": "crops/legal_circular_2/page_024/legal_circular_2_p024_b05_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p024_b06",
+   "block_type": "text",
+   "text": "المحافظات : الرقم :",
+   "table_data": null,
+   "bbox": {
+    "x1": 1255,
+    "y1": 361,
+    "x2": 2289,
+    "y2": 424
+   },
+   "crop_path": "crops/legal_circular_2/page_024/legal_circular_2_p024_b06_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p024_b07",
+   "block_type": "text",
+   "text": "الشهر : السنة :",
+   "table_data": null,
+   "bbox": {
+    "x1": 1213,
+    "y1": 452,
+    "x2": 2289,
+    "y2": 515
+   },
+   "crop_path": "crops/legal_circular_2/page_024/legal_circular_2_p024_b07_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p024_b08",
+   "block_type": "header",
+   "text": "بطاقة بيانات عميل جديد او كفيل او شريك متضمن (شخص طبيعي او اعتباري) (١)",
+   "table_data": null,
+   "bbox": {
+    "x1": 278,
+    "y1": 568,
+    "x2": 2115,
+    "y2": 650
+   },
+   "crop_path": "crops/legal_circular_2/page_024/legal_circular_2_p024_b08_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p024_b09",
+   "block_type": "text",
+   "text": "الاسم (١) : العنوان / المدينة : المحافظة : المهنة / النشاط : الشكل القانوني : رقم مستند اثبات الشخصية (١) : نوع مستند اثبات الشخصية (٢) : تاريخ الميلاد : تاريخ الاصدار : تاريخ الاصدار : رقم السجل التجاري : تاريخ الجريدة الرسمية : رقم الجريدة الرسمية : تاريخ بدء التعامل مع البنك :",
+   "table_data": null,
+   "bbox": {
+    "x1": 94,
+    "y1": 685,
+    "x2": 2284,
+    "y2": 1593
+   },
+   "crop_path": "crops/legal_circular_2/page_024/legal_circular_2_p024_b09_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p024_b10",
+   "block_type": "text",
+   "text": "اسماء العملاء أو الكفلاء أو الشركاء المتضمنين (١) اصفة (عزير/ كفيل/ شريك) الرقم الرمزي تاريخ التوقيع بالوكالة ١ ٢ ٣ ٤ ٥ ٦ ٧ ٨",
+   "table_data": null,
+   "bbox": {
+    "x1": 87,
+    "y1": 1670,
+    "x2": 2277,
+    "y2": 2485
+   },
+   "crop_path": "crops/legal_circular_2/page_024/legal_circular_2_p024_b10_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p024_b11",
+   "block_type": "text",
+   "text": "الوظيفة : الاسم المسنول : التوقيع : التاريخ :",
+   "table_data": null,
+   "bbox": {
+    "x1": 87,
+    "y1": 2562,
+    "x2": 2269,
+    "y2": 2755
+   },
+   "crop_path": "crops/legal_circular_2/page_024/legal_circular_2_p024_b11_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p024_b12",
+   "block_type": "text",
+   "text": "(١) في حالة المنشآت الفردية يتم ارفاق صورة السجل التجاري للمنشأة بالإضافة الى صورة مستند اثبات الشخصية لمالكها . (٢) يكتب الاسم من واقع مستندات اثبات الشخصية ، مع ارفاق المستندات المؤيدة لصحة البيانات . (٣) بطاقة الرقم القومي بالنسبة للأفراد المصريين ، وجواز السفر وترخيص الإقامة بالنسبة للجنائب . (٤) بالنسبة لبطاقة الرقم القومي يتم اثبات مكوناته كاملة (اربعة عشر رقما) دون اختصار .",
+   "table_data": null,
+   "bbox": {
+    "x1": 240,
+    "y1": 2849,
+    "x2": 2239,
+    "y2": 3193
+   },
+   "crop_path": "crops/legal_circular_2/page_024/legal_circular_2_p024_b12_text.png"
+  }
+ ]
+}

@@ -1,0 +1,183 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 23,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p023_b00",
+   "block_type": "header",
+   "text": "(تمويل رقم ١ من ٦)",
+   "table_data": null,
+   "bbox": {
+    "x1": 25,
+    "y1": 2905,
+    "x2": 109,
+    "y2": 3298
+   },
+   "crop_path": "crops/legal_circular_2/page_023/legal_circular_2_p023_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p023_b01",
+   "block_type": "header",
+   "text": "الهيئة المركزية المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 137,
+    "y1": 2625,
+    "x2": 211,
+    "y2": 3298
+   },
+   "crop_path": "crops/legal_circular_2/page_023/legal_circular_2_p023_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p023_b02",
+   "block_type": "header",
+   "text": "قطاع الرقابة والافراض",
+   "table_data": null,
+   "bbox": {
+    "x1": 240,
+    "y1": 2762,
+    "x2": 303,
+    "y2": 3224
+   },
+   "crop_path": "crops/legal_circular_2/page_023/legal_circular_2_p023_b02_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p023_b03",
+   "block_type": "text",
+   "text": "اسم البنك : .....",
+   "table_data": null,
+   "bbox": {
+    "x1": 265,
+    "y1": 256,
+    "x2": 328,
+    "y2": 990
+   },
+   "crop_path": "crops/legal_circular_2/page_023/legal_circular_2_p023_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p023_b04",
+   "block_type": "text",
+   "text": "اسم الفرع : .....",
+   "table_data": null,
+   "bbox": {
+    "x1": 367,
+    "y1": 256,
+    "x2": 431,
+    "y2": 990
+   },
+   "crop_path": "crops/legal_circular_2/page_023/legal_circular_2_p023_b04_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p023_b05",
+   "block_type": "text",
+   "text": "الاعارة العامة لجميع محار الائتمان المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 347,
+    "y1": 2653,
+    "x2": 405,
+    "y2": 3273
+   },
+   "crop_path": "crops/legal_circular_2/page_023/legal_circular_2_p023_b05_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p023_b06",
+   "block_type": "header",
+   "text": "طلب اطلاق عن عمل تمويل او تسهيلات انتمائية *",
+   "table_data": null,
+   "bbox": {
+    "x1": 441,
+    "y1": 1221,
+    "x2": 533,
+    "y2": 2442
+   },
+   "crop_path": "crops/legal_circular_2/page_023/legal_circular_2_p023_b06_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p023_b07",
+   "block_type": "table",
+   "text": "مستقبل الرقم المركزي الاسم المحافظة المهنة / النشاط شكل قانوني المستند الدين السجيد ملاحظات ١ ٢ ٣ ٤ ٥ ٦ ٧ ٨ ٩ ١٠",
+   "table_data": "<table border=\"1\">\n<thead>\n<tr>\n<th>مستقبل</th>\n<th>الرقم المركزي</th>\n<th>الاسم</th>\n<th>المحافظة</th>\n<th>المهنة / النشاط</th>\n<th>شكل قانوني</th>\n<th>المستند</th>\n<th>الدين السجيد</th>\n<th>ملاحظات</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>١</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td>٢</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td>٣</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td>٤</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td>٥</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td>٦</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td>٧</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td>٨</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td>٩</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td>١٠</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n</tbody>\n</table>",
+   "bbox": {
+    "x1": 620,
+    "y1": 81,
+    "x2": 1803,
+    "y2": 3368
+   },
+   "crop_path": "crops/legal_circular_2/page_023/legal_circular_2_p023_b07_table.png"
+  },
+  {
+   "block_id": "legal_circular_2_p023_b08",
+   "block_type": "text",
+   "text": "* يتم التقدم بهذا الطلب في حالة يعثر الاطلاق من خلال شبكة معلومات البنك المركزي أو وجود استفسارات عند الاطلاق .",
+   "table_data": null,
+   "bbox": {
+    "x1": 1852,
+    "y1": 228,
+    "x2": 1932,
+    "y2": 2087
+   },
+   "crop_path": "crops/legal_circular_2/page_023/legal_circular_2_p023_b08_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p023_b09",
+   "block_type": "text",
+   "text": "التاريخ :",
+   "table_data": null,
+   "bbox": {
+    "x1": 2145,
+    "y1": 228,
+    "x2": 2217,
+    "y2": 389
+   },
+   "crop_path": "crops/legal_circular_2/page_023/legal_circular_2_p023_b09_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p023_b10",
+   "block_type": "text",
+   "text": "اسم المستقبل : .....",
+   "table_data": null,
+   "bbox": {
+    "x1": 2138,
+    "y1": 871,
+    "x2": 2209,
+    "y2": 1719
+   },
+   "crop_path": "crops/legal_circular_2/page_023/legal_circular_2_p023_b10_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p023_b11",
+   "block_type": "text",
+   "text": "الوظيفة : .....",
+   "table_data": null,
+   "bbox": {
+    "x1": 2128,
+    "y1": 1761,
+    "x2": 2193,
+    "y2": 1966
+   },
+   "crop_path": "crops/legal_circular_2/page_023/legal_circular_2_p023_b11_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p023_b12",
+   "block_type": "text",
+   "text": "التوقيع : .....",
+   "table_data": null,
+   "bbox": {
+    "x1": 2128,
+    "y1": 2481,
+    "x2": 2193,
+    "y2": 2674
+   },
+   "crop_path": "crops/legal_circular_2/page_023/legal_circular_2_p023_b12_text.png"
+  }
+ ]
+}

@@ -1,0 +1,92 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 4,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p004_b00",
+   "block_type": "header",
+   "text": "البنك المركزي المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 1716,
+    "y1": 186,
+    "x2": 2239,
+    "y2": 270
+   },
+   "crop_path": "crops/legal_circular_2/page_004/legal_circular_2_p004_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p004_b01",
+   "block_type": "header",
+   "text": "صفحة ٢ من ٢٠",
+   "table_data": null,
+   "bbox": {
+    "x1": 525,
+    "y1": 186,
+    "x2": 846,
+    "y2": 242
+   },
+   "crop_path": "crops/legal_circular_2/page_004/legal_circular_2_p004_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p004_b02",
+   "block_type": "text",
+   "text": "(ب) مستخرج حديث من السجل التجاري للمركز الرئيسي للشركة على أن يتوافق تاريخ استخراجه مع تاريخ تقديم طلب الحصول على التحويل أو التسهيلات الائتمانية ، أو زيادته أو تجديده.",
+   "table_data": null,
+   "bbox": {
+    "x1": 377,
+    "y1": 456,
+    "x2": 2066,
+    "y2": 729
+   },
+   "crop_path": "crops/legal_circular_2/page_004/legal_circular_2_p004_b02_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p004_b03",
+   "block_type": "text",
+   "text": "(ج) صورة من الجريدة الرسمية المنشور بها قرار الانشاء بالنسبة لجميع الشركات ونقل التبعية أو تعديل الاسم بالنسبة للجهات الحكومية ووحداث القطاع العام والأعمال العام.",
+   "table_data": null,
+   "bbox": {
+    "x1": 377,
+    "y1": 818,
+    "x2": 2058,
+    "y2": 1091
+   },
+   "crop_path": "crops/legal_circular_2/page_004/legal_circular_2_p004_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p004_b04",
+   "block_type": "text",
+   "text": "(د) مستخرج حديث من السجل التجاري لفروع الشركات الأجنبية يتوافق تاريخ استخراجه مع تاريخ تقديم طلب الحصول على التحويل أو التسهيلات الائتمانية ، أو تصريح مزاولة العمل في مصر بالنسبة للشركات الأجنبية.",
+   "table_data": null,
+   "bbox": {
+    "x1": 377,
+    "y1": 1179,
+    "x2": 2046,
+    "y2": 1453
+   },
+   "crop_path": "crops/legal_circular_2/page_004/legal_circular_2_p004_b04_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p004_b05",
+   "block_type": "text",
+   "text": "(هـ) صورة من الوقائع المصرية المنشور بها قرار انشاء الجمعيات والمؤسسات الأهلية والمنشآت.",
+   "table_data": null,
+   "bbox": {
+    "x1": 377,
+    "y1": 1540,
+    "x2": 2041,
+    "y2": 1709
+   },
+   "crop_path": "crops/legal_circular_2/page_004/legal_circular_2_p004_b05_text.png"
+  }
+ ]
+}

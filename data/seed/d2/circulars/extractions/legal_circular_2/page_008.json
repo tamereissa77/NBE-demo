@@ -1,0 +1,105 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 8,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p008_b00",
+   "block_type": "header",
+   "text": "البنك المركزي المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 1748,
+    "y1": 175,
+    "x2": 2279,
+    "y2": 266
+   },
+   "crop_path": "crops/legal_circular_2/page_008/legal_circular_2_p008_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p008_b01",
+   "block_type": "header",
+   "text": "صفحة ٦ من ٢٠",
+   "table_data": null,
+   "bbox": {
+    "x1": 523,
+    "y1": 175,
+    "x2": 843,
+    "y2": 235
+   },
+   "crop_path": "crops/legal_circular_2/page_008/legal_circular_2_p008_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p008_b02",
+   "block_type": "text",
+   "text": "٥- تلتزم البنوك وشركات التأجير التمولي وشركات التمويل العقارى بموافاة الادارة العامة لتجميع مخاطر الائتمان المصري في وقت يتزامن مع وقت ادخال بيانات العملاء الجدد بالاتي:",
+   "table_data": null,
+   "bbox": {
+    "x1": 415,
+    "y1": 452,
+    "x2": 2180,
+    "y2": 727
+   },
+   "crop_path": "crops/legal_circular_2/page_008/legal_circular_2_p008_b02_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p008_b03",
+   "block_type": "text",
+   "text": "(أ) بطاقة بيانات عميل جديد / كفيل / شريك متضامن (شخص طبيعي أو اعتبارى) على النموذج المعد لهذا الغرض رقم ٢ (مرفق) متضمنة البيانات التالية:",
+   "table_data": null,
+   "bbox": {
+    "x1": 415,
+    "y1": 811,
+    "x2": 2028,
+    "y2": 1081
+   },
+   "crop_path": "crops/legal_circular_2/page_008/legal_circular_2_p008_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p008_b04",
+   "block_type": "text",
+   "text": "- التاريخ : الشهر / السنة - بيانات البنك / الشركة: اسم البنك / الشركة - اسم الفرع - المحافظة. - بيانات العميل: فرد طبيعي: اسم العميل - تاريخ الميلاد - العنوان - المهنة - رقم ونوع وتاريخ اصدار مستند اثبات الشخصية (بطاقة الرقم القومي بالنسبة للأفراد المصريين ، وجواز السفر وترخيص الإقامة بالنسبة للأجانب). شخص اعتبارى: اسم العميل - العنوان - الشكل القانونى - النشاط - رقم السجل التجارى وتاريخ وجهة اصداره - رقم وتاريخ الجريدة الرسمية أو الوقائع المصرية. - تاريخ بدء التعامل مع البنك. - أسماء الكفلاء وتاريخ التوقيع بالكفالة. - أسماء الشركاء المتضامين.",
+   "table_data": null,
+   "bbox": {
+    "x1": 415,
+    "y1": 1102,
+    "x2": 1900,
+    "y2": 2257
+   },
+   "crop_path": "crops/legal_circular_2/page_008/legal_circular_2_p008_b04_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p008_b05",
+   "block_type": "text",
+   "text": "(ب) صور مستندات اثبات الشخصية المؤيدة لصحة بيانات العملاء وكفلائهم والشركاء المتضامين.",
+   "table_data": null,
+   "bbox": {
+    "x1": 364,
+    "y1": 2351,
+    "x2": 2056,
+    "y2": 2527
+   },
+   "crop_path": "crops/legal_circular_2/page_008/legal_circular_2_p008_b05_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p008_b06",
+   "block_type": "text",
+   "text": "وتقوم الادارة العامة لتجميع مخاطر الائتمان المصري بالتحقق من دقة البيانات التي قامت البنوك والشركات بادخالها ومتابعة حصولها على الارقام الرمزية للعملاء الجدد من خلال شبكة معلومات البنك المركزي.",
+   "table_data": null,
+   "bbox": {
+    "x1": 407,
+    "y1": 2548,
+    "x2": 2051,
+    "y2": 2818
+   },
+   "crop_path": "crops/legal_circular_2/page_008/legal_circular_2_p008_b06_text.png"
+  }
+ ]
+}

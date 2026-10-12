@@ -1,0 +1,105 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 31,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p031_b00",
+   "block_type": "header",
+   "text": "(مؤاز رقم ٦ من ٦)",
+   "table_data": null,
+   "bbox": {
+    "x1": 191,
+    "y1": 2576,
+    "x2": 255,
+    "y2": 2958
+   },
+   "crop_path": "crops/legal_circular_2/page_031/legal_circular_2_p031_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p031_b01",
+   "block_type": "header",
+   "text": "الوثائق العسكرية المصرية",
+   "table_data": null,
+   "bbox": {
+    "x1": 255,
+    "y1": 1994,
+    "x2": 328,
+    "y2": 2632
+   },
+   "crop_path": "crops/legal_circular_2/page_031/legal_circular_2_p031_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p031_b02",
+   "block_type": "text",
+   "text": "مطابع الرقابة والأخراية",
+   "table_data": null,
+   "bbox": {
+    "x1": 349,
+    "y1": 2106,
+    "x2": 412,
+    "y2": 2541
+   },
+   "crop_path": "crops/legal_circular_2/page_031/legal_circular_2_p031_b02_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p031_b03",
+   "block_type": "text",
+   "text": "الطائرة العامة لتيمنع مطار للقيمان المصريون",
+   "table_data": null,
+   "bbox": {
+    "x1": 436,
+    "y1": 2031,
+    "x2": 496,
+    "y2": 2614
+   },
+   "crop_path": "crops/legal_circular_2/page_031/legal_circular_2_p031_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p031_b04",
+   "block_type": "header",
+   "text": "أخطر عن موقف عميل القنمان غير منتظم",
+   "table_data": null,
+   "bbox": {
+    "x1": 535,
+    "y1": 1106,
+    "x2": 610,
+    "y2": 1947
+   },
+   "crop_path": "crops/legal_circular_2/page_031/legal_circular_2_p031_b04_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p031_b05",
+   "block_type": "text",
+   "text": "بشكل : ..... فسرحة : .....",
+   "table_data": null,
+   "bbox": {
+    "x1": 349,
+    "y1": 126,
+    "x2": 489,
+    "y2": 1014
+   },
+   "crop_path": "crops/legal_circular_2/page_031/legal_circular_2_p031_b05_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p031_b06",
+   "block_type": "text",
+   "text": "الرصدة التسهيلات في تاريخ الإخطار ( الف جنبه ) مصرح مستخدم توقيع التسهيل (الضمان )",
+   "table_data": null,
+   "bbox": {
+    "x1": 625,
+    "y1": 88,
+    "x2": 2130,
+    "y2": 2954
+   },
+   "crop_path": "crops/legal_circular_2/page_031/legal_circular_2_p031_b06_text.png"
+  }
+ ]
+}

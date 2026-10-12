@@ -1,0 +1,196 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 26,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p026_b00",
+   "block_type": "header",
+   "text": "(تموقع رقم ٤ من ٦)",
+   "table_data": null,
+   "bbox": {
+    "x1": 221,
+    "y1": 2832,
+    "x2": 278,
+    "y2": 3189
+   },
+   "crop_path": "crops/legal_circular_2/page_026/legal_circular_2_p026_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p026_b01",
+   "block_type": "header",
+   "text": "البنك المصري المصري المصري وطلائ الرقابة والأخبار",
+   "table_data": null,
+   "bbox": {
+    "x1": 275,
+    "y1": 2527,
+    "x2": 410,
+    "y2": 3210
+   },
+   "crop_path": "crops/legal_circular_2/page_026/legal_circular_2_p026_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p026_b02",
+   "block_type": "header",
+   "text": "الحدارة العامة لتدعيم مظاهر الائتمان المرسوم",
+   "table_data": null,
+   "bbox": {
+    "x1": 424,
+    "y1": 2558,
+    "x2": 481,
+    "y2": 3193
+   },
+   "crop_path": "crops/legal_circular_2/page_026/legal_circular_2_p026_b02_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p026_b03",
+   "block_type": "text",
+   "text": "اسم البنك : _____ اسم الفرع : _____",
+   "table_data": null,
+   "bbox": {
+    "x1": 344,
+    "y1": 270,
+    "x2": 481,
+    "y2": 1095
+   },
+   "crop_path": "crops/legal_circular_2/page_026/legal_circular_2_p026_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p026_b04",
+   "block_type": "text",
+   "text": "كشوف الأوراق المالية الشهرية عن الرصدة التحويلية والتسهيلات الائتمانية في نهاية شهر : _____",
+   "table_data": null,
+   "bbox": {
+    "x1": 540,
+    "y1": 603,
+    "x2": 620,
+    "y2": 3252
+   },
+   "crop_path": "crops/legal_circular_2/page_026/legal_circular_2_p026_b04_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p026_b05",
+   "block_type": "text",
+   "text": "المبلغ بالاف الجنيهات",
+   "table_data": null,
+   "bbox": {
+    "x1": 548,
+    "y1": 2337,
+    "x2": 610,
+    "y2": 2804
+   },
+   "crop_path": "crops/legal_circular_2/page_026/legal_circular_2_p026_b05_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p026_b06",
+   "block_type": "table",
+   "text": "رقم العمل اسم العمل المحافظ التعداد الاقتصادي شكل قانوني حالة العمل",
+   "table_data": "<table border=\"1\">\n<thead>\n<tr>\n<th>رقم العمل</th>\n<th>اسم العمل</th>\n<th>المحافظ</th>\n<th>التعداد الاقتصادي</th>\n<th>شكل قانوني</th>\n<th>حالة العمل</th>\n</tr>\n</thead>\n</table>",
+   "bbox": {
+    "x1": 657,
+    "y1": 224,
+    "x2": 736,
+    "y2": 3394
+   },
+   "crop_path": "crops/legal_circular_2/page_026/legal_circular_2_p026_b06_table.png"
+  },
+  {
+   "block_id": "legal_circular_2_p026_b07",
+   "block_type": "table",
+   "text": "بنود تسهيلات مجموع (١٩) المصرح المستخدم",
+   "table_data": "<table border=\"1\">\n<tbody>\n<tr>\n<td>بنود تسهيلات</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td>مجموع (١٩)</td>\n</tr>\n<tr>\n<td>المصرح</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td>المستخدم</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n</tbody>\n</table>",
+   "bbox": {
+    "x1": 787,
+    "y1": 224,
+    "x2": 980,
+    "y2": 3394
+   },
+   "crop_path": "crops/legal_circular_2/page_026/legal_circular_2_p026_b07_table.png"
+  },
+  {
+   "block_id": "legal_circular_2_p026_b08",
+   "block_type": "table",
+   "text": "بنود تسهيلات مجموع (٢٠) المصرح المستخدم",
+   "table_data": "<table border=\"1\">\n<tbody>\n<tr>\n<td>بنود تسهيلات</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td>مجموع (٢٠)</td>\n</tr>\n<tr>\n<td>المصرح</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td>المستخدم</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n</tbody>\n</table>",
+   "bbox": {
+    "x1": 1029,
+    "y1": 224,
+    "x2": 1223,
+    "y2": 3394
+   },
+   "crop_path": "crops/legal_circular_2/page_026/legal_circular_2_p026_b08_table.png"
+  },
+  {
+   "block_id": "legal_circular_2_p026_b09",
+   "block_type": "table",
+   "text": "بنود تسهيلات مجموع (٢١) المصرح المستخدم",
+   "table_data": "<table border=\"1\">\n<tbody>\n<tr>\n<td>بنود تسهيلات</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td>مجموع (٢١)</td>\n</tr>\n<tr>\n<td>المصرح</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td>المستخدم</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n</tbody>\n</table>",
+   "bbox": {
+    "x1": 1272,
+    "y1": 224,
+    "x2": 1465,
+    "y2": 3394
+   },
+   "crop_path": "crops/legal_circular_2/page_026/legal_circular_2_p026_b09_table.png"
+  },
+  {
+   "block_id": "legal_circular_2_p026_b10",
+   "block_type": "table",
+   "text": "بنود تسهيلات مجموع (٢٢) المصرح المستخدم",
+   "table_data": "<table border=\"1\">\n<tbody>\n<tr>\n<td>بنود تسهيلات</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td>مجموع (٢٢)</td>\n</tr>\n<tr>\n<td>المصرح</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td>المستخدم</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n</tbody>\n</table>",
+   "bbox": {
+    "x1": 1515,
+    "y1": 224,
+    "x2": 1709,
+    "y2": 3394
+   },
+   "crop_path": "crops/legal_circular_2/page_026/legal_circular_2_p026_b10_table.png"
+  },
+  {
+   "block_id": "legal_circular_2_p026_b11",
+   "block_type": "table",
+   "text": "بنود تسهيلات مجموع (٢٣) المصرح المستخدم",
+   "table_data": "<table border=\"1\">\n<tbody>\n<tr>\n<td>بنود تسهيلات</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td>مجموع (٢٣)</td>\n</tr>\n<tr>\n<td>المصرح</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td>المستخدم</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n</tbody>\n</table>",
+   "bbox": {
+    "x1": 1758,
+    "y1": 224,
+    "x2": 1952,
+    "y2": 3394
+   },
+   "crop_path": "crops/legal_circular_2/page_026/legal_circular_2_p026_b11_table.png"
+  },
+  {
+   "block_id": "legal_circular_2_p026_b12",
+   "block_type": "table",
+   "text": "مجموع المصرح مجموع المستخدم",
+   "table_data": "<table border=\"1\">\n<tbody>\n<tr>\n<td>مجموع المصرح</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td>مجموع المستخدم</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n</tbody>\n</table>",
+   "bbox": {
+    "x1": 2002,
+    "y1": 224,
+    "x2": 2158,
+    "y2": 3394
+   },
+   "crop_path": "crops/legal_circular_2/page_026/legal_circular_2_p026_b12_table.png"
+  },
+  {
+   "block_id": "legal_circular_2_p026_b13",
+   "block_type": "footer",
+   "text": "ترسل بيانات النموذج الكترونيا من خلال شبكة معلومات البنك المركزي",
+   "table_data": null,
+   "bbox": {
+    "x1": 2222,
+    "y1": 288,
+    "x2": 2292,
+    "y2": 1397
+   },
+   "crop_path": "crops/legal_circular_2/page_026/legal_circular_2_p026_b13_footer.png"
+  }
+ ]
+}

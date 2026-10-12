@@ -1,0 +1,28 @@
+# TEMPORARY development gateway config, loaded only through docker-compose.api.yml.
+# The GB10 uses config/litellm.yaml, where every alias points at a local model server.
+#
+# Same aliases as litellm.yaml, so no demo code changes: the four chat aliases go to one external
+# model (NBE_API_MODEL, a LiteLLM model string such as `anthropic/<model>`, `gemini/<model>`,
+# `nvidia_nim/<model>` or `openai/<model>`), and `embed` stays on the local bge-m3 server.
+# The reranker is not listed here: nbe_core calls nbe-rerank directly, as on the GB10.
+model_list:
+  - model_name: workhorse
+    litellm_params: { model: os.environ/NBE_API_MODEL, api_key: os.environ/NBE_API_KEY }
+  - model_name: vision
+    litellm_params: { model: os.environ/NBE_API_MODEL, api_key: os.environ/NBE_API_KEY }
+  - model_name: quality
+    litellm_params: { model: os.environ/NBE_API_MODEL, api_key: os.environ/NBE_API_KEY }
+  - model_name: hero
+    litellm_params: { model: os.environ/NBE_API_MODEL, api_key: os.environ/NBE_API_KEY }
+  # For an OpenAI-compatible endpoint with its own URL, add to each entry above:
+  #   api_base: os.environ/NBE_API_BASE      (and pass NBE_API_BASE to nbe-llmgw in docker-compose.api.yml)
+  - model_name: embed                     # bge-m3, 1024-dim, local: identical vectors to the GB10
+    litellm_params: { model: hosted_vllm/bge-m3, api_base: "http://nbe-embed:8000/v1", api_key: none }
+
+router_settings:
+  num_retries: 0
+
+litellm_settings:
+  drop_params: true
+  request_timeout: 600
+  telemetry: false

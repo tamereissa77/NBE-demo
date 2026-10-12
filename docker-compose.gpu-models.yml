@@ -1,0 +1,32 @@
+# Development override: embeddings (bge-m3) and the reranker (bge-reranker-v2-m3) on THIS machine's GPU.
+# Used ON TOP of docker-compose.api.yml, where they run on CPU. Not used on the GB10 (vLLM serves them there).
+#
+#   C="docker compose -f docker-compose.yml -f docker-compose.api.yml -f docker-compose.gb10-remote.yml -f docker-compose.gpu-models.yml --profile core"
+#   $C up -d --wait --build --no-deps nbe-embed nbe-rerank
+#   curl -s localhost:<NBE_PORT>/api/d2/health          # the demos are unaffected either way
+#   docker exec nbe-embed python -c "import urllib.request; print(urllib.request.urlopen('http://localhost:8000/health').read())"
+#
+# Same server and same weights as the CPU setup, built with the CUDA wheels of torch. DEVICE=auto: each model
+# goes on the GPU if it fits and stays on CPU otherwise (/health reports which, and why). Together the two
+# need roughly 3 GB of free GPU memory in half precision. The GPU of this server is shared: after memory
+# becomes free, restart the two containers to move them onto it.
+
+x-gpu-model: &gpu-model
+  image: nbe-dev-gpu-models:latest
+  build:
+    context: docker/dev-cpu-models
+    args:
+      TORCH_INDEX: https://download.pytorch.org/whl/cu128     # RTX 50-series needs the CUDA 12.8 build
+  deploy:
+    resources:
+      reservations:
+        devices: [{ driver: nvidia, count: all, capabilities: [gpu] }]
+
+services:
+  nbe-embed:
+    <<: *gpu-model
+    environment: { DEVICE: auto, BATCH: "32" }
+
+  nbe-rerank:
+    <<: *gpu-model
+    environment: { DEVICE: auto, BATCH: "32" }

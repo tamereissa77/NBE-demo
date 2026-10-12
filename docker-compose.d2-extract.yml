@@ -1,0 +1,83 @@
+# OPTIONAL override: back-office intake of new scanned documents into D2.
+#
+# Adds what docker-compose.yml does not have and D2 needs to take a new PDF:
+#   nbe-d2-uploads        a writable volume for D2 (./data is mounted read-only): incoming PDFs, the fetched
+#                         extraction results, and the normalised corpus D2 reads beside its seed corpus
+#   nbe-d2-uploads-init   one-shot: gives that volume to the user the demo services run as
+#   nbe-d2                gets the volume and the address of the extraction service
+#   nbe-d2-extract        nbe-working's Chandra OCR extraction service (GPU), for when it runs on the SAME
+#                         machine as D2. Profile `extract`: started only when a document has to be added,
+#                         and stopped afterwards, because it holds GPU memory for as long as it runs.
+#
+# D2 and the extraction service exchange files over HTTP, so the service can also run on another machine:
+#   - same machine (the GB10 deployment): this file alone;
+#   - D2 on a workstation, the service on the GB10: add docker-compose.d2-extract-remote.yml, and start the
+#     service on the GB10 from services/d2_extraction/docker-compose.yml.
+#
+# Without this file D2 is unchanged and its /upload endpoints answer 404.
+#
+#   C="docker compose -f docker-compose.yml -f docker-compose.d2-extract.yml"   # add -f docker-compose.api.yml on the workstation
+#   $C --profile core up -d --wait nbe-d2                       # D2 with the volume
+#   $C --profile extract up -d --wait --build nbe-d2-extract    # only while adding documents
+#   scripts/d2_upload.sh <file.pdf> "<Arabic title>" "<English title>"
+#   $C --profile extract stop nbe-d2-extract
+#
+# The model is read from ${MODELS_DIR}/chandra-ocr-2 (datalab-to/chandra-ocr-2, a gated model, downloaded once).
+# See D2/ahmedsoliman/documentation/README.md, section 12.
+
+services:
+  nbe-d2-uploads-init:
+    image: nbe-d2:${IMAGE_TAG:-latest}
+    container_name: nbe-d2-uploads-init
+    user: "0:0"
+    restart: "no"
+    network_mode: none
+    entrypoint: ["sh", "-c", "mkdir -p /uploads/incoming /uploads/circulars /uploads/pipeline_output && chown 10001 /uploads /uploads/incoming /uploads/circulars /uploads/pipeline_output"]
+    volumes:
+      - nbe-d2-uploads:/uploads
+
+  nbe-d2:
+    environment:
+      D2_EXTRACTION_URL: ${D2_EXTRACTION_URL:-http://nbe-d2-extract:8000}
+      D2_EXTRACTION_TOKEN: ${D2_EXTRACTION_TOKEN:-}
+    volumes:
+      - nbe-d2-uploads:/uploads
+    depends_on:
+      nbe-d2-uploads-init:
+        condition: service_completed_successfully
+
+  nbe-d2-extract:
+    profiles: [extract]
+    build:
+      context: services/d2_extraction
+    image: nbe-d2-extract:latest
+    container_name: nbe-d2-extract
+    restart: "no"              # a model server: never auto-starts at boot
+    networks: [nbe-core]
+    environment:
+      CHANDRA_MODEL_PATH: /models/chandra-ocr-2
+      MAX_INFERENCE_DIM: ${D2_MAX_INFERENCE_DIM:-2000}
+      LOAD_IN_4BIT: ${D2_LOAD_IN_4BIT:-1}
+      EXTRACTION_TOKEN: ${D2_EXTRACTION_TOKEN:-}
+      DATA_DIR: /work
+      HF_HUB_OFFLINE: "1"
+      TRANSFORMERS_OFFLINE: "1"
+    volumes:
+      - nbe-d2-extract-work:/work
+      - ${MODELS_DIR:-/opt/models}/chandra-ocr-2:/models/chandra-ocr-2:ro
+    deploy:
+      resources:
+        reservations:
+          devices: [{ driver: nvidia, count: all, capabilities: [gpu] }]
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 80
+      start_period: 600s
+
+volumes:
+  nbe-d2-uploads:
+    name: nbe-d2-uploads
+  nbe-d2-extract-work:
+    name: nbe-d2-extract-work

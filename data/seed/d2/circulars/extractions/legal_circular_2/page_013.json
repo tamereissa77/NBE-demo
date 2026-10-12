@@ -1,0 +1,196 @@
+{
+ "doc_id": "legal_circular_2",
+ "page_num": 13,
+ "original_size": [
+  2480,
+  3509
+ ],
+ "inference_size": [
+  2480,
+  3509
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_2_p013_b00",
+   "block_type": "header",
+   "text": "البنك المركزي المصري",
+   "table_data": null,
+   "bbox": {
+    "x1": 1736,
+    "y1": 193,
+    "x2": 2267,
+    "y2": 281
+   },
+   "crop_path": "crops/legal_circular_2/page_013/legal_circular_2_p013_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p013_b01",
+   "block_type": "header",
+   "text": "صفحة ١١ من ٢٠",
+   "table_data": null,
+   "bbox": {
+    "x1": 514,
+    "y1": 193,
+    "x2": 831,
+    "y2": 256
+   },
+   "crop_path": "crops/legal_circular_2/page_013/legal_circular_2_p013_b01_header.png"
+  },
+  {
+   "block_id": "legal_circular_2_p013_b02",
+   "block_type": "text",
+   "text": "١٥- يكون اساس الاقرار هو المبلغ المصرح به بصرف النظر عن المبلغ المستخدم منه ، على أن يستمر الاقرار وإن انخفض الحد المصرح به للعمل عن حد الاقرار حتى تمام سداد المديونية .",
+   "table_data": null,
+   "bbox": {
+    "x1": 402,
+    "y1": 470,
+    "x2": 2209,
+    "y2": 741
+   },
+   "crop_path": "crops/legal_circular_2/page_013/legal_circular_2_p013_b02_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p013_b03",
+   "block_type": "text",
+   "text": "١٦- تكون مبالغ الاقرار بالجنيه المصري ومقربة لأقرب ألف جنيه.",
+   "table_data": null,
+   "bbox": {
+    "x1": 897,
+    "y1": 832,
+    "x2": 2209,
+    "y2": 913
+   },
+   "crop_path": "crops/legal_circular_2/page_013/legal_circular_2_p013_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p013_b04",
+   "block_type": "text",
+   "text": "١٧- تقوم البنوك وشركات التأجير التمويلي وشركات التمويل العقارى بإرسال البيانات (الاقرار) شهريا إلكترونيا من خلال شبكة معلومات البنك المركزى على النموذج المعد لهذا الغرض رقم ٤ (مرفق) متضمننا البيانات التالية:",
+   "table_data": null,
+   "bbox": {
+    "x1": 402,
+    "y1": 1000,
+    "x2": 2214,
+    "y2": 1274
+   },
+   "crop_path": "crops/legal_circular_2/page_013/legal_circular_2_p013_b04_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p013_b05",
+   "block_type": "text",
+   "text": "(أ) اسم ورقم البنك / الشركة - اسم ورقم الفرع - اسم ورقم المحافظة.",
+   "table_data": null,
+   "bbox": {
+    "x1": 620,
+    "y1": 1291,
+    "x2": 2043,
+    "y2": 1376
+   },
+   "crop_path": "crops/legal_circular_2/page_013/legal_circular_2_p013_b05_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p013_b06",
+   "block_type": "text",
+   "text": "(ب) تاريخ الشهر والسنة المعد عنه البيانات.",
+   "table_data": null,
+   "bbox": {
+    "x1": 945,
+    "y1": 1393,
+    "x2": 2043,
+    "y2": 1474
+   },
+   "crop_path": "crops/legal_circular_2/page_013/legal_circular_2_p013_b06_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p013_b07",
+   "block_type": "text",
+   "text": "(ج) اسم العميل ورقمه الرمزى - العنوان - المهنة / النشاط - الشكل القانونى.",
+   "table_data": null,
+   "bbox": {
+    "x1": 459,
+    "y1": 1491,
+    "x2": 2043,
+    "y2": 1572
+   },
+   "crop_path": "crops/legal_circular_2/page_013/legal_circular_2_p013_b07_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p013_b08",
+   "block_type": "text",
+   "text": "(د) قيمة الحد المصرح به للتمويل والتسهيلات الائتمانية المقدمة للعميل ومقدار المستخدم منه فى نهاية كل شهر موزعة وفقا لبيود التمويل والتسهيلات المستخدمة وأواع الضمانات الموضحة بالبيان الوارد فيما بعد.",
+   "table_data": null,
+   "bbox": {
+    "x1": 402,
+    "y1": 1589,
+    "x2": 2043,
+    "y2": 1859
+   },
+   "crop_path": "crops/legal_circular_2/page_013/legal_circular_2_p013_b08_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p013_b09",
+   "block_type": "text",
+   "text": "١٨- يستثنى من الاقرار الآتى:",
+   "table_data": null,
+   "bbox": {
+    "x1": 1580,
+    "y1": 1980,
+    "x2": 2209,
+    "y2": 2057
+   },
+   "crop_path": "crops/legal_circular_2/page_013/legal_circular_2_p013_b09_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p013_b10",
+   "block_type": "text",
+   "text": "(أ) الاقرار عن التسهيلات الائتمانية المقدمة للبنوك.",
+   "table_data": null,
+   "bbox": {
+    "x1": 1057,
+    "y1": 2078,
+    "x2": 2066,
+    "y2": 2155
+   },
+   "crop_path": "crops/legal_circular_2/page_013/legal_circular_2_p013_b10_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p013_b11",
+   "block_type": "text",
+   "text": "(ب) الكفلاء الذين تقتصر كفالاتهم على تقديم ضمانة عينية أو ودائع نقدية أو أية أوعية ادخارية بصورها المختلفة أو أنون خزانة أو سندات حكومية بذات قيمة كفالاتهم.",
+   "table_data": null,
+   "bbox": {
+    "x1": 402,
+    "y1": 2171,
+    "x2": 2083,
+    "y2": 2446
+   },
+   "crop_path": "crops/legal_circular_2/page_013/legal_circular_2_p013_b11_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p013_b12",
+   "block_type": "text",
+   "text": "١٩- يتعين استيفاء بيانات الاقرارات بالدقة التامة وتكون البنوك وشركات التأجير التمويلى وشركات التمويل العقارى مسؤولة مسئولية كاملة عن البيانات المرسلة.",
+   "table_data": null,
+   "bbox": {
+    "x1": 402,
+    "y1": 2537,
+    "x2": 2207,
+    "y2": 2716
+   },
+   "crop_path": "crops/legal_circular_2/page_013/legal_circular_2_p013_b12_text.png"
+  },
+  {
+   "block_id": "legal_circular_2_p013_b13",
+   "block_type": "text",
+   "text": "٢٠- يتعين على البنوك وشركات التأجير التمويلى وشركات التمويل العقارى اتخاذ كافة الاجراءات اللازمة لضمان تأمين البيانات التى يتم ارسالها عبر شبكة معلومات البنك المركزى.",
+   "table_data": null,
+   "bbox": {
+    "x1": 402,
+    "y1": 2832,
+    "x2": 2198,
+    "y2": 3105
+   },
+   "crop_path": "crops/legal_circular_2/page_013/legal_circular_2_p013_b13_text.png"
+  }
+ ]
+}

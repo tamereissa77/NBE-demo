@@ -1,0 +1,27 @@
+{
+ "doc_id": "legal_circular_3",
+ "page_num": 1,
+ "original_size": [
+  1241,
+  1754
+ ],
+ "inference_size": [
+  1241,
+  1754
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_3_p001_b00",
+   "block_type": "header",
+   "text": "شروط الجدارة والصلاحية الفنية للمسؤولين الرئيسيين لمشغلي نظم الدفع ومقدمي خدمات الدفع",
+   "table_data": null,
+   "bbox": {
+    "x1": 212,
+    "y1": 607,
+    "x2": 1014,
+    "y2": 852
+   },
+   "crop_path": "crops/legal_circular_3/page_001/legal_circular_3_p001_b00_header.png"
+  }
+ ]
+}

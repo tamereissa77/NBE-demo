@@ -19,6 +19,7 @@ from fastapi import HTTPException
 from psycopg.rows import dict_row
 from pydantic import BaseModel
 
+from app import clustering, policy
 from nbe_core import create_app, llm, platform, retrieval, settings
 from nbe_core.audit import log_event
 from nbe_core.text import strip_preamble
@@ -135,8 +136,10 @@ async def classify(text: str):
     return await llm.chat_json([{"role": "user", "content": CLASSIFY_PROMPT + text}], CLASSIFY_SCHEMA, max_tokens=300)
 
 
-def policy_violations(text: str) -> list[str]:
-    return [p for p in BANNED if re.search(p, text, re.I)]
+def policy_violations(text: str, pol: dict | None = None, ctx: dict | None = None) -> list[str]:
+    """The banned patterns, plus the data-driven checks when data/seed/d7/policy.json is present (app/policy.py)."""
+    found = [p for p in BANNED if re.search(p, text, re.I)]
+    return found + policy.violations(pol, text, **ctx) if pol else found
 
 
 @app.post("/triage/{cid}")
@@ -163,15 +166,31 @@ async def triage(cid: str):
               f"رقم الشكوى: {cid}. الفريق المختص: {team}. موعد الرد الأول المتوقع: خلال {sla_h} ساعة.\n"
               "سياسة الردود (إلزامية):\n" + "\n".join(f"- {r}" for r in POLICY_RULES) + f"\n{lang_note}\n\n"
               f"الشكوى ({c['customer_name']}):\n{c['text']}")
+    retry_note = "\n\nتنبيه: المسودة السابقة خالفت السياسة بعبارات: {v}. أعد الكتابة دون أي وعد أو طلب بيانات حساسة."
+    # With data/seed/d7/policy.json: rules from the file, a fixed English team name, a public reply for social media
+    pol = policy.load()
+    ctx = {"cid": cid, "channel": c["channel"], "language": cls["language"], "topic": cls["topic"], "customer_name": c["customer_name"]}
+    team_en = policy.team_en(pol, cls["topic"]) if pol else None
+    public = bool(pol) and policy.is_public(pol, c["channel"])
+    if public:
+        prompt = policy.public_prompt(pol, cid, c["text"], lang_note)
+    elif pol:
+        team_line = team if cls["language"] != "en" or not team_en else f"{team_en} (اكتب اسم الفريق في الرد بهذا النص الإنجليزي حرفياً)"
+        prompt = ("اكتب رد خدمة العملاء على الشكوى التالية. أخرج نص الرد فقط، بدون أي مقدمة أو عنوان أو بدائل أو تنسيق Markdown.\n"
+                  f"رقم الشكوى: {cid}. الفريق المختص: {team_line}. موعد الرد الأول المتوقع: خلال {sla_h} ساعة.\n"
+                  "سياسة الردود (إلزامية):\n" + "\n".join(f"- {r}" for r in pol["rules"]) + f"\n{lang_note}\n\n"
+                  f"الشكوى ({c['customer_name']}):\n{c['text']}")
+    if pol:
+        retry_note = "\n\nتنبيه: المسودة السابقة خالفت السياسة: {v}. أعد الكتابة مع تصحيح ذلك، دون أي وعد أو طلب بيانات حساسة."
+        trace.add("rules", "Reply policy (policy.json)", {"public_reply": public, "team_en": team_en})
     draft = ""
     violations: list[str] = []
     for attempt in (1, 2):
-        r = await llm.chat([{"role": "user", "content": prompt + ("" if attempt == 1 else
-                            "\n\nتنبيه: المسودة السابقة خالفت السياسة بعبارات: " + "، ".join(violations) + ". أعد الكتابة دون أي وعد أو طلب بيانات حساسة.")}],
+        r = await llm.chat([{"role": "user", "content": prompt + ("" if attempt == 1 else retry_note.format(v="، ".join(violations)))}],
                            max_tokens=600, temperature=0.3)
         trace.llm(f"Draft reply (attempt {attempt})", r)
         draft = strip_preamble(r.text)
-        violations = policy_violations(draft)
+        violations = policy_violations(draft, pol, ctx)
         if not violations:
             break
     guard = await platform.guard_output(draft, user=c["text"])
@@ -181,6 +200,8 @@ async def triage(cid: str):
               "similar": similar, "draft": draft, "policy_ok": not violations, "policy_violations": violations,
               "guardrail": {"allowed": guard["allowed"], "rail": guard["rail"]},
               "labels": {"topic": c["label_topic"], "severity": c["label_severity"]}, "trace": trace.to_list()}
+    if pol:
+        result |= {"team_en": team_en, "public_reply": public, "guardrail_gate": bool(pol.get("guardrail_gate"))}
     with db() as conn:
         conn.execute("""INSERT INTO d7.triage (id, result, status) VALUES (%s,%s,'awaiting_human')
                         ON CONFLICT (id) DO UPDATE SET result=EXCLUDED.result, status='awaiting_human', final_reply=NULL,
@@ -212,13 +233,28 @@ async def decision(cid: str, d: Decision):
     if d.action not in ("approve", "edit", "escalate"):
         raise HTTPException(400, "action must be approve, edit or escalate")
     with db() as conn:
-        t = conn.execute("SELECT result FROM d7.triage WHERE id=%s", (cid,)).fetchone()
-        if not t:
-            raise HTTPException(409, "triage the complaint first")
-        final = d.text if d.action == "edit" and d.text else t["result"]["draft"]
-        if d.action in ("approve", "edit") and policy_violations(final):
-            raise HTTPException(422, f"reply violates policy: {policy_violations(final)}")
-        status = {"approve": "approved", "edit": "approved_edited", "escalate": "escalated"}[d.action]
+        t = conn.execute("""SELECT t.result, c.channel, c.customer_name, c.text FROM d7.triage t
+                            JOIN d7.complaints c ON c.id = t.id WHERE t.id=%s""", (cid,)).fetchone()
+    if not t:
+        raise HTTPException(409, "triage the complaint first")
+    res = t["result"]
+    edited = d.action == "edit" and bool(d.text)
+    final = d.text if edited else res["draft"]
+    pol = policy.load()
+    ctx = {"cid": cid, "channel": t["channel"], "language": res["language"], "topic": res["topic"], "customer_name": t["customer_name"]}
+    if d.action in ("approve", "edit"):
+        found = policy_violations(final, pol, ctx)
+        if found:
+            raise HTTPException(422, f"reply violates policy: {found}")
+        # The guardrail is a gate, not a note: a blocked draft cannot be sent, and a reviewer's own text is checked too
+        if pol and pol.get("guardrail_gate"):
+            guard = await platform.guard_output(final, user=t["text"]) if edited else res["guardrail"]
+            if not guard["allowed"]:
+                await log_event("decision_blocked", d.reviewer, {"id": cid, "action": d.action, "rail": guard.get("rail")})
+                raise HTTPException(422, "reply blocked by the output guardrail: " +
+                                    ("change the text or escalate" if edited else "edit the draft or escalate"))
+    status = {"approve": "approved", "edit": "approved_edited", "escalate": "escalated"}[d.action]
+    with db() as conn:
         conn.execute("UPDATE d7.triage SET status=%s, final_reply=%s, decided_by=%s, decided_at=now() WHERE id=%s",
                      (status, final if d.action != "escalate" else None, d.reviewer, cid))
     await log_event("human_decision", d.reviewer, {"id": cid, "action": d.action})
@@ -244,7 +280,9 @@ async def trends(refresh: bool = False):
         rows = conn.execute("SELECT id, text, label_topic, label_severity, received_at FROM d7.complaints ORDER BY id").fetchall()
     vecs = np.array(await retrieval.embed([r["text"] for r in rows]), dtype=np.float32)
     vecs /= np.linalg.norm(vecs, axis=1, keepdims=True)
-    labels = kmeans(vecs, 10)
+    cfg = clustering.load_config()          # data/seed/d7/trends.json; without it, the fixed k below
+    labels, chosen = clustering.choose_clusters(vecs, **cfg) if cfg else (kmeans(vecs, 10), None)
+    k = int(labels.max()) + 1
 
     async def name(j):
         members = [rows[i] for i in np.where(labels == j)[0]]
@@ -259,9 +297,11 @@ async def trends(refresh: bool = False):
                 "avg_severity": round(float(np.mean([m["label_severity"] for m in members])), 2),
                 "top_topic": max(set(m["label_topic"] for m in members), key=[m["label_topic"] for m in members].count),
                 "weekly": dict(sorted(weeks.items())), "examples": [m["text"][:200] for m in members[:3]]}
-    clusters = sorted(await asyncio.gather(*(name(j) for j in range(10))), key=lambda c: -c["count"])
+    clusters = sorted(await asyncio.gather(*(name(j) for j in range(k))), key=lambda c: -c["count"])
     by_topic = {t: sum(1 for r in rows if r["label_topic"] == t) for t in TOPICS}
     value = {"total": len(rows), "clusters": clusters, "by_topic": by_topic, "topic_ar": TOPIC_AR}
+    if chosen:
+        value["clustering"] = chosen
     with db() as conn:
         conn.execute("INSERT INTO d7.cache VALUES ('trends', %s) ON CONFLICT (key) DO UPDATE SET value=EXCLUDED.value",
                      (json.dumps(value, ensure_ascii=False, default=str),))
@@ -299,5 +339,7 @@ async def accuracy(refresh: bool = False, n: int = 100):
 
 
 @app.get("/policy")
-def policy():
-    return {"rules": POLICY_RULES, "sla_hours": SLA_HOURS, "teams": TEAMS, "note": f"Synthetic placeholder policy until {settings.bank_short} supplies its rules."}
+def get_policy():
+    base = {"rules": POLICY_RULES, "sla_hours": SLA_HOURS, "teams": TEAMS, "note": f"Synthetic placeholder policy until {settings.bank_short} supplies its rules."}
+    pol = policy.load()
+    return base | {k: pol[k] for k in ("rules", "banned_extra", "teams_en", "public_reply", "guardrail_gate") if k in pol} if pol else base

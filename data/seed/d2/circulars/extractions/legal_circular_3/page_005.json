@@ -1,0 +1,209 @@
+{
+ "doc_id": "legal_circular_3",
+ "page_num": 5,
+ "original_size": [
+  1241,
+  1754
+ ],
+ "inference_size": [
+  1241,
+  1754
+ ],
+ "blocks": [
+  {
+   "block_id": "legal_circular_3_p005_b00",
+   "block_type": "header",
+   "text": "٣ إجراءات ترشيح المسؤولين الرئيسيين:",
+   "table_data": null,
+   "bbox": {
+    "x1": 635,
+    "y1": 146,
+    "x2": 1113,
+    "y2": 184
+   },
+   "crop_path": "crops/legal_circular_3/page_005/legal_circular_3_p005_b00_header.png"
+  },
+  {
+   "block_id": "legal_circular_3_p005_b01",
+   "block_type": "text",
+   "text": "١-٣ تقوم مؤسسة الدفع بتقديم طلب للحصول على موافقة البنك المركزي الكتابة المسبقة على الترشيح لشغل إحدى الوظائف الرئيسية مرفقاً به المستندات الآتية:",
+   "table_data": null,
+   "bbox": {
+    "x1": 105,
+    "y1": 212,
+    "x2": 1064,
+    "y2": 293
+   },
+   "crop_path": "crops/legal_circular_3/page_005/legal_circular_3_p005_b01_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p005_b02",
+   "block_type": "text",
+   "text": "أ. النماذج المطلوب استيفائها",
+   "table_data": null,
+   "bbox": {
+    "x1": 689,
+    "y1": 309,
+    "x2": 954,
+    "y2": 340
+   },
+   "crop_path": "crops/legal_circular_3/page_005/legal_circular_3_p005_b02_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p005_b03",
+   "block_type": "text",
+   "text": "ب. سيرة ذاتية تفصيلية للمرشح",
+   "table_data": null,
+   "bbox": {
+    "x1": 675,
+    "y1": 354,
+    "x2": 956,
+    "y2": 389
+   },
+   "crop_path": "crops/legal_circular_3/page_005/legal_circular_3_p005_b03_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p005_b04",
+   "block_type": "text",
+   "text": "ج. موافقة مجلس إدارة مؤسسة الدفع على الترشيح",
+   "table_data": null,
+   "bbox": {
+    "x1": 513,
+    "y1": 400,
+    "x2": 954,
+    "y2": 437
+   },
+   "crop_path": "crops/legal_circular_3/page_005/legal_circular_3_p005_b04_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p005_b05",
+   "block_type": "text",
+   "text": "د. خطاب ترشيح أعضاء مجلس الإدارة في حالة تمثيل أشخاص اعتبارية",
+   "table_data": null,
+   "bbox": {
+    "x1": 316,
+    "y1": 446,
+    "x2": 954,
+    "y2": 482
+   },
+   "crop_path": "crops/legal_circular_3/page_005/legal_circular_3_p005_b05_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p005_b06",
+   "block_type": "text",
+   "text": "هـ. بيان الحالة والمستندات اللازمة",
+   "table_data": null,
+   "bbox": {
+    "x1": 645,
+    "y1": 491,
+    "x2": 954,
+    "y2": 526
+   },
+   "crop_path": "crops/legal_circular_3/page_005/legal_circular_3_p005_b06_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p005_b07",
+   "block_type": "text",
+   "text": "و. هيكل تنظيمي حديث",
+   "table_data": null,
+   "bbox": {
+    "x1": 737,
+    "y1": 540,
+    "x2": 954,
+    "y2": 574
+   },
+   "crop_path": "crops/legal_circular_3/page_005/legal_circular_3_p005_b07_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p005_b08",
+   "block_type": "text",
+   "text": "٢-٣ يجب على مؤسسة الدفع مقدمة الطلب إجراء استعلام وافقي والتحقق من المعلومات المقدمة من قبل المرشح، ويكون كل منهما مسؤولاً عن استيفاء المعلومات والتأكد على صحتها قبل تقديمها إلى البنك المركزي.",
+   "table_data": null,
+   "bbox": {
+    "x1": 105,
+    "y1": 584,
+    "x2": 1064,
+    "y2": 716
+   },
+   "crop_path": "crops/legal_circular_3/page_005/legal_circular_3_p005_b08_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p005_b09",
+   "block_type": "text",
+   "text": "٣-٣ يجوز للبنك المركزي دعوة المرشح لإجراء مقابلة شخصية، ويحق له اتخاذ أي إجراء يراه مناسباً بشأن الموافقة على الطلبات المقدمة له أو رفضها، ويقوم البنك المركزي بإبلاغ مؤسسة الدفع كتابياً بقرار القبول أو الرفض، وفي حالة عدم الموافقة، يجب أن يكون القرار مسبباً.",
+   "table_data": null,
+   "bbox": {
+    "x1": 105,
+    "y1": 726,
+    "x2": 1064,
+    "y2": 900
+   },
+   "crop_path": "crops/legal_circular_3/page_005/legal_circular_3_p005_b09_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p005_b10",
+   "block_type": "text",
+   "text": "٤-٣ في حالة مرور ٦٠ يوماً من تاريخ تقديم الطلب مستوفياً كافة الأوراق والمستندات المطلوبة قبل الانتهاء من استكمال كافة الإجراءات، يقوم البنك المركزي بإصدار موافقة مبدئية لحين استكمال الإجراءات ما لم يرى مانعاً من ذلك.",
+   "table_data": null,
+   "bbox": {
+    "x1": 105,
+    "y1": 910,
+    "x2": 1064,
+    "y2": 1040
+   },
+   "crop_path": "crops/legal_circular_3/page_005/legal_circular_3_p005_b10_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p005_b11",
+   "block_type": "text",
+   "text": "٥-٣ يتم تقديم طلب للحصول على موافقة البنك المركزي في حالة ترشح أحد الكوادر من داخل مؤسسة الدفع لشغل أحد وظائف الإدارة العليا الشاغرة ممن لديهم درجة كافية من الخبرة والمعرفة والدرابة.",
+   "table_data": null,
+   "bbox": {
+    "x1": 105,
+    "y1": 1052,
+    "x2": 1064,
+    "y2": 1182
+   },
+   "crop_path": "crops/legal_circular_3/page_005/legal_circular_3_p005_b11_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p005_b12",
+   "block_type": "text",
+   "text": "٦-٣ يتم تقديم طلب للحصول على الموافقة لكل عضو من أعضاء مجلس إدارة مؤسسة الدفع من البنك المركزي على أن يتم إحاطة مجلس الإدارة والجمعية العامة لمؤسسة الدفع لإقرار هذا التعيين.",
+   "table_data": null,
+   "bbox": {
+    "x1": 105,
+    "y1": 1194,
+    "x2": 1064,
+    "y2": 1324
+   },
+   "crop_path": "crops/legal_circular_3/page_005/legal_circular_3_p005_b12_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p005_b13",
+   "block_type": "text",
+   "text": "٧-٣ في حالة قيام مؤسسة الدفع بتكليف المرشح كقائم بتسيير الأعمال، يتم تقديم أوراقه كاملة إلى البنك المركزي لحين استكمال إجراءات تعيينه بصفة دائمة والحصول على موافقة البنك المركزي.",
+   "table_data": null,
+   "bbox": {
+    "x1": 105,
+    "y1": 1335,
+    "x2": 1064,
+    "y2": 1463
+   },
+   "crop_path": "crops/legal_circular_3/page_005/legal_circular_3_p005_b13_text.png"
+  },
+  {
+   "block_id": "legal_circular_3_p005_b14",
+   "block_type": "footer",
+   "text": "3",
+   "table_data": null,
+   "bbox": {
+    "x1": 1096,
+    "y1": 1640,
+    "x2": 1118,
+    "y2": 1665
+   },
+   "crop_path": "crops/legal_circular_3/page_005/legal_circular_3_p005_b14_footer.png"
+  }
+ ]
+}
