@@ -227,10 +227,14 @@ async def analyze_text(name: str, text: str, kind: str) -> dict:
     # Units come from the source, not the model's echo; dedup in order; an "amount" without a number
     # ("not available") is not an amount
     amounts = [_with_unit(a.strip(), units) for a in summary["amounts"] if _numbers(a)]
+    # A number with no unit, percent sign or wording is a list marker or a count the model picked up, not an amount
+    amounts = [a for a in amounts if not re.fullmatch(r"[\d,.\s]+", a.translate(_DIGITS))]
     if ruling and not amounts:
         # The model sometimes returns an empty list; the operative part's own amounts are the answer then
         amounts = _operative_amounts(operative, units)
     summary["amounts"] = _order_amounts(list(dict.fromkeys(amounts)), operative)
+    if not ruling:
+        summary["key_points"] = [_canonical_tag(k, en) for k in summary["key_points"]]
     summary["article_refs"] = _article_refs(summary["key_points"])
     for f in ("court", "outcome", "award_split"):
         summary[f] = (summary.get(f) or None) if ruling else None
@@ -306,6 +310,13 @@ def _order_amounts(amounts: list[str], operative: str) -> list[str]:
         return amounts
     awarded = set(_numbers(operative))
     return sorted(amounts, key=lambda a: not (set(_numbers(a)) & awarded))
+
+
+def _canonical_tag(point: str, en: bool) -> str:
+    """A contract key point's article tag in the one form the UI and article_refs read: [م.N] or [Art.N].
+    The 26B on vLLM wrote the Arabic tag with a Latin letter once ("[m.7]")."""
+    return re.sub(r"^\s*\[\s*(?:م|m|المادة|Art(?:icle)?)\s*\.?\s*(\d+)\s*\]",
+                  lambda m: f"[{'Art.' if en else 'م.'}{m.group(1)}]", point, count=1, flags=re.I)
 
 
 def _article_refs(key_points: list[str]) -> list[int]:
@@ -512,6 +523,23 @@ def _usable_verdict(d: dict | None) -> bool:
     return "deviates" not in filled and (not d["deviates"] or d.get("severity") in ("low", "medium", "high"))
 
 
+_SEVERITY_WORDS = {"", "high", "medium", "low", "none", "مرتفع", "مرتفعة", "عالي", "عالية", "متوسط", "متوسطة",
+                   "منخفض", "منخفضة"}
+
+
+def _risk_text(d: dict, en: bool) -> str:
+    """The risk sentence, or the changed aspects when the model put only the severity word there
+    (Gemma 4 26B on vLLM answered "high" for most Arabic articles)."""
+    risk = (d.get("risk") or "").strip()
+    if re.sub(r"[\s.*:،]", "", risk).lower() not in _SEVERITY_WORDS:
+        return risk
+    aspects = [c["aspect"] for c in d.get("changes") or [] if isinstance(c, dict) and c.get("aspect")]
+    if not aspects:
+        return risk
+    return ("Deviates from the approved template in: " + "; ".join(aspects) if en
+            else "انحراف عن النموذج المعتمد في: " + "؛ ".join(aspects))
+
+
 async def template_diff(chunks: list[dict], trace: Trace, en: bool = False) -> tuple[list, list]:
     template = split_clauses((SEED / "template.md").read_text(encoding="utf-8"))
     by_no = {c["no"]: c for c in chunks}
@@ -535,11 +563,14 @@ async def template_diff(chunks: list[dict], trace: Trace, en: bool = False) -> t
             "Ignore differences in the client's name, amounts and number of instalments; focus on the terms: periods, rates, "
             "rights, notice, governing law and jurisdiction, liability, data. If it deviates, list each change: the aspect, "
             "the template's value and the contract's value, then the severity for the bank and for client protection. "
+            "In risk, write one sentence on what the deviation means for the bank or the client "
+            "(the consequence, not the severity word). "
             f"{SEVERITY_RUBRIC_EN} Answer in English.\n\n"
             f"Approved template:\n{t['text']}\n\nContract:\n{c['text']}") if en else (
             "قارن المادة في العقد بنفس المادة في النموذج المعتمد. تجاهل الفروق في الأسماء والمبالغ وعدد الأقساط الخاصة بالعميل، "
             "وركّز على الأحكام: المدد، النسب، الحقوق، الإنذار، القانون والاختصاص، المسؤولية، البيانات. "
             "إن وُجد انحراف فاذكر كل تغيير: الجانب، والقيمة في النموذج، والقيمة في العقد، ثم مستوى الخطورة على البنك وحماية العميل. "
+            "واكتب في risk جملة واحدة تشرح أثر الانحراف على البنك أو على العميل (الأثر نفسه، لا كلمة مستوى الخطورة). "
             f"{SEVERITY_RUBRIC} اكتب الإجابة بالعربية.\n\n"
             f"النموذج المعتمد:\n{t['text']}\n\nالعقد:\n{c['text']}")}]
         # Malformed output: chat_json_d5 retries and repairs a truncated reply. A repair is only trusted if the
@@ -562,7 +593,7 @@ async def template_diff(chunks: list[dict], trace: Trace, en: bool = False) -> t
         if t["no"] in MEDIUM_ARTICLES and severity == "high":
             severity = "medium"
         return {"article": t["no"], "title": t["title"], "status": "deviates" if d["deviates"] else "same",
-                "severity": severity, "changes": d["changes"], "risk": d["risk"],
+                "severity": severity, "changes": d["changes"], "risk": _risk_text(d, en) if d["deviates"] else d["risk"],
                 "template": t["text"], "contract": c["text"], "_ms": r.latency_ms if r else 0}
 
     rows = await asyncio.gather(*(compare(t) for t in template))
@@ -614,7 +645,11 @@ async def upload(file: UploadFile = File(...)):
     if (file.filename or "").lower().endswith((".md", ".txt")):
         conv = {"markdown": data.decode("utf-8-sig")}       # already text: no Docling round trip
     else:
-        conv = await platform.convert_document(file.filename or "upload.pdf", data)
+        try:
+            conv = await platform.convert_document(file.filename or "upload.pdf", data)
+        except httpx.HTTPError as exc:
+            raise HTTPException(503, "The document converter is not reachable, so PDF and Word files cannot be read. "
+                                     "Upload a .md or .txt file instead.") from exc
     text = conv["markdown"]
     if conv.get("rtl_pdf"):
         pages = await platform.render_pdf(data)

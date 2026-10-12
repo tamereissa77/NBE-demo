@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useI18n } from "../i18n";
+import { OFF_GB10, useI18n } from "../i18n";
 
 export function Header() {
   const { t, toggle } = useI18n();
@@ -11,7 +11,7 @@ export function Header() {
         </Link>
         <div className="flex items-center gap-3">
           <span className="hidden rounded-full border border-nbe-green px-3 py-1 text-xs font-semibold text-nbe-green md:inline">
-            {t.poc}
+            {OFF_GB10 ? t.pocDev : t.poc}
           </span>
           <button
             onClick={toggle}

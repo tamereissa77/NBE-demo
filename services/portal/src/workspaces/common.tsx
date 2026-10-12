@@ -18,8 +18,8 @@ export function Panel({ title, banner, tone = "ok", children }: { title: string;
   );
 }
 
-export function Block({ label, children, accent = "green" }: { label?: string; children: ReactNode; accent?: "green" | "orange" | "red" }) {
-  const border = { green: "border-s-nbe-green", orange: "border-s-nbe-orange", red: "border-s-status-stop" }[accent];
+export function Block({ label, children, accent = "green" }: { label?: string; children: ReactNode; accent?: "green" | "orange" | "red" | "neutral" }) {
+  const border = { green: "border-s-nbe-green", orange: "border-s-nbe-orange", red: "border-s-status-stop", neutral: "border-s-nbe-text" }[accent];
   return (
     <div className={`rounded-lg border border-nbe-border border-s-4 ${border} bg-nbe-bg px-4 py-3 text-sm text-nbe-strong`}>
       {label && <div className="mb-1 text-xs font-semibold uppercase text-nbe-text">{label}</div>}

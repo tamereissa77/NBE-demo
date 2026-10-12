@@ -2,6 +2,7 @@
 
 Sends each alias to the same Gemma 4 model the GB10 serves for it, through OpenRouter. Key: OPENROUTER_API_KEY.
 OPENROUTER_FREE=1 uses the rate-limited :free variants.
+VLLM_URL=http://host:8000/v1 sends every alias to that vLLM server's Gemma 4 26B instead (no key needed).
 Run:
     python scripts/openrouter_relay.py        # listens on 127.0.0.1:4000
 then start a demo with LLM_GATEWAY_URL=http://127.0.0.1:4000/v1
@@ -14,12 +15,19 @@ import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-UPSTREAM = "https://openrouter.ai/api/v1"
-KEY = os.environ["OPENROUTER_API_KEY"]
-_free = ":free" if os.getenv("OPENROUTER_FREE") == "1" else ""
-# Same models as the GB10 aliases (docker-compose.yml: nbe-llm, nbe-llm-q)
-ALIASES = {"workhorse": f"google/gemma-4-26b-a4b-it{_free}", "vision": f"google/gemma-4-26b-a4b-it{_free}",
-           "quality": f"google/gemma-4-31b-it{_free}"}
+VLLM_URL = os.getenv("VLLM_URL", "").rstrip("/")
+if VLLM_URL:
+    UPSTREAM = VLLM_URL
+    KEY = os.getenv("VLLM_API_KEY", "none")
+    # One server, one model (docker-compose.yml: nbe-llm); "quality" has no 31B behind it here
+    ALIASES = dict.fromkeys(("workhorse", "vision", "quality"), os.getenv("VLLM_MODEL", "gemma-4-26b-a4b"))
+else:
+    UPSTREAM = "https://openrouter.ai/api/v1"
+    KEY = os.environ["OPENROUTER_API_KEY"]
+    _free = ":free" if os.getenv("OPENROUTER_FREE") == "1" else ""
+    # Same models as the GB10 aliases (docker-compose.yml: nbe-llm, nbe-llm-q)
+    ALIASES = {"workhorse": f"google/gemma-4-26b-a4b-it{_free}", "vision": f"google/gemma-4-26b-a4b-it{_free}",
+               "quality": f"google/gemma-4-31b-it{_free}"}
 DEFAULT = ALIASES["workhorse"]
 
 MAX_RETRIES = 8
@@ -39,8 +47,9 @@ def _retry_after(r: httpx.Response) -> float:
 async def chat(request: Request):
     body = await request.json()
     body["model"] = ALIASES.get(body.get("model"), DEFAULT)
-    # Only route to hosts that honour every parameter sent (json_schema, temperature)
-    body["provider"] = {"require_parameters": True}
+    if not VLLM_URL:
+        # Only route to hosts that honour every parameter sent (json_schema, temperature)
+        body["provider"] = {"require_parameters": True}
     # Rate limits (429) and overloaded hosts (502/503) are waited out. A hung request is cut at UPSTREAM_TIMEOUT
     # and retried, and the whole request gets REQUEST_BUDGET seconds; past that the relay answers 504 so the
     # demo can move on (D5 then retries that article on the fallback model or marks it unchecked).
@@ -73,5 +82,5 @@ async def chat(request: Request):
 
 
 if __name__ == "__main__":
-    print(f"relay -> OpenRouter {ALIASES}", flush=True)
+    print(f"relay -> {UPSTREAM} {ALIASES}", flush=True)
     uvicorn.run(app, host="127.0.0.1", port=int(os.getenv("RELAY_PORT", "4000")))

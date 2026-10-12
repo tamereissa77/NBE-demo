@@ -190,6 +190,29 @@ def test_insurance_liability_data_capped_at_medium(monkeypatch):
     assert sev[9] == "high" and sev[6] == sev[3] == "high"     # deleted article / other articles untouched
 
 
+def test_severity_word_as_risk_is_replaced_by_the_changed_aspects():
+    changes = [{"aspect": "مهلة التأخر", "template": "90", "contract": "60"}, {"aspect": "الإنذار", "template": "15", "contract": "-"}]
+    assert main._risk_text({"risk": "high", "changes": changes}, en=False) == "انحراف عن النموذج المعتمد في: مهلة التأخر؛ الإنذار"
+    assert main._risk_text({"risk": " **High**. ", "changes": changes[:1]}, en=True) == "Deviates from the approved template in: مهلة التأخر"
+    assert main._risk_text({"risk": "يقصّر المهلة ويحذف الإنذار", "changes": changes}, en=False) == "يقصّر المهلة ويحذف الإنذار"
+    assert main._risk_text({"risk": "medium", "changes": []}, en=False) == "medium"       # nothing better to say
+
+
+def test_key_point_tags_are_written_one_way():
+    assert main._canonical_tag("[m.7] إلزامية التأمين", en=False) == "[م.7] إلزامية التأمين"
+    assert main._canonical_tag(" [ المادة 12 ] القانون", en=False) == "[م.12] القانون"
+    assert main._canonical_tag("[Article 6] Late payment", en=True) == "[Art.6] Late payment"
+    assert main._canonical_tag("[م.3] العائد [m.4]", en=False) == "[م.3] العائد [m.4]"      # only the leading tag
+    assert main._canonical_tag("no tag here", en=True) == "no tag here"
+
+
+def test_bare_number_is_not_an_amount(monkeypatch):
+    # Seen with the 26B on vLLM: R01's amounts came back as ["47,300 جنيه مصري", "2"] (a list number)
+    _fake_llm(monkeypatch, {**SUMMARY, "amounts": ["47,300 جنيه", "2", "٢"]}, [])
+    r = asyncio.run(main.analyze_text("R01.md", (SEED / "R01.md").read_text(encoding="utf-8"), "ruling"))
+    assert r["summary"]["amounts"] == ["47,300 جنيه مصري"]
+
+
 def test_quote_normalisation_ignores_diacritics_and_letter_forms():
     doc = main._norm_quote("يكون التأمين على الحياة إلزامي طوال مدة التمويل")
     assert main._norm_quote("«يكونُ التامين علي الحياه الزامي.»") in doc

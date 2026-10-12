@@ -69,6 +69,10 @@ GSM7_EXT = set("^{}\\[~]|€")
 MAX_FIX_PASSES = 2
 BASELINE_NOTE = ("Assumption, not measured: the synthetic data has no redemption history, so the A/B plan uses an assumed "
                  "30-day redemption rate for a targeted cashback SMS. Replace it with the bank's historical rate.")
+BASELINE_NOTE_AR = ("افتراض غير مقيس: البيانات التجريبية لا تتضمن سجلاً للاستفادة من العروض، لذلك تستخدم خطة A/B معدّل استفادة مفترضاً "
+                    "خلال 30 يوماً لرسالة استرداد نقدي موجّهة. استبدله بالمعدّل التاريخي للبنك.")
+# run_id -> index of the flow step in progress (0 segment … 5 banner / A-B plan); the portal lights its flow chips from this
+PROGRESS: dict[str, int] = {}
 
 
 def db():
@@ -133,13 +137,13 @@ def interest_profile(conn, persona: str, city: str | None, metric: str = "freque
         args.append(city)
     measure = {"frequency": "n", "spend": "spend"}[metric]
     return conn.execute(f"""
-        WITH seg AS (SELECT m.category, m.category_ar, sum(t.amount) AS spend, count(*) AS n, count(DISTINCT t.customer_id) AS buyers
+        WITH seg AS (SELECT m.category, m.category_ar, m.category_en, sum(t.amount) AS spend, count(*) AS n, count(DISTINCT t.customer_id) AS buyers
                      FROM d3.transactions t JOIN d3.customers c ON c.id = t.customer_id JOIN d3.merchants m ON m.id = t.merchant_id
-                     WHERE {where} GROUP BY 1, 2),
+                     WHERE {where} GROUP BY 1, 2, 3),
              base AS (SELECT m.category, sum(t.amount) AS spend, count(*) AS n FROM d3.transactions t JOIN d3.merchants m ON m.id = t.merchant_id GROUP BY 1),
              size AS (SELECT count(*) AS customers FROM d3.customers c WHERE {where})
         SELECT * FROM (
-            SELECT seg.category, seg.category_ar, seg.n AS transactions, round(seg.spend) AS spend,
+            SELECT seg.category, seg.category_ar, seg.category_en, seg.n AS transactions, round(seg.spend) AS spend,
                    round(100.0 * seg.buyers / size.customers, 1) AS penetration,
                    round(100.0 * seg.{measure} / sum(seg.{measure}) OVER (), 1) AS share,
                    round((seg.{measure}::numeric / sum(seg.{measure}) OVER ()) / (base.{measure}::numeric / sum(base.{measure}) OVER ()), 2) AS lift
@@ -200,6 +204,7 @@ class CampaignIn(BaseModel):
     brief: str = ""
     stress_test: bool = False     # plant a non-compliant claim to show the compliance check catching it
     baseline_rate: float = Field(0.08, gt=0, lt=0.5)   # assumed 30-day redemption rate for the A/B sizing (see BASELINE_NOTE)
+    run_id: str | None = Field(None, max_length=64)    # set by the portal to follow this run at /campaign/progress/{run_id}
 
 
 COPY_SCHEMA = {"type": "object", "properties": {k: {"type": "string"} for k in (
@@ -214,6 +219,14 @@ def sms_parts(text: str) -> tuple[int, int, str]:
     else:
         n, single, multi, enc = len(text.encode("utf-16-le")) // 2, 70, 67, "UCS-2"
     return n, 1 if n <= single else math.ceil(n / multi), enc
+
+
+def sms_info(key: str, text: str) -> dict:
+    """What the portal shows under an SMS: its billable length against the limit for its language and encoding."""
+    n, parts, enc = sms_parts(text)
+    max_parts = SMS_MAX_PARTS["en" if key.endswith("_en") else "ar"]
+    single, multi = (160, 153) if enc == "GSM-7" else (70, 67)
+    return {"chars": n, "parts": parts, "encoding": enc, "max_parts": max_parts, "max_chars": single if max_parts == 1 else max_parts * multi}
 
 
 def banned_spans(text: str) -> list[tuple[str, int, int]]:
@@ -327,26 +340,46 @@ async def banner(category: str, trace: Trace) -> dict:
     return {"png_base64": None, "source": "none", "prompt": prompt}
 
 
+@app.get("/campaign/progress/{run_id}")
+def campaign_progress(run_id: str):
+    """Flow step a running campaign has reached; null once it has finished (or was never started)."""
+    return {"step": PROGRESS.get(run_id)}
+
+
 @app.post("/campaign")
 async def campaign(body: CampaignIn):
+    try:
+        return await build_campaign(body)
+    finally:
+        PROGRESS.pop(body.run_id, None)
+
+
+async def build_campaign(body: CampaignIn):
+    def at(step: int) -> None:
+        if body.run_id:
+            PROGRESS[body.run_id] = step
+
     trace = Trace()
+    at(0)
     with db() as conn:
         seg = conn.execute("""SELECT persona_ar, count(*) AS n, sum(opt_in_sms::int) AS sms, sum(opt_in_email::int) AS email,
                                      round(avg(age)) AS age FROM d3.customers WHERE persona=%s AND (%s::text IS NULL OR city=%s) GROUP BY 1""",
                           (body.persona, body.city, body.city)).fetchone()
         if not seg:
             raise HTTPException(404, "empty segment")
+        at(1)
         with trace.step("sql", "Interest profile: category share of transactions vs all customers (lift)") as s:
             profile = interest_profile(conn, body.persona, body.city)
             s["detail"] = profile[:5]
         offer_cats = [p["category"] for p in profile if p["category"] in OFFER][:3]   # categories we have offer rules for
         if not offer_cats:
             raise HTTPException(409, "this segment has no spending in a category with an offer rule")
+        at(2)
         with trace.step("sql", "Merchant match: partner merchants where this segment spends most") as s:
-            merchants = conn.execute("""SELECT m.id, m.name_ar, m.category, m.category_ar, m.city, round(sum(t.amount)) AS seg_spend, count(DISTINCT t.customer_id) AS seg_customers
+            merchants = conn.execute("""SELECT m.id, m.name_ar, m.category, m.category_ar, m.category_en, m.city, round(sum(t.amount)) AS seg_spend, count(DISTINCT t.customer_id) AS seg_customers
                 FROM d3.transactions t JOIN d3.customers c ON c.id = t.customer_id JOIN d3.merchants m ON m.id = t.merchant_id
                 WHERE c.persona = %s AND (%s::text IS NULL OR c.city = %s) AND m.partner AND m.category = ANY(%s)
-                GROUP BY 1, 2, 3, 4, 5 ORDER BY seg_spend DESC LIMIT 3""",
+                GROUP BY 1, 2, 3, 4, 5, 6 ORDER BY seg_spend DESC LIMIT 3""",
                 (body.persona, body.city, body.city, offer_cats)).fetchall()
             s["detail"] = merchants
     if body.brief.strip():
@@ -355,8 +388,8 @@ async def campaign(body: CampaignIn):
             s["detail"] = [h["text"] for h in hits[:3]]
         if hits:
             with db() as conn:
-                m = conn.execute("SELECT id, name_ar, category, category_ar, city FROM d3.merchants WHERE id=%s", (hits[0]["merchant_id"],)).fetchone()
-            merchants = [{**m, "seg_spend": None, "seg_customers": None}] + [x for x in merchants if x["id"] != m["id"]][:2]
+                m = conn.execute("SELECT id, name_ar, category, category_ar, category_en, city FROM d3.merchants WHERE id=%s", (hits[0]["merchant_id"],)).fetchone()
+            merchants = [{**m, "seg_spend": None, "seg_customers": None, "from_brief": True}] + [x for x in merchants if x["id"] != m["id"]][:2]
     if not merchants:
         raise HTTPException(409, "no partner merchant for this segment")
     m = merchants[0]
@@ -377,11 +410,13 @@ async def campaign(body: CampaignIn):
               "قواعد: لا وعود مضمونة، لا مقارنة بالمنافسين، لا مبالغة، اذكر النسبة والحد الأقصى والتاجر وتاريخ الانتهاء بدقة." +
               ("\n(اختبار ضغط للامتثال: أدرج عمداً في sms_a_ar عبارة «عائد مضمون 100%»)." if body.stress_test else "") +
               (f"\nتوجيه إضافي من فريق التسويق: {body.brief}" if body.brief.strip() else ""))
+    at(3)
     copy, res = await llm.chat_json([{"role": "user", "content": prompt}], COPY_SCHEMA, max_tokens=1800, temperature=0.5)
     trace.llm("Write AR/EN copy for SMS, email and social (workhorse)", res)
     if body.stress_test and not banned_spans(copy["sms_a_ar"]):   # the demo must not depend on the model obeying
         copy["sms_a_ar"] = "عائد مضمون 100%! " + copy["sms_a_ar"]
         trace.add("rules", "Stress test: banned claim planted in sms_a_ar", {"planted": "عائد مضمون 100%!"})
+    at(4)
     issues = compliance(copy, offer)
     trace.add("rules", f"Compliance check: {len(issues)} issue(s)", issues)
     first_issues, passes, enforced = issues, 0, []
@@ -400,6 +435,7 @@ async def campaign(body: CampaignIn):
         copy, enforced = enforce(copy, offer)
         issues = compliance(copy, offer)
         trace.add("rules", f"Enforced in code: {len(enforced)} change(s); final check {len(issues)} issue(s)", enforced)
+    at(5)
     img = await banner(m["category"], trace)
 
     # A/B design sized to the real audience: 10% holdout, the rest split evenly between A and B.
@@ -418,11 +454,17 @@ async def campaign(body: CampaignIn):
           "note": ("Two-proportion test at 5% significance and 80% power. With this audience the test can detect a relative lift of "
                    f"{int(mde * 100)}% or more in redemption; smaller effects need a longer test or a wider segment." if mde else
                    "Audience too small for a reliable A/B test: widen the segment or run a single variant.")}
+    ab |= {"metric_ar": "الاستفادة من العرض لدى التاجر خلال 30 يوماً", "baseline_note_ar": BASELINE_NOTE_AR,
+           "note_ar": ("اختبار نسبتين عند مستوى دلالة 5% وقوة 80%. بهذا الجمهور يستطيع الاختبار رصد ارتفاع نسبي في الاستفادة قدره "
+                       f"{int(mde * 100)}% أو أكثر؛ الآثار الأصغر تحتاج اختباراً أطول أو شريحة أوسع." if mde else
+                       "الجمهور أصغر من أن يسمح باختبار A/B موثوق: وسّع الشريحة أو أرسل نسخة واحدة.")}
     if copy["sms_a_ar"] == copy["sms_b_ar"]:   # e.g. both replaced by the plain offer text in enforce()
         ab["note"] = "Variants A and B are identical after the compliance fixes, so there is nothing to test: regenerate the copy. " + ab["note"]
+        ab["note_ar"] = "النسختان A و B متطابقتان بعد تصحيحات الامتثال، فلا يوجد ما يُختبر: أعد توليد النص. " + ab["note_ar"]
     return {"segment": {**seg, "persona": body.persona, "city": body.city}, "profile": profile, "merchants": merchants, "offer": offer, "copy": copy,
             "compliance": {"passed": not issues, "issues": issues, "initial_issues": first_issues, "auto_fixed": bool(first_issues),
                            "fix_passes": passes, "enforced_in_code": enforced},
+            "sms": {k: sms_info(k, copy[k]) for k in ("sms_a_ar", "sms_b_ar", "sms_en")},
             "banner": img, "ab_test": ab, "synthetic": True, "trace": trace.to_list(), "total_ms": trace.total_ms()}
 
 

@@ -77,6 +77,14 @@ def test_sms_parts():
     assert main.sms_parts("Café é")[2] == "GSM-7" and main.sms_parts("price ≤ 5")[2] == "UCS-2"
 
 
+def test_sms_info_reports_the_limit_for_its_language_and_encoding():
+    ar = main.sms_info("sms_a_ar", "ب" * 115)
+    assert (ar["chars"], ar["parts"], ar["encoding"], ar["max_parts"], ar["max_chars"]) == (115, 2, "UCS-2", 2, 134)
+    en = main.sms_info("sms_en", "a" * 100)
+    assert (en["parts"], en["encoding"], en["max_parts"], en["max_chars"]) == (1, "GSM-7", 1, 160)
+    assert main.sms_info("sms_en", "price ≤ 5")["max_chars"] == 70     # one part, but UCS-2 because of "≤"
+
+
 def test_arabic_sms_limit_is_two_parts_not_160_chars():
     assert "sms_length" in rules(("خصم " * 40) + "تطبق الشروط والأحكام")   # ~180 chars UCS-2 = 3 parts
     assert "sms_length" not in rules(AR_OK)

@@ -12,6 +12,8 @@ import { WORKSPACES } from "../workspaces";
 
 export interface WorkspaceProps {
   onTrace: (steps: TraceStep[]) => void;
+  // Index of the flow step a running demo has reached (null when idle); lights the flow chips above the workspace.
+  onProgress?: (step: number | null) => void;
 }
 
 export function DemoPage() {
@@ -26,6 +28,7 @@ function DemoView({ id }: { id: string }) {
   const { lang, t } = useI18n();
   const health = useHealth(demo.id, true);
   const [trace, setTrace] = useState<TraceStep[]>([]);
+  const [step, setStep] = useState<number | null>(null);
   const Workspace: ComponentType<WorkspaceProps> | undefined = WORKSPACES[demo.id];
 
   return (
@@ -43,7 +46,7 @@ function DemoView({ id }: { id: string }) {
         <p className="text-base">{demo.tagline[lang]}</p>
       </header>
 
-      <Flow steps={demo.flow[lang]} />
+      <Flow steps={demo.flow[lang]} active={step} />
 
       <details className="mt-4 rounded-xl border border-nbe-border bg-white px-5 py-3">
         <summary className="cursor-pointer font-bold text-nbe-green">{t.story}</summary>
@@ -55,7 +58,7 @@ function DemoView({ id }: { id: string }) {
 
       <div className="mt-5">
         {Workspace ? (
-          <Workspace onTrace={setTrace} />
+          <Workspace onTrace={setTrace} onProgress={setStep} />
         ) : (
           <div className="grid gap-5 lg:grid-cols-3">
             <section className="flex min-h-64 flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-nbe-border bg-white p-8 text-center lg:col-span-2">
