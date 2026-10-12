@@ -42,9 +42,9 @@ function CropImage({ src, alt, errorLabel }: { src: string; alt: string; errorLa
   if (state === "error") return <div className="rounded-lg bg-status-stop/10 p-3 text-center text-xs text-status-stop">{errorLabel}</div>;
   return (
     <a href={src} target="_blank" rel="noopener noreferrer" className="block">
-      {state === "loading" && <div className="h-16 animate-pulse rounded-lg bg-nbe-bg" />}
+      {state === "loading" && <div className="h-16 animate-pulse rounded-lg bg-canvas" />}
       <img src={src} alt={alt} onLoad={() => setState("ok")} onError={() => setState("error")}
-           className={`mx-auto max-w-full rounded-lg border border-nbe-border bg-white ${state === "ok" ? "" : "hidden"}`} />
+           className={`mx-auto max-w-full rounded-lg border border-line bg-white ${state === "ok" ? "" : "hidden"}`} />
     </a>
   );
 }
@@ -112,24 +112,24 @@ export default function D2Chat({ onTrace }: WorkspaceProps) {
 
   return (
     <div className="grid gap-5 lg:grid-cols-3">
-      <section className="flex min-h-[32rem] flex-col rounded-xl border border-nbe-border bg-white lg:col-span-2">
+      <section className="flex min-h-[32rem] flex-col rounded-xl border border-line bg-white lg:col-span-2">
         {roles.length > 0 && (
-          <div className="flex flex-wrap items-center gap-2 border-b border-nbe-border px-5 py-2.5 text-xs">
-            <span className="font-semibold text-nbe-text">{l.role}</span>
+          <div className="flex flex-wrap items-center gap-2 border-b border-line px-5 py-2.5 text-xs">
+            <span className="font-semibold text-ink-soft">{l.role}</span>
             {roles.map((r) => (
               <button key={r.id} data-test={`role-${r.id}`} onClick={() => setRole(r.id)}
-                      className={`rounded-full px-3 py-1 font-semibold ${role === r.id ? "bg-nbe-green text-white" : "bg-nbe-bg text-nbe-strong hover:bg-nbe-orange/20"}`}>
+                      className={`rounded-full px-3 py-1 font-semibold ${role === r.id ? "bg-brand text-white" : "bg-canvas text-ink hover:bg-accent/20"}`}>
                 {lang === "ar" ? r.ar : r.en}
               </button>
             ))}
-            <span className="text-nbe-text">{roles.filter((r) => r.id === role).map((r) => (lang === "ar" ? r.scope_ar : r.scope_en))}</span>
+            <span className="text-ink-soft">{roles.filter((r) => r.id === role).map((r) => (lang === "ar" ? r.scope_ar : r.scope_en))}</span>
           </div>
         )}
         <div className="flex-1 space-y-4 overflow-y-auto p-5">
           {turns.length === 0 && (
             <div className="flex flex-wrap gap-2">
               {suggested.map((s) => (
-                <button key={s.q} data-test="suggested" onClick={() => ask(s.q)} dir="auto" className="rounded-full bg-nbe-bg px-3 py-1.5 text-sm text-nbe-strong hover:bg-nbe-orange/20">
+                <button key={s.q} data-test="suggested" onClick={() => ask(s.q)} dir="auto" className="rounded-full bg-canvas px-3 py-1.5 text-sm text-ink hover:bg-accent/20">
                   {s.q}
                 </button>
               ))}
@@ -137,15 +137,15 @@ export default function D2Chat({ onTrace }: WorkspaceProps) {
           )}
           {turns.map((t, i) => (
             <div key={i} className="space-y-2">
-              <div dir="auto" className="ms-auto w-fit max-w-[85%] rounded-2xl bg-nbe-green px-4 py-2 text-sm text-white">{t.q}</div>
+              <div dir="auto" className="ms-auto w-fit max-w-[85%] rounded-2xl bg-brand px-4 py-2 text-sm text-white">{t.q}</div>
               {t.a && (
-                <div data-test="answer" className="max-w-[92%] rounded-2xl bg-nbe-bg px-4 py-3">
+                <div data-test="answer" className="max-w-[92%] rounded-2xl bg-canvas px-4 py-3">
                   <Md text={t.a.answer} onCite={cite(i, t.a)} />
                   {t.a.citations.some((c) => c.kind === "scan") && (
                     <div className="mt-2 flex flex-wrap gap-1.5">
                       {t.a.citations.map((c) => (
                         <button key={c.label} data-test="source-chip" onClick={() => open(i, c)} dir="auto"
-                                className={`rounded-full bg-white px-2 py-0.5 text-xs font-semibold text-nbe-green ring-1 ring-nbe-border hover:bg-nbe-orange/20 ${c.cited ? "" : "opacity-60"}`}>
+                                className={`rounded-full bg-white px-2 py-0.5 text-xs font-semibold text-brand ring-1 ring-line hover:bg-accent/20 ${c.cited ? "" : "opacity-60"}`}>
                           {c.label} · {c.title}{c.kind === "scan" ? ` · ${l.page} ${c.page}` : ""}
                         </button>
                       ))}
@@ -164,9 +164,9 @@ export default function D2Chat({ onTrace }: WorkspaceProps) {
           {busy && <Spinner label={l.thinking} />}
           <div ref={end} />
         </div>
-        <form onSubmit={(e) => { e.preventDefault(); ask(q); }} className="flex gap-2 border-t border-nbe-border p-3">
+        <form onSubmit={(e) => { e.preventDefault(); ask(q); }} className="flex gap-2 border-t border-line p-3">
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={l.ask} dir="auto"
-                 className="flex-1 rounded-full border border-nbe-border px-4 py-2 text-sm" />
+                 className="flex-1 rounded-full border border-line px-4 py-2 text-sm" />
           <Button type="submit" disabled={busy || !q.trim()}>{l.send}</Button>
         </form>
       </section>
@@ -178,10 +178,10 @@ export default function D2Chat({ onTrace }: WorkspaceProps) {
         {last && !last.found && !last.restricted && !last.blocked && <Block accent="orange">{l.notFound}</Block>}
         {last && last.found && (
           <>
-            <div className="text-xs font-semibold uppercase text-nbe-text">{l.sources}</div>
+            <div className="text-xs font-semibold uppercase text-ink-soft">{l.sources}</div>
             {last.citations.filter((c) => c.cited).concat(last.citations.filter((c) => !c.cited)).slice(0, scans.length ? undefined : 4).map((c) => (
               <button key={c.label} onClick={() => open(shownIdx, c)}
-                      className={`text-start ${c.cited ? "" : "opacity-60"} ${c.label === active?.label ? "rounded-lg ring-2 ring-nbe-green" : ""}`}>
+                      className={`text-start ${c.cited ? "" : "opacity-60"} ${c.label === active?.label ? "rounded-lg ring-2 ring-brand" : ""}`}>
                 <Block accent={c.cited ? "green" : "orange"}>
                   <div className="mb-1 flex flex-wrap items-center gap-1.5">
                     <Chip tone="orange">{c.label}</Chip>
@@ -200,21 +200,21 @@ export default function D2Chat({ onTrace }: WorkspaceProps) {
                     {c.lang === "en" && <Chip>EN</Chip>}
                   </div>
                   <div dir="auto" className="font-semibold">{c.title}</div>
-                  <div dir="auto" className="text-xs text-nbe-text">{c.section}</div>
-                  {c.kind === "scan" && <div dir="auto" className="mt-1 text-xs text-nbe-text">{preview(c.text)}</div>}
+                  <div dir="auto" className="text-xs text-ink-soft">{c.section}</div>
+                  {c.kind === "scan" && <div dir="auto" className="mt-1 text-xs text-ink-soft">{preview(c.text)}</div>}
                 </Block>
               </button>
             ))}
             {active && shown && (
-              <div data-test="citation-detail" className="rounded-lg border border-nbe-border p-3">
+              <div data-test="citation-detail" className="rounded-lg border border-line p-3">
                 <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-                  <div dir="auto" className="text-sm font-bold text-nbe-green">{active.title}</div>
+                  <div dir="auto" className="text-sm font-bold text-brand">{active.title}</div>
                   <Chip>{l.page} {active.page}</Chip>
                 </div>
-                <div className="mb-2 flex gap-1 rounded-full bg-nbe-bg p-1 text-xs font-semibold">
+                <div className="mb-2 flex gap-1 rounded-full bg-canvas p-1 text-xs font-semibold">
                   {(["image", "text"] as const).map((m) => (
                     <button key={m} data-test={`view-${m}`} onClick={() => setView(m)}
-                            className={`flex-1 rounded-full px-3 py-1 ${view === m ? "bg-white text-nbe-green shadow-sm" : "text-nbe-text"}`}>
+                            className={`flex-1 rounded-full px-3 py-1 ${view === m ? "bg-white text-brand shadow-sm" : "text-ink-soft"}`}>
                       {m === "image" ? l.viewImage : l.viewText}
                     </button>
                   ))}
@@ -232,7 +232,7 @@ export default function D2Chat({ onTrace }: WorkspaceProps) {
                 )}
                 {active.crops?.[0] && (
                   <a href={cropUrl(active, active.crops[0], shown.role)} target="_blank" rel="noopener noreferrer"
-                     className="mt-2 inline-block text-xs font-semibold text-nbe-green hover:underline">
+                     className="mt-2 inline-block text-xs font-semibold text-brand hover:underline">
                     {l.openOriginal} ↗
                   </a>
                 )}
@@ -246,12 +246,12 @@ export default function D2Chat({ onTrace }: WorkspaceProps) {
                 <Md text={last.delta.summary} />
                 {last.delta.sections.length > 0 && (
                   <details className="mt-2">
-                    <summary className="cursor-pointer text-xs font-semibold text-nbe-green">{l.sections} ({last.delta.sections.length})</summary>
+                    <summary className="cursor-pointer text-xs font-semibold text-brand">{l.sections} ({last.delta.sections.length})</summary>
                     {last.delta.sections.map((s) => (
                       <div key={s.section} className="mt-2 grid gap-1 text-xs">
                         <div className="font-semibold" dir="auto">{s.section}</div>
                         <div dir="auto" className="rounded bg-status-stop/5 p-2 line-through decoration-status-stop/40">{s.before.slice(0, 400)}</div>
-                        <div dir="auto" className="rounded bg-nbe-green/5 p-2">{s.after.slice(0, 400)}</div>
+                        <div dir="auto" className="rounded bg-brand/5 p-2">{s.after.slice(0, 400)}</div>
                       </div>
                     ))}
                   </details>

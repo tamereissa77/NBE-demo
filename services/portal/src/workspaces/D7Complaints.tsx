@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { getJSON, postJSON, type TraceStep } from "../api";
+import { BRAND } from "../brand";
 import { useI18n } from "../i18n";
 import type { WorkspaceProps } from "../pages/DemoPage";
 import { Block, Button, Chip, ErrorNote, Panel, Spinner } from "./common";
@@ -21,7 +22,7 @@ const L = {
   en: { queue: "Queue", trends: "Trends", accuracy: "Accuracy", triageAll: "Triage all", triage: "Triage", panel: "Triage dashboard",
         banner: "Human review before any action", sla: "SLA", team: "Team", status: "Status", draft: "Draft reply", similar: "Similar past complaints",
         approve: "Approve & send", edit: "Save edit & send", escalate: "Escalate", awaiting: "Awaiting human", policy: "Policy check", guard: "Guardrail",
-        select: "Select a complaint.", policyNote: "Synthetic placeholder policy until NBE supplies its rules.", vulnerable: "Vulnerable customer", callback: "Call back",
+        select: "Select a complaint.", policyNote: `Synthetic placeholder policy until ${BRAND.short} supplies its rules.`, vulnerable: "Vulnerable customer", callback: "Call back",
         runAcc: "Run on 100 held-out complaints", label: "Synthetic label", publicReply: "Public reply",
         blocked: "The guardrail blocked this draft. Edit it or escalate." },
   ar: { queue: "قائمة الشكاوى", trends: "الاتجاهات", accuracy: "الدقة", triageAll: "فرز الكل", triage: "فرز", panel: "لوحة فرز الشكاوى",
@@ -73,7 +74,7 @@ export default function D7Complaints({ onTrace }: WorkspaceProps) {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
         {(["queue", "trends", "accuracy"] as const).map((t) => (
-          <button key={t} onClick={() => openTab(t)} className={`rounded-full px-4 py-1.5 text-sm font-semibold ${tab === t ? "bg-nbe-green text-white" : "bg-white text-nbe-green ring-1 ring-nbe-border"}`}>
+          <button key={t} onClick={() => openTab(t)} className={`rounded-full px-4 py-1.5 text-sm font-semibold ${tab === t ? "bg-brand text-white" : "bg-white text-brand ring-1 ring-line"}`}>
             {l[t]}
           </button>
         ))}
@@ -88,14 +89,14 @@ export default function D7Complaints({ onTrace }: WorkspaceProps) {
 
       {tab === "queue" && (
         <div className="grid gap-5 lg:grid-cols-3">
-          <section className="overflow-hidden rounded-xl border border-nbe-border bg-white lg:col-span-2">
+          <section className="overflow-hidden rounded-xl border border-line bg-white lg:col-span-2">
             <div className="max-h-[38rem] overflow-y-auto">
               {items.map((i) => (
-                <button key={i.id} data-test="queue-item" onClick={() => setSel(i.id)} className={`flex w-full items-start gap-3 border-b border-nbe-border px-4 py-3 text-start ${sel === i.id ? "bg-nbe-orange/10" : "hover:bg-nbe-bg"}`}>
+                <button key={i.id} data-test="queue-item" onClick={() => setSel(i.id)} className={`flex w-full items-start gap-3 border-b border-line px-4 py-3 text-start ${sel === i.id ? "bg-accent/10" : "hover:bg-canvas"}`}>
                   <span className="text-lg" title={i.channel}>{CH[i.channel]}</span>
                   <span className="flex-1">
                     <span className="flex flex-wrap items-center gap-1.5 text-xs">
-                      <b className="text-nbe-strong">{i.id}</b>
+                      <b className="text-ink">{i.id}</b>
                       <span dir="auto">{i.customer_name}</span>
                       <Chip>{i.lang}</Chip>
                       {i.triage && <Chip tone={SEV[i.triage.severity]}>S{i.triage.severity} · {lang === "ar" ? i.triage.topic_ar : i.triage.topic}</Chip>}
@@ -103,7 +104,7 @@ export default function D7Complaints({ onTrace }: WorkspaceProps) {
                       {i.triage?.vulnerable && <Chip tone="red">{l.vulnerable}</Chip>}
                       <Chip tone={STATUS[i.status].tone}>{STATUS[i.status][lang]}</Chip>
                     </span>
-                    <span dir="auto" className="mt-1 line-clamp-2 block text-sm text-nbe-strong">{i.text}</span>
+                    <span dir="auto" className="mt-1 line-clamp-2 block text-sm text-ink">{i.text}</span>
                   </span>
                 </button>
               ))}
@@ -128,19 +129,19 @@ export default function D7Complaints({ onTrace }: WorkspaceProps) {
                         <Chip>{item.triage.sla_hours} h · {due(item.triage.sla_due)}</Chip>
                       </div>
                       <div className="mt-1 font-semibold" dir="auto">{lang === "en" && item.triage.team_en ? item.triage.team_en : item.triage.team}</div>
-                      <div className="mt-1 text-xs text-nbe-text" dir="auto">{item.triage.summary}</div>
-                      <div className="mt-1 text-xs text-nbe-text">{l.label}: {item.triage.labels.topic} / S{item.triage.labels.severity}</div>
+                      <div className="mt-1 text-xs text-ink-soft" dir="auto">{item.triage.summary}</div>
+                      <div className="mt-1 text-xs text-ink-soft">{l.label}: {item.triage.labels.topic} / S{item.triage.labels.severity}</div>
                     </Block>
                     <div>
-                      <div className="mb-1 flex items-center gap-1.5 text-xs font-semibold uppercase text-nbe-text">
+                      <div className="mb-1 flex items-center gap-1.5 text-xs font-semibold uppercase text-ink-soft">
                         {l.draft}
                         {item.triage.public_reply && <Chip tone="orange">{l.publicReply}</Chip>}
                         <Chip tone={item.triage.policy_ok ? "green" : "red"}>{l.policy} {item.triage.policy_ok ? "✓" : "✗"}</Chip>
                         <Chip tone={item.triage.guardrail.allowed ? "green" : "red"}>{l.guard} {item.triage.guardrail.allowed ? "✓" : "✗"}</Chip>
                       </div>
                       <textarea data-test="draft" dir="auto" value={draft} onChange={(e) => setDraft(e.target.value)} rows={8} disabled={item.status !== "awaiting_human"}
-                                className="w-full rounded-lg border border-nbe-border p-3 text-sm leading-relaxed" />
-                      <p className="text-xs text-nbe-text">{l.policyNote}</p>
+                                className="w-full rounded-lg border border-line p-3 text-sm leading-relaxed" />
+                      <p className="text-xs text-ink-soft">{l.policyNote}</p>
                     </div>
                     {item.status === "awaiting_human" ? (
                       <div className="flex flex-wrap gap-2">
@@ -156,8 +157,8 @@ export default function D7Complaints({ onTrace }: WorkspaceProps) {
                     )}
                     {item.triage.similar.length > 0 && (
                       <details className="text-xs">
-                        <summary className="cursor-pointer font-semibold text-nbe-green">{l.similar} ({item.triage.similar.length})</summary>
-                        {item.triage.similar.map((s) => <p key={s.id} dir="auto" className="mt-1 rounded bg-nbe-bg p-2">{s.id}: {s.text}…</p>)}
+                        <summary className="cursor-pointer font-semibold text-brand">{l.similar} ({item.triage.similar.length})</summary>
+                        {item.triage.similar.map((s) => <p key={s.id} dir="auto" className="mt-1 rounded bg-canvas p-2">{s.id}: {s.text}…</p>)}
                       </details>
                     )}
                   </>
@@ -170,19 +171,19 @@ export default function D7Complaints({ onTrace }: WorkspaceProps) {
 
       {tab === "trends" && trends && (
         <section className="grid gap-5 lg:grid-cols-3">
-          <div className="rounded-xl border border-nbe-border bg-white p-5 lg:col-span-2">
-            <h3 className="mb-3 font-bold text-nbe-green">{trends.total} complaints · themes found by clustering (bge-m3 embeddings, named by the LLM)</h3>
+          <div className="rounded-xl border border-line bg-white p-5 lg:col-span-2">
+            <h3 className="mb-3 font-bold text-brand">{trends.total} complaints · themes found by clustering (bge-m3 embeddings, named by the LLM)</h3>
             {trends.clusters.map((c) => (
               <div key={c.cluster} className="mb-2">
                 <div className="flex justify-between text-sm" dir="auto"><span className="font-semibold">{c.name}</span><span>{c.count} · S{c.avg_severity}</span></div>
-                <div className="h-2.5 rounded-full bg-nbe-bg"><div className="h-full rounded-full bg-nbe-orange" style={{ width: `${(100 * c.count) / trends.clusters[0].count}%` }} /></div>
+                <div className="h-2.5 rounded-full bg-canvas"><div className="h-full rounded-full bg-accent" style={{ width: `${(100 * c.count) / trends.clusters[0].count}%` }} /></div>
               </div>
             ))}
           </div>
-          <div className="rounded-xl border border-nbe-border bg-white p-5">
-            <h3 className="mb-3 font-bold text-nbe-green">By topic</h3>
+          <div className="rounded-xl border border-line bg-white p-5">
+            <h3 className="mb-3 font-bold text-brand">By topic</h3>
             {Object.entries(trends.by_topic).sort((a, b) => b[1] - a[1]).map(([t, n]) => (
-              <div key={t} className="flex justify-between border-t border-nbe-border py-1.5 text-sm"><span>{lang === "ar" ? trends.topic_ar[t] : t}</span><b>{n}</b></div>
+              <div key={t} className="flex justify-between border-t border-line py-1.5 text-sm"><span>{lang === "ar" ? trends.topic_ar[t] : t}</span><b>{n}</b></div>
             ))}
           </div>
         </section>
@@ -191,9 +192,9 @@ export default function D7Complaints({ onTrace }: WorkspaceProps) {
       {tab === "accuracy" && acc && (
         <section className="grid gap-4 sm:grid-cols-3">
           {[["Topic accuracy", `${Math.round(acc.topic_accuracy * 100)}%`], ["Severity within ±1", `${Math.round(acc.severity_within_1 * 100)}%`], ["Avg latency", `${(acc.avg_latency_ms / 1000).toFixed(1)} s`]].map(([k, v]) => (
-            <div key={k} className="rounded-xl border border-nbe-border bg-white p-5">
-              <div className="text-sm text-nbe-text">{k}</div>
-              <div className="text-3xl font-bold text-nbe-green">{v}</div>
+            <div key={k} className="rounded-xl border border-line bg-white p-5">
+              <div className="text-sm text-ink-soft">{k}</div>
+              <div className="text-3xl font-bold text-brand">{v}</div>
             </div>
           ))}
           <p className="text-xs sm:col-span-3">n = {acc.n}. {acc.note}</p>

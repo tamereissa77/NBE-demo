@@ -38,7 +38,7 @@ case "${1:-up}" in
   golden)
     for t in golden_d2 golden_d2_circulars; do
       echo "== $t"
-      docker run --rm --network nbe-core -v "$(pwd)/tests:/tests:ro" -v "$(pwd)/data:/data:ro" nbe-d2:latest \
+      docker run --rm --network nbe-core -v "$(pwd)/tests:/tests:ro" -v "$(pwd)/data:/data:ro" "nbe-d2:${IMAGE_TAG:-latest}" \
         python "/tests/$t.py" http://nbe-d2:8000
     done
     ;;

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { BRAND } from "../brand";
 import { Link } from "react-router-dom";
 
 // Week-1 Arabic gate results: model names revealed. Human scores lead; the LLM judge is a
@@ -25,7 +26,7 @@ interface Row {
 }
 interface Results {
   models: Row[];
-  by_dialect: Record<"msa" | "egy" | "mix", Row[]>;
+  by_dialect: Record<"msa" | "dia" | "mix", Row[]>;
   legal: Row[];
   scorers: string[];
   recommendation: { source: string; workhorse: string | null; workhorse_model: string | null; keep_quality: boolean | null; notes: string[] } | null;
@@ -57,22 +58,22 @@ export function EvalResults() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-6">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold text-nbe-green">Arabic gate · results</h1>
+        <h1 className="text-2xl font-bold text-brand">Arabic gate · results</h1>
         <div className="flex gap-2 text-sm">
-          <Link to="/eval" className="rounded-full bg-white px-4 py-1.5 font-semibold text-nbe-green">
+          <Link to="/eval" className="rounded-full bg-white px-4 py-1.5 font-semibold text-brand">
             Back to scoring
           </Link>
-          <a href="/api/eval/export.csv" className="rounded-full bg-nbe-green px-4 py-1.5 font-semibold text-white">
+          <a href="/api/eval/export.csv" className="rounded-full bg-brand px-4 py-1.5 font-semibold text-white">
             Download CSV
           </a>
         </div>
       </div>
 
       {rec && (
-        <section className="mb-6 rounded-xl border-s-4 border-s-nbe-orange bg-white p-5">
-          <h2 className="mb-2 font-bold text-nbe-green">Recommendation{rec.source !== "none" && ` (${rec.source} scores)`}</h2>
+        <section className="mb-6 rounded-xl border-s-4 border-s-accent bg-white p-5">
+          <h2 className="mb-2 font-bold text-brand">Recommendation{rec.source !== "none" && ` (${rec.source} scores)`}</h2>
           {rec.workhorse_model && (
-            <p className="mb-2 text-nbe-strong">
+            <p className="mb-2 text-ink">
               Workhorse: <b>{rec.workhorse_model}</b> · Quality model (Gemma 4 31B): <b>{rec.keep_quality ? "keep" : "drop"}</b> · Hero: gpt-oss-120b
             </p>
           )}
@@ -84,9 +85,9 @@ export function EvalResults() {
         </section>
       )}
 
-      <section className="mb-6 overflow-x-auto rounded-xl border border-nbe-border bg-white">
+      <section className="mb-6 overflow-x-auto rounded-xl border border-line bg-white">
         <table className="w-full text-sm">
-          <thead className="bg-nbe-green text-white">
+          <thead className="bg-brand text-white">
             <tr>
               {["Model", "tok/s", "Latency", "Auto-checks", "Judge C / A / F", "Judge mean", "Human C / A / F", "Human mean", "Human coverage"].map((h) => (
                 <th key={h} className="px-3 py-2 text-start font-semibold">
@@ -97,8 +98,8 @@ export function EvalResults() {
           </thead>
           <tbody>
             {data.models.map((r) => (
-              <tr key={r.alias} className="border-t border-nbe-border">
-                <td className="px-3 py-2 font-semibold text-nbe-strong">{r.name}</td>
+              <tr key={r.alias} className="border-t border-line">
+                <td className="px-3 py-2 font-semibold text-ink">{r.name}</td>
                 <td className="px-3 py-2">{r.tok_s ?? "–"}</td>
                 <td className="px-3 py-2">{r.latency_ms ? `${(Number(r.latency_ms) / 1000).toFixed(1)} s` : "–"}</td>
                 <td className="px-3 py-2">
@@ -122,12 +123,12 @@ export function EvalResults() {
       </section>
 
       <section className="mb-6 grid gap-4 md:grid-cols-3">
-        {(["msa", "egy", "mix"] as const).map((d) => (
-          <div key={d} className="rounded-xl border border-nbe-border bg-white p-4">
-            <h3 className="mb-2 font-bold text-nbe-green">{{ msa: "Modern Standard Arabic (15)", egy: "Egyptian dialect (10)", mix: "Mixed / English (5)" }[d]}</h3>
+        {(["msa", "dia", "mix"] as const).map((d) => (
+          <div key={d} className="rounded-xl border border-line bg-white p-4">
+            <h3 className="mb-2 font-bold text-brand">{{ msa: "Modern Standard Arabic (15)", dia: `${BRAND.locale.dialect.en} (10)`, mix: "Mixed / English (5)" }[d]}</h3>
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-xs text-nbe-text">
+                <tr className="text-xs text-ink-soft">
                   <th className="text-start">Model</th>
                   <th className="text-end">Judge</th>
                   <th className="text-end">Human</th>
@@ -135,7 +136,7 @@ export function EvalResults() {
               </thead>
               <tbody>
                 {data.by_dialect[d].map((r) => (
-                  <tr key={r.alias} className="border-t border-nbe-border">
+                  <tr key={r.alias} className="border-t border-line">
                     <td className="py-1">{names[r.alias] ?? r.alias}</td>
                     <td className="py-1 text-end">{fmt(mean3(r, "j"))}</td>
                     <td className="py-1 text-end">{fmt(mean3(r, "h"))}</td>

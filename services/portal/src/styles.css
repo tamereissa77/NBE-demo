@@ -1,44 +1,51 @@
 @import "tailwindcss";
 @import "@fontsource-variable/cairo";
+/* Both brand fonts are bundled (offline); brand/theme.css picks one through --font-ui */
+@import "@fontsource/ibm-plex-sans-arabic/400.css";
+@import "@fontsource/ibm-plex-sans-arabic/500.css";
+@import "@fontsource/ibm-plex-sans-arabic/600.css";
+@import "@fontsource/ibm-plex-sans-arabic/700.css";
 @import "../../../brand/theme.css";
 
-/* Map the NBE brand tokens (brand/theme.css) into Tailwind utilities: bg-nbe-green, text-nbe-orange, ... */
+/* Map the active brand pack's tokens (brand/theme.css) into Tailwind utilities: bg-brand, text-accent, ... */
 @theme inline {
-  --color-nbe-green: var(--nbe-green);
-  --color-nbe-green-dark: var(--nbe-green-dark);
-  --color-nbe-orange: var(--nbe-orange);
-  --color-nbe-gold: var(--nbe-gold);
-  --color-nbe-orange-deep: var(--nbe-orange-deep);
-  --color-nbe-bg: var(--nbe-bg);
-  --color-nbe-text: var(--nbe-text);
-  --color-nbe-strong: var(--nbe-text-strong);
-  --color-nbe-border: var(--nbe-border);
+  --color-brand: var(--brand);
+  --color-brand-dark: var(--brand-dark);
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-accent-deep: var(--accent-deep);
+  --color-canvas: var(--canvas);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink: var(--ink);
+  --color-line: var(--line);
   --color-status-review: var(--status-review);
   --color-status-stop: var(--status-stop);
-  --font-sans: "Cairo Variable", var(--font-ui);
+  --color-status-ok: var(--status-ok);
+  --color-on-accent: var(--on-accent);
+  --font-sans: var(--font-ui);
 }
 
-html { background: var(--nbe-bg); }
+html { background: var(--canvas); }
 body {
   margin: 0;
-  background: var(--nbe-bg);
-  color: var(--nbe-text);
-  font-family: "Cairo Variable", var(--font-ui);
+  background: var(--canvas);
+  color: var(--ink-soft);
+  font-family: var(--font-ui);
   -webkit-font-smoothing: antialiased;
 }
 
-.nbe-rule { height: 4px; background: var(--nbe-gradient); }
+.brand-rule { height: 4px; background: var(--accent-gradient); }
 
 /* Markdown answers */
-.nbe-md p { margin: 0.35rem 0; }
-.nbe-md ul, .nbe-md ol { margin: 0.35rem 0; padding-inline-start: 1.25rem; }
-.nbe-md ul { list-style: disc; }
-.nbe-md ol { list-style: decimal; }
-.nbe-md h1, .nbe-md h2, .nbe-md h3 { font-weight: 700; color: var(--nbe-green); margin: 0.6rem 0 0.3rem; }
-.nbe-md h1 { font-size: 1.15rem; } .nbe-md h2 { font-size: 1.05rem; } .nbe-md h3 { font-size: 1rem; }
-.nbe-md table { border-collapse: collapse; margin: 0.5rem 0; font-size: 0.85rem; }
-.nbe-md th, .nbe-md td { border: 1px solid var(--nbe-border); padding: 0.25rem 0.5rem; }
-.nbe-md code { background: var(--nbe-bg); border-radius: 4px; padding: 0 0.25rem; font-size: 0.85em; }
-.nbe-md pre { background: var(--nbe-text-strong); color: white; border-radius: 8px; padding: 0.75rem; overflow-x: auto; direction: ltr; }
-.nbe-md pre code { background: transparent; }
-.nbe-md strong { font-weight: 700; }
+.md-body p { margin: 0.35rem 0; }
+.md-body ul, .md-body ol { margin: 0.35rem 0; padding-inline-start: 1.25rem; }
+.md-body ul { list-style: disc; }
+.md-body ol { list-style: decimal; }
+.md-body h1, .md-body h2, .md-body h3 { font-weight: 700; color: var(--brand); margin: 0.6rem 0 0.3rem; }
+.md-body h1 { font-size: 1.15rem; } .md-body h2 { font-size: 1.05rem; } .md-body h3 { font-size: 1rem; }
+.md-body table { border-collapse: collapse; margin: 0.5rem 0; font-size: 0.85rem; }
+.md-body th, .md-body td { border: 1px solid var(--line); padding: 0.25rem 0.5rem; }
+.md-body code { background: var(--canvas); border-radius: 4px; padding: 0 0.25rem; font-size: 0.85em; }
+.md-body pre { background: var(--ink); color: white; border-radius: 8px; padding: 0.75rem; overflow-x: auto; direction: ltr; }
+.md-body pre code { background: transparent; }
+.md-body strong { font-weight: 700; }

@@ -1,4 +1,4 @@
-"""D6 · NBE AI Assistant (PLAN.md §4 D6).
+"""D6 · AI Assistant (PLAN.md §4 D6).
 
 One assistant for file chat, drafting, summarisation, translation and code explanation. A router picks
 the model per task and says why; the portal shows that as the Model-Selection Panel.
@@ -27,7 +27,7 @@ from nbe_core.trace import Trace
 DOCS_DIR = Path("/data/generated/d6")
 COLLECTION = "d6_docs"
 API_KEY = os.getenv("D6_API_KEY", "")
-app = create_app("d6", "NBE AI Assistant", phase="wave1")
+app = create_app("d6", f"{settings.bank_short} AI Assistant", phase="wave1")
 FILES: dict[str, dict] = {}       # uploaded files for file chat (in memory, demo scope)
 
 # Task -> model alias, and why. "hero" falls back to the workhorse at the gateway when it is not running.
@@ -87,9 +87,9 @@ async def code_context(question: str, trace: Trace) -> str:
 
 
 SYSTEM = {
-    "ar": ("أنت مساعد موظفي البنك الأهلي المصري. أجب بالعربية الفصحى الواضحة ما لم يُطلب غير ذلك. كن دقيقاً ومختصراً، "
+    "ar": (f"أنت مساعد موظفي {settings.bank_ar}. أجب بالعربية الفصحى الواضحة ما لم يُطلب غير ذلك. كن دقيقاً ومختصراً، "
            "ولا تخترع معلومات عن البنك. عند شرح الأكواد اكتب المصطلحات التقنية بالإنجليزية."),
-    "en": "You are National Bank of Egypt's internal employee assistant. Be accurate and concise; never invent bank facts.",
+    "en": f"You are {settings.bank_en}'s internal employee assistant. Be accurate and concise; never invent bank facts.",
 }
 
 
@@ -172,7 +172,7 @@ def models(authorization: str | None = Header(default=None)):
     require_key(authorization)
     now = int(time.time())
     return {"object": "list", "data": [{"id": m, "object": "model", "created": now, "owned_by": "nbe-gb10"}
-                                       for m in ("nbe-auto", "workhorse", "hero")]}
+                                       for m in ("auto", "workhorse", "hero")]}
 
 
 @app.post("/v1/chat/completions")
@@ -183,7 +183,7 @@ async def completions(request: Request, authorization: str | None = Header(defau
     last = messages[-1]["content"] if messages else ""
     if isinstance(last, list):   # content parts
         last = " ".join(p.get("text", "") for p in last if p.get("type") == "text")
-    if body.get("model", "nbe-auto") == "nbe-auto":
+    if body.get("model", "auto") in ("auto", "nbe-auto"):      # "nbe-auto" kept for earlier Dataiku configs
         r = await route(last, False)
     else:
         alias = body["model"] if body["model"] in ("workhorse", "hero") else "workhorse"
@@ -193,7 +193,7 @@ async def completions(request: Request, authorization: str | None = Header(defau
     if r["alias"] == "hero":
         upstream.setdefault("reasoning_effort", "low")
     headers = {"Authorization": f"Bearer {settings.llm_gateway_key}"}
-    route_headers = {"X-NBE-Route-Task": r["task"], "X-NBE-Route-Model": r["alias"], "X-NBE-Route-Lang": r["lang"]}
+    route_headers = {"X-Route-Task": r["task"], "X-Route-Model": r["alias"], "X-Route-Lang": r["lang"]}
     url = f"{settings.llm_gateway_url}/chat/completions"
     if body.get("stream"):
         async def relay():

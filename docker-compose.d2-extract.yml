@@ -27,7 +27,7 @@
 
 services:
   nbe-d2-uploads-init:
-    image: nbe-d2:latest
+    image: nbe-d2:${IMAGE_TAG:-latest}
     container_name: nbe-d2-uploads-init
     user: "0:0"
     restart: "no"

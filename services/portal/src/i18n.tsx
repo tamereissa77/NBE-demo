@@ -1,12 +1,13 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { BRAND } from "./brand";
 import type { Lang } from "./demos";
 
 // UI chrome strings. Demo content lives in demos.ts.
 const STRINGS = {
   en: {
-    appTitle: "NBE AI Demos",
-    heroTitle: "Seven AI use cases, live on one Dell Pro Max with GB10",
-    heroSub: "One demo per NBE use case, on one shared, fully offline platform.",
+    appTitle: BRAND.appTitle.en,
+    heroTitle: BRAND.heroTitle?.en ?? "Seven AI use cases, live on one Dell Pro Max with GB10",
+    heroSub: `One demo per ${BRAND.short} use case, on one shared, fully offline platform.`,
     allDemos: "All demos",
     openDemo: "Open demo",
     wave: "Wave",
@@ -27,8 +28,8 @@ const STRINGS = {
     back: "Back to all demos",
   },
   ar: {
-    appTitle: "عروض الذكاء الاصطناعي للبنك الأهلي المصري",
-    heroTitle: "سبع حالات استخدام للذكاء الاصطناعي على جهاز واحد Dell Pro Max with GB10",
+    appTitle: BRAND.appTitle.ar,
+    heroTitle: BRAND.heroTitle?.ar ?? "سبع حالات استخدام للذكاء الاصطناعي على جهاز واحد Dell Pro Max with GB10",
     heroSub: "عرض لكل حالة استخدام، على منصة واحدة مشتركة تعمل دون اتصال بالإنترنت.",
     allDemos: "جميع العروض",
     openDemo: "افتح العرض",

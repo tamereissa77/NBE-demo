@@ -6,18 +6,23 @@ COMPOSE := docker compose
 # Management commands see every profile, so on-demand model servers are included in ps/stop/down/logs
 COMPOSE_ALL := docker compose --profile core --profile quality --profile voice --profile image --profile hero --profile eval
 -include .env
-export NBE_PORT
+export NBE_PORT IMAGE_TAG COMPOSE_PROJECT_NAME BRAND
 
-.PHONY: help up down start stop restart build rebuild ps status logs clean \
+.PHONY: start-NBE start-RYD brand help up down start stop restart build rebuild ps status logs clean \
         preflight gpu verify platform-check warm models d1 d2 d3 d4 d5 d6 d7 \
         data ingest demo-reset ui-test record offline-check arabic-gate models-lock hero hero-off quality-on quality-off voice-on voice-off image-on image-off
 
 help:
-	@echo "NBE AI demos on GB10"
+	@echo "Bank AI demos on GB10 (this checkout: $${BRAND:-nbe}, project $${COMPOSE_PROJECT_NAME:-nbe})"
+	@echo ""
+	@echo "  make start-NBE     start the National Bank of Egypt demos (branch main)"
+	@echo "  make start-RYD     start the Riyad Bank demos (branch Riyadh-Bank)"
+	@echo "                     either one stops the other bank's stack first; the first start of a bank builds its images"
+	@echo "  make brand         which bank's stack is running"
 	@echo ""
 	@echo "  make up            preflight (free the GPU), then start everything in a memory-safe order"
 	@echo "                     (MODE=show default: core + voice + image;  MODE=full adds Gemma 4 31B;  MODE=core: core only)"
-	@echo "  make down          stop and remove containers (data volumes kept)"
+	@echo "  make down          stop the running demo stack, NBE or RYD, from either folder (data volumes kept)"
 	@echo "  make start|stop    start/stop existing containers"
 	@echo "  make restart       restart all containers"
 	@echo "  make build         build images"
@@ -55,11 +60,17 @@ help:
 	@sed -i "s/^D6_API_KEY=.*/D6_API_KEY=nbe-$$(head -c 18 /dev/urandom | base64 | tr -d '/+=')/" .env
 	@echo "Created .env from .env.example (random Postgres password and API keys)"
 
+start-NBE start-RYD:
+	@scripts/switch_brand.sh $(subst start-,,$@)
+
+brand:
+	@docker ps --filter name=nbe-gateway --format 'running: project {{.Label "com.docker.compose.project"}} from {{.Label "com.docker.compose.project.working_dir"}}' | grep . || echo "no demo stack running"
+
 up: .env preflight
 	@scripts/up.sh
 
-down:
-	$(COMPOSE_ALL) down
+down:   ## stop whichever bank's stack is running (NBE or RYD), from either folder
+	@scripts/stop_demo.sh
 
 start:
 	$(COMPOSE_ALL) start
@@ -71,10 +82,10 @@ restart:
 	$(COMPOSE_ALL) restart
 
 build: .env
-	$(COMPOSE_ALL) build
+	$(COMPOSE_ALL) --profile tools build   # tools: the data generators (datagen) and test runners
 
 rebuild: .env
-	$(COMPOSE_ALL) build --no-cache
+	$(COMPOSE_ALL) --profile tools build --no-cache
 
 ps:
 	$(COMPOSE_ALL) ps
@@ -105,14 +116,14 @@ verify:
 
 platform-check warm:
 	@docker run --rm --network nbe-core --env-file .env -e LLM_GATEWAY_URL=http://nbe-llmgw:4000/v1 \
-	  -v $(CURDIR)/tests:/tests:ro nbe-d1:latest python /tests/platform_check.py
+	  -v $(CURDIR)/tests:/tests:ro nbe-d1:$(or $(IMAGE_TAG),latest) python /tests/platform_check.py
 
 DATAGEN := docker compose --profile tools run --rm -u $$(id -u):$$(id -g) nbe-datagen
 PW_IMAGE := mcr.microsoft.com/playwright/python:v1.55.0-noble
 PW_RUN := docker run --rm --network host -u pwuser -v $(CURDIR)/tests/ui:/tests:ro
 
 data:
-	@mkdir -p data/generated/d3/banners && chmod 777 data/generated/d3/banners
+	@mkdir -p data/generated/d3/banners && (chmod 777 data/generated/d3/banners 2>/dev/null || true)
 	$(DATAGEN) python -m data.generators.d1_loan_docs
 	$(DATAGEN) python -m data.generators.d3_commerce
 	$(DATAGEN) python -m data.generators.d6_docs

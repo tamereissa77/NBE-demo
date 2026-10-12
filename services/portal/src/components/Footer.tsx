@@ -4,7 +4,7 @@ import { useI18n } from "../i18n";
 export function Footer() {
   const { t } = useI18n();
   return (
-    <footer className="mt-16 bg-nbe-green-dark text-white">
+    <footer className="mt-16 bg-brand-dark text-white">
       <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-6 text-sm sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap gap-x-4 gap-y-1 opacity-90">
           <span>{t.poc}</span>
@@ -17,7 +17,7 @@ export function Footer() {
           <Link to="/eval" className="opacity-70 hover:opacity-100 hover:underline">
             Arabic gate
           </Link>
-          <span className="font-semibold text-nbe-gold">{t.poweredBy}</span>
+          <span className="font-semibold text-accent-light">{t.poweredBy}</span>
         </div>
       </div>
     </footer>
