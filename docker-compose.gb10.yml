@@ -64,6 +64,11 @@ services:
     environment:
       NBE_HERO_MODEL: hosted_vllm/gpt-oss-20b
 
+  # With the reader, the voice and the hero model on the box, SDXL cannot keep 27 GB after a banner
+  nbe-sdxl:
+    environment:
+      SDXL_LOW_MEMORY: "1"
+
   nbe-d2-extract:
     image: nbe-d2-extract:${IMAGE_TAG:-latest}
     volumes:

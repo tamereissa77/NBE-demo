@@ -21,6 +21,12 @@ MODEL_DIR = os.getenv("SDXL_DIR", "/models/sdxl-base-1.0")
 app = FastAPI(title="NBE SDXL")
 pipe = StableDiffusionXLPipeline.from_pretrained(MODEL_DIR, torch_dtype=torch.float16, variant="fp16",
                                                  use_safetensors=True).to("cuda")
+# For a box where other models need the memory (SDXL_LOW_MEMORY=1): the picture is decoded in tiles, and the
+# working memory is handed back after each one. Without it, one 1216x832 banner took this service from 7 GB
+# to 27 GB on the GB10 and it kept them.
+LOW_MEMORY = os.getenv("SDXL_LOW_MEMORY", "0") == "1"
+if LOW_MEMORY:
+    pipe.enable_vae_tiling()
 
 
 class Req(BaseModel):
@@ -43,6 +49,8 @@ def generate(r: Req):
     g = torch.Generator("cuda").manual_seed(r.seed)
     img = pipe(r.prompt, negative_prompt=r.negative_prompt, width=r.width, height=r.height,
                num_inference_steps=r.steps, generator=g).images[0]
+    if LOW_MEMORY:
+        torch.cuda.empty_cache()
     buf = io.BytesIO()
     img.save(buf, "PNG")
     return {"png_base64": base64.b64encode(buf.getvalue()).decode(), "latency_ms": int((time.time() - t) * 1000),
