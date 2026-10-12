@@ -24,7 +24,7 @@ from pydantic import BaseModel, Field
 
 from nbe_core import create_app, llm, retrieval, settings
 from nbe_core import locale as L
-from nbe_core.text import normalize_map
+from nbe_core.text import normalize_map, plain_typography
 from nbe_core.trace import Trace
 
 DATA = Path("/data/generated/d3")
@@ -263,6 +263,14 @@ def offer_text(key: str, offer: dict) -> str:
             f"حتى {offer['valid_until']}. {REQUIRED['ar']}")
 
 
+def tidy(copy: dict) -> dict:
+    """Plain hyphens and spaces in every field; the banner headline, drawn over the image, is words only."""
+    copy = {k: plain_typography(v) if isinstance(v, str) else v for k, v in copy.items()}
+    headline = re.sub(r"(?<=\S)-(?=\S)|[*_#`]", " ", str(copy.get("banner_headline_ar", "")))
+    copy["banner_headline_ar"] = re.sub(r"\s+", " ", headline).strip()
+    return copy
+
+
 def compliance(copy: dict, offer: dict | None = None) -> list[dict]:
     issues = []
     for key, text in copy.items():
@@ -413,6 +421,7 @@ async def build_campaign(body: CampaignIn):
               (f"\nتوجيه إضافي من فريق التسويق: {body.brief}" if body.brief.strip() else ""))
     at(3)
     copy, res = await llm.chat_json([{"role": "user", "content": prompt}], COPY_SCHEMA, max_tokens=1800, temperature=0.5)
+    copy = tidy(copy)
     trace.llm("Write AR/EN copy for SMS, email and social (workhorse)", res)
     if body.stress_test and not banned_spans(copy["sms_a_ar"]):   # the demo must not depend on the model obeying
         copy["sms_a_ar"] = "عائد مضمون 100%! " + copy["sms_a_ar"]
@@ -429,6 +438,7 @@ async def build_campaign(body: CampaignIn):
                       "ممنوع بأي صيغة: مضمون/نضمن، 100% أو مية في المية، أفضل من، أفضل بنك، بدون شروط، guarantee، risk-free.\n\n" +
                       json.dumps(copy, ensure_ascii=False))
         copy, res = await llm.chat_json([{"role": "user", "content": fix_prompt}], COPY_SCHEMA, max_tokens=1800, temperature=0)
+        copy = tidy(copy)
         trace.llm(f"Fix compliance issues, pass {passes} (workhorse)", res)
         issues = compliance(copy, offer)
         trace.add("rules", f"Compliance re-check {passes}: {len(issues)} issue(s)", issues)

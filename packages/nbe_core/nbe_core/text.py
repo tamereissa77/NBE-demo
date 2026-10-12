@@ -38,6 +38,13 @@ def normalize_map(text: str) -> tuple[str, list[int]]:
         out.append(" " if ch.isspace() else _FOLD.get(ch, ch).lower())
         idx.append(i)
     return "".join(out), idx
+def plain_typography(text: str) -> str:
+    """Models emit non-breaking hyphens, narrow no-break spaces and zero-width characters (gpt-oss most of all).
+    The Arabic UI fonts have no glyphs for them and the browser cannot wrap at them, so text meant for display
+    or SMS gets the plain hyphen and space instead."""
+    text = re.sub("[\u2010-\u2013\u2212]", "-", text)
+    text = re.sub("[\u00a0\u2007\u2009\u202f]", " ", text)
+    return re.sub("[\u200b\u2060\ufeff]", "", text)
 
 
 def strip_preamble(text: str) -> str:

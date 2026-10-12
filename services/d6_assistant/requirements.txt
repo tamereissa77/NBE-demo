@@ -1,1 +1,8 @@
 # Demo-specific dependencies (nbe_core deps are installed by the base image)
+pillow
+openpyxl
+pypdfium2
+python-docx
+pandas
+numpy
+sqlglot

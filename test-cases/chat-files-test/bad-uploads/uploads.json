@@ -1,0 +1,155 @@
+{
+ "_about": "Upload-validation cases for D6 (tests/d6_files_eval.py uploads <label>). A refused file must come back with this HTTP status and error code, quickly and with a message a bank employee can act on; an accepted file must return 200.",
+ "cases": [
+  {
+   "file": "too_big.pdf",
+   "status": 413,
+   "code": "too_large",
+   "what": "25 MB file, limit is 20 MB"
+  },
+  {
+   "file": "program.exe",
+   "status": 415,
+   "code": "unsupported_type",
+   "what": "a Windows program"
+  },
+  {
+   "file": "archive.zip",
+   "status": 415,
+   "code": "unsupported_type",
+   "what": "a ZIP archive"
+  },
+  {
+   "file": "video.mp4",
+   "status": 415,
+   "code": "unsupported_type",
+   "what": "a video"
+  },
+  {
+   "file": "no_extension",
+   "status": 415,
+   "code": "unsupported_type",
+   "what": "a file with no extension"
+  },
+  {
+   "file": "old_word.doc",
+   "status": 415,
+   "code": "old_format",
+   "what": "Word 97-2003 document"
+  },
+  {
+   "file": "old_excel.xls",
+   "status": 415,
+   "code": "old_format",
+   "what": "Excel 97-2003 workbook"
+  },
+  {
+   "file": "disguised_program.pdf",
+   "status": 422,
+   "code": "wrong_content",
+   "what": "a program renamed to .pdf"
+  },
+  {
+   "file": "disguised_program.docx",
+   "status": 422,
+   "code": "wrong_content",
+   "what": "a program renamed to .docx"
+  },
+  {
+   "file": "binary_named.txt",
+   "status": 422,
+   "code": "wrong_content",
+   "what": "binary data named .txt"
+  },
+  {
+   "file": "excel_renamed.docx",
+   "status": 422,
+   "code": "wrong_content",
+   "what": "an Excel workbook named .docx"
+  },
+  {
+   "file": "protected.pdf",
+   "status": 422,
+   "code": "password_protected",
+   "what": "PDF that needs a password to open"
+  },
+  {
+   "file": "protected.docx",
+   "status": 422,
+   "code": "password_protected",
+   "what": "Word document with a password"
+  },
+  {
+   "file": "protected.xlsx",
+   "status": 422,
+   "code": "password_protected",
+   "what": "Excel workbook with a password"
+  },
+  {
+   "file": "damaged.pdf",
+   "status": 422,
+   "code": "damaged",
+   "what": "PDF header followed by garbage"
+  },
+  {
+   "file": "cut_in_half.docx",
+   "status": 422,
+   "code": "damaged",
+   "what": "first half of a Word document"
+  },
+  {
+   "file": "damaged.xlsx",
+   "status": 422,
+   "code": "damaged",
+   "what": "ZIP header followed by garbage"
+  },
+  {
+   "file": "damaged.png",
+   "status": 422,
+   "code": "damaged",
+   "what": "PNG header followed by garbage"
+  },
+  {
+   "file": "empty.pdf",
+   "status": 422,
+   "code": "empty",
+   "what": "0 bytes"
+  },
+  {
+   "file": "empty.txt",
+   "status": 422,
+   "code": "empty",
+   "what": "0 bytes"
+  },
+  {
+   "file": "ok_opens_without_password.pdf",
+   "status": 200,
+   "code": null,
+   "what": "PDF with printing restricted but no password to open"
+  },
+  {
+   "file": "ok_small.docx",
+   "status": 200,
+   "code": null,
+   "what": "valid Word document"
+  },
+  {
+   "file": "ok_small.xlsx",
+   "status": 200,
+   "code": null,
+   "what": "valid Excel workbook"
+  },
+  {
+   "file": "OK_UPPERCASE.PDF",
+   "status": 200,
+   "code": null,
+   "what": "valid PDF with an upper-case extension"
+  },
+  {
+   "file": "ok_arabic_ملاحظات.txt",
+   "status": 200,
+   "code": null,
+   "what": "valid text file with an Arabic name"
+  }
+ ]
+}

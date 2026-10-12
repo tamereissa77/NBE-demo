@@ -1,0 +1,396 @@
+{
+ "_about": "Summary cases for D6 (tests/d6_summary_eval.py), mostly Arabic. Each summary is judged by checks computed in the test: recognised as a summary; key facts kept; no figure that is not in the source; a known trap not fallen into; the form, length and language asked for; no English glosses added to Arabic; sources shown.",
+ "cases": [
+  {
+   "id": "paste-3-points",
+   "about": "Pasted Arabic note, three points. The trap: 'postponed from 16 to 23 October' must not become 'during 16 to 23 October'.",
+   "paste": "docs/delay_ar.txt",
+   "q": "لخّص في ثلاث نقاط:",
+   "check": {
+    "must": [
+     [
+      "re:(?<![\\d.,])23(?![\\d]|[.,]\\d)"
+     ],
+     [
+      "1240"
+     ],
+     [
+      "re:(?<![\\d.,])850(?![\\d]|[.,]\\d)"
+     ],
+     [
+      "re:(?<![\\d.,])25(?![\\d]|[.,]\\d)"
+     ]
+    ],
+    "trap": "الفترة من 16 (أكتوبر )?إلى 23|خلال 16|بين 16 و ?23"
+   }
+  },
+  {
+   "id": "paste-one-sentence",
+   "about": "The same note in one sentence for senior management.",
+   "paste": "docs/delay_ar.txt",
+   "q": "لخص النص التالي في جملة واحدة للإدارة العليا:",
+   "check": {
+    "must": [
+     [
+      "re:(?<![\\d.,])23(?![\\d]|[.,]\\d)"
+     ]
+    ],
+    "trap": "الفترة من 16 (أكتوبر )?إلى 23|خلال 16|بين 16 و ?23",
+    "max_sentences": 2
+   }
+  },
+  {
+   "id": "meeting-actions",
+   "about": "Meeting minutes as action items: each task must stay with its own owner and deadline.",
+   "files": [
+    "docs/meeting_ar.txt"
+   ],
+   "q": "لخّص هذا المحضر.",
+   "options": {
+    "form": "actions"
+   },
+   "check": {
+    "rows": [
+     [
+      "السيولة",
+      "منى",
+      "11"
+     ],
+     [
+      "ترشيح",
+      "شريف",
+      "15"
+     ],
+     [
+      "المورد",
+      "نهى",
+      "25"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "meeting-executive",
+   "about": "The same minutes as a three-sentence executive summary.",
+   "files": [
+    "docs/meeting_ar.txt"
+   ],
+   "q": "لخّص هذا المحضر.",
+   "options": {
+    "form": "executive"
+   },
+   "check": {
+    "must": [
+     [
+      "الطوابير"
+     ]
+    ],
+    "max_sentences": 4
+   }
+  },
+  {
+   "id": "meeting-decisions",
+   "about": "Decisions and open issues only.",
+   "files": [
+    "docs/meeting_ar.txt"
+   ],
+   "q": "لخّص هذا المحضر.",
+   "options": {
+    "form": "decisions_risks"
+   },
+   "check": {
+    "must": [
+     [
+      "الطوابير"
+     ],
+     [
+      "re:(?<![\\d.,])12(?![\\d]|[.,]\\d)"
+     ],
+     [
+      "السبت"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "policy-key-points",
+   "about": "A branch policy: every limit and deadline must survive.",
+   "files": [
+    "docs/policy_ar.md"
+   ],
+   "q": "لخّص هذه السياسة في نقاط.",
+   "check": {
+    "must": [
+     [
+      "25000"
+     ],
+     [
+      "2000"
+     ],
+     [
+      "1000"
+     ],
+     [
+      "re:(?<![\\d.,])5(?![\\d]|[.,]\\d)"
+     ],
+     [
+      "2027"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "policy-in-english",
+   "about": "An Arabic document summarised in English.",
+   "files": [
+    "docs/policy_ar.md"
+   ],
+   "q": "لخّص هذه السياسة.",
+   "options": {
+    "language": "en"
+   },
+   "check": {
+    "must": [
+     [
+      "25000"
+     ],
+     [
+      "2000"
+     ],
+     [
+      "january"
+     ]
+    ],
+    "lang": "en"
+   }
+  },
+  {
+   "id": "policy-focus",
+   "about": "Only what concerns the branch manager.",
+   "files": [
+    "docs/policy_ar.md"
+   ],
+   "q": "لخّص هذه السياسة.",
+   "options": {
+    "focus": "ما يخص مدير الفرع فقط"
+   },
+   "check": {
+    "must": [
+     [
+      "1000"
+     ]
+    ],
+    "max_words": 110
+   }
+  },
+  {
+   "id": "thread-short",
+   "about": "A pasted e-mail thread, short: the outcome and what the branch must do.",
+   "paste": "docs/thread_ar.txt",
+   "q": "لخّص سلسلة الرسائل التالية:",
+   "options": {
+    "length": "short"
+   },
+   "check": {
+    "must": [
+     [
+      "4750"
+     ],
+     [
+      "re:(?<![\\d.,])3(?![\\d]|[.,]\\d)"
+     ]
+    ],
+    "max_words": 80
+   }
+  },
+  {
+   "id": "thread-facts",
+   "about": "The same thread as a table of dates, amounts and references.",
+   "files": [
+    "docs/thread_ar.txt"
+   ],
+   "q": "لخّص هذا الملف.",
+   "options": {
+    "form": "facts_table"
+   },
+   "check": {
+    "must": [
+     [
+      "dsp-88214"
+     ],
+     [
+      "4750"
+     ],
+     [
+      "c-2026-031"
+     ]
+    ],
+    "table": true
+   }
+  },
+  {
+   "id": "scanned-letter",
+   "about": "A scanned Arabic letter (read by the vision model).",
+   "files": [
+    "../chat-files-test/test_cirular.pdf"
+   ],
+   "q": "لخّص هذا الكتاب في خمس نقاط.",
+   "file_figures": "17 2026 19 2019 5 2020 1 2 3 4 9",
+   "check": {
+    "must": [
+     [
+      "التثقيف المالي",
+      "الثقافه الماليه",
+      "الشمول المالي"
+     ],
+     [
+      "ربع"
+     ],
+     [
+      "خطه عمل"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "typed-letter",
+   "about": "A typed Arabic letter.",
+   "files": [
+    "../chat-files-test/normal_file.pdf"
+   ],
+   "q": "لخّص هذا الكتاب في فقرة واحدة.",
+   "file_figures": "28 2026 2020 1 2",
+   "check": {
+    "must": [
+     [
+      "تحويل الاموال"
+     ],
+     [
+      "ذوي المخاطر"
+     ],
+     [
+      "2026"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "spreadsheet",
+   "about": "An Arabic CSV of 30 complaints, summarised for a manager: the figures must be the computed ones.",
+   "files": [
+    "../chat-files-test/complaints_ar.csv"
+   ],
+   "q": "لخّص هذا الملف لمدير خدمة العملاء.",
+   "file_figures": "7.07 212 18 9 6 7 5 70 56 46 40 87 59 37 29 129 44 39 14 1 30",
+   "check": {
+    "must": [
+     [
+      "re:(?<![\\d.,])30(?![\\d]|[.,]\\d)"
+     ],
+     [
+      "re:(?<![\\d.,])18(?![\\d]|[.,]\\d)",
+      "7.07"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "two-files",
+   "about": "Two Arabic files, one paragraph each.",
+   "files": [
+    "docs/meeting_ar.txt",
+    "docs/policy_ar.md"
+   ],
+   "q": "لخّص الملفين، فقرة لكل ملف.",
+   "check": {
+    "must": [
+     [
+      "الطوابير"
+     ],
+     [
+      "النثريه",
+      "العهده"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "bilingual-brochure",
+   "about": "A bilingual brochure, one topic only, in Arabic.",
+   "files": [
+    "../chat-files-test/mix_en_ar.pdf"
+   ],
+   "q": "لخّص ما يخص تقديم الشكاوى فقط.",
+   "file_figures": "15 19623 25945221 202 13 2019 2 24 7",
+   "check": {
+    "must": [
+     [
+      "re:(?<![\\d.,])15(?![\\d]|[.,]\\d)"
+     ],
+     [
+      "البنك المركزي"
+     ]
+    ],
+    "lang": "ar",
+    "bilingual_source": true
+   }
+  },
+  {
+   "id": "english-control",
+   "about": "CONTROL: an English circular.",
+   "files": [
+    "../chat-files-test/Reg_circular.pdf"
+   ],
+   "q": "Summarise this circular in five bullet points.",
+   "file_figures": "2026 09 28 2020 10 12 30 15 2027 31 80 2002 1 2 3 4",
+   "check": {
+    "must": [
+     [
+      "kyc"
+     ],
+     [
+      "2027"
+     ]
+    ],
+    "lang": "en"
+   }
+  },
+  {
+   "id": "nothing-to-summarise",
+   "about": "No text and no file: it must ask for the document, not invent a summary.",
+   "q": "لخّص آخر تعميم من البنك المركزي عن حماية العملاء.",
+   "check": {
+    "asks": true
+   }
+  },
+  {
+   "id": "follow-up-shorter",
+   "about": "A follow-up that asks for a shorter version: still a summary, shorter, the key limit kept.",
+   "files": [
+    "docs/policy_ar.md"
+   ],
+   "q": "لخّص هذه السياسة في نقاط.",
+   "then": "اجعله أقصر.",
+   "check": {
+    "must": [
+     [
+      "25000"
+     ]
+    ],
+    "shorter": true
+   }
+  },
+  {
+   "id": "legal-pointer",
+   "about": "A contract: summarised plainly, with a pointer to the legal demo (D5) for clause analysis.",
+   "files": [
+    "__d5_contract__"
+   ],
+   "q": "لخّص هذا العقد في خمس نقاط.",
+   "check": {
+    "legal": true
+   },
+   "file_figures": "15"
+  }
+ ]
+}

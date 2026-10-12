@@ -1,0 +1,40 @@
+# API mode: run D3 and D6 on a machine without the GB10's memory. Enabled from .env:
+#   COMPOSE_FILE=docker-compose.yml:docker-compose.api-d6.yml
+#   MODE=api
+#
+# The LLMs move to external APIs (config/litellm.api-d6.yaml); bge-m3, the reranker and SDXL stay local
+# on a stock vLLM image. scripts/up.sh starts only what D3 and D6 need; the other demos stay listed
+# in the portal but their services and models are not started.
+#
+# This is NOT offline: the model gateway joins nbe-edge to reach the APIs, and prompts leave the box.
+
+services:
+  nbe-llmgw:
+    networks: [nbe-core, nbe-edge]
+    environment:
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      NVIDIA_API_KEY: ${NVIDIA_API_KEY:-}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+    volumes:
+      - ./config/litellm.api-d6.yaml:/app/config.yaml:ro
+
+  # The stock image's entrypoint is already `vllm serve`; cleared so the base file's commands run as written.
+  # VLLM_USE_V2_MODEL_RUNNER=0: the V2 runner needs UVA, which WSL2 does not provide ("UVA is not available").
+  nbe-embed:
+    image: ${VLLM_IMAGE:-vllm/vllm-openai:v0.29.0}
+    entrypoint: []
+    environment:
+      VLLM_USE_V2_MODEL_RUNNER: "0"
+    depends_on: !reset {}          # no local workhorse to wait for
+
+  nbe-rerank:
+    image: ${VLLM_IMAGE:-vllm/vllm-openai:v0.29.0}
+    entrypoint: []
+    environment:
+      VLLM_USE_V2_MODEL_RUNNER: "0"
+
+  nbe-sdxl:
+    build:
+      args: { BASE_IMAGE: "${VLLM_IMAGE:-vllm/vllm-openai:v0.29.0}" }
+    environment:
+      SDXL_CUDNN: "1"              # the cuDNN fault is specific to the GB10 image

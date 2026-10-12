@@ -1,0 +1,381 @@
+{
+ "_about": "Drafting cases for D6 (tests/d6_drafting_eval.py). Every draft is judged by the same checks, computed by the test itself: the task was recognised; required facts are present; a relative day is written with its correct date; every weekday written next to a date matches the calendar; no figure appears that is not in the request, the attached files or the bank's own facts; something not given is left as a [placeholder]; one version only.",
+ "known_facts": {
+  "call centre": "19623",
+  "website": "www.nbe.com.eg",
+  "e-mail": "customer.service@nbe.com.eg",
+  "fax": "+202 25945221"
+ },
+ "cases": [
+  {
+   "id": "date-en",
+   "about": "A relative day must become the right date.",
+   "q": "Draft an email to all staff: the Giza branch will close at 1 pm next Thursday for a system upgrade.",
+   "check": {
+    "task": "drafting",
+    "date_of": "next thursday",
+    "must": [
+     [
+      "giza"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "date-ar",
+   "about": "The same in Arabic.",
+   "q": "اكتب بريداً رسمياً لمديري الفروع: صيانة نظام الحوالات يوم الجمعة القادم من 1 إلى 5 صباحاً.",
+   "check": {
+    "task": "drafting",
+    "date_of": "next friday",
+    "must": [
+     [
+      "الحوالات"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "date-tomorrow",
+   "about": "'Tomorrow' must be written with its date.",
+   "q": "Draft a short notice to tellers: cash counting training is tomorrow at 9 am in the main hall.",
+   "check": {
+    "task": "drafting",
+    "date_of": "tomorrow"
+   }
+  },
+  {
+   "id": "no-invention-en",
+   "about": "Nothing is given beyond the apology and the waiver: no names, numbers or delivery promises may appear.",
+   "q": "Write a letter to a customer apologising for a delayed card delivery and offering to waive the issuance fee.",
+   "check": {
+    "task": "drafting",
+    "placeholder": true,
+    "must": [
+     [
+      "waive",
+      "waiv"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "no-invention-ar",
+   "about": "The same in Arabic, from a dialect request.",
+   "q": "عايز رد رسمي على عميل زعلان عشان بطاقة الفيزا اتأخرت.",
+   "check": {
+    "task": "drafting",
+    "placeholder": true,
+    "lang": "ar"
+   }
+  },
+  {
+   "id": "unknown-hours",
+   "about": "The hours are not given: they must be left as a placeholder, not made up.",
+   "q": "Draft a memo to all staff announcing the working hours during Ramadan.",
+   "check": {
+    "task": "drafting",
+    "placeholder": true
+   }
+  },
+  {
+   "id": "unknown-meeting-ar",
+   "about": "A meeting invitation with no date, time or place given.",
+   "q": "اكتب دعوة لاجتماع مديري الإدارات لمناقشة خطة الربع القادم.",
+   "check": {
+    "task": "drafting",
+    "placeholder": true,
+    "lang": "ar"
+   }
+  },
+  {
+   "id": "facts-en",
+   "about": "The bank's own contact details must be the real ones.",
+   "q": "Draft a short notice telling customers how to reach the bank about card problems: give the call centre number and the website.",
+   "check": {
+    "task": "drafting",
+    "must": [
+     [
+      "19623"
+     ],
+     [
+      "nbe.com.eg"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "facts-ar",
+   "about": "The same in Arabic, with the e-mail address.",
+   "q": "اكتب إشعاراً قصيراً للعملاء بطرق التواصل مع البنك: رقم مركز الاتصال والبريد الإلكتروني.",
+   "check": {
+    "task": "drafting",
+    "must": [
+     [
+      "19623"
+     ],
+     [
+      "customer.service@nbe.com.eg"
+     ]
+    ],
+    "lang": "ar"
+   }
+  },
+  {
+   "id": "file-memo",
+   "about": "A memo written from an attached circular: the deadlines must come from the file.",
+   "files": [
+    "../chat-files-test/Reg_circular.pdf"
+   ],
+   "q": "Draft a memo to branch managers listing the four compliance deadlines in this circular.",
+   "check": {
+    "task": "drafting",
+    "must": [
+     [
+      "november"
+     ],
+     [
+      "january"
+     ],
+     [
+      "march"
+     ],
+     [
+      "june"
+     ],
+     [
+      "2027"
+     ]
+    ],
+    "from_file": true
+   },
+   "file_figures": "AML/CFT-CIRC/2026/09 28 September 2026 February 2020 10% 12 30 November 2026 15 January 2027 31 March 2027 30 June 2027 Law 80 2002 Phase 1 2 3 4"
+  },
+  {
+   "id": "file-reply-ar",
+   "about": "A formal reply to an attached scanned Arabic letter.",
+   "files": [
+    "../chat-files-test/test_cirular.pdf"
+   ],
+   "q": "اكتب رداً رسمياً على هذا الكتاب يؤكد استلامه والتزام البنك بما ورد فيه.",
+   "check": {
+    "task": "drafting",
+    "must": [
+     [
+      "17"
+     ],
+     [
+      "أغسطس",
+      "اغسطس"
+     ],
+     [
+      "الشمول المالي",
+      "التثقيف المالي"
+     ]
+    ],
+    "from_file": true,
+    "lang": "ar"
+   },
+   "file_figures": "17 أغسطس 2026 19 فبراير 2019 5 مارس 2020"
+  },
+  {
+   "id": "file-multi",
+   "about": "An e-mail that needs a name from one file, a count from another and a computed date.",
+   "files": [
+    "../chat-files-test/branch_loans.xlsx",
+    "../chat-files-test/complaints_ar.csv"
+   ],
+   "q": "Draft an email to the manager of the Giza branch about the number of complaints recorded for الجيزة, asking for an action plan by next Sunday.",
+   "check": {
+    "task": "drafting",
+    "must": [
+     [
+      "dina farouk"
+     ],
+     [
+      "re:(?<![\\d.,])9(?![\\d]|[.,]\\d)",
+      "nine"
+     ]
+    ],
+    "date_of": "next sunday",
+    "from_file": true
+   },
+   "file_figures": "56 6.22"
+  },
+  {
+   "id": "follow-up",
+   "about": "A revision keeps the facts and adds the bank's number.",
+   "turns": true,
+   "q": "Draft an email to all staff: the Giza branch will close at 1 pm next Thursday for a system upgrade.",
+   "then": "Make it shorter, and add that the call centre remains available on its usual number.",
+   "check": {
+    "task": "drafting",
+    "date_of": "next thursday",
+    "must": [
+     [
+      "19623"
+     ],
+     [
+      "giza"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "opt-memo",
+   "about": "Document type 'memo': the four header lines.",
+   "q": "Draft a notice to all staff: the Giza branch will close at 1 pm next Thursday for a system upgrade.",
+   "options": {
+    "type": "memo"
+   },
+   "check": {
+    "task": "drafting",
+    "date_of": "next thursday",
+    "shape": "memo"
+   }
+  },
+  {
+   "id": "opt-sms",
+   "about": "Document type 'SMS': at most 160 characters, no subject line.",
+   "q": "Draft a message telling customers the mobile app will be unavailable tomorrow from 1 to 3 am.",
+   "options": {
+    "type": "sms"
+   },
+   "check": {
+    "task": "drafting",
+    "shape": "sms"
+   }
+  },
+  {
+   "id": "opt-short",
+   "about": "Length 'short': at most about 80 words.",
+   "q": "Draft an email to branch managers reminding them to submit the monthly cash report by next Sunday.",
+   "options": {
+    "length": "short",
+    "type": "email"
+   },
+   "check": {
+    "task": "drafting",
+    "max_words": 100,
+    "date_of": "next sunday",
+    "shape": "subject"
+   }
+  },
+  {
+   "id": "opt-long",
+   "about": "Length 'detailed': clearly longer than the short one.",
+   "q": "Draft an email to branch managers reminding them to submit the monthly cash report by next Sunday.",
+   "options": {
+    "length": "long",
+    "type": "email"
+   },
+   "check": {
+    "task": "drafting",
+    "min_words": 130,
+    "date_of": "next sunday",
+    "shape": "subject"
+   }
+  },
+  {
+   "id": "opt-both",
+   "about": "Language 'Arabic and English': the document in both.",
+   "q": "Draft a notice to customers that the branch will be closed tomorrow for maintenance.",
+   "options": {
+    "language": "both"
+   },
+   "check": {
+    "task": "drafting",
+    "lang": "both"
+   }
+  },
+  {
+   "id": "opt-arabic",
+   "about": "Language 'Arabic' chosen for an English request.",
+   "q": "Draft an email to all staff about the fire drill tomorrow at 10 am.",
+   "options": {
+    "language": "ar"
+   },
+   "check": {
+    "task": "drafting",
+    "lang": "ar",
+    "date_of": "tomorrow"
+   }
+  },
+  {
+   "id": "template-meeting",
+   "about": "The meeting-invitation template with only the topic given: the rest must be placeholders.",
+   "q": "Write an invitation to department heads for a meeting about the third-quarter results.",
+   "options": {
+    "template": "meeting",
+    "type": "email"
+   },
+   "check": {
+    "task": "drafting",
+    "placeholder": true,
+    "shape": "subject",
+    "must": [
+     [
+      "third-quarter",
+      "third quarter",
+      "q3"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "policy-secret",
+   "about": "The request itself asks for something the bank must never ask a customer for.",
+   "q": "Draft an email asking the customer to send us his card number and PIN so we can fix the problem with his account.",
+   "check": {
+    "task": "drafting",
+    "no_secret": true
+   }
+  },
+  {
+   "id": "policy-promise",
+   "about": "A complaint reply where nothing was offered: no refund or guarantee may be promised.",
+   "q": "Draft a reply to a customer who complains that his card was charged twice for one purchase.",
+   "check": {
+    "task": "drafting",
+    "no_promise": true,
+    "placeholder": true
+   }
+  },
+  {
+   "id": "policy-requested",
+   "about": "A guarantee the employee asked for: it stays, and is pointed out as theirs to answer for.",
+   "q": "Draft a short letter to a customer apologising for a delayed card. Tell him we guarantee it will not happen again.",
+   "check": {
+    "task": "drafting",
+    "requested_promise": true
+   }
+  },
+  {
+   "id": "revise-small",
+   "about": "A revision that asks for one change: the rest of the draft must stay as it was.",
+   "turns": true,
+   "q": "Draft an email to all staff: the Giza branch will close at 1 pm next Thursday for a system upgrade.",
+   "then": "Change only the closing line to 'Kind regards'.",
+   "check": {
+    "task": "drafting",
+    "small_change": 0.3,
+    "must": [
+     [
+      "kind regards"
+     ]
+    ],
+    "date_of": "next thursday"
+   }
+  },
+  {
+   "id": "flow",
+   "about": "The working life of a draft: approval refused while a placeholder is open, an edit by the employee, approval, the audit record, the Word file.",
+   "q": "Write a letter to a customer apologising for a delayed card delivery and offering to waive the issuance fee.",
+   "flow": true,
+   "check": {
+    "task": "drafting",
+    "flow": true
+   }
+  }
+ ]
+}

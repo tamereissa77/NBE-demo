@@ -11,7 +11,8 @@ async function handle<T>(r: Response): Promise<T> {
     let detail = r.statusText;
     try {
       const j = await r.json();
-      detail = typeof j.detail === "string" ? j.detail : JSON.stringify(j.detail ?? j);
+      // A refusal can carry a code with its message ({code, message}); show the message
+      detail = typeof j.detail === "string" ? j.detail : j.detail?.message ?? JSON.stringify(j.detail ?? j);
     } catch {
       /* not JSON */
     }
