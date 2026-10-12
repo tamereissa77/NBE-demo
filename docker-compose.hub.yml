@@ -3,9 +3,9 @@
 #   on a workstation:    scripts/up_remote.sh              (docker-compose.remote.yml: apps and data there, models here)
 #
 # One container, nbe-hub, joins the internal network and publishes:
-#   NBE_HUB_PORT (8210)   /gateway /rerank /embed /asr /tts /sdxl /docvlm /d2-extract, each behind NBE_HUB_KEY
-#   8000 and 8001         the workhorse and the hero model as vLLM serves them: the addresses the team's earlier
-#                         setups point at (config/litellm.gb10.yaml, config/litellm.api-d6.yaml)
+#   NBE_HUB_PORT (8035)   /gateway /rerank /embed /asr /tts /sdxl /docvlm /d2-extract, each behind NBE_HUB_KEY
+#   8000 and 8001         the workhorse and the hero model (gpt-oss-120b, MODE=hero) as vLLM serves them: the
+#                         addresses the team's earlier setups point at (config/litellm.gb10.yaml, config/litellm.api-d6.yaml)
 # Development only. With the hub up the models are reachable from the network, so `make offline-check` fails
 # on purpose; for the demonstration start without HUB=1 and only the portal is published.
 
@@ -15,7 +15,7 @@ services:
     container_name: nbe-hub
     restart: "no"
     ports:
-      - "${NBE_HUB_PORT:-8210}:8000"
+      - "${NBE_HUB_PORT:-8035}:8000"
       - "${NBE_HUB_LLM_PORT:-8000}:8001"
       - "${NBE_HUB_HERO_PORT:-8001}:8002"
     environment:

@@ -3,6 +3,8 @@
 # Models start one at a time, vLLM first: it sizes itself from the memory that is free when it starts.
 #   MODE=show (default)   workhorse, embeddings, reranker, Egyptian voice, document reader, SDXL
 #   MODE=core             the same without SDXL
+#   MODE=hero             gpt-oss-120b (about 71 GB) for D6 in place of the document reader, the voice services and
+#                         SDXL, which do not fit beside it: they are stopped if they are running
 #   VOICE=0 / DOCVLM=0    leave the voice services / the document reader off
 #   HUB=1                 also serve the models to the team's workstations (docker-compose.hub.yml): development only
 #   EXTRACT=1             also start D2's document extraction (Chandra OCR, about 10 GB); it is stopped by hand
@@ -13,7 +15,8 @@ cd "$(dirname "$0")/.."
 MODE=${MODE:-show}
 C="docker compose -f docker-compose.yml -f docker-compose.d2-extract.yml -f docker-compose.gb10.yml"
 [ "${HUB:-0}" = "1" ] && C="$C -f docker-compose.hub.yml"
-C="$C --profile core --profile image --profile extract"
+C="$C --profile core --profile image --profile extract --profile hero"
+if [ "$MODE" = "hero" ]; then DOCVLM=0; VOICE=0; fi
 BUILD_FLAG=""
 [ "${BUILD:-0}" = "1" ] && BUILD_FLAG="--build"
 env_value() { grep -E "^$1=" .env 2>/dev/null | tail -1 | cut -d= -f2- || true; }
@@ -58,6 +61,19 @@ $C up -d --wait nbe-llm
 $C up -d --wait nbe-embed
 $C up -d --wait nbe-rerank
 
+if [ "$MODE" = "hero" ]; then
+  step "hero model (gpt-oss-120b) in place of the document reader, voice and SDXL"
+  $C stop nbe-docvlm nbe-qwencleo nbe-voicetut nbe-sdxl nbe-d2-extract >/dev/null 2>&1 || true
+  if ! docker inspect -f '{{.State.Running}}' nbe-hero 2>/dev/null | grep -q true; then
+    avail=$(free -g | awk '/^Mem:/ {print $7}')
+    [ "$avail" -ge 72 ] || { echo "Only ${avail} GB of memory available: gpt-oss-120b needs about 72 GB." >&2; exit 1; }
+  fi
+  $C up -d --wait nbe-hero
+else
+  # The hero model and the full show do not fit together: a hero left running would starve what starts next
+  $C stop nbe-hero >/dev/null 2>&1 || true
+fi
+
 if [ "${DOCVLM:-1}" = "1" ]; then
   LIBS=$(env_value NBE_DOCVLM_LIBS)
   [ -d "${LIBS:-ops/docvlm-libs}/transformers" ] || {
@@ -99,7 +115,7 @@ if [ "${HUB:-0}" = "1" ]; then
   $C up -d --wait nbe-hub
   HUB_PORT=$(env_value NBE_HUB_PORT)
   echo "Model hub: http://$(hostname -I | tr ' ' '
-' | grep -m1 '^100\.' || hostname):${HUB_PORT:-8210}  (key: NBE_HUB_KEY in .env)"
+' | grep -m1 '^100\.' || hostname):${HUB_PORT:-8035}  (key: NBE_HUB_KEY in .env)"
 fi
 
 echo; echo "Portal: http://localhost:${NBE_PORT:-8200}"

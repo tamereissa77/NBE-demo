@@ -36,13 +36,17 @@ the apps and the databases and nobody needs a hosted API.
 
 | Where | Start | What runs there |
 |---|---|---|
-| GB10 | `HUB=1 scripts/up_gb10.sh` | everything, plus `nbe-hub`: one port (8210) for the gateway and each model server, behind `NBE_HUB_KEY` |
+| GB10 | `HUB=1 scripts/up_gb10.sh` | everything, plus `nbe-hub`: one port (8035) for the gateway and each model server, behind `NBE_HUB_KEY` |
 | Workstation | `scripts/up_remote.sh` | portal, the seven demos, Postgres, Qdrant, guardrails, Docling; no model |
 
 On the workstation the service called `nbe-llmgw` is a proxy to the hub that also answers under the model
 servers' names, so the demos call the same addresses as on the GB10 (`docker-compose.remote.yml`). Its `.env`
 needs `NBE_HUB_URL` and the GB10's `NBE_HUB_KEY`. The hub also keeps the workhorse on port 8000 without a
 key, the address the earlier development setups use (`config/litellm.gb10.yaml`).
+
+`MODE=hero HUB=1 scripts/up_gb10.sh` puts gpt-oss-120b on the box for D6 (port 8001 through the hub, alias
+`hero`). It needs about 71 GB, so the document reader, the voice services and SDXL are stopped while it
+runs; the same command without `MODE=hero` stops it and brings them back.
 
 The hub is for development. With it up the models are reachable from the network and `make offline-check`
 fails on purpose; for the demonstration start without `HUB=1`.

@@ -7,14 +7,14 @@
 #               names of the model servers (:8000), as each of them, and forwards every call to the hub on the
 #               GB10 with the shared key. It is the only container with a route out.
 # The model servers of docker-compose.yml (profiles core, voice, image, ...) are not started.
-# In .env: NBE_HUB_URL (http://<gb10>:8210) and NBE_HUB_KEY (the GB10's NBE_HUB_KEY).
+# In .env: NBE_HUB_URL (http://<gb10>:8035) and NBE_HUB_KEY (the GB10's NBE_HUB_KEY).
 
 services:
   nbe-llmgw:
     image: caddy:2.11-alpine
     command: !override ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
     environment: !override
-      NBE_HUB_URL: ${NBE_HUB_URL:?set NBE_HUB_URL in .env, for example http://100.69.85.46:8210}
+      NBE_HUB_URL: ${NBE_HUB_URL:?set NBE_HUB_URL in .env, for example http://100.69.85.46:8035}
       NBE_HUB_KEY: ${NBE_HUB_KEY:?set NBE_HUB_KEY in .env (the same value as on the GB10)}
     volumes: !override
       - ./config/caddy/Caddyfile.remote:/etc/caddy/Caddyfile:ro
