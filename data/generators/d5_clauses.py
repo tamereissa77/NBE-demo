@@ -54,6 +54,10 @@ def build() -> dict:
               "template_facts": by_key[d["clause"]]["facts"], "contract_facts": d["facts"]} for d in k["deviations"]] +
             [{"clause": m, "title": by_key[m]["title"], "severity": "high", "why_ar": "المادة محذوفة بالكامل من العقد",
               "template_facts": by_key[m]["facts"], "contract_facts": None} for m in k.get("missing", [])]})
+    # E01 is a hand translation of C01 into English (English-path test); it carries C01's planted deviation
+    if (OUT / "E01.md").exists():
+        c01 = next(c for c in contracts if c["file"] == "C01.md")
+        contracts.append({**c01, "file": "E01.md", "lang": "en", "borrower": "Al-Ofok Trading Company (specimen)"})
     rulings = [{"file": f"{r['id']}.md", **r} for r in specs.RULINGS if (OUT / f"{r['id']}.md").exists()]
     manifest = {"template": "template.md", "contracts": contracts, "rulings": rulings,
                 "note": "Clauses written deterministically (d5_clauses.py); rulings authored by the on-box LLM."}

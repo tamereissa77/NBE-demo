@@ -2,6 +2,10 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import { BRAND } from "./brand";
 import type { Lang } from "./demos";
 
+// VITE_OFF_GB10=1 marks a run that is not on the GB10 (a laptop, a remote model server): the header and footer
+// then stop claiming the GB10, offline operation and the Dell hardware.
+export const OFF_GB10 = import.meta.env.VITE_OFF_GB10 === "1";
+
 // UI chrome strings. Demo content lives in demos.ts.
 const STRINGS = {
   en: {
@@ -15,6 +19,7 @@ const STRINGS = {
     days: "engineer-days",
     fit: "GB10 fit",
     poc: "Single-user PoC on one GB10",
+    pocDev: "Development run · not on the GB10",
     offline: "Fully offline",
     synthetic: "Synthetic data only",
     poweredBy: "Powered by Dell Pro Max with GB10",
@@ -38,6 +43,7 @@ const STRINGS = {
     days: "يوم عمل",
     fit: "الملاءمة لـ GB10",
     poc: "إثبات مفهوم لمستخدم واحد على جهاز GB10",
+    pocDev: "تشغيل للتطوير · ليس على جهاز GB10",
     offline: "يعمل دون إنترنت",
     synthetic: "بيانات تجريبية فقط",
     poweredBy: "يعمل على Dell Pro Max with GB10",

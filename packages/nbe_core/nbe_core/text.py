@@ -22,6 +22,24 @@ def normalize_ar(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+_DROP = set("ًٌٍَُِّْـ​‌‍‎‏؜﻿")  # diacritics, tatweel/kashida, zero-width and direction marks
+_FOLD = {**{c: "ا" for c in "أإآٱ"}, "ى": "ي", "ة": "ه", "ؤ": "و", "ئ": "ي", "٪": "%", "﹪": "%", "％": "%",
+         **{a: str(i) for i, a in enumerate("٠١٢٣٤٥٦٧٨٩")}, **{p: str(i) for i, p in enumerate("۰۱۲۳۴۵۶۷۸۹")}}
+
+
+def normalize_map(text: str) -> tuple[str, list[int]]:
+    """For rule matching: normalize_ar's folding plus Arabic/Persian digits -> ASCII, Arabic percent -> %, hamza
+    carriers, zero-width marks dropped, lower case, each whitespace char -> " ". Returns the normalised text and,
+    for every normalised char, its index in the original, so a match can be located (and removed) in the original."""
+    out, idx = [], []
+    for i, ch in enumerate(text):
+        if ch in _DROP:
+            continue
+        out.append(" " if ch.isspace() else _FOLD.get(ch, ch).lower())
+        idx.append(i)
+    return "".join(out), idx
+
+
 def strip_preamble(text: str) -> str:
     """Remove a leading 'Here is ...:' line and surrounding quotes that models add to drafts."""
     lines = text.strip().splitlines()

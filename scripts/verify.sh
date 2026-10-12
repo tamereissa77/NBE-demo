@@ -13,7 +13,7 @@ for _ in $(seq 30); do curl -fsS -o /dev/null "$BASE/" && curl -fsS -o /dev/null
 echo "Portal"
 curl -fsS "$BASE/" | grep -q 'id="root"' && pass "portal / served" || bad "portal / not served"
 curl -fsS "$BASE/d4" | grep -q 'id="root"' && pass "SPA deep link /d4" || bad "SPA deep link /d4"
-curl -fsS -o /dev/null "$BASE/nbe-logo-web.png" && pass "NBE logo asset" || bad "NBE logo asset"
+curl -fsS -o /dev/null "$BASE/logo.png" && pass "brand logo asset" || bad "brand logo asset"
 
 echo "Demo APIs"
 for i in 1 2 3 4 5 6 7; do
