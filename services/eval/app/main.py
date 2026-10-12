@@ -128,7 +128,7 @@ def results():
     order = {a: i for i, a in enumerate(CORE + REFERENCE)}
     by_order = lambda rows: sorted(rows, key=lambda r: order.get(r["alias"], 99))  # noqa: E731
     overall = by_order(summary_rows())
-    by_dialect = {d: by_order(summary_rows(ids(lambda i, d=d: i["dialect"] == d))) for d in ("msa", "egy", "mix")}
+    by_dialect = {d: by_order(summary_rows(ids(lambda i, d=d: i["dialect"] == d))) for d in ("msa", "dia", "mix")}
     legal = by_order(summary_rows(ids(lambda i: i["demo"] == "D5")))
     for row in overall:
         row["name"] = MODEL_NAMES.get(row["alias"], row["alias"])

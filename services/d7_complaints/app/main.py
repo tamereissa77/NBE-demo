@@ -122,13 +122,13 @@ def queue():
 CLASSIFY_SCHEMA = {"type": "object", "properties": {
     "topic": {"type": "string", "enum": TOPICS}, "severity": {"type": "integer", "minimum": 1, "maximum": 4},
     "sentiment": {"type": "string", "enum": ["negative", "neutral", "positive"]}, "vulnerable": {"type": "boolean"},
-    "needs_callback": {"type": "boolean"}, "summary": {"type": "string"}, "language": {"type": "string", "enum": ["msa", "egy", "en"]}},
+    "needs_callback": {"type": "boolean"}, "summary": {"type": "string"}, "language": {"type": "string", "enum": ["msa", "dia", "en"]}},
     "required": ["topic", "severity", "sentiment", "vulnerable", "needs_callback", "summary", "language"]}
 
 CLASSIFY_PROMPT = ("صنّف شكوى عميل بنك. topic واحد من: " + ", ".join(f"{k} ({v})" for k, v in TOPIC_AR.items()) +
                    ". severity: 1 استفسار بسيط، 2 إزعاج دون خسارة كبيرة، 3 خسارة مالية أو تعطل خدمة مهمة، 4 احتيال أو خسارة كبيرة أو ظرف إنساني عاجل. "
                    "vulnerable: العميل في ظرف إنساني صعب (مرض، سن متقدم، حاجة عاجلة). needs_callback: الخطورة 3 أو أكثر أو عميل في ظرف صعب. "
-                   "summary: جملة واحدة بالعربية. language: msa أو egy أو en.\n\nالشكوى:\n")
+                   "summary: جملة واحدة بالعربية. language: msa (فصحى) أو dia (عامية/لهجة محلية) أو en.\n\nالشكوى:\n")
 
 
 async def classify(text: str):
@@ -300,4 +300,4 @@ async def accuracy(refresh: bool = False, n: int = 100):
 
 @app.get("/policy")
 def policy():
-    return {"rules": POLICY_RULES, "sla_hours": SLA_HOURS, "teams": TEAMS, "note": "Synthetic placeholder policy until NBE supplies its rules."}
+    return {"rules": POLICY_RULES, "sla_hours": SLA_HOURS, "teams": TEAMS, "note": f"Synthetic placeholder policy until {settings.bank_short} supplies its rules."}

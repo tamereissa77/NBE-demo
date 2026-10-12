@@ -31,7 +31,7 @@ async def _check_qdrant() -> str:
 
 
 def create_app(demo_id: str, title: str, phase: str = "scaffold") -> FastAPI:
-    app = FastAPI(title=f"NBE {demo_id.upper()} · {title}", docs_url="/docs", redoc_url=None)
+    app = FastAPI(title=f"{settings.bank_short} {demo_id.upper()} · {title}", docs_url="/docs", redoc_url=None)
     started = time.time()
 
     @app.get("/health")

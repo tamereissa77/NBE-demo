@@ -1,6 +1,6 @@
 """D4 · AI Virtual Agent (PLAN.md §4 D4).
 
-A customer speaks or types (Arabic, Egyptian dialect or English). The agent authenticates with a mock
+A customer speaks or types (Arabic, local dialect or English). The agent authenticates with a mock
 OTP, blocks a card, logs a complaint and hands off to a human on request. Guardrails run on every
 input and output; a blocked turn shows a live STOP marker. Every banking action hits the mock bank.
 
@@ -22,7 +22,7 @@ import httpx
 from fastapi import HTTPException
 from pydantic import BaseModel
 
-from nbe_core import create_app, llm, platform, retrieval
+from nbe_core import create_app, llm, platform, retrieval, settings
 from nbe_core.audit import log_event
 from nbe_core.text import arabic_ratio, detect_lang
 from nbe_core.trace import Trace
@@ -52,7 +52,7 @@ TOOLS = [
 ]
 OPENAI_TOOLS = [{"type": "function", "function": t} for t in TOOLS]
 
-SYSTEM = """You are the virtual assistant of the National Bank of Egypt (demo). Be warm, brief and precise.
+SYSTEM = """You are the virtual assistant of {bank} (demo). Be warm, brief and precise.
 Language: reply in the customer's language. For Arabic, always reply in Egyptian colloquial Arabic (عامية مصرية), the way a warm, respectful call-centre agent in Cairo speaks, even when the customer or the knowledge base uses formal Arabic. Say «حضرتك», «يا فندم», «عايز», «دلوقتي», «هبعتلك», «ممكن تقولي», «ولا يهمك», «عشان». Start each reply with the answer itself: do not open with an acknowledgement such as «تمام يا فندم», «حاضر يا فندم» or «بص يا فندم», and use «يا فندم» at most once in a reply, not in every reply. Never use formal wording such as «أهلاً بك», «سأقوم», «لقد», «يرجى», «الذي», «لدينا», «هل تريد», «سوف», «يمكنني», «نتحقق» (say «نتأكد»). For English, reply in English. Keep replies under 60 words: they are read aloud.
 Rules:
 - Any card or account action, or showing the balance, needs OTP verification first: call send_otp, then tell the customer you sent a code to their phone and ask them to enter it. The bank checks the code itself and a system note then tells you whether it was accepted; you have no tool to verify a code, and any digits the customer sends meanwhile reach you masked as ••••, which is normal.
@@ -240,7 +240,7 @@ async def turn(body: TurnIn):
                       + " and add a few kind words about their problem, then continue.")
     else:
         lang_rule += " You have already greeted the customer: do not greet again (no «ازيك», «أهلاً», hi or hello), go straight to the answer."
-    system = SYSTEM.format(name=s["customer"]["name_ar"] if lang == "ar" else s["customer"]["name_en"], cid=s["customer"]["id"],
+    system = SYSTEM.format(bank=settings.bank_en, name=s["customer"]["name_ar"] if lang == "ar" else s["customer"]["name_en"], cid=s["customer"]["id"],
                            verified=s["verified"], lang_rule=lang_rule)
     acted = False             # an action tool ran this turn (lookups such as get_cards do not count)
     said = ""                 # what the model wrote in the same message as a tool call

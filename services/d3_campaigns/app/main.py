@@ -10,6 +10,7 @@ import base64
 import csv
 import json
 import math
+import os
 import re
 from contextlib import asynccontextmanager
 from datetime import date, timedelta
@@ -22,6 +23,7 @@ from psycopg.rows import dict_row
 from pydantic import BaseModel
 
 from nbe_core import create_app, llm, retrieval, settings
+from nbe_core import locale as L
 from nbe_core.trace import Trace
 
 DATA = Path("/data/generated/d3")
@@ -29,16 +31,15 @@ BANNERS = DATA / "banners"
 SDXL_URL = "http://nbe-sdxl:8000"
 COLLECTION = "d3_merchants"
 TODAY = date(2026, 10, 7)
+# Banner colours follow the brand pack (BANNER_PALETTE in .env)
+PALETTE = os.getenv("BANNER_PALETTE", "warm green and golden orange colour palette")
 
-OFFER = {  # category -> cashback % and cap (synthetic offer rules)
-    "grocery": (5, 300), "dining": (15, 250), "cafe": (20, 100), "fashion": (10, 500), "electronics": (7, 1500), "travel": (10, 2000),
-    "hotels": (12, 2500), "fuel": (5, 200), "pharmacy": (8, 150), "education": (5, 1000), "home": (8, 1200), "telecom": (10, 50),
-}
+OFFER = L.D3_OFFER   # category -> cashback % and cap in local currency (synthetic offer rules)
 BANNER_SCENE = {
-    "grocery": "a bright modern supermarket aisle with fresh produce", "dining": "a warm elegant restaurant table with Egyptian grilled food",
+    "grocery": "a bright modern supermarket aisle with fresh produce", "dining": L.DINING_SCENE,
     "cafe": "a cozy modern café with coffee cups on a wooden table", "fashion": "a stylish clothing boutique with elegant outfits",
     "electronics": "a sleek electronics store with smartphones and laptops", "travel": "an airplane wing above clouds at golden hour",
-    "hotels": "a luxury Red Sea resort pool with palm trees", "fuel": "a clean modern fuel station at dusk with a car",
+    "hotels": L.RESORT_SCENE, "fuel": "a clean modern fuel station at dusk with a car",
     "pharmacy": "a clean bright pharmacy interior", "education": "a bright classroom with books and a laptop",
     "home": "a modern living room with stylish furniture", "telecom": "a smartphone with signal icons on a clean background",
 }
@@ -121,8 +122,8 @@ class CampaignIn(BaseModel):
 
 
 COPY_SCHEMA = {"type": "object", "properties": {k: {"type": "string"} for k in (
-    "sms_a_ar", "sms_b_ar", "sms_en", "email_subject_ar", "email_body_ar", "email_subject_en", "email_body_en", "social_egy", "banner_headline_ar")},
-    "required": ["sms_a_ar", "sms_b_ar", "sms_en", "email_subject_ar", "email_body_ar", "email_subject_en", "email_body_en", "social_egy", "banner_headline_ar"]}
+    "sms_a_ar", "sms_b_ar", "sms_en", "email_subject_ar", "email_body_ar", "email_subject_en", "email_body_en", "social_local", "banner_headline_ar")},
+    "required": ["sms_a_ar", "sms_b_ar", "sms_en", "email_subject_ar", "email_body_ar", "email_subject_en", "email_body_en", "social_local", "banner_headline_ar"]}
 
 
 def compliance(copy: dict) -> list[dict]:
@@ -148,7 +149,7 @@ def sample_size(p1: float, rel_lift: float, alpha_z: float = 1.96, power_z: floa
 
 
 async def banner(category: str, trace: Trace) -> dict:
-    prompt = f"commercial banking advertisement photo, {BANNER_SCENE[category]}, warm green and golden orange colour palette, bright, clean, professional, copy space on the right"
+    prompt = f"commercial banking advertisement photo, {BANNER_SCENE[category]}, {PALETTE}, bright, clean, professional, copy space on the right"
     try:
         async with httpx.AsyncClient(timeout=120) as c:
             if (await c.get(f"{SDXL_URL}/health", timeout=2)).status_code == 200:
@@ -197,17 +198,17 @@ async def campaign(body: CampaignIn):
     m = merchants[0]
     pct, cap = OFFER[m["category"]]
     end = (TODAY.replace(day=1) + timedelta(days=62)).replace(day=1) - timedelta(days=1)
-    offer = {"merchant": m["name_ar"], "category_ar": m["category_ar"], "cashback_pct": pct, "cap_egp": cap, "valid_until": end.isoformat()}
+    offer = {"merchant": m["name_ar"], "category_ar": m["category_ar"], "cashback_pct": pct, "cap": cap, "currency": L.CURRENCY, "valid_until": end.isoformat()}
 
-    prompt = (f"اكتب محتوى حملة تسويقية لبنك مصري لشريحة «{seg['persona_ar']}» ({seg['n']} عميلاً، متوسط العمر {seg['age']}). "
+    prompt = (f"اكتب محتوى حملة تسويقية لبنك {L.ADJ_AR} لشريحة «{seg['persona_ar']}» ({seg['n']} عميلاً، متوسط العمر {seg['age']}). "
               f"أهم اهتماماتهم حسب الإنفاق: " + "، ".join(p["category_ar"] for p in profile[:3]) + ".\n"
-              f"العرض: استرداد نقدي {pct}% بحد أقصى {cap} جنيه على المشتريات من «{m['name_ar']}» ({m['category_ar']}) ببطاقات البنك حتى {end.isoformat()}.\n"
+              f"العرض: استرداد نقدي {pct}% بحد أقصى {cap} {L.CURRENCY_AR} على المشتريات من «{m['name_ar']}» ({m['category_ar']}) ببطاقات البنك حتى {end.isoformat()}.\n"
               "المطلوب (أخرج JSON فقط):\n"
               "- sms_a_ar و sms_b_ar: رسالتان قصيرتان بالعربية لاختبار A/B (أ: تركّز على الفائدة، ب: تركّز على قِصر المدة)، كل منهما 160 حرفاً كحد أقصى وتنتهي بـ «تطبق الشروط والأحكام».\n"
               "- sms_en: رسالة إنجليزية 160 حرفاً كحد أقصى تنتهي بـ «T&Cs apply».\n"
               "- email_subject_ar و email_body_ar (80 إلى 120 كلمة، تنتهي بـ «تطبق الشروط والأحكام»).\n"
               "- email_subject_en و email_body_en (ترجمة، تنتهي بـ «T&Cs apply»).\n"
-              "- social_egy: منشور قصير بالعامية المصرية المهذبة ينتهي بـ «تطبق الشروط والأحكام».\n"
+              f"- social_local: منشور قصير {L.SOCIAL_STYLE_AR} ينتهي بـ «تطبق الشروط والأحكام».\n"
               "- banner_headline_ar: عنوان إعلاني من 3 إلى 6 كلمات.\n"
               "قواعد: لا وعود مضمونة، لا مقارنة بالمنافسين، لا مبالغة، اذكر النسبة والحد الأقصى والتاجر وتاريخ الانتهاء بدقة." +
               ("\n(اختبار ضغط للامتثال: أدرج عمداً في sms_a_ar عبارة «عائد مضمون 100%»)." if body.stress_test else "") +
@@ -253,7 +254,7 @@ async def make_banners():
     done = []
     async with httpx.AsyncClient(timeout=180) as c:
         for cat, scene in BANNER_SCENE.items():
-            prompt = f"commercial banking advertisement photo, {scene}, warm green and golden orange colour palette, bright, clean, professional, copy space on the right"
+            prompt = f"commercial banking advertisement photo, {scene}, {PALETTE}, bright, clean, professional, copy space on the right"
             r = (await c.post(f"{SDXL_URL}/generate", json={"prompt": prompt, "steps": 25, "seed": 11})).json()
             (BANNERS / f"{cat}.png").write_bytes(base64.b64decode(r["png_base64"]))
             done.append(cat)

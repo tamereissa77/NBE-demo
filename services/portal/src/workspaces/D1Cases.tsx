@@ -75,7 +75,7 @@ const DECISION: Record<string, { en: string; ar: string; tone: "green" | "orange
   reject_docs: { en: "Documents rejected", ar: "رُفضت المستندات", tone: "red" },
 };
 const VTONE: Record<string, "green" | "orange" | "neutral"> = { flagged_for_review: "orange", no_issues_found: "green", confirm_readings: "orange", incomplete: "neutral" };
-const INPUT = "w-full rounded-lg border border-nbe-border px-3 py-1.5 text-sm";
+const INPUT = "w-full rounded-lg border border-line px-3 py-1.5 text-sm";
 
 function FieldRow({ f, lang, onSave }: { f: Field; lang: "en" | "ar"; onSave: (key: string, value: string | boolean | null, reset?: boolean) => void }) {
   const l = L[lang];
@@ -84,7 +84,7 @@ function FieldRow({ f, lang, onSave }: { f: Field; lang: "en" | "ar"; onSave: (k
   useEffect(() => setText(f.value == null ? "" : String(f.value)), [f.value]);
   const changed = text !== (f.value == null ? "" : String(f.value));
   return (
-    <tr className={`border-t border-nbe-border align-top ${f.doubt ? "bg-nbe-orange/10" : ""}`}>
+    <tr className={`border-t border-line align-top ${f.doubt ? "bg-accent/10" : ""}`}>
       <td className="py-1.5 pe-3 text-sm font-semibold">{lang === "ar" ? f.label_ar : f.label_en}</td>
       <td className="py-1.5">
         {bool ? (
@@ -102,8 +102,8 @@ function FieldRow({ f, lang, onSave }: { f: Field; lang: "en" | "ar"; onSave: (k
           {f.base && !f.corrected && <Chip>{l.baseModel}</Chip>}
           {f.second_read && !f.corrected && <Chip>{l.reread}</Chip>}
           {f.corrected && <Chip tone="green">{l.corrected}</Chip>}
-          {!bool && (f.doubt || changed) && <button className="text-xs font-semibold text-nbe-green underline" onClick={() => onSave(f.key, text)}>{changed ? l.save : l.ok}</button>}
-          {f.corrected && <button className="text-xs text-nbe-text underline" onClick={() => onSave(f.key, null, true)}>{l.reset}</button>}
+          {!bool && (f.doubt || changed) && <button className="text-xs font-semibold text-brand underline" onClick={() => onSave(f.key, text)}>{changed ? l.save : l.ok}</button>}
+          {f.corrected && <button className="text-xs text-ink-soft underline" onClick={() => onSave(f.key, null, true)}>{l.reset}</button>}
         </div>
       </td>
     </tr>
@@ -172,11 +172,11 @@ export default function D1Cases({ onTrace }: WorkspaceProps) {
   return (
     <div className="grid gap-5 lg:grid-cols-[220px_1fr_340px]">
       <nav className="flex gap-2 overflow-x-auto lg:flex-col">
-        <div className="hidden text-xs font-semibold uppercase text-nbe-text lg:block">{l.files}</div>
+        <div className="hidden text-xs font-semibold uppercase text-ink-soft lg:block">{l.files}</div>
         <Button test="new-file" variant="ghost" onClick={newFile}>+ {l.newFile}</Button>
         {rows.map((r) => (
           <button key={r.id} data-test="case" onClick={() => pick(r.id)}
-                  className={`shrink-0 rounded-xl border px-3 py-2 text-start text-sm ${cur?.id === r.id ? "border-nbe-green bg-nbe-green text-white" : "border-nbe-border bg-white hover:bg-nbe-bg"}`}>
+                  className={`shrink-0 rounded-xl border px-3 py-2 text-start text-sm ${cur?.id === r.id ? "border-brand bg-brand text-white" : "border-line bg-white hover:bg-canvas"}`}>
             <div className="font-bold">{r.id}</div>
             <div dir="auto" className="text-xs opacity-90">{r.applicant_name || "—"}</div>
             <div className="text-xs opacity-90">{r.loan_amount && !Number.isNaN(Number(r.loan_amount)) ? `${Number(r.loan_amount).toLocaleString("en-US")} ${l.egp}` : l.noAmount}</div>
@@ -184,25 +184,25 @@ export default function D1Cases({ onTrace }: WorkspaceProps) {
             {r.decision && <div className="mt-1"><Chip tone={DECISION[r.decision].tone}>{DECISION[r.decision][lang]}</Chip></div>}
           </button>
         ))}
-        {rows.length === 0 && <p className="hidden text-xs text-nbe-text lg:block">{l.none}</p>}
+        {rows.length === 0 && <p className="hidden text-xs text-ink-soft lg:block">{l.none}</p>}
       </nav>
 
       <section className="space-y-4">
-        {reader && !reader.ready && <p className="rounded-lg bg-nbe-orange/20 p-3 text-sm text-nbe-strong">{reader.configured ? l.loading : l.absent}</p>}
+        {reader && !reader.ready && <p className="rounded-lg bg-accent/20 p-3 text-sm text-ink">{reader.configured ? l.loading : l.absent}</p>}
         <ErrorNote error={error} />
-        <div className="rounded-xl border border-nbe-border bg-white p-4">
+        <div className="rounded-xl border border-line bg-white p-4">
           <div className="mb-3 flex items-center gap-3">
-            {cur && <span className="font-bold text-nbe-green">{cur.id}</span>}
+            {cur && <span className="font-bold text-brand">{cur.id}</span>}
             <span className="text-sm font-semibold">{l.declared}</span>
           </div>
           <div className="grid gap-3 md:grid-cols-2">
-            <label className="text-xs text-nbe-text">{l.name}<input dir="auto" data-test="f-name" className={INPUT} value={form.applicant_name} onChange={(e) => set("applicant_name", e.target.value)} /></label>
-            <label className="text-xs text-nbe-text">{l.nid}<input dir="ltr" inputMode="numeric" className={INPUT} value={form.national_id} onChange={(e) => set("national_id", e.target.value)} /></label>
-            <label className="text-xs text-nbe-text">{l.employer}<input dir="auto" className={INPUT} value={form.employer} onChange={(e) => set("employer", e.target.value)} /></label>
-            <label className="text-xs text-nbe-text">{l.salary}<input dir="ltr" inputMode="decimal" className={INPUT} value={form.monthly_salary ?? ""} onChange={(e) => set("monthly_salary", num(e.target.value))} /></label>
-            <label className="text-xs text-nbe-text md:col-span-2">{l.address}<input dir="auto" className={INPUT} value={form.address} onChange={(e) => set("address", e.target.value)} /></label>
-            <label className="text-xs text-nbe-text">{l.amount}<input dir="ltr" inputMode="decimal" className={INPUT} value={form.loan_amount ?? ""} onChange={(e) => set("loan_amount", num(e.target.value))} /></label>
-            <label className="text-xs text-nbe-text">{l.kind}
+            <label className="text-xs text-ink-soft">{l.name}<input dir="auto" data-test="f-name" className={INPUT} value={form.applicant_name} onChange={(e) => set("applicant_name", e.target.value)} /></label>
+            <label className="text-xs text-ink-soft">{l.nid}<input dir="ltr" inputMode="numeric" className={INPUT} value={form.national_id} onChange={(e) => set("national_id", e.target.value)} /></label>
+            <label className="text-xs text-ink-soft">{l.employer}<input dir="auto" className={INPUT} value={form.employer} onChange={(e) => set("employer", e.target.value)} /></label>
+            <label className="text-xs text-ink-soft">{l.salary}<input dir="ltr" inputMode="decimal" className={INPUT} value={form.monthly_salary ?? ""} onChange={(e) => set("monthly_salary", num(e.target.value))} /></label>
+            <label className="text-xs text-ink-soft md:col-span-2">{l.address}<input dir="auto" className={INPUT} value={form.address} onChange={(e) => set("address", e.target.value)} /></label>
+            <label className="text-xs text-ink-soft">{l.amount}<input dir="ltr" inputMode="decimal" className={INPUT} value={form.loan_amount ?? ""} onChange={(e) => set("loan_amount", num(e.target.value))} /></label>
+            <label className="text-xs text-ink-soft">{l.kind}
               <select className={INPUT} value={form.applicant_type} onChange={(e) => set("applicant_type", e.target.value)}>
                 <option value="employee">{l.employee}</option><option value="business">{l.business}</option>
               </select>
@@ -212,11 +212,11 @@ export default function D1Cases({ onTrace }: WorkspaceProps) {
         </div>
 
         {cur && (
-          <div className="rounded-xl border border-nbe-border bg-white p-4">
+          <div className="rounded-xl border border-line bg-white p-4">
             <div className="mb-1 text-sm font-semibold">{l.docs}</div>
-            <p className="mb-3 text-xs text-nbe-text">{l.local}</p>
+            <p className="mb-3 text-xs text-ink-soft">{l.local}</p>
             <div className="flex flex-wrap items-center gap-2">
-              <select data-test="doc-type" className={`rounded-lg border px-3 py-2 text-sm ${docType ? "border-nbe-border" : "border-nbe-orange bg-nbe-orange/10"}`}
+              <select data-test="doc-type" className={`rounded-lg border px-3 py-2 text-sm ${docType ? "border-line" : "border-accent bg-accent/10"}`}
                       value={docType} onChange={(e) => setDocType(e.target.value)}>
                 <option value="" disabled>{l.chooseType}</option>
                 {(reader?.doc_types ?? []).map((t) => <option key={t.id} value={t.id}>{lang === "ar" ? t.ar : t.en}</option>)}
@@ -226,13 +226,13 @@ export default function D1Cases({ onTrace }: WorkspaceProps) {
               <Button variant="ghost" disabled={!docType} onClick={() => picker.current?.click()}>{l.add}: {l.choose}</Button>
               <span className="ms-auto"><Button test="verify" onClick={verify} disabled={busy || cur.documents.length === 0}>{res && (cur.stale || unread) ? l.reverify : l.verify}</Button></span>
             </div>
-            {!docType && <p className="mt-2 text-xs text-nbe-text">{l.pickFirst}</p>}
+            {!docType && <p className="mt-2 text-xs text-ink-soft">{l.pickFirst}</p>}
             {busy && <div className="mt-3"><Spinner label={l.working} /></div>}
-            {cur.stale && !busy && <p className="mt-3 text-xs text-nbe-strong">{l.stale}</p>}
+            {cur.stale && !busy && <p className="mt-3 text-xs text-ink">{l.stale}</p>}
             <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-3">
               {cur.documents.map((d) => (
                 <button key={d.id} data-test="doc" onClick={() => { setOpen(d.id); setTab(d.read && !d.error && !d.needs_type ? "fields" : "document"); }}
-                        className={`overflow-hidden rounded-xl border-2 bg-white text-start ${flagsOf(d.id) ? "border-status-stop/60" : "border-nbe-border"}`}>
+                        className={`overflow-hidden rounded-xl border-2 bg-white text-start ${flagsOf(d.id) ? "border-status-stop/60" : "border-line"}`}>
                   <img src={`data:image/jpeg;base64,${d.thumb}`} alt={d.doc_type} className="h-40 w-full object-cover object-top" />
                   <div className="flex items-center justify-between gap-2 px-3 py-2">
                     <span className="text-sm font-semibold" dir="auto">{label(d)}</span>
@@ -255,7 +255,7 @@ export default function D1Cases({ onTrace }: WorkspaceProps) {
               <Chip tone={res.risk === "high" ? "red" : res.risk === "medium" ? "orange" : "green"}>risk: {res.risk}</Chip>
               {res.total_ms > 0 && <Chip>{(res.total_ms / 1000).toFixed(0)} s</Chip>}
             </div>
-            <p dir="auto" className="text-sm leading-relaxed text-nbe-strong">{lang === "ar" ? res.summary.ar : res.summary.en}</p>
+            <p dir="auto" className="text-sm leading-relaxed text-ink">{lang === "ar" ? res.summary.ar : res.summary.en}</p>
             {res.flags.length > 0 && (
               <Block label={l.evidence} accent="orange">
                 {res.flags.map((f, i) => (
@@ -268,7 +268,7 @@ export default function D1Cases({ onTrace }: WorkspaceProps) {
                     <div className="mt-0.5 flex flex-wrap gap-2">
                       {f.documents.map((id) => {
                         const d = cur.documents.find((x) => x.id === id);
-                        return d ? <button key={id} className="text-xs text-nbe-green underline" onClick={() => { setOpen(id); setTab("fields"); }}>{label(d)}</button> : null;
+                        return d ? <button key={id} className="text-xs text-brand underline" onClick={() => { setOpen(id); setTab("fields"); }}>{label(d)}</button> : null;
                       })}
                     </div>
                   </div>
@@ -282,7 +282,7 @@ export default function D1Cases({ onTrace }: WorkspaceProps) {
               </Block>
             ) : (
               <div className="space-y-2">
-                <textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder={l.note} dir="auto" rows={2} className="w-full rounded-lg border border-nbe-border p-2 text-sm" />
+                <textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder={l.note} dir="auto" rows={2} className="w-full rounded-lg border border-line p-2 text-sm" />
                 <div className="flex flex-wrap gap-2">
                   <Button onClick={() => decide("approve_docs")}>{l.approve}</Button>
                   <Button variant="ghost" onClick={() => decide("request_more")}>{l.more}</Button>
@@ -299,21 +299,21 @@ export default function D1Cases({ onTrace }: WorkspaceProps) {
         <Modal title={`${label(doc)} · ${cur.id}`} onClose={() => setOpen(null)}>
           <div className="mb-3 flex flex-wrap items-center gap-2">
             {(["document", "fields", "ela"] as const).filter((t) => (t !== "ela" || doc.has_ela) && (t !== "fields" || doc.fields.length > 0)).map((t) => (
-              <button key={t} onClick={() => setTab(t)} className={`rounded-full px-3 py-1 text-sm ${tab === t ? "bg-nbe-green text-white" : "bg-nbe-bg"}`}>{l[t]}</button>
+              <button key={t} onClick={() => setTab(t)} className={`rounded-full px-3 py-1 text-sm ${tab === t ? "bg-brand text-white" : "bg-canvas"}`}>{l[t]}</button>
             ))}
             <button className="ms-auto text-xs text-status-stop underline"
                     onClick={() => { setOpen(null); run(() => del<Case>(`${base}/documents/${doc.id}`)); }}>{l.remove}</button>
           </div>
           <div className="mb-3 flex flex-wrap items-center gap-2 text-sm">
-            <span className="text-xs text-nbe-text">{l.type}</span>
-            <select data-test="set-type" className={`rounded-lg border px-2 py-1 text-sm ${doc.needs_type ? "border-nbe-orange bg-nbe-orange/10" : "border-nbe-border"}`}
+            <span className="text-xs text-ink-soft">{l.type}</span>
+            <select data-test="set-type" className={`rounded-lg border px-2 py-1 text-sm ${doc.needs_type ? "border-accent bg-accent/10" : "border-line"}`}
                     value={doc.needs_type ? "" : doc.doc_type} onChange={(e) => setType(doc.id, e.target.value)}>
               {doc.needs_type && <option value="" disabled>{l.chooseType}</option>}
               {(reader?.doc_types ?? []).map((t) => <option key={t.id} value={t.id}>{lang === "ar" ? t.ar : t.en}</option>)}
             </select>
           </div>
           {doc.source && (
-            <p className="mb-3 text-xs text-nbe-text" dir="auto">
+            <p className="mb-3 text-xs text-ink-soft" dir="auto">
               {l.pdf} · {doc.source.pages} {l.pages} · {l.madeBy}: {[doc.source.producer, doc.source.creator].filter(Boolean).join(" / ") || "—"} · {l.saves}: {doc.source.revisions}
               {doc.source.created && ` · ${doc.source.created}`}{doc.source.modified && doc.source.modified !== doc.source.created && ` → ${doc.source.modified}`}
             </p>
@@ -322,15 +322,15 @@ export default function D1Cases({ onTrace }: WorkspaceProps) {
           {tab === "document" && (
             <div>
               <div className="relative">
-                <img src={`${base}/documents/${doc.id}/image`} alt={doc.doc_type} className="w-full rounded-lg border border-nbe-border" />
+                <img src={`${base}/documents/${doc.id}/image`} alt={doc.doc_type} className="w-full rounded-lg border border-line" />
                 {doc.size && doc.boxes.map((x, i) => (
-                  <div key={i} title={x.kind} className={`absolute rounded border-4 ${x.kind === "patch" ? "border-status-stop" : x.kind === "resave" ? "border-nbe-green" : "border-nbe-orange"}`}
+                  <div key={i} title={x.kind} className={`absolute rounded border-4 ${x.kind === "patch" ? "border-status-stop" : x.kind === "resave" ? "border-brand" : "border-accent"}`}
                        style={{ left: `${(100 * x.bbox[0]) / doc.size![0]}%`, top: `${(100 * x.bbox[1]) / doc.size![1]}%`,
                                 width: `${(100 * (x.bbox[2] - x.bbox[0])) / doc.size![0]}%`, height: `${(100 * (x.bbox[3] - x.bbox[1])) / doc.size![1]}%` }} />
                 ))}
               </div>
               {doc.boxes.length > 0 && <p className="mt-2 text-xs">{l.boxes}</p>}
-              {doc.noise_checkable === false && <p className="mt-2 text-xs text-nbe-text">{l.uncheckable}</p>}
+              {doc.noise_checkable === false && <p className="mt-2 text-xs text-ink-soft">{l.uncheckable}</p>}
             </div>
           )}
           {tab === "ela" && (
@@ -341,12 +341,12 @@ export default function D1Cases({ onTrace }: WorkspaceProps) {
           )}
           {tab === "fields" && (
             <div className="grid gap-4 md:grid-cols-2">
-              <img src={`${base}/documents/${doc.id}/image`} alt={doc.doc_type} className="w-full rounded-lg border border-nbe-border" />
+              <img src={`${base}/documents/${doc.id}/image`} alt={doc.doc_type} className="w-full rounded-lg border border-line" />
               <table className="w-full">
                 <tbody>
                   {doc.fields.map((f) => <FieldRow key={f.key} f={f} lang={lang} onSave={saveField(doc.id)} />)}
-                  <tr className="border-t border-nbe-border"><td className="py-1.5 pe-3 text-sm font-semibold">software</td><td colSpan={2} className="text-sm">{doc.software ?? "—"}</td></tr>
-                  {doc.fields.some((f) => f.base) && <tr><td colSpan={3} className="pt-2 text-xs text-nbe-text">{l.baseNote}</td></tr>}
+                  <tr className="border-t border-line"><td className="py-1.5 pe-3 text-sm font-semibold">software</td><td colSpan={2} className="text-sm">{doc.software ?? "—"}</td></tr>
+                  {doc.fields.some((f) => f.base) && <tr><td colSpan={3} className="pt-2 text-xs text-ink-soft">{l.baseNote}</td></tr>}
                 </tbody>
               </table>
             </div>

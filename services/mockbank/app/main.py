@@ -15,6 +15,7 @@ from psycopg.rows import dict_row
 from pydantic import BaseModel
 
 from nbe_core import create_app, settings
+from nbe_core import locale as L
 from app.seed import customers
 
 SCHEMA = """
@@ -45,7 +46,7 @@ def reset() -> int:
         for c in seed:
             conn.execute("INSERT INTO bank.customers VALUES (%s,%s,%s,%s,%s)",
                          (c["id"], c["name_ar"], c["name_en"], c["phone"], c["city"]))
-            conn.execute("INSERT INTO bank.accounts (customer_id, balance) VALUES (%s,%s)", (c["id"], c["balance"]))
+            conn.execute("INSERT INTO bank.accounts (customer_id, balance, currency) VALUES (%s,%s,%s)", (c["id"], c["balance"], L.CURRENCY))
             for card in c["cards"]:
                 conn.execute("INSERT INTO bank.cards (customer_id, last4, type) VALUES (%s,%s,%s)",
                              (c["id"], card["last4"], card["type"]))
