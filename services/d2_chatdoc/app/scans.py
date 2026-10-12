@@ -155,9 +155,28 @@ def load(root: Path) -> dict | None:
         pages = [json.loads(f.read_text(encoding="utf-8")) for f in sorted((root / "extractions" / doc_id).glob("page_*.json"))]
         for page in pages:
             for b in page["blocks"]:
-                crops[b["block_id"]] = (doc_id, root / b["crop_path"])
+                if b.get("crop_path"):       # a block the OCR gave no usable box has no crop image
+                    crops[b["block_id"]] = (doc_id, root / b["crop_path"])
         for p in build_passages(doc, pages):
             # Same shape as D2's procedure sections: title line, heading line, then the body
             passages.append({**p, "doc_id": doc_id, "embed": f"{doc['title_ar']}\n{p['heading']}\n{p['text']}"})
         doc["passages"] = sum(1 for p in passages if p["doc_id"] == doc_id)
     return {"docs": docs, "passages": passages, "crops": crops}
+
+
+def load_all(roots: list[Path]) -> dict | None:
+    """The corpora under several roots as one (the seed corpus, then documents added by app/intake.py).
+    A document id found again in a later root replaces the earlier one."""
+    out: dict | None = None
+    for root in roots:
+        part = load(root)
+        if not part:
+            continue
+        if out is None:
+            out = part
+            continue
+        again = set(part["docs"]) & set(out["docs"])
+        out["passages"] = [p for p in out["passages"] if p["doc_id"] not in again] + part["passages"]
+        out["crops"] = {k: v for k, v in out["crops"].items() if v[0] not in again} | part["crops"]
+        out["docs"] = {k: v for k, v in out["docs"].items() if k not in again} | part["docs"]
+    return out

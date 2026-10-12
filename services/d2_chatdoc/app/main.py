@@ -10,6 +10,10 @@ see app/scans.py. It lives in its own collection, its citations carry the crop i
 and each document lists the roles allowed to read it. Without /data/seed/d2/circulars the service
 behaves exactly as the procedures-only D2.
 
+New scanned documents can be added without re-ingesting (back office, manager only): app/intake.py sends
+an uploaded PDF to the extraction service (services/d2_extraction) and adds only its passages. That path
+exists only with docker-compose.d2-extract.yml.
+
 With that corpus come the guardrails nbe-working had, here on the local guardrails service (policy
 config/guardrails/d2): an input check before retrieval, and on every generated answer a rule that masks
 personal identifiers followed by an output check.
@@ -24,8 +28,8 @@ from fastapi import HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
-from app import scans
-from nbe_core import create_app, llm, platform, retrieval
+from app import intake, scans
+from nbe_core import create_app, llm, platform, retrieval, settings
 from nbe_core.text import detect_lang
 from nbe_core.trace import Trace
 
@@ -63,9 +67,16 @@ def sections(md: str) -> list[dict]:
     return out
 
 
+def load_scans() -> None:
+    """The seed corpus plus any documents added through app/intake.py (none unless that volume is mounted)."""
+    fresh = scans.load_all([SEED / "circulars", intake.CORPUS]) or {}
+    SCANS.clear()
+    SCANS.update(fresh)
+
+
 def load_docs() -> None:
     if not SCANS:
-        SCANS.update(scans.load(SEED / "circulars") or {})
+        load_scans()
     if DOCS or not (SEED / "manifest.json").exists():
         return
     for m in json.loads((SEED / "manifest.json").read_text(encoding="utf-8")):
@@ -95,15 +106,35 @@ async def ingest():
     out = {"ingested_sections": n, "documents": len(DOCS)}
     if SCANS:
         await retrieval.ensure_collection(SCAN_COLLECTION, recreate=True)
-        docs = SCANS["docs"]
-        out["scanned_passages"] = await retrieval.upsert(
-            SCAN_COLLECTION, [p["embed"] for p in SCANS["passages"]],
-            [{"kind": "scan", "doc_id": p["doc_id"], "title": docs[p["doc_id"]]["title_ar"], "title_en": docs[p["doc_id"]]["title_en"],
-              "lang": docs[p["doc_id"]]["lang"], "roles": docs[p["doc_id"]]["roles"], "page": p["page"], "section": p["heading"],
-              "block_type": p["block_type"], "display": p["display"], "blocks": p["blocks"], "passage": p["id"]}
-             for p in SCANS["passages"]])
-        out["scanned_documents"] = len(docs)
+        out["scanned_passages"] = await retrieval.upsert(SCAN_COLLECTION, *scan_points(SCANS["passages"]))
+        out["scanned_documents"] = len(SCANS["docs"])
     return out
+
+
+def scan_points(passages: list[dict]) -> tuple[list[str], list[dict]]:
+    """Texts to embed and their payloads, for the scanned collection."""
+    docs = SCANS["docs"]
+    return [p["embed"] for p in passages], [
+        {"kind": "scan", "doc_id": p["doc_id"], "title": docs[p["doc_id"]]["title_ar"], "title_en": docs[p["doc_id"]]["title_en"],
+         "lang": docs[p["doc_id"]]["lang"], "roles": docs[p["doc_id"]]["roles"], "page": p["page"], "section": p["heading"],
+         "block_type": p["block_type"], "display": p["display"], "blocks": p["blocks"], "passage": p["id"]}
+        for p in passages]
+
+
+async def index_doc(doc_id: str) -> int:
+    """Make the collection match the corpus for ONE scanned document: drop its passages, add the current
+    ones (none if the document is gone). Every other document, and the procedures collection, is untouched."""
+    load_scans()
+    await retrieval.ensure_collection(SCAN_COLLECTION)
+    async with httpx.AsyncClient(timeout=120, base_url=settings.qdrant_url) as client:
+        r = await client.post(f"/collections/{SCAN_COLLECTION}/points/delete?wait=true",
+                              json={"filter": {"must": [{"key": "doc_id", "match": {"value": doc_id}}]}})
+        r.raise_for_status()
+    mine = [p for p in SCANS.get("passages", []) if p["doc_id"] == doc_id]
+    return await retrieval.upsert(SCAN_COLLECTION, *scan_points(mine)) if mine else 0
+
+
+app.include_router(intake.build_router(index_doc))
 
 
 @app.get("/documents")

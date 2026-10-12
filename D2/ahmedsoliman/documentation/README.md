@@ -281,7 +281,8 @@ tables and lists is added to the system prompt only when a scanned source is in 
 | Teller refusal written by the model | Fixed sentence chosen by rule | Deterministic, and no forbidden text is shown to the model |
 | Unknown role sees everything | Unknown role is rejected | Fail closed |
 | Standalone React app with login screen | A panel inside the portal's D2 screen, portal theme | One portal for all demos |
-| Chandra OCR, orchestrator, upload | Not ported | Out of scope: the pre-extracted pages are shipped as seed data |
+| Chandra OCR extraction service | Ported on 12 October as a back-office service, off by default (section 12) | A client may ask for a new document to be added |
+| Orchestrator, MinIO bucket and webhook as the upload trigger | `POST /upload` on D2, manager only (section 12) | No MinIO in the demo; one endpoint does the same job |
 | SQLite document catalog | `manifest.json` | |
 
 ## 6. The temporary development setup
@@ -512,6 +513,9 @@ should be re-run after any model change. Changing `MAX_CHARS` or `MIN_TAIL` requ
 
 **Add or replace a scanned document**
 
+There are two ways. Section 12 describes the intake path (upload a PDF, nothing else is re-ingested). The
+steps below are the original way, through nbe-working, and end in a full ingest.
+
 1. Extract it with nbe-working's extraction service, so that its page JSON and crops are in nbe-working's output folder.
 2. Give it a title, type and roles in `DOCS` in `services/d2_chatdoc/tools/import_nbe_working.py` (documents named `legal_circular_N` get defaults).
 3. Run the import, then rebuild D2 if code changed, then ingest.
@@ -539,10 +543,166 @@ should be re-run after any model change. Changing `MAX_CHARS` or `MIN_TAIL` requ
 - **The mask is a pattern.** It catches unbroken digit runs. A number written with spaces or dashes inside it is left to the output check.
 - **The model-based checks are judgements.** They passed every test case here, but a differently worded attack or an unusual legitimate question can be misjudged. 4 stop cases is a small sample.
 - **No answer without the guardrails service.** If `nbe-guardrails` is down, D2 returns an error, by design.
-- **No live upload.** New scanned documents go through nbe-working's OCR offline (section 10).
+- **Upload is back-office only, and the OCR model has not been run from this repository.** Section 12 lists what was and was not verified.
 - **OCR quality.** The RTGS text has systematic misspellings ("الحظية", "الخطية" for "اللحظية"). Retrieval coped in testing, but exact-word matching would not.
 - **Sample personal data.** `legal_circular_1` contains a phone number and a 14-digit national-ID-style number in its text. They read like planted test values, but they are now in the repository.
 - **No highlight on the full page.** Page images were not shipped, and the stored bounding boxes are not in one coordinate space, so the citation shows crops only.
 - **`make ui-test` has not been run** with these changes. The hooks it uses are unchanged.
 - **Shared documents are not updated** (section 7.4).
-- **D7** has not been started.
+- **D7** has its own documentation: `D7/ahmedsoliman/documentation/README.md`.
+
+## 12. Adding a new scanned document (intake, added 12 October 2026)
+
+For the case where the client asks for a new document to be added. It is a back-office task, not part of the
+demo flow, and only a manager may do it. Nothing has to be re-ingested and no collection is rebuilt.
+
+### 12.1 What happens to an uploaded PDF
+
+| Step | Where | What |
+|---|---|---|
+| 1. Upload | D2, `POST /upload` | The PDF is saved on the uploads volume. The document id is the file name without `.pdf`, as nbe-working's orchestrator derived it |
+| 2. Extraction | `nbe-d2-extract` | nbe-working's extraction service: pages rendered at about 200 dpi, Chandra OCR-2 reads each page into typed blocks, one crop image per block, one JSON file per page, in nbe-working's output layout |
+| 3. Normalisation | D2, `app/intake.py` | That output is rewritten into the layout of `data/seed/d2/circulars`, by the same rules as `tools/import_nbe_working.py` |
+| 4. Passages | D2, `app/scans.py` | The existing passage builder, unchanged: blocks under one heading on one page become one passage that keeps its list of crops |
+| 5. Index | D2, `index_doc()` | The document's old passages are deleted from `d2_circulars`, its new ones are embedded and added, and the in-memory corpus is reloaded. No other document is touched |
+
+A document with a page the OCR could not read is not indexed; the job fails and names the pages.
+
+### 12.2 What replaced MinIO
+
+| MinIO's job in nbe-working | Here |
+|---|---|
+| A PDF dropped in the `nbe-ingestion` bucket fired a webhook to the orchestrator | `POST /upload` starts the same sequence; one document at a time |
+| Crops and page images were uploaded and served by address | Crops stay on the volume and are served by the existing `/crop` endpoint, with the role check |
+
+### 12.3 Files
+
+| File | Status | Purpose |
+|---|---|---|
+| `services/d2_extraction/` | new | The extraction service. `extractor.py`, `cropper.py`, `coords.py` and `schemas.py` are nbe-working's files with imports renamed. Changed: the model is loaded from a local folder with no login; the service takes a PDF and renders it itself; nothing is forwarded to an indexing service; a new submission clears that document's earlier output |
+| `services/d2_chatdoc/app/intake.py` | new | The upload endpoints, the call to the extraction service, and the normalisation |
+| `services/d2_chatdoc/app/main.py` | changed | Loads the seed corpus plus uploaded documents; `scan_points()` and `index_doc()`; registers the intake endpoints |
+| `services/d2_chatdoc/app/scans.py` | changed | `load_all()` reads several corpus folders as one; a block with no crop no longer breaks loading |
+| `docker-compose.d2-extract.yml` | new | The uploads volume, the extraction service (profile `extract`), and the two settings D2 needs |
+| `scripts/d2_upload.sh` | new | Upload a file and wait; list; remove |
+| `tests/d2_intake_equivalence.py` | new | Proves the intake output equals the seed corpus (section 12.6) |
+| `tests/stub_d2_extraction.py` | new | Stand-in for the extraction service that replays an existing extraction; for testing without a GPU |
+
+No shared file was edited. Without `docker-compose.d2-extract.yml`, D2 has no uploads volume and no extraction
+address: `/upload` answers 404 and D2 behaves as before.
+
+### 12.4 How to use it
+
+```bash
+# once, on a machine with internet (the model is gated: the account must have accepted its terms)
+hf download datalab-to/chandra-ocr-2 --local-dir "$MODELS_DIR/chandra-ocr-2"
+
+C="docker compose -f docker-compose.yml -f docker-compose.d2-extract.yml"   # workstation: add -f docker-compose.api.yml
+$C --profile core up -d --wait nbe-d2                         # D2 with the uploads volume
+$C --profile extract up -d --wait --build nbe-d2-extract      # only while adding documents
+
+scripts/d2_upload.sh circular_12.pdf "تعميم قانوني رقم 12" "Legal circular no. 12"
+scripts/d2_upload.sh rtgs_v2.pdf "دليل ..." "RTGS guide v2" sop teller,legal_counsel,manager
+scripts/d2_upload.sh --list
+scripts/d2_upload.sh --remove circular_12
+
+$C --profile extract stop nbe-d2-extract                      # frees the GPU memory
+```
+
+- Uploading a file with the same name again replaces that document.
+- Uploading a file named like a seed document (for example `legal-circular_4.pdf`) replaces the seed copy for as
+  long as the upload exists; removing the upload brings the seed copy back.
+- Default readers are legal counsel and manager. The manager is always added.
+- A full `make ingest` keeps uploaded documents: it now reads both folders.
+
+### 12.5 API
+
+| Endpoint | Notes |
+|---|---|
+| `POST /upload` | Multipart: `file`, `role` (must be `manager`), `title_ar`, `title_en`, `doc_type` (`legal_circular` or `sop`), `roles`. Returns a job, HTTP 202 |
+| `GET /upload/jobs/{id}?role=manager` | `accepted`, `extracting`, `indexing`, `complete` or `failed` with the reason |
+| `GET /upload/jobs?role=manager`, `GET /upload/documents?role=manager` | Jobs since D2 started; documents added by upload |
+| `DELETE /upload/{doc_id}?role=manager` | Removes an uploaded document and its passages |
+
+### 12.6 What was verified, and what was not
+
+Verified on the workstation, 12 October, without the OCR model:
+
+| Check | Result |
+|---|---|
+| `tests/d2_intake_equivalence.py`: all six seed documents taken from nbe-working's extraction output through `intake.normalise` | Identical to the seed corpus: 6 manifest entries, 62 page files and 541 crop images byte for byte, and the same 143 passages |
+| Upload of circular 4 (already in the corpus), with the stand-in extraction service | Collection stays at 143 passages; the document's 2 stored passages have identical payloads and embedding vectors (cosine 1.000000) to the seed copy; the 57 RTGS passages are untouched; the golden question about circular 4 is answered with the same four crops |
+| Upload of the same pages as a new document (`legal-circular_9`) | 143 to 145 passages, 6 to 7 documents, no ingest; its crop is served to a manager; a teller asking about it gets the restricted reply |
+| Procedures collection during all of this | 203 sections throughout |
+| A teller uploads; a non-PDF is uploaded | Refused: HTTP 403; HTTP 400 |
+| Full ingest with an uploaded document present | 145 scanned passages, 7 documents: the upload is kept |
+| Removing both uploads | Back to 143 passages and 6 documents; circular 4 falls back to its seed copy with identical payloads |
+| Upload while the extraction service is not running | The job fails with a reason; nothing is indexed |
+| Both golden sets on the rebuilt D2, after the uploads were removed | Procedures 51/52 (current value 36/37, delta 12/12, unanswerable 3/3); scanned 32/32. The same totals as before the change |
+
+Not verified:
+
+- **The extraction service image has not been built and the Chandra model has not been run from this
+  repository.** The workstation's GPU was fully in use by other users (31.5 of 32.6 GB). The Python files
+  compile; nothing more is known.
+- **Whether a fresh OCR run reproduces the stored blocks exactly.** Circulars 3, 4 and 5 were extracted by
+  this same service code with the same settings (render scale 2.7, longest side 2000). Circulars 1 and 2 and
+  the RTGS guide came from the earlier notebook, which fed the model full-size pages (for example 2480 by
+  3509), so re-extracting those three with the service settings may split blocks differently. A real run on a
+  free GPU is needed to know; the passage logic after that point is proven identical.
+- **Chandra on the GB10.** It is loaded 4-bit through bitsandbytes on a CUDA 12.4 x86 image, as in nbe-working.
+  Its memory need next to the other model servers, and whether that stack runs on the GB10's hardware, are open.
+- **The portal has no upload screen.** The script is the interface.
+
+### 12.7 Effect on the two setups
+
+**Workstation setup.** D2 now runs with both override files (section 12.8): the uploads volume exists and is
+empty, and D2 points at the GB10 for extraction. `scripts/dev_api.sh up` does not include the overrides; if
+documents have been uploaded, start D2 with them, or run an ingest without them to drop the uploads from the
+collection.
+
+**GB10.** `make up` alone is unchanged. To offer intake there: copy the model folder to `$MODELS_DIR`, build
+`nbe-d2-extract` (it needs internet once for the Python packages, or a pre-built image), and start D2 with the
+override file. Run one real document and compare its passages before promising this to a client.
+
+### 12.8 Extraction on the GB10, D2 on the workstation (changed later on 12 October)
+
+The model will live on the GB10, which has the GPU memory for it; D2 stays on the workstation. The first
+version of the intake passed file paths on a volume both services mounted, which cannot work across two
+machines, so the exchange now goes over HTTP in every setup:
+
+| | First version | Now |
+|---|---|---|
+| D2 to the service | A path to the PDF on a shared volume | The PDF itself, in a multipart request |
+| The service to D2 | Page JSON and crops written to the shared volume | `GET /v1/jobs/{id}/result`: one zip, unpacked by D2 after checking every path in it |
+| The service's files | On D2's uploads volume | In its own working volume |
+
+| File | Status | Purpose |
+|---|---|---|
+| `services/d2_extraction/app/main.py` | changed | Multipart submit, result as a zip, optional bearer token (`EXTRACTION_TOKEN`) |
+| `services/d2_extraction/app/extractor.py`, `config.py` | changed | `LOAD_IN_4BIT=0` loads the model without bitsandbytes |
+| `services/d2_extraction/Dockerfile` | changed | Build arguments for the base image and the torch wheel index |
+| `services/d2_extraction/docker-compose.yml`, `README.md` | new | Stand-alone start on the GB10 (port 8010) and the steps for it. The folder is self-contained |
+| `services/d2_chatdoc/app/intake.py` | changed | Sends the file, fetches and unpacks the result, sends the token if one is set |
+| `docker-compose.d2-extract-remote.yml` | new | Workstation only: D2 also joins `nbe-egress` to reach the GB10, address `http://100.69.85.46:8010` |
+| `docker-compose.d2-extract.yml` | changed | The same-machine service keeps its own working volume; the address and token can be set in `.env` |
+| `tests/stub_d2_extraction.py` | changed | Same new API |
+
+Steps on the GB10 and on the workstation: `services/d2_extraction/README.md`.
+
+Verified on the workstation with the stand-in service placed on the egress network only, as the GB10 is, and
+protected by a token:
+
+| Check | Result |
+|---|---|
+| `tests/d2_intake_equivalence.py` | Still identical to the seed corpus |
+| Upload of circular 4 | 143 passages; identical payloads; vectors equal to the stored ones (cosine 0.999999, embeddings now on the GPU) |
+| Upload of a new document, then removal of both | 145, crop served, then back to 143 with circular 4 on its seed copy |
+| Wrong token | The job fails with "401 missing or wrong token"; nothing is indexed |
+
+Still not verified: the image build, the model load and a real extraction, now on the GB10's hardware. The
+service has only ever been built for an x86 workstation. `services/d2_extraction/README.md` lists the settings
+for the likely failures (no GPU build of torch, bitsandbytes not running).
+
+Side effect to know: with the remote override, D2 on the workstation has a route out of the internal network,
+which it did not have before. That is a property of the workstation setup only.

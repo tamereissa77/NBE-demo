@@ -1,0 +1,15 @@
+# As nbe-working's extraction_service (pyproject.toml), plus pypdfium2 from its orchestrator_service
+fastapi>=0.115,<1.0
+uvicorn[standard]>=0.32,<1.0
+pydantic>=2.0,<3.0
+pillow>=12.0
+torch>=2.0
+torchvision
+transformers>=4.40
+huggingface-hub>=0.20
+accelerate>=0.26
+chandra-ocr[hf]>=0.2.0
+bitsandbytes>=0.46.1
+beautifulsoup4
+pypdfium2
+python-multipart>=0.0.9

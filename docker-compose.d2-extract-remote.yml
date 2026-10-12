@@ -1,0 +1,21 @@
+# Workstation only, ON TOP of docker-compose.d2-extract.yml: the extraction service runs on the GB10.
+#
+# D2 lives on nbe-core, which has no route out. To reach the GB10 it also joins nbe-egress (the network
+# docker-compose.api.yml gives the model gateway for the same reason), and is told the GB10 address.
+# Not used on the GB10 itself, where D2 and the service share nbe-core.
+#
+#   C="docker compose -f docker-compose.yml -f docker-compose.api.yml -f docker-compose.d2-extract.yml -f docker-compose.d2-extract-remote.yml"
+#   $C --profile core up -d --wait nbe-d2
+#
+# D2_EXTRACTION_URL in .env overrides the address; D2_EXTRACTION_TOKEN must match the service's EXTRACTION_TOKEN
+# if one is set there.
+
+services:
+  nbe-d2:
+    environment:
+      D2_EXTRACTION_URL: ${D2_EXTRACTION_URL:-http://100.69.85.46:8010}
+    networks: [nbe-core, nbe-egress]
+
+networks:
+  nbe-egress:
+    name: nbe-egress
