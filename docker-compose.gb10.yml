@@ -1,17 +1,19 @@
 # The Efada build on the GB10: D1's fine-tuned reader and D4's Egyptian voice, beside the GB10's own models.
-#   docker compose -f docker-compose.yml -f docker-compose.gb10.yml up -d ...   (scripts/up_gb10.sh does this)
+#   docker compose -f docker-compose.yml -f docker-compose.d2-extract.yml -f docker-compose.gb10.yml up -d ...
+#   (scripts/up_gb10.sh does this; docker-compose.d2-extract.yml comes first because D2's extraction is changed here)
 #
 # What changes from docker-compose.yml:
 #   - D4 speaks with VoiceTut-TTS (nbe-voicetut) and listens with QwenCleo-ASR (nbe-qwencleo). They answer
 #     under the names of the GB10's Piper and Whisper services, which are not started.
 #   - D1 reads uploaded documents with the fine-tuned Qwen3-VL (nbe-docvlm).
+#   - D2's extraction service (nbe-d2-extract) finds Chandra OCR in EFADA_MODELS_DIR.
 # What does not change: the workhorse, embeddings and reranker are the GB10's own vLLM servers, and the model
 # gateway uses config/litellm.yaml. Nothing is hosted, and every service here is on the internal network only,
 # so `make offline-check` holds.
 #
 # The three services are defined once, in docker-compose.local.yml, and extended here. Their models are not in
 # /opt/models (root-owned on the shared box) but in EFADA_MODELS_DIR:
-#   QwenCleo-ASR/  models--mohammedaly22--VoiceTut-TTS/  models--Qwen--Qwen3-VL-8B-Instruct-FP8/
+#   QwenCleo-ASR/  models--mohammedaly22--VoiceTut-TTS/  models--Qwen--Qwen3-VL-8B-Instruct-FP8/  chandra-ocr-2/
 
 services:
   nbe-voicetut:
@@ -35,3 +37,8 @@ services:
   nbe-d1:
     environment:
       DOCVLM_URL: http://nbe-docvlm:8000
+
+  nbe-d2-extract:
+    image: nbe-d2-extract:${IMAGE_TAG:-latest}
+    volumes:
+      - ${EFADA_MODELS_DIR:?set EFADA_MODELS_DIR in .env}/chandra-ocr-2:/models/chandra-ocr-2:ro

@@ -4,12 +4,16 @@
 #   MODE=show (default)   workhorse, embeddings, reranker, Egyptian voice, document reader, SDXL
 #   MODE=core             the same without SDXL
 #   VOICE=0 / DOCVLM=0    leave the voice services / the document reader off
+#   HUB=1                 also serve the models to the team's workstations (docker-compose.hub.yml): development only
+#   EXTRACT=1             also start D2's document extraction (Chandra OCR, about 10 GB); it is stopped by hand
 #   BUILD=1               rebuild images first (missing images are always built)
 # Unlike `make up`, this never stops another team's containers: it reports them and the free memory.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 MODE=${MODE:-show}
-C="docker compose -f docker-compose.yml -f docker-compose.gb10.yml --profile core --profile image"
+C="docker compose -f docker-compose.yml -f docker-compose.d2-extract.yml -f docker-compose.gb10.yml"
+[ "${HUB:-0}" = "1" ] && C="$C -f docker-compose.hub.yml"
+C="$C --profile core --profile image --profile extract"
 BUILD_FLAG=""
 [ "${BUILD:-0}" = "1" ] && BUILD_FLAG="--build"
 env_value() { grep -E "^$1=" .env 2>/dev/null | tail -1 | cut -d= -f2- || true; }
@@ -70,6 +74,11 @@ if [ "$MODE" = "show" ]; then
   $C up -d $BUILD_FLAG --wait nbe-sdxl
 fi
 
+if [ "${EXTRACT:-0}" = "1" ]; then
+  step "D2 document extraction (Chandra OCR)"
+  $C up -d $BUILD_FLAG --wait nbe-d2-extract
+fi
+
 step "platform and demo services"
 $C up -d $BUILD_FLAG --wait nbe-llmgw nbe-mockbank nbe-guardrails nbe-docling nbe-eval \
   nbe-d1 nbe-d2 nbe-d3 nbe-d4 nbe-d5 nbe-d6 nbe-d7 nbe-portal nbe-gateway
@@ -83,6 +92,14 @@ if ! curl -fsS "http://localhost:${NBE_PORT:-8200}/api/d2/documents" | grep -q p
    [ "$(docker exec nbe-qdrant bash -c 'exec 3<>/dev/tcp/127.0.0.1/6333; printf "GET /collections/d2_procedures HTTP/1.0\r\n\r\n" >&3; head -1 <&3' 2>/dev/null | grep -c 200)" = "0" ]; then
   step "loading demo data (first run)"
   NBE_PORT=${NBE_PORT:-8200} scripts/ingest.sh
+fi
+
+if [ "${HUB:-0}" = "1" ]; then
+  step "model hub for the workstations"
+  $C up -d --wait nbe-hub
+  HUB_PORT=$(env_value NBE_HUB_PORT)
+  echo "Model hub: http://$(hostname -I | tr ' ' '
+' | grep -m1 '^100\.' || hostname):${HUB_PORT:-8210}  (key: NBE_HUB_KEY in .env)"
 fi
 
 echo; echo "Portal: http://localhost:${NBE_PORT:-8200}"

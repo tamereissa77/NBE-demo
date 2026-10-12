@@ -1,0 +1,39 @@
+# Workstation with the models on the GB10: apps, databases and knowledge bases here, every model there.
+#   scripts/up_remote.sh        (the GB10 must be serving: HUB=1 scripts/up_gb10.sh, docker-compose.hub.yml)
+#
+# No model runs on this machine and nothing is hosted outside the team's network. The demo services are the
+# same as on the GB10 and call the same addresses; what answers at those addresses changes:
+#   nbe-llmgw   is not LiteLLM here but a small proxy. It answers as the model gateway (:4000) and, under the
+#               names of the model servers (:8000), as each of them, and forwards every call to the hub on the
+#               GB10 with the shared key. It is the only container with a route out.
+# The model servers of docker-compose.yml (profiles core, voice, image, ...) are not started.
+# In .env: NBE_HUB_URL (http://<gb10>:8210) and NBE_HUB_KEY (the GB10's NBE_HUB_KEY).
+
+services:
+  nbe-llmgw:
+    image: caddy:2.11-alpine
+    command: !override ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
+    environment: !override
+      NBE_HUB_URL: ${NBE_HUB_URL:?set NBE_HUB_URL in .env, for example http://100.69.85.46:8210}
+      NBE_HUB_KEY: ${NBE_HUB_KEY:?set NBE_HUB_KEY in .env (the same value as on the GB10)}
+    volumes: !override
+      - ./config/caddy/Caddyfile.remote:/etc/caddy/Caddyfile:ro
+    networks: !override
+      nbe-core:
+        aliases: [nbe-rerank, nbe-embed, nbe-asr, nbe-tts, nbe-sdxl, nbe-docvlm, nbe-d2-extract]
+      nbe-egress: {}
+    healthcheck:
+      # Through the hub to the gateway on the GB10: healthy means the models are reachable
+      test: ["CMD", "wget", "-qO-", "http://localhost:4000/health/liveliness"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 5s
+
+  nbe-d1:
+    environment:
+      DOCVLM_URL: http://nbe-docvlm:8000
+
+networks:
+  nbe-egress:
+    name: nbe-egress

@@ -1,0 +1,76 @@
+# Model hub on the GB10 (docker-compose.hub.yml): one port through which a developer's workstation reaches
+# every model on the box. /<service>/* -> that model server (prefix stripped). Development only: the demo
+# itself runs without the hub, and then nothing but the portal is published.
+#
+# Every request must carry the shared key (X-Hub-Key = NBE_HUB_KEY in .env); the workstation side
+# (config/caddy/Caddyfile.remote) adds it, so the demo services never hold it.
+{
+	admin off
+	auto_https off
+}
+
+:8000 {
+	handle /health {
+		respond "ok" 200
+	}
+
+	@nokey not header X-Hub-Key {$NBE_HUB_KEY}
+	handle @nokey {
+		respond "model hub: missing or wrong X-Hub-Key" 401
+	}
+
+	# The model gateway with its aliases (workhorse, vision, quality, hero, embed). The hub signs in with
+	# the GB10's own gateway key, so a workstation needs the hub key only.
+	handle_path /gateway/* {
+		reverse_proxy nbe-llmgw:4000 {
+			header_up Authorization "Bearer {$LITELLM_MASTER_KEY}"
+			flush_interval -1
+		}
+	}
+
+	handle_path /rerank/* {
+		reverse_proxy nbe-rerank:8000
+	}
+
+	handle_path /embed/* {
+		reverse_proxy nbe-embed:8000
+	}
+
+	handle_path /asr/* {
+		reverse_proxy nbe-asr:8000
+	}
+
+	handle_path /tts/* {
+		reverse_proxy nbe-tts:8000
+	}
+
+	handle_path /sdxl/* {
+		reverse_proxy nbe-sdxl:8000
+	}
+
+	handle_path /docvlm/* {
+		reverse_proxy nbe-docvlm:8000
+	}
+
+	handle_path /d2-extract/* {
+		reverse_proxy nbe-d2-extract:8000
+	}
+
+	handle {
+		respond "model hub: unknown service" 404
+	}
+}
+
+# The addresses the team's earlier development setups already use (config/litellm.gb10.yaml,
+# config/litellm.api-d6.yaml): the workhorse and the hero model, as vLLM serves them, without a key.
+:8001 {
+	reverse_proxy nbe-llm:8000 {
+		flush_interval -1
+	}
+}
+
+:8002 {
+	reverse_proxy nbe-hero:8000 {
+		flush_interval -1
+	}
+}

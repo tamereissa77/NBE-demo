@@ -11,7 +11,9 @@ bad()  { printf '  \033[31mFAIL\033[0m %s\n' "$1"; fail=1; }
 echo "Networks"
 for c in $(docker ps --filter name=nbe- --format '{{.Names}}' | sort); do
   nets=$(docker inspect -f '{{range $k, $v := .NetworkSettings.Networks}}{{$k}} {{end}}' "$c" | xargs)
-  if [ "$c" = "nbe-gateway" ]; then
+  if [ "$c" = "nbe-hub" ]; then
+    bad "$c is serving the models to the network (development hub): start without HUB=1 for the demonstration"
+  elif [ "$c" = "nbe-gateway" ]; then
     [ "$nets" = "nbe-core nbe-edge" ] || [ "$nets" = "nbe-edge nbe-core" ] && pass "$c on nbe-edge + nbe-core (the only published port)" || bad "$c networks: $nets"
   else
     [ "$nets" = "nbe-core" ] && pass "$c only on nbe-core" || bad "$c networks: $nets"

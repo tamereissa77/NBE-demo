@@ -1,0 +1,31 @@
+# Model hub: the GB10 serves every model to the team's workstations over the private network.
+#   on the GB10:         HUB=1 scripts/up_gb10.sh          (adds this file)
+#   on a workstation:    scripts/up_remote.sh              (docker-compose.remote.yml: apps and data there, models here)
+#
+# One container, nbe-hub, joins the internal network and publishes:
+#   NBE_HUB_PORT (8210)   /gateway /rerank /embed /asr /tts /sdxl /docvlm /d2-extract, each behind NBE_HUB_KEY
+#   8000 and 8001         the workhorse and the hero model as vLLM serves them: the addresses the team's earlier
+#                         setups point at (config/litellm.gb10.yaml, config/litellm.api-d6.yaml)
+# Development only. With the hub up the models are reachable from the network, so `make offline-check` fails
+# on purpose; for the demonstration start without HUB=1 and only the portal is published.
+
+services:
+  nbe-hub:
+    image: caddy:2.11-alpine
+    container_name: nbe-hub
+    restart: "no"
+    ports:
+      - "${NBE_HUB_PORT:-8210}:8000"
+      - "${NBE_HUB_LLM_PORT:-8000}:8001"
+      - "${NBE_HUB_HERO_PORT:-8001}:8002"
+    environment:
+      NBE_HUB_KEY: ${NBE_HUB_KEY:?set NBE_HUB_KEY in .env (the key workstations send)}
+      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:?set LITELLM_MASTER_KEY in .env}
+    volumes:
+      - ./config/caddy/Caddyfile.hub:/etc/caddy/Caddyfile:ro
+    networks: [nbe-edge, nbe-core]
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5

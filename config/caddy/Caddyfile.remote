@@ -1,0 +1,34 @@
+# Workstation side of the model hub (docker-compose.remote.yml). This container answers under the names of
+# the model servers, so the demo services call the same addresses as on the GB10, and forwards each call to
+# the hub on the GB10 (config/caddy/Caddyfile.hub) with the shared key.
+{
+	admin off
+	auto_https off
+}
+
+# The model gateway (http://nbe-llmgw:4000): aliases, fall-backs and keys live on the GB10
+:4000 {
+	rewrite * /gateway{uri}
+	reverse_proxy {$NBE_HUB_URL} {
+		header_up X-Hub-Key {$NBE_HUB_KEY}
+		flush_interval -1
+	}
+}
+
+# The model servers (http://nbe-tts:8000, http://nbe-rerank:8000, ...): the name called picks the service
+:8000 {
+	map {http.request.host} {hub_service} {
+		nbe-rerank /rerank
+		nbe-embed /embed
+		nbe-asr /asr
+		nbe-tts /tts
+		nbe-sdxl /sdxl
+		nbe-docvlm /docvlm
+		nbe-d2-extract /d2-extract
+		default /unknown
+	}
+	rewrite * {hub_service}{uri}
+	reverse_proxy {$NBE_HUB_URL} {
+		header_up X-Hub-Key {$NBE_HUB_KEY}
+	}
+}
