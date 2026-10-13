@@ -42,7 +42,8 @@ SPEAKER = os.getenv("TTS_SPEAKER", "Hanan")
 NUM_STEP = int(os.getenv("TTS_NUM_STEP", "6"))
 CAREFUL_STEPS = int(os.getenv("TTS_CAREFUL_STEPS", "32"))       # the library's own default
 GUIDANCE_SCALE = float(os.getenv("TTS_GUIDANCE_SCALE", "2.0"))
-SPEED = float(os.getenv("TTS_SPEED", "0.9"))                    # below 1 is slower: at the engine's own pace banking replies ran together
+SPEED = float(os.getenv("TTS_SPEED", "0.8"))                    # below 1 is slower. Picked by ear: at the engine's own pace banking
+                                                                # replies ran together, and كارت was only right at 0.8
 # A flow-matching model rushes and drops word endings over long spans: longer text is spoken
 # sentence by sentence and joined
 CHUNK_CHARS = int(os.getenv("TTS_CHUNK_CHARS", "90"))
