@@ -39,7 +39,7 @@ from voicetut_tts.engine import split_sentences
 MODEL = os.getenv("VOICETUT_MODEL", "/models/models--mohammedaly22--VoiceTut-TTS")
 DEVICE = os.getenv("TTS_DEVICE", "cuda")
 SPEAKER = os.getenv("TTS_SPEAKER", "Hanan")
-NUM_STEP = int(os.getenv("TTS_NUM_STEP", "6"))
+NUM_STEP = int(os.getenv("TTS_NUM_STEP", "12"))                 # the fast setting. Picked by ear: at 6 a plain sentence stammered at the 0.8 pace
 CAREFUL_STEPS = int(os.getenv("TTS_CAREFUL_STEPS", "32"))       # the library's own default
 GUIDANCE_SCALE = float(os.getenv("TTS_GUIDANCE_SCALE", "2.0"))
 SPEED = float(os.getenv("TTS_SPEED", "0.8"))                    # below 1 is slower. Picked by ear: at the engine's own pace banking
