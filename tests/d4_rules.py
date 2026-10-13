@@ -243,7 +243,7 @@ async def main() -> int:
     check(lex.get("وعشرين") == "وَعِشْرِين" and lex.get("لتلاتين") == "لِتَلَاتِين" and lex.get("التمنية") == "التَّمَنْيَة" and lex.get("الأقصى") == "الْأَقْصَى",
           "number words carry their vowels in every joined form, and so does الأقصى")
     check(lex.get("تلتاشر") == "تَلَتَّاشَر" and lex.get("وتلتاشر") == "وَتَلَتَّاشَر" and lex.get("دخل") == "دَخْلْ" and lex.get("الصراف") == "الصَرَّاف"
-          and lex.get("للصراف") == "لِلصَرَّاف" and lex.get("هبعتلك") == "هَبْعتلَكْ", "words corrected by ear are said as they were written down")
+          and lex.get("للصراف") == "لِلصَرَّاف" and lex.get("هبعتلك") == "هَبْعتلَكْ" and lex.get("بعتلك") == "بَعَتْلّكْ", "words corrected by ear are said as they were written down")
     check(lex.get("الرقم") == "الرقم" and lex.get("القومي") == "القومي" and lex.get("بالرقم") == "بِالرقم" and lex.get("موبايلك") == "مُوبَايلَك"
           and d4.speech.careful_words(say("صورة بطاقة الرقم القومي", "ar")) == ["الرقم", "القومي"],
           "الرقم القومي goes to the voice without vowels and on the exact setting, as it was picked by ear")
