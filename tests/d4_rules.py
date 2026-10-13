@@ -247,6 +247,8 @@ async def main() -> int:
     check(lex.get("الرقم") == "الرقم" and lex.get("القومي") == "القومي" and lex.get("بالرقم") == "بِالرقم" and lex.get("موبايلك") == "مُوبَايلَك"
           and d4.speech.careful_words(say("صورة بطاقة الرقم القومي", "ar")) == ["الرقم", "القومي"],
           "الرقم القومي goes to the voice without vowels and on the exact setting, as it was picked by ear")
+    check(lex.get("الحسابات") == "الْحِسَابَات" and lex.get("المتاحة") == "الْمُتَاحَة" and d4.speech.careful_words(say("أنواع الحسابات المتاحة", "ar")) == ["المتاحة"],
+          "الحسابات المتاحة carries its vowels, and المتاحة takes the exact setting: on the fast one it was not said")
     check(lex.get("المية") == "الْمِيَّة" and lex.get("ونص") == "وَنُصّ" and lex.get("وميت") == "وَمِيت", "the words written for a percentage, a half and a joined hundred carry their vowels")
     check(lex.get("مقدم") == "مُقَدَّم" and lex.get("والمقدم") == "وَالْمُقَدَّم" and lex.get("بمقدم") == "بِمُقَدَّم" and lex.get("للمقدم") == "لِلْمُقَدَّم",
           "a listed word keeps its vowels behind و، ب، ل and ال: the down payment is مُقَدَّم however it is joined")
