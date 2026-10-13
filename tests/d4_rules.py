@@ -252,6 +252,7 @@ async def main() -> int:
     check(all(w not in lex for w in ("بطاقة", "سارية")) and lex.get("رقم") == "رقم" and d4.speech.careful_words(say("بطاقة رقم قومي سارية", "ar")) == ["رقم", "سارية", "قومي"],
           "بطاقة رقم قومي سارية goes to the voice without vowels, on the exact setting")
     check("كارت" not in lex and d4.speech.careful_words(say("تم وقف الكارت، وهيوصلك كارت جديد", "ar")) == ["الكارت", "كارت"], "كارت has no vowels and takes the exact setting")
+    check(lex.get("آخره") == "أَخْرُه" and lex.get("اخره") == "أَخْرُه" and lex.get("آخرها") == "أَخِرْهَا", "اللي آخره is said with a short first vowel, as picked by ear")
     check(lex.get("المية") == "الْمِيَّة" and lex.get("ونص") == "وَنُصّ" and lex.get("وميت") == "وَمِيت", "the words written for a percentage, a half and a joined hundred carry their vowels")
     check(lex.get("مقدم") == "مُقَدَّم" and lex.get("والمقدم") == "وَالْمُقَدَّم" and lex.get("بمقدم") == "بِمُقَدَّم" and lex.get("للمقدم") == "لِلْمُقَدَّم",
           "a listed word keeps its vowels behind و، ب، ل and ال: the down payment is مُقَدَّم however it is joined")
