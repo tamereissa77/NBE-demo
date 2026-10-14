@@ -1,0 +1,15 @@
+{
+  "id": "creditdumaroc",
+  "short": "CDM",
+  "country": "MA",
+  "name": {
+    "en": "CREDIT DU MAROC",
+    "ar": "مصرف المغرب"
+  },
+  "website": "https://www.creditdumaroc.ma/",
+  "logo": "logo.png",
+  "font": "cairo",
+  "colors": {},
+  "facts": [],
+  "note": "Created with the setup page (make setup)."
+}

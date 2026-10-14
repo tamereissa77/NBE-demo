@@ -8,13 +8,14 @@ COMPOSE_ALL := docker compose --profile core --profile quality --profile voice -
 -include .env
 export NBE_PORT IMAGE_TAG COMPOSE_PROJECT_NAME BRAND MODE COUNTRY BANK_NAME_EN
 
-.PHONY: customer customers author start-NBE start-RYD brand help up down start stop restart build rebuild ps status logs clean \
+.PHONY: setup customer customers author start-NBE start-RYD brand help up down start stop restart build rebuild ps status logs clean \
         preflight gpu verify platform-check warm models d1 d2 d3 d4 d5 d6 d7 \
         data ingest demo-reset ui-test record offline-check arabic-gate models-lock hero hero-off quality-on quality-off voice-on voice-off image-on image-off
 
 help:
 	@echo "Bank AI demos on GB10 (customer: $${BANK_NAME_EN:-none yet}, country $${COUNTRY:-EG}, project $${COMPOSE_PROJECT_NAME:-nbe})"
 	@echo ""
+	@echo "  make setup         web page to add or edit a customer (logo, names, country, colours) and apply it: :$${SETUP_PORT:-8210}"
 	@echo "  make customers     list the customer profiles (customers/<name>: logo, names, country, colours)"
 	@echo "  make customer NAME=<name>"
 	@echo "                     present the demos for that customer: its logo, colours and names, and its country's"
@@ -69,6 +70,10 @@ customer:
 
 customers:
 	@python3 scripts/apply_customer.py --list
+
+# The customer setup page (scripts/setup): upload a logo, set the names and country, preview, save and apply
+setup:
+	@python3 scripts/setup/server.py
 
 # Once per new country: the LLM writes its procedures, knowledge base, rulings and complaints from the fact sheets
 # (data/generators/countries/<cc>.py) into data/seed/<CC>; commit that folder afterwards.

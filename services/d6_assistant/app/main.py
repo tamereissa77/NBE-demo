@@ -1185,6 +1185,9 @@ async def completions(request: Request, authorization: str | None = Header(defau
 
 
 SAMPLES = Path(__file__).parent / "samples"       # small made-up files, so a suggested request can show a feature that needs one
+# The active country's own copies (its cities, staff and currency: scripts/d6_samples.py), or the Egyptian originals
+if (SAMPLES / os.getenv("COUNTRY", "EG").upper()).is_dir():
+    SAMPLES = SAMPLES / os.getenv("COUNTRY", "EG").upper()
 
 
 @app.post("/sample/{name}")

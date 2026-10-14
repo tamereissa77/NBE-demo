@@ -8,7 +8,19 @@ make customers                 # list them (* = active)
 make customer NAME=oasis-demo  # switch; reloads the running stack (about 3 minutes)
 ```
 
-## Adding a customer
+## The setup page
+
+`make setup` serves a page at http://<GB10>:8210 (`SETUP_PORT`, `SETUP_BIND`) that does all of the below without
+editing files: pick a customer or press **New customer**, drop the logo (and optionally the emblem), fill in the names,
+pick the country (it brings the currency, dialect, ID rules, time zone and data), adjust the colours picked from the
+logo, and watch a preview in English and Arabic. **Save** writes `customers/<folder>/`. **Save and start / switch the
+demos** launches them with that customer: a running stack is switched to it (`make customer`, about a minute), a stopped
+one is started with it (`make up`, about 4 minutes; another checkout's stack is stopped first, after asking). A new tab
+follows the progress and opens the portal (:8200) once every demo reports healthy. **Stop demo** runs `make down`. It listens on every
+interface like the portal: anyone who can reach the port can change the demo, so use `SETUP_BIND=127.0.0.1` (and an
+SSH tunnel) on a shared network, and stop it (Ctrl-C) when you are done.
+
+## Adding a customer by hand
 
 1. `cp -r customers/_template customers/<name>`
 2. Put the bank's logo in the folder as `logo.png` (PNG, ideally on a transparent background, wide is fine).
@@ -38,8 +50,8 @@ Logos and names of real banks are for that customer's demonstration only.
 |---|---|---|---|---|---|
 | EG | Egypt | EGP, جنيه | Egyptian | 14-digit national ID, decoded | `data/seed/EG` |
 | SA | Saudi Arabia | SAR, ريال | Saudi (white dialect) | 10-digit national ID / iqama | `data/seed/SA` |
-| AE | United Arab Emirates | AED, درهم | Emirati | 15-digit Emirates ID (784) | `make author` once |
-| MA | Morocco | MAD, درهم | Darija | CIN (letters + digits) | `make author` once |
+| AE | United Arab Emirates | AED, درهم | Emirati | 15-digit Emirates ID (784) | `data/seed/AE` |
+| MA | Morocco | MAD, درهم | Darija | CIN (letters + digits) | `data/seed/MA` |
 
 A country is two modules with the same names in each: `packages/nbe_core/nbe_core/countries/<cc>.py` (names,
 cities, merchants, currency, ID rules, D4 dialect, D6 glossary, portal locale) and

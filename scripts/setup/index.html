@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Customer Setup</title>
+<style>
+:root {
+  --bg: #f4f5f7; --panel: #fff; --ink: #1c1f26; --soft: #5b6270; --line: #dde0e6; --focus: #2f6fed;
+  --ok: #1f8a4c; --warn: #b26a00; --bad: #c62828; --chip: #eef0f4;
+  /* the preview's colours: set from the theme */
+  --p-brand: #1f2a44; --p-brand-dark: #141c2f; --p-accent: #f2a900; --p-accent-light: #f7c84d; --p-accent-deep: #c28700;
+  --p-on-accent: #141414; --p-canvas: #f8f8f8; --p-ink: #141414; --p-ink-soft: #4a4a4a; --p-line: #d6d6d6;
+  --p-status-review: #f2a900; --p-status-stop: #c62828; --p-status-ok: #2e7d32;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 system-ui, "Segoe UI", Tahoma, sans-serif; }
+button, input, select, textarea { font: inherit; color: inherit; }
+h1 { font-size: 17px; margin: 0; }
+h2 { font-size: 14px; margin: 0 0 12px; display: flex; align-items: center; gap: 8px; }
+h2 .n { width: 22px; height: 22px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 12px; display: grid; place-items: center; }
+.muted { color: var(--soft); }
+.small { font-size: 12px; }
+
+header { position: sticky; top: 0; z-index: 5; background: var(--panel); border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; gap: 16px; padding: 10px 20px; flex-wrap: wrap; }
+header .grow { flex: 1; }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 99px; background: var(--chip); font-size: 12px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--soft); }
+.dot.ok { background: var(--ok); } .dot.bad { background: var(--bad); } .dot.warn { background: var(--warn); }
+a.btn, button.btn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--panel);
+  padding: 7px 14px; border-radius: 8px; cursor: pointer; text-decoration: none; white-space: nowrap; }
+.btn:hover { border-color: #b9bec8; }
+.btn.primary { background: var(--ink); border-color: var(--ink); color: #fff; }
+.btn.primary:hover { background: #000; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn.link { border: none; background: none; padding: 4px 6px; color: var(--focus); }
+
+.layout { display: grid; grid-template-columns: 230px minmax(0, 1fr) 400px; gap: 20px; padding: 20px; align-items: start; }
+@media (max-width: 1250px) { .layout { grid-template-columns: 210px minmax(0, 1fr); } .preview-col { grid-column: 1 / -1; } }
+@media (max-width: 760px) { .layout { grid-template-columns: 1fr; padding: 16px; } header { position: static; padding: 10px 16px; }
+  .actions { padding: 10px 16px; } .toast { bottom: 130px; } .preview-col { position: static; } }
+
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px; }
+.stack > * + * { margin-top: 16px; }
+
+/* customer list */
+.list { display: flex; flex-direction: column; gap: 6px; }
+.cust { display: flex; align-items: center; gap: 10px; padding: 8px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; background: none; text-align: start; width: 100%; }
+.cust:hover { background: var(--chip); }
+.cust.sel { border-color: var(--ink); background: var(--panel); }
+.cust .thumb { width: 54px; height: 34px; border-radius: 6px; background: #fff center/contain no-repeat; border: 1px solid var(--line); flex: none; }
+.cust .t { min-width: 0; }
+.cust .t b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.tag { font-size: 11px; padding: 1px 6px; border-radius: 4px; background: var(--chip); color: var(--soft); }
+.tag.active { background: #e3f4ea; color: var(--ok); }
+.new { border: 1px dashed #b9bec8; justify-content: center; color: var(--soft); }
+
+/* form */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+label.f { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--soft); }
+label.f input, label.f select, label.f textarea { font-size: 14px; color: var(--ink); padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; min-width: 0; }
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--focus); outline-offset: -1px; border-color: transparent; }
+input[dir=rtl] { font-family: "Segoe UI", Tahoma, "Noto Sans Arabic", sans-serif; }
+.err { border-color: var(--bad) !important; }
+
+.drops { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; }
+@media (max-width: 560px) { .drops { grid-template-columns: 1fr; } }
+.drop { position: relative; border: 2px dashed #c4c9d2; border-radius: 10px; min-height: 130px; display: grid; place-items: center; text-align: center;
+  padding: 14px; cursor: pointer; background: repeating-conic-gradient(#f3f4f6 0 25%, #fff 0 50%) 0 0/16px 16px; }
+.drop:hover, .drop.over { border-color: var(--focus); }
+.drop img { max-width: 100%; max-height: 110px; object-fit: contain; }
+.drop .hint { background: rgba(255,255,255,.9); padding: 6px 10px; border-radius: 6px; }
+.drop .x { position: absolute; top: 6px; inset-inline-end: 6px; }
+.drop input { display: none; }
+
+.countries { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+.country { text-align: start; border: 1px solid var(--line); border-radius: 10px; padding: 12px; background: #fff; cursor: pointer; }
+.country:hover { border-color: #b9bec8; }
+.country.sel { border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); }
+.country .code { font-weight: 700; font-size: 12px; letter-spacing: .5px; }
+.country b { display: block; margin: 2px 0 6px; }
+.country dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 2px 8px; font-size: 12px; }
+.country dt { color: var(--soft); } .country dd { margin: 0; }
+
+.found { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+.sw { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 99px; padding: 3px 10px 3px 3px; background: #fff; font-size: 12px; }
+.sw i { width: 20px; height: 20px; border-radius: 50%; border: 1px solid rgba(0,0,0,.1); }
+.sw button { border: none; background: none; color: var(--focus); cursor: pointer; padding: 0 2px; font-size: 12px; }
+.tokens { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 8px; }
+.tok { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; background: #fff; }
+.tok input[type=color] { width: 32px; height: 28px; border: none; padding: 0; background: none; cursor: pointer; flex: none; }
+.tok .t { min-width: 0; flex: 1; }
+.tok .t b { font-size: 12px; font-weight: 600; display: block; }
+.tok .t span { font: 11px ui-monospace, monospace; color: var(--soft); }
+.tok .state { font-size: 10px; text-transform: uppercase; letter-spacing: .4px; color: var(--soft); }
+.tok.custom { border-color: var(--ink); }
+.tok.custom .state { color: var(--ink); font-weight: 700; }
+.tok .reset { border: none; background: none; cursor: pointer; color: var(--soft); padding: 2px; }
+.tok:not(.custom) .reset { visibility: hidden; }
+.tokens.main .tok { padding: 10px; }
+.tokens.main input[type=color] { width: 42px; height: 36px; }
+
+details { border-top: 1px solid var(--line); padding-top: 12px; margin-top: 12px; }
+summary { cursor: pointer; font-weight: 600; font-size: 13px; }
+.facts { display: flex; flex-direction: column; gap: 8px; }
+.fact { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; }
+.fact input { padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; min-width: 0; }
+.check { display: flex; gap: 8px; align-items: center; font-size: 13px; }
+
+/* sticky action bar */
+.actions { position: sticky; bottom: 0; z-index: 4; background: var(--panel); border-top: 1px solid var(--line); padding: 12px 20px;
+  display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.actions .msg { flex: 1; min-width: 200px; }
+.msg.bad { color: var(--bad); } .msg.ok { color: var(--ok); }
+
+/* job */
+.job { margin-top: 16px; }
+.steps { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.step { font-size: 12px; padding: 3px 9px; border-radius: 99px; background: var(--chip); color: var(--soft); }
+.step.done { background: #e3f4ea; color: var(--ok); }
+.step.now { background: var(--ink); color: #fff; }
+pre.log { background: #12151b; color: #d6dae2; border-radius: 10px; padding: 12px; max-height: 300px; overflow: auto; font: 12px/1.5 ui-monospace, monospace; margin: 0; white-space: pre-wrap; word-break: break-word; }
+
+/* preview */
+.preview-col { position: sticky; top: 70px; }
+.pv-tabs { display: flex; gap: 4px; margin-bottom: 10px; }
+.pv-tabs button { border: 1px solid var(--line); background: #fff; border-radius: 6px; padding: 3px 10px; cursor: pointer; font-size: 12px; }
+.pv-tabs button.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+.pv { border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: var(--p-canvas); color: var(--p-ink);
+  font-family: "Segoe UI", Tahoma, "Noto Sans Arabic", sans-serif; }
+.pv-head { background: #fff; display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 3px solid var(--p-accent); }
+.pv-head img { height: 30px; max-width: 150px; object-fit: contain; }
+.pv-head .ttl { color: var(--p-brand); font-weight: 700; font-size: 13px; flex: 1; }
+.pv-head .lang { white-space: nowrap; font-size: 11px; border: 1px solid var(--p-line); border-radius: 6px; padding: 2px 7px; color: var(--p-ink-soft); }
+.pv-hero { background: var(--p-brand); color: #fff; padding: 18px 16px; }
+.pv-hero p { margin: 0 0 10px; font-size: 12px; opacity: .9; }
+.pv-hero h3 { margin: 0 0 6px; font-size: 17px; line-height: 1.3; }
+.pv-hero .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.pv-hero .chip { background: var(--p-accent); color: var(--p-on-accent); font-size: 11px; padding: 2px 9px; border-radius: 99px; font-weight: 600; }
+.pv-body { padding: 14px; display: grid; gap: 10px; }
+.pv-card { background: #fff; border: 1px solid var(--p-line); border-radius: 8px; padding: 10px 12px; }
+.pv-card .h { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--p-brand); font-size: 13px; }
+.pv-card .h .av { width: 28px; height: 28px; border-radius: 50%; background: #fff center/80% no-repeat; border: 2px solid var(--p-accent); flex: none; }
+.pv-card p { margin: 6px 0 8px; font-size: 12px; color: var(--p-ink-soft); }
+.pv-bubble { background: var(--p-canvas); border-radius: 8px; padding: 6px 9px; font-size: 12px; margin-top: 6px; }
+.pv-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+.pv-btn { background: var(--p-brand); color: #fff; font-size: 12px; padding: 5px 12px; border-radius: 6px; }
+.pv-btn.acc { background: var(--p-accent); color: var(--p-on-accent); }
+.pv-status { display: flex; gap: 6px; flex-wrap: wrap; font-size: 11px; }
+.pv-status span { padding: 2px 8px; border-radius: 4px; color: #fff; }
+.pv-foot { background: var(--p-brand-dark); color: var(--p-accent-light); font-size: 11px; padding: 8px 14px; }
+.pv-strip { height: 4px; background: linear-gradient(90deg, var(--p-accent-light), var(--p-accent) 55%, var(--p-accent-deep)); }
+.facts-pv { margin-top: 12px; font-size: 12px; }
+.facts-pv div { display: flex; justify-content: space-between; gap: 8px; border-bottom: 1px dashed var(--line); padding: 3px 0; }
+
+.toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 8px 16px; border-radius: 8px; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 10; }
+.toast.on { opacity: 1; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Customer setup</h1>
+  <span class="muted small">Logo, brand, country and data for the bank demos</span>
+  <span class="grow"></span>
+  <span class="pill" id="activePill"><span class="dot"></span><span>…</span></span>
+  <span class="pill" id="stackPill"><span class="dot"></span><span>…</span></span>
+  <button class="btn" id="stopBtn" hidden>Stop demo</button>
+  <a class="btn" id="portalLink" target="_blank" rel="noopener">Open portal ↗</a>
+</header>
+
+<div class="layout">
+  <!-- customers -->
+  <aside class="panel">
+    <h2>Customers</h2>
+    <div class="list" id="list"></div>
+  </aside>
+
+  <!-- the form -->
+  <main class="stack" id="form">
+    <section class="panel">
+      <h2><span class="n">1</span>Logo</h2>
+      <div class="drops">
+        <div class="drop" id="logoDrop" tabindex="0">
+          <input type="file" accept="image/png,image/jpeg,image/webp,image/gif" id="logoFile">
+          <div class="hint"><b>Drop the bank's logo here</b><br><span class="small muted">or click to choose. PNG, ideally transparent, about 1000 px wide</span></div>
+        </div>
+        <div class="drop" id="markDrop" tabindex="0">
+          <input type="file" accept="image/png,image/jpeg,image/webp,image/gif" id="markFile">
+          <div class="hint"><b>Emblem</b> <span class="small muted">(optional)</span><br><span class="small muted">a square mark for the round avatars; without it the logo is shrunk</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2><span class="n">2</span>Bank</h2>
+      <div class="grid2">
+        <label class="f">Name in English<input id="nameEn" placeholder="Emirates Demo Bank" autocomplete="off"></label>
+        <label class="f">Name in Arabic<input id="nameAr" dir="rtl" placeholder="بنك الإمارات التجريبي" autocomplete="off"></label>
+        <label class="f">Short name (used in running text and labels)<input id="short" placeholder="EDB" autocomplete="off"></label>
+        <label class="f">Website<input id="website" placeholder="https://www.example.com" autocomplete="off"></label>
+        <label class="f">Folder in customers/ <input id="folder" placeholder="emirates-demo" autocomplete="off" spellcheck="false"></label>
+        <label class="f">Font<select id="font"><option value="cairo">Cairo</option><option value="plex">IBM Plex Sans Arabic</option></select></label>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2><span class="n">3</span>Country <span class="muted small" style="font-weight:400">sets the currency, dialect, ID rules, time zone and the demo data</span></h2>
+      <div class="countries" id="countries"></div>
+    </section>
+
+    <section class="panel">
+      <h2><span class="n">4</span>Colours <span class="muted small" style="font-weight:400">picked from the logo; change any of them</span></h2>
+      <div class="found" id="found"><span class="muted small">Upload a logo to pick its colours.</span></div>
+      <div class="tokens main" id="tokensMain"></div>
+      <details>
+        <summary>All theme colours</summary>
+        <div class="tokens" id="tokensMore" style="margin-top:10px"></div>
+      </details>
+    </section>
+
+    <section class="panel">
+      <h2><span class="n">5</span>Details <span class="muted small" style="font-weight:400">optional</span></h2>
+      <div class="small muted" style="margin-bottom:8px">Facts D6 may state in a drafted letter without being told (call centre, website, e-mail):</div>
+      <div class="facts" id="facts"></div>
+      <button class="btn link" id="addFact">+ add a fact</button>
+      <details>
+        <summary>Titles in the portal</summary>
+        <p class="small muted">Leave a pair empty to use the default built from the short name.</p>
+        <div class="grid2" id="titles"></div>
+        <label class="check" style="margin-top:10px"><input type="checkbox" id="heroChips" checked> Show the chips under the headline (single-user PoC, fully offline, synthetic data)</label>
+        <label class="f" style="margin-top:10px">D3 banner palette in words (for the image model)<input id="bannerPalette" placeholder="auto from the colours"></label>
+      </details>
+    </section>
+
+    <section class="panel job" id="jobPanel" hidden>
+      <h2 id="jobTitle">Applying</h2>
+      <div class="steps" id="steps"></div>
+      <pre class="log" id="log"></pre>
+    </section>
+  </main>
+
+  <!-- preview -->
+  <aside class="preview-col">
+    <div class="panel">
+      <h2 style="justify-content:space-between">Preview
+        <span class="pv-tabs"><button data-l="en" class="on">EN</button><button data-l="ar">ع</button></span></h2>
+      <div class="pv" id="pv">
+        <div class="pv-head"><img id="pvLogo" alt=""><span class="ttl"></span><span class="lang" id="pvTitle"></span><span class="lang" id="pvLang"></span></div>
+        <div class="pv-strip"></div>
+        <div class="pv-hero"><h3 id="pvHero"></h3><p id="pvSub"></p><div class="chips" id="pvChips"></div></div>
+        <div class="pv-body">
+          <div class="pv-card">
+            <div class="h"><span class="av" id="pvAv"></span><span id="pvAgent"></span></div>
+            <div class="pv-bubble" id="pvSay"></div>
+          </div>
+          <div class="pv-card">
+            <div class="h" id="pvLoanH"></div>
+            <p id="pvLoan"></p>
+            <div class="pv-btns"><span class="pv-btn" id="pvB1"></span><span class="pv-btn acc" id="pvB2"></span></div>
+          </div>
+          <div class="pv-status">
+            <span style="background:var(--p-status-ok)" id="pvS1"></span>
+            <span style="background:var(--p-status-review);color:var(--p-on-accent)" id="pvS2"></span>
+            <span style="background:var(--p-status-stop)" id="pvS3"></span>
+          </div>
+        </div>
+        <div class="pv-foot" id="pvFoot"></div>
+      </div>
+      <div class="facts-pv" id="pvCountry"></div>
+    </div>
+  </aside>
+</div>
+
+<div class="actions">
+  <span class="msg small" id="msg"></span>
+  <button class="btn" id="saveBtn">Save</button>
+  <button class="btn primary" id="applyBtn">Save and start the demos</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const LABELS = {
+  "brand": "Brand", "accent": "Accent", "brand-dark": "Brand dark", "accent-light": "Accent light", "accent-deep": "Accent deep",
+  "on-accent": "Text on accent", "canvas": "Page background", "ink": "Strong text", "ink-soft": "Body text", "line": "Borders",
+  "status-review": "Flag: review", "status-stop": "Flag: stop", "status-ok": "Flag: OK",
+};
+const TITLES = [["appTitle", "App title"], ["assistant", "Assistant name"], ["agentName", "D4 agent name"], ["heroTitle", "Home page headline"]];
+
+let S = { countries: [], customers: [], tokens: [] };
+let cur = null;          // the form's state
+let theme = null;        // the colours from the server
+let pvLang = "en";
+let dirty = false;
+let jobSince = 0, jobTimer = null;
+
+function blank() {
+  return { isNew: true, folder: "", folderTouched: false, logo: null, logoUrl: null, mark: null, markUrl: null, removeMark: false,
+    customer: { short: "", name: { en: "", ar: "" }, country: "", website: "", font: "cairo", colors: {}, facts: [
+      { label: "Call centre / مركز الاتصال", value: "" }, { label: "Website / الموقع الإلكتروني", value: "" },
+      { label: "E-mail / البريد الإلكتروني", value: "" }], heroChips: true, bannerPalette: "" } };
+}
+
+async function api(path, body) {
+  const r = await fetch(path, body === undefined ? {} : { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  const j = await r.json().catch(() => ({ error: `HTTP ${r.status}` }));
+  if (!r.ok) throw new Error(j.error || `HTTP ${r.status}`);
+  return j;
+}
+function toast(t) { const e = $("toast"); e.textContent = t; e.classList.add("on"); clearTimeout(e._t); e._t = setTimeout(() => e.classList.remove("on"), 2200); }
+function msg(t, cls = "") { const e = $("msg"); e.textContent = t; e.className = "msg small " + cls; }
+function esc(s) { return String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+function slug(s) { return s.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40); }
+
+// ------------------------------------------------------------------ state from the server
+async function refresh() {
+  const st = await api("/api/state");
+  S = st;
+  const active = st.customers.find((c) => c.active);
+  $("activePill").innerHTML = `<span class="dot ${active ? "ok" : ""}"></span><span>Active: <b>${esc(active ? active.short : "none")}</b>${active ? " · " + esc(active.country) : ""}</span>`;
+  const k = st.stack;
+  const stackText = k.running ? (k.mine ? `Demo stack running (${k.containers} containers)` : `Another checkout's stack is running (${esc(k.project)})`)
+    : k.error ? esc(k.error) : "Demo stack stopped";
+  $("stackPill").innerHTML = `<span class="dot ${k.running ? (k.mine ? "ok" : "warn") : "bad"}"></span><span>${stackText}</span>`;
+  $("stopBtn").hidden = !(k.running && k.mine);
+  $("applyBtn").textContent = launchLabel();
+  $("portalLink").href = `${location.protocol}//${location.hostname}:${st.portalPort}/`;
+  renderList();
+  if (!cur) newCustomer();
+  renderCountries();
+  if (st.job.running && !jobTimer) followJob(true);
+}
+
+function renderList() {
+  const sel = cur && !cur.isNew ? cur.folder : null;
+  $("list").innerHTML = S.customers.map((c) => `
+    <button class="cust ${c.folder === sel ? "sel" : ""}" data-f="${esc(c.folder)}">
+      <span class="thumb" style="background-image:url('/customers/${esc(c.folder)}/logo.png?${c.mtime}')"></span>
+      <span class="t"><b>${esc(c.short)}</b><span class="tag">${esc(c.country)}</span> ${c.active ? '<span class="tag active">active</span>' : ""}</span>
+    </button>`).join("") + `<button class="cust new" id="newBtn">+ New customer</button>`;
+  $("list").querySelectorAll(".cust[data-f]").forEach((b) => b.onclick = () => confirmLeave() && openCustomer(b.dataset.f));
+  $("newBtn").onclick = () => confirmLeave() && newCustomer();
+}
+
+function renderCountries() {
+  $("countries").innerHTML = S.countries.map((c) => `
+    <button class="country ${cur.customer.country === c.code ? "sel" : ""}" data-c="${c.code}">
+      <span class="code">${c.code}</span><b>${esc(c.name.en)}</b>
+      <dl><dt>Currency</dt><dd>${esc(c.currency.en)} · ${esc(c.currency.ar)}</dd>
+          <dt>Dialect</dt><dd>${esc(c.dialect.en)}</dd>
+          <dt>ID</dt><dd>${esc(c.nationalId.en)}</dd>
+          <dt>Time</dt><dd>${esc(c.tz)}</dd>
+          <dt>Data</dt><dd>${c.corpus ? "ready" : '<span style="color:var(--warn)">needs <code>make author</code></span>'}</dd></dl>
+    </button>`).join("");
+  $("countries").querySelectorAll(".country").forEach((b) => b.onclick = () => { cur.customer.country = b.dataset.c; touch(); renderCountries(); });
+}
+
+// ------------------------------------------------------------------ the form
+function newCustomer() {
+  cur = blank(); theme = null; fill(); msg("New customer: upload the logo, then fill in the names and pick the country.");
+}
+
+async function openCustomer(folder) {
+  const r = await api(`/api/customer/${folder}`);
+  const c = r.customer;
+  cur = { isNew: false, folder, folderTouched: true, logo: null, logoUrl: `/customers/${folder}/logo.png?${Date.now()}`,
+    mark: null, markUrl: r.mark ? `/customers/${folder}/mark.png?${Date.now()}` : null, removeMark: false,
+    customer: { ...c, name: { ...(c.name || {}) }, colors: { ...(c.colors || {}) }, facts: (c.facts || []).map((f) => ({ ...f })),
+      heroChips: c.heroChips !== false, bannerPalette: c.bannerPalette || "", font: c.font || "cairo", website: c.website || "" } };
+  theme = null; fill(); msg(`Editing customers/${folder}`); colours();
+}
+
+function fill() {
+  const c = cur.customer;
+  $("nameEn").value = c.name.en || ""; $("nameAr").value = c.name.ar || ""; $("short").value = c.short || "";
+  $("website").value = c.website || ""; $("folder").value = cur.folder; $("folder").disabled = !cur.isNew;
+  $("font").value = c.font; $("heroChips").checked = c.heroChips; $("bannerPalette").value = c.bannerPalette || "";
+  $("titles").innerHTML = TITLES.map(([k, l]) => `
+    <label class="f">${l} (English)<input data-t="${k}" data-l="en" value="${esc(c[k]?.en)}"></label>
+    <label class="f">${l} (Arabic)<input data-t="${k}" data-l="ar" dir="rtl" value="${esc(c[k]?.ar)}"></label>`).join("");
+  $("titles").querySelectorAll("input").forEach((i) => i.oninput = () => {
+    c[i.dataset.t] = { ...(c[i.dataset.t] || { en: "", ar: "" }), [i.dataset.l]: i.value }; touch(); preview(); });
+  drawDrop("logoDrop", cur.logoUrl); drawDrop("markDrop", cur.markUrl);
+  renderFacts(); renderCountries(); renderTokens(); renderList(); preview(); dirty = false;
+  document.querySelectorAll(".err").forEach((e) => e.classList.remove("err"));
+}
+
+function touch() { dirty = true; }
+function confirmLeave() { return !dirty || confirm("Discard the unsaved changes?"); }
+
+[["nameEn", (v) => { cur.customer.name.en = v; if (cur.isNew && !cur.folderTouched) { cur.folder = slug(v); $("folder").value = cur.folder; } }],
+ ["nameAr", (v) => cur.customer.name.ar = v], ["short", (v) => cur.customer.short = v], ["website", (v) => cur.customer.website = v],
+ ["folder", (v) => { cur.folder = v.toLowerCase(); cur.folderTouched = true; }], ["bannerPalette", (v) => cur.customer.bannerPalette = v],
+].forEach(([id, set]) => $(id).addEventListener("input", (e) => { set(e.target.value); e.target.classList.remove("err"); touch(); preview(); }));
+$("font").onchange = (e) => { cur.customer.font = e.target.value; touch(); preview(); };
+$("heroChips").onchange = (e) => { cur.customer.heroChips = e.target.checked; touch(); preview(); };
+
+function renderFacts() {
+  $("facts").innerHTML = cur.customer.facts.map((f, i) => `
+    <div class="fact"><input data-i="${i}" data-k="label" value="${esc(f.label)}" placeholder="Label / التسمية">
+      <input data-i="${i}" data-k="value" value="${esc(f.value)}" placeholder="Value"><button class="btn link" data-del="${i}" title="Remove">✕</button></div>`).join("");
+  $("facts").querySelectorAll("input").forEach((i) => i.oninput = () => { cur.customer.facts[i.dataset.i][i.dataset.k] = i.value; touch(); preview(); });
+  $("facts").querySelectorAll("[data-del]").forEach((b) => b.onclick = () => { cur.customer.facts.splice(b.dataset.del, 1); touch(); renderFacts(); preview(); });
+}
+$("addFact").onclick = () => { cur.customer.facts.push({ label: "", value: "" }); renderFacts(); };
+
+// ------------------------------------------------------------------ logo and emblem
+function drawDrop(id, url) {
+  const d = $(id), input = d.querySelector("input"), hint = d.querySelector(".hint");
+  d.querySelectorAll("img,.x").forEach((e) => e.remove());
+  hint.hidden = !!url;
+  if (!url) return;
+  const img = new Image(); img.src = url; img.alt = "";
+  d.append(img);
+  const x = document.createElement("button"); x.className = "btn link x"; x.textContent = id === "logoDrop" ? "Replace" : "Remove";
+  x.onclick = (e) => { e.stopPropagation(); if (id === "logoDrop") input.click(); else { cur.mark = null; cur.markUrl = null; cur.removeMark = true; touch(); drawDrop(id, null); preview(); } };
+  d.append(x);
+  d.onclick = () => input.click();
+}
+function wireDrop(id, which) {
+  const d = $(id), input = d.querySelector("input");
+  d.onclick = () => input.click();
+  d.onkeydown = (e) => (e.key === "Enter" || e.key === " ") && input.click();
+  input.onchange = () => input.files[0] && take(input.files[0], which, id);
+  d.ondragover = (e) => { e.preventDefault(); d.classList.add("over"); };
+  d.ondragleave = () => d.classList.remove("over");
+  d.ondrop = (e) => { e.preventDefault(); d.classList.remove("over"); e.dataTransfer.files[0] && take(e.dataTransfer.files[0], which, id); };
+}
+function take(file, which, id) {
+  if (!/^image\/(png|jpeg|webp|gif)$/.test(file.type)) { msg(file.type === "image/svg+xml" ? "SVG is not supported: export the logo as a PNG." : "Choose a PNG, JPEG or WebP image.", "bad"); return; }
+  const r = new FileReader();
+  r.onload = () => {
+    cur[which] = r.result; cur[which + "Url"] = r.result; if (which === "mark") cur.removeMark = false;
+    touch(); drawDrop(id, r.result); preview();
+    if (which === "logo") colours();
+  };
+  r.readAsDataURL(file);
+}
+wireDrop("logoDrop", "logo"); wireDrop("markDrop", "mark");
+
+// ------------------------------------------------------------------ colours
+let colourSeq = 0, colourTimer = null;
+function colours(delay = 0) {
+  clearTimeout(colourTimer);
+  colourTimer = setTimeout(async () => {
+    if (!cur.logo && cur.isNew) return;
+    const seq = ++colourSeq;
+    try {
+      const r = await api("/api/colors", { logo: cur.logo, folder: cur.isNew ? "" : cur.folder, colors: cur.customer.colors });
+      if (seq !== colourSeq) return;
+      theme = r; renderTokens(); preview();
+    } catch (e) { msg(e.message, "bad"); }
+  }, delay);
+}
+function setColour(k, v) {
+  if (v) cur.customer.colors[k] = v; else delete cur.customer.colors[k];
+  // brand and accent drive the shades: re-derive the ones not set by hand
+  touch(); colours(120);
+  if (theme) { theme.theme[k] = v || theme.theme[k]; renderTokens(); preview(); }
+}
+function renderTokens() {
+  const t = theme?.theme || {};
+  $("found").innerHTML = theme ? (theme.found.length
+    ? `<span class="small muted">In the logo:</span>` + theme.found.slice(0, 6).map((f) => `
+      <span class="sw"><i style="background:${f.hex}"></i>${f.hex} <span class="muted">${Math.round(f.share * 100)}%</span>
+        <button data-hex="${f.hex}" data-k="brand">brand</button><button data-hex="${f.hex}" data-k="accent">accent</button></span>`).join("")
+    : `<span class="small muted">The logo has no brand colour (black, grey or white): set the brand and accent colours by hand.</span>`)
+    : `<span class="small muted">Upload a logo to pick its colours.</span>`;
+  $("found").querySelectorAll("button[data-hex]").forEach((b) => b.onclick = () => setColour(b.dataset.k, b.dataset.hex));
+  const tok = (k) => {
+    const v = cur.customer.colors[k] || t[k] || "#cccccc", custom = !!cur.customer.colors[k];
+    return `<div class="tok ${custom ? "custom" : ""}"><input type="color" value="${v}" data-k="${k}" aria-label="${LABELS[k]}">
+      <span class="t"><b>${LABELS[k]}</b><span>${v}</span></span><span class="state">${custom ? "set" : "auto"}</span>
+      <button class="reset" data-r="${k}" title="Back to automatic">↺</button></div>`;
+  };
+  $("tokensMain").innerHTML = ["brand", "accent"].map(tok).join("");
+  $("tokensMore").innerHTML = S.tokens.filter((k) => !["brand", "accent"].includes(k)).map(tok).join("");
+  document.querySelectorAll(".tok input[type=color]").forEach((i) => {
+    i.oninput = () => { cur.customer.colors[i.dataset.k] = i.value; touch(); applyPreviewColours(); i.nextElementSibling.querySelector("span").textContent = i.value; };
+    i.onchange = () => setColour(i.dataset.k, i.value);
+  });
+  document.querySelectorAll(".tok .reset").forEach((b) => b.onclick = () => setColour(b.dataset.r, null));
+}
+
+// ------------------------------------------------------------------ preview
+function li(ar) { return ar.startsWith("ال") ? "ل" + ar.slice(1) : "ل" + ar; }
+function applyPreviewColours() {
+  const t = { ...(theme?.theme || {}), ...cur.customer.colors };
+  Object.entries(t).forEach(([k, v]) => $("pv").style.setProperty(`--p-${k}`, v));
+}
+function preview() {
+  const c = cur.customer, ar = pvLang === "ar", short = c.short || (ar ? "البنك" : "Bank"), nameAr = c.name.ar || "البنك";
+  const country = S.countries.find((x) => x.code === c.country);
+  const pick = (k, en, a) => (c[k]?.en && c[k]?.ar) ? c[k][pvLang] : (ar ? a : en);
+  $("pv").dir = ar ? "rtl" : "ltr";
+  $("pv").style.fontFamily = c.font === "plex" ? '"IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif' : '"Cairo", "Segoe UI", Tahoma, sans-serif';
+  $("pvLogo").src = cur.logoUrl || "data:image/gif;base64,R0lGODlhAQABAAAAACw="; $("pvLogo").hidden = !cur.logoUrl;
+  $("pvAv").style.backgroundImage = `url('${cur.markUrl || cur.logoUrl || ""}')`;
+  $("pvTitle").textContent = ar ? "إثبات مفهوم لمستخدم واحد على جهاز GB10" : "Single-user PoC on one GB10";
+  document.title = `Customer Setup · ${pick("appTitle", `${short} AI Demos`, `عروض الذكاء الاصطناعي ${li(nameAr)}`)}`;
+  $("pvLang").textContent = ar ? "English" : "عربي";
+  $("pvHero").textContent = pick("heroTitle", "Seven AI use cases, live on one Dell Pro Max with GB10", "سبع حالات استخدام للذكاء الاصطناعي على جهاز واحد Dell Pro Max with GB10");
+  $("pvSub").textContent = ar ? "عرض لكل حالة استخدام، على منصة واحدة مشتركة تعمل دون اتصال بالإنترنت." : `One demo per ${short} use case, on one shared, fully offline platform.`;
+  $("pvChips").innerHTML = c.heroChips ? (ar ? ["إثبات مفهوم لمستخدم واحد على جهاز GB10", "يعمل دون إنترنت", "بيانات تجريبية فقط"] : ["Single-user PoC on one GB10", "Fully offline", "Synthetic data only"]).map((x) => `<span class="chip">${x}</span>`).join("") : "";
+  $("pvAgent").textContent = pick("agentName", `${short} Virtual Agent`, `المساعد الافتراضي ${li(nameAr)}`);
+  const cur$ = country ? country.currency[pvLang] : (ar ? "جنيه" : "EGP");
+  $("pvSay").textContent = ar ? `أهلاً بك في ${nameAr}، رسوم إصدار بطاقة بديلة 150 ${cur$}.` : `Welcome to ${c.name.en || short}. A replacement card costs ${cur$} 150.`;
+  $("pvLoanH").textContent = ar ? "طلب تمويل شخصي" : "Personal loan application";
+  $("pvLoan").textContent = ar ? `المبلغ 250,000 ${cur$} · ${country ? country.nationalId.ar : "الرقم القومي"} مطابق`
+    : `Amount ${cur$} 250,000 · ${country ? country.nationalId.en : "national ID"} matches`;
+  $("pvB1").textContent = ar ? "اعتماد" : "Approve"; $("pvB2").textContent = ar ? "مراجعة" : "Review";
+  $("pvS1").textContent = ar ? "سليم" : "OK"; $("pvS2").textContent = ar ? "للمراجعة" : "Review"; $("pvS3").textContent = ar ? "إيقاف" : "Stop";
+  $("pvFoot").textContent = `© ${c.name[pvLang] || short} · ${ar ? "محتوى تجريبي" : "Synthetic demo content"}`;
+  $("pvCountry").innerHTML = country ? `
+    <div><span class="muted">Country</span><b>${esc(country.name.en)}</b></div>
+    <div><span class="muted">Currency</span><span>${esc(country.currency.en)} · ${esc(country.currency.ar)}</span></div>
+    <div><span class="muted">D4 dialect</span><span>${esc(country.dialect.en)}</span></div>
+    <div><span class="muted">D1 ID document</span><span>${esc(country.nationalId.en)}</span></div>
+    <div><span class="muted">Banners</span><span>${esc(c.bannerPalette || theme?.palette || "auto")}</span></div>` : `<div class="muted">Pick a country.</div>`;
+  applyPreviewColours();
+}
+document.querySelectorAll(".pv-tabs button").forEach((b) => b.onclick = () => {
+  pvLang = b.dataset.l; document.querySelectorAll(".pv-tabs button").forEach((x) => x.classList.toggle("on", x === b)); preview(); });
+
+// ------------------------------------------------------------------ save and apply
+function validate() {
+  const bad = [];
+  const need = [["nameEn", cur.customer.name.en], ["nameAr", cur.customer.name.ar], ["short", cur.customer.short], ["folder", cur.folder]];
+  need.forEach(([id, v]) => { if (!String(v || "").trim()) { $(id).classList.add("err"); bad.push(id); } });
+  if (cur.folder && !/^[a-z0-9][a-z0-9-]{0,39}$/.test(cur.folder)) { $("folder").classList.add("err"); return "The folder name must be lowercase letters, digits and dashes."; }
+  if (cur.isNew && !cur.logo) return "Upload the bank's logo.";
+  if (bad.length) return "Fill in the highlighted fields.";
+  if (!cur.customer.country) return "Pick the country.";
+  return null;
+}
+async function save() {
+  const problem = validate();
+  if (problem) { msg(problem, "bad"); throw new Error(problem); }
+  const c = cur.customer;
+  const body = { isNew: cur.isNew, folder: cur.folder, logo: cur.logo, mark: cur.mark, removeMark: cur.removeMark,
+    customer: { id: c.id, short: c.short, name: c.name, country: c.country, website: c.website, font: c.font, colors: c.colors,
+      facts: c.facts, heroChips: c.heroChips, bannerPalette: c.bannerPalette,
+      ...Object.fromEntries(TITLES.map(([k]) => [k, c[k] || {}])) } };
+  const r = await api("/api/save", body);
+  dirty = false;
+  await refresh();
+  await openCustomer(r.folder);
+  return r.folder;
+}
+$("saveBtn").onclick = async () => {
+  try { const f = await save(); msg(`Saved to customers/${f}. Launch it when you are ready.`, "ok"); toast("Saved"); }
+  catch (e) { msg(e.message, "bad"); }
+};
+function launchLabel() {
+  const k = S.stack || {};
+  return k.running && k.mine ? "Save and switch the demos" : k.running ? "Save and start the demos here" : "Save and start the demos";
+}
+$("applyBtn").onclick = async () => {
+  const problem = validate();
+  if (problem) { msg(problem, "bad"); return; }
+  const country = S.countries.find((x) => x.code === cur.customer.country);
+  if (country && !country.corpus && !confirm(`${country.name.en} has no demo data yet (make author, about 25 min). Launch anyway?`)) return;
+  const k = S.stack || {};
+  const replaceOther = k.running && !k.mine;
+  if (replaceOther && !confirm(`The demo stack from another checkout (project “${k.project}”) is running. Stop it and start the demos from here?`)) return;
+  // The tab is opened now, while the click still counts: a tab opened after the save would be blocked as a pop-up
+  const tab = window.open("", "_blank");
+  if (tab) tab.document.write('<title>Launching Demos</title><body style="font:15px system-ui;display:grid;place-items:center;height:90vh;color:#5b6270">Saving the profile…</body>');
+  try {
+    const f = await save();
+    await api("/api/launch", { folder: f, replaceOther });
+    msg(k.running && k.mine ? `Switching the demos to ${cur.customer.short}…` : `Starting the demos for ${cur.customer.short} (about 4 minutes)…`);
+    if (tab) { tab.location.href = "/launch"; followJob(true); }
+    else location.href = "/launch";               // pop-ups blocked: follow it in this tab
+  } catch (e) {
+    tab?.close();
+    msg(e.message === "another stack is running" ? "Another demo stack started meanwhile: press the button again." : e.message, "bad");
+  }
+};
+$("stopBtn").onclick = async () => {
+  if (!confirm("Stop the demo stack (make down)? This frees the GB10; the data is kept.")) return;
+  try { await api("/api/stop", {}); msg("Stopping the demo stack…"); followJob(true); } catch (e) { msg(e.message, "bad"); }
+};
+
+function followJob(reset) {
+  if (reset) { jobSince = 0; $("log").textContent = ""; }
+  $("jobPanel").hidden = false;
+  $("applyBtn").disabled = $("saveBtn").disabled = $("stopBtn").disabled = true;
+  clearTimeout(jobTimer);
+  const tick = async () => {
+    try {
+      const j = await api(`/api/job?since=${jobSince}`);
+      jobSince = j.total;
+      if (j.lines.length) { const l = $("log"); l.textContent += j.lines.join("\n") + "\n"; l.scrollTop = l.scrollHeight; }
+      $("jobTitle").textContent = { start: `Starting the demos for ${j.target}`, switch: `Switching the demos to ${j.target}`, stop: "Stopping the demo stack" }[j.kind] || "Working";
+      const text = $("log").textContent;
+      const found = [...text.matchAll(/^== (.+)$/gm)].map((m) => m[1]);
+      $("steps").innerHTML = found.map((s, i) => `<span class="step ${i < found.length - 1 || !j.running ? "done" : "now"}">${esc(s)}</span>`).join("");
+      if (j.running) { jobTimer = setTimeout(tick, 1000); return; }
+      jobTimer = null;
+      $("applyBtn").disabled = $("saveBtn").disabled = $("stopBtn").disabled = false;
+      await refresh();
+      if (j.rc !== 0) return msg(`It stopped with an error (exit ${j.rc}): see the log below.`, "bad");
+      msg(j.kind === "stop" ? "The demo stack is stopped." : /no corpus yet/.test(text)
+        ? "Launched, but this country has no demo data yet: run make author in ~/Bank-Demo (about 25 min)."
+        : "Done: the demos show this customer. The launch tab opens them once every demo is healthy.", "ok");
+    } catch (e) { jobTimer = setTimeout(tick, 3000); }
+  };
+  tick();
+}
+
+window.addEventListener("beforeunload", (e) => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
+refresh().catch((e) => msg("Could not reach the setup server: " + e.message, "bad"));
+setInterval(() => { if (!jobTimer) refresh().catch(() => {}); }, 15000);
+</script>
+</body>
+</html>

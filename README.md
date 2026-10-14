@@ -31,6 +31,7 @@ Seven live AI applications for the **National Bank of Egypt (NBE)**, one per NBE
 15. [Production rollout on PowerEdge XE7745 and XE9780](#15-production-rollout-on-poweredge-xe7745-and-xe9780)
 16. [Known limitations](#16-known-limitations)
 17. [Customers: one platform, any bank, four countries](#17-customers-one-platform-any-bank-four-countries)
+18. [Demo videos](#18-demo-videos)
 
 ---
 
@@ -55,8 +56,9 @@ The portal also hosts the **Arabic gate** (`/eval`): a blind scoring tool used t
 Prerequisites: a GB10 (or any NVIDIA host with about 100 GB of free GPU memory) running Docker with the NVIDIA container runtime, `make`, and model weights in `/opt/models` (`make models` downloads them; this is the only step that needs the internet).
 
 ```bash
-git clone https://github.com/tamereissa77/NBE-demo.git ~/NBE-demo && cd ~/NBE-demo
-make customer NAME=nbe   # which bank and country to present (make customers lists them; section 17)
+git clone -b General-Demo https://github.com/Mohamedtahaahmedtaha/NBE-demo.git ~/Bank-Demo && cd ~/Bank-Demo
+make setup         # optional: the setup page on :8210 to add a customer, pick it and start the demos (section 17)
+make customer NAME=nbe   # or from the command line: which bank and country to present (make customers lists them)
 make up            # ~4 min cold: creates .env, frees the GPU, starts models one by one, loads demo data on first run
 make verify        # portal, 7 demo APIs, offline proof, platform check of every model and service
 make ui-test       # a real browser clicks through all seven demos (Playwright)
@@ -357,11 +359,14 @@ Reproduce: `make verify`, `make ui-test`, `python tests/golden_d2.py`, `GET /api
 
 | Command | What it does |
 |---|---|
+| `make setup` | The customer setup page on :8210: add or edit a customer (logo, names, country, colours), start or switch the demos, stop them (section 17) |
+| `make customer NAME=<name>`, `make customers` | Present the demos for another customer / list the profiles (section 17) |
 | `make up` / `make down` | Start in a memory-safe order (preflight, models one by one, apps, first-run data) / stop and remove containers |
 | `make status`, `make ps`, `make gpu`, `make logs-<service>` | Health of every demo, containers, GPU memory per container, logs |
 | `make verify` | Portal, demo APIs, offline proof, full platform check |
 | `make ui-test` | Playwright walkthrough of all seven demos |
 | `make record` | Backup videos per demo (Arabic and English) into `recordings/` |
+| `tools/video/` | A narrated walkthrough video of all seven demos for the active customer (section 18) |
 | `make offline-check` | Networks, egress attempts and offline flags, container by container |
 | `make demo-reset` | Clear decisions, triage, agent sessions and mock-bank state between audiences |
 | `make data`, `make ingest` | Regenerate synthetic data; load every demo |
@@ -386,14 +391,17 @@ NBE-demo/
 ├── docker/                     Dockerfiles: demo-api, portal, gpu-python, tts, guardrails, docling, datagen
 ├── packages/nbe_core/          shared Python library (section 8)
 ├── services/
-│   ├── d1_docverify … d7_complaints/   one FastAPI app per demo
+│   ├── d1_docverify … d7_complaints/   one FastAPI app per demo (d6 app/samples/<CC>/ = D6's sample files per country)
 │   ├── mockbank, guardrails, docling, asr, tts, sdxl, eval/
 │   └── portal/                 React + Vite + Tailwind (workspaces/ = one screen per demo)
 ├── data/generators/            synthetic data generators; countries/<cc>.py = fact sheets per country
 ├── data/seed/<CC>/             committed corpora and golden sets per country (data/generated/, data/seed-active/ git-ignored)
 ├── eval/arabic_gate/           30 gate prompts
 ├── tests/                      platform_check.py, golden_d2.py, ui/walkthrough.py, ui/capture_guide.py
-├── scripts/                    up, mode, preflight, gpu, verify, ingest, demo_reset, offline_check, arabic_gate, download_models
+├── scripts/                    up, mode, preflight, gpu, verify, ingest, demo_reset, offline_check, arabic_gate, download_models,
+│                               apply_customer, switch_customer, d6_samples; setup/ = the customer setup page (make setup)
+├── tools/video/                the narrated demo video kit (section 18)
+├── recordings/                 backup and narrated videos (git-ignored)
 └── docs/                       runbook, talk tracks, Arabic gate guide
 ```
 
@@ -405,6 +413,9 @@ NBE-demo/
 | `HF_TOKEN` | Used only by `make models` |
 | `NBE_LLM_GPU_UTIL`, `NBE_LLMQ_GPU_UTIL`, `NBE_HERO_GPU_UTIL`, … | Optional overrides of each model server's memory share |
 | `D5_REDUCE_ALIAS` | Model alias for D5's reduce step (default `workhorse`) |
+| `BRAND`, `BANK_SHORT`, `BANK_NAME_EN/AR`, `COUNTRY`, `TZ`, `BANNER_PALETTE` | The active customer, written by `make customer` (section 17) |
+| `COMPOSE_PROJECT_NAME`, `IMAGE_TAG` | Docker project and image tag of this checkout (`general`) |
+| `SETUP_PORT`, `SETUP_BIND` | The setup page's port (8210) and address (all interfaces; `127.0.0.1` keeps it on the box) |
 
 ---
 
@@ -512,6 +523,7 @@ Planning assumptions to validate by benchmark, not commitments.
 - **Model choice is provisional** until human scoring of the Arabic gate.
 - **Voice:** browsers allow the microphone only on `localhost` or https; Egyptian dialect in voice is a bonus, not a guarantee.
 - **D1 forensics** flag for review and are not fraud-proof.
+- **D6 code answers** use gpt-oss-120b only after `make hero`; otherwise the workhorse answers and the panel says so.
 - **Not deployed:** Open WebUI (the D6 portal screen replaces it; `/v1` is ready if wanted), Dataiku (version and host to be confirmed by NBE).
 
 
@@ -535,8 +547,26 @@ make author                     # once per new country: the LLM writes its corpu
 | `riyad` Riyad Bank | SA | colours sampled from riyadbank.com |
 | `oasis-demo` Oasis Demo Bank | AE | fictional, colours taken from its logo |
 | `atlas-demo` Atlas Demo Bank | MA | fictional, colours taken from its logo |
+| `credit-du-maroc` Crédit du Maroc (CDM) | MA | made with the setup page, colours taken from its logo; narrated videos in section 18 |
 
-**Adding a customer**: copy `customers/_template`, add the bank's `logo.png`, set names and country in
+**The setup page** (`make setup`, http://<GB10>:8210; `scripts/setup/`): the same without editing files.
+
+- Pick a customer or press **New customer**, drop the logo (and optionally a square emblem), fill in the names in
+  English and Arabic, and pick the country. The country brings its currency, dialect, ID rules, time zone and data.
+- The colours picked from the logo are shown, and any theme colour can be set by hand. A preview shows the portal in
+  English and Arabic.
+- **Save** writes `customers/<folder>/`. **Save and start / switch the demos** launches them with that customer:
+  - a running stack is switched to it (`make customer`, about a minute);
+  - a stopped one is started with it (`make up`, about 4 minutes);
+  - another checkout's stack is stopped first, after asking.
+- A new tab follows the progress and opens the portal (:8200) once every demo reports healthy.
+- **Stop demo** runs `make down`.
+- Start it with `make setup` (Ctrl-C stops it), or in the background:
+  `nohup make setup > /tmp/setup.log 2>&1 &` and `pkill -f scripts/setup/server.py`.
+  It needs only Python and Pillow, so it runs with everything else down.
+- It listens on every interface like the portal: use `SETUP_BIND=127.0.0.1` on a shared network.
+
+**Adding a customer by hand**: copy `customers/_template`, add the bank's `logo.png`, set names and country in
 `customer.json`, then `make customer NAME=<name>`. Colours come from the logo unless `colors` sets them;
 `python3 scripts/apply_customer.py <name> --colors-only` previews them. Details in `customers/README.md`.
 
@@ -561,11 +591,42 @@ and regenerates and reloads the data.
 | Currency, ID card and number rules, dialect, cities, names, employers, merchants, phone format, VAT, D2 sample questions, D4 dialect (style, small talk, fallback phrases), D6 glossary and weekend, PII patterns, time zone, portal locale | `packages/nbe_core/nbe_core/countries/<cc>.py`, loaded by `nbe_core.locale` from `COUNTRY` | Every service prompt, D1/D3 generators, mock bank, portal |
 | Corpus facts: procedures, contract template and deviations, court rulings, KB topics, complaint grid | `data/generators/countries/<cc>.py`, loaded by `data/generators/specs.py` | D2, D4, D5, D7 corpus and golden answers |
 | Corpus, golden sets, D4 pronunciation, D7 policy | `data/seed/<CC>/` (`bank.json` = the bank it was written for) | D2, D4, D5, D7 |
+| D6 sample files (policy, minutes, e-mail thread, complaints CSV, loans workbook) with local cities, staff and currency | `services/d6_assistant/app/samples/<CC>/`, made from the Egyptian ones by `scripts/d6_samples.py` | D6 suggested requests |
 
 **Limits outside Egypt**: the D4 voice is an Egyptian voice (VoiceTut-TTS), so Gulf and Moroccan replies are
 written in the local dialect but spoken with an Egyptian accent and Egyptian number words; D1's document reader is
 fine-tuned on Egyptian documents; D2's scanned circulars exist only for Egypt; the Arabic gate prompts
 (`eval/arabic_gate/prompts.yaml`) are Egyptian.
+
+---
+
+## 18. Demo videos
+
+| Video | Length | |
+|---|---|---|
+| `recordings/CDM_AI_Demos_AR.mp4` | 9 min 22 s, 1080p | Crédit du Maroc, portal in Arabic, Arabic captions with an English line, Arabic voice-over (VoiceTut) |
+| `recordings/CDM_AI_Demos_EN.mp4` | the same | The same footage with an English voice-over (Piper) reading the English lines |
+
+Chapters: intro 0:00 · D1 0:35 · D2 2:08 · D3 3:14 · D4 4:34 · D5 5:59 · D6 6:59 · D7 8:06 · outro 9:10.
+
+Each is one real run on the GB10, not a mock-up:
+
+- **Intro**: a title card, then the portal in CDM's brand.
+- **D1**: loan pack A01 flagged for review (the employer letter's salary of 16,300 MAD against 9,800 MAD in the
+  statement, and a name mismatch), the evidence viewer, the error-level picture and the extracted fields, then the
+  officer's decision.
+- **D2**: a cited answer showing the version changes, a question in Darija, and a question no procedure covers.
+- **D3**: a campaign with the planted banned claim caught, a Darija social post, a banner with CDM's logo, and the A/B plan.
+- **D4**: the full WhatsApp script.
+- **D5**: contract C01 against the template (article 6), then ruling R02.
+- **D6**: drafting, file chat, translation and code run on the Moroccan workbook.
+- **D7**: triage, an approved draft, trends and accuracy.
+
+Model waits are sped up, with an on-screen counter of the real time.
+
+The videos are git-ignored. `tools/video/` makes them again, or for another customer: the narration
+(`lines.py`), the recording script (`film.py`, a headed Chromium under Xvfb captured with ffmpeg), the edit
+(`edit.py`), and voice and sync checks with the on-box Whisper (see `tools/video/README.md`).
 
 ---
 

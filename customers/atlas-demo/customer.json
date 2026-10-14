@@ -19,5 +19,6 @@
       "value": "www.atlas-demo-bank.example"
     }
   ],
-  "note": "Fictional bank for trying the Morocco country pack. Not a real institution."
+  "note": "Fictional bank for trying the Morocco country pack. Not a real institution.",
+  "colors": {}
 }

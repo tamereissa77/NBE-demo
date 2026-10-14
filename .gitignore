@@ -18,3 +18,8 @@ ops/
 *.tsbuildinfo
 D6_OPTIMISATIONS_REPORT.md
 test-cases/*/results/
+
+# Demo video work files (tools/video): narration audio and takes
+tools/video/out/
+tools/video/tts/
+tools/video/tts_en/

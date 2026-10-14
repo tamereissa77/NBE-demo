@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Launching Demos</title>
+<style>
+:root { --bg: #f4f5f7; --panel: #fff; --ink: #1c1f26; --soft: #5b6270; --line: #dde0e6; --ok: #1f8a4c; --bad: #c62828; --chip: #eef0f4; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--bg); color: var(--ink);
+  font: 14px/1.5 system-ui, "Segoe UI", Tahoma, sans-serif; padding: 16px; }
+.card { width: min(620px, 100%); background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 24px; }
+.top { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+.top img { height: 44px; max-width: 200px; object-fit: contain; }
+h1 { font-size: 18px; margin: 0; }
+.sub { color: var(--soft); font-size: 13px; }
+.bar { height: 6px; border-radius: 99px; background: var(--chip); overflow: hidden; margin: 6px 0 18px; }
+.bar i { display: block; height: 100%; width: 30%; background: var(--ink); border-radius: 99px; animation: slide 1.4s ease-in-out infinite; }
+.done .bar i { width: 100%; animation: none; background: var(--ok); }
+.failed .bar i { width: 100%; animation: none; background: var(--bad); }
+@keyframes slide { 0% { margin-left: -30%; } 100% { margin-left: 100%; } }
+ol { list-style: none; padding: 0; margin: 0 0 16px; display: grid; gap: 6px; }
+li { display: flex; gap: 10px; align-items: baseline; font-size: 13px; color: var(--soft); }
+li::before { content: "✓"; color: var(--ok); width: 14px; flex: none; font-weight: 700; }
+li.now { color: var(--ink); font-weight: 600; }
+li.now::before { content: "●"; color: var(--ink); animation: blink 1s infinite; }
+li.fail::before { content: "✕"; color: var(--bad); }
+@keyframes blink { 50% { opacity: .2; } }
+.time { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--soft); font-weight: 400; }
+details { margin-top: 8px; }
+summary { cursor: pointer; font-size: 13px; color: var(--soft); }
+pre { background: #12151b; color: #d6dae2; border-radius: 10px; padding: 12px; max-height: 260px; overflow: auto; font: 12px/1.5 ui-monospace, monospace;
+  white-space: pre-wrap; word-break: break-word; margin: 8px 0 0; }
+.msg { font-size: 14px; margin: 0 0 12px; }
+.msg.bad { color: var(--bad); }
+a.btn { display: inline-flex; padding: 8px 16px; border-radius: 8px; background: var(--ink); color: #fff; text-decoration: none; margin-right: 8px; }
+a.btn.alt { background: none; color: var(--ink); border: 1px solid var(--line); }
+</style>
+</head>
+<body>
+<div class="card" id="card">
+  <div class="top"><img id="logo" alt="" hidden><div><h1 id="title">Launching the demos</h1><div class="sub" id="sub">Starting…</div></div></div>
+  <div class="bar"><i></i></div>
+  <p class="msg" id="msg" hidden></p>
+  <ol id="steps"></ol>
+  <div id="links" hidden></div>
+  <details id="det"><summary>Log</summary><pre id="log"></pre></details>
+</div>
+<script>
+const $ = (id) => document.getElementById(id);
+let since = 0, text = "", portal = null, readySince = null, t0 = Date.now(), stepStart = {};
+
+const fmt = (ms) => { const s = Math.round(ms / 1000); return s < 60 ? `${s}s` : `${Math.floor(s / 60)}m ${String(s % 60).padStart(2, "0")}s`; };
+async function get(p) { const r = await fetch(p, { cache: "no-store" }); return r.json(); }
+
+function steps(running, failed) {
+  const found = [...text.matchAll(/^== (.+)$/gm)].map((m) => m[1]);
+  found.forEach((s, i) => stepStart[i] ??= Date.now());
+  const items = found.map((s, i) => {
+    const last = i === found.length - 1;
+    const cls = last && running ? "now" : last && failed ? "fail" : "";
+    const end = last ? Date.now() : stepStart[i + 1];
+    return `<li class="${cls}">${s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}<span class="time">${fmt(end - stepStart[i])}</span></li>`;
+  });
+  if (!running && !failed) items.push(`<li class="now">waiting for every demo to report healthy<span class="time"></span></li>`);
+  $("steps").innerHTML = items.join("");
+}
+
+async function tick() {
+  let j;
+  try { j = await get(`/api/job?since=${since}`); } catch { return setTimeout(tick, 2000); }
+  since = j.total;
+  if (j.lines.length) { text += j.lines.join("\n") + "\n"; const l = $("log"); l.textContent = text; l.scrollTop = l.scrollHeight; }
+  if (j.target && $("logo").hidden) { $("logo").src = `/customers/${j.target}/logo.png`; $("logo").hidden = false; }
+  $("title").textContent = j.kind === "switch" ? "Switching the demos" : j.kind === "start" ? "Starting the demos" : j.kind === "stop" ? "Stopping the demos" : "Launching the demos";
+  const bank = (text.match(/\((.+) - [A-Z]{2}\)\s*$/m) || [])[1];
+  $("sub").textContent = `${j.kind === "start" ? "About 4 minutes" : j.kind === "switch" ? "About a minute" : ""}${bank ? " · " + bank : ""} · ${fmt(Date.now() - (j.started ? j.started * 1000 : t0))}`;
+  if (j.running) { steps(true, false); return setTimeout(tick, 1000); }
+  if (!j.kind) {                                   // nothing launched since the setup server started: open the demos if they are up
+    const r = await get("/api/ready");
+    if (r.ready) { steps(false, false); return waitReady(); }
+    $("sub").textContent = "The demos are not running. Start them from the setup page."; return done(false, "done");
+  }
+  if (j.rc !== 0) {
+    steps(false, true);
+    msg(`It stopped with an error (exit ${j.rc}). The log below says where.`, true);
+    $("det").open = true;
+    return done(false);
+  }
+  if (j.kind === "stop") { steps(false, true); $("steps").lastElementChild?.classList.remove("fail"); msg("The demo stack is stopped."); return done(false, "done"); }
+  steps(false, false);
+  waitReady();
+}
+
+async function waitReady() {
+  let r;
+  try { r = await get("/api/ready"); } catch { return setTimeout(waitReady, 2000); }
+  portal = `${location.protocol}//${location.hostname}:${r.port}/`;
+  if (r.ready) {
+    readySince ??= Date.now();
+    if (Date.now() - readySince >= 2000) {        // healthy twice in a row: open the portal
+      $("card").classList.add("done");
+      $("title").textContent = "The demos are ready";
+      $("sub").textContent = `Opening ${portal}…`;
+      setTimeout(() => location.replace(portal), 600);
+      return;
+    }
+  } else {
+    readySince = null;
+    const last = $("steps").lastElementChild;
+    if (last) last.firstChild.textContent = r.waiting.length ? `waiting for ${r.waiting.join(", ")}` : r.portal !== 200 ? "waiting for the portal" : "waiting for every demo to report healthy";
+    if (Date.now() - t0 > 15 * 60 * 1000) { msg("The demos did not all report healthy within 15 minutes.", true); return done(true); }
+  }
+  setTimeout(waitReady, 1500);
+}
+
+function msg(t, bad = false) { $("msg").textContent = t; $("msg").className = "msg" + (bad ? " bad" : ""); $("msg").hidden = false; }
+function done(withPortal, look) {
+  $("card").classList.add(look || (withPortal ? "done" : "failed"));
+  get("/api/ready").then((r) => {
+    const p = `${location.protocol}//${location.hostname}:${r.port}/`;
+    $("links").innerHTML = (withPortal || r.portal === 200 ? `<a class="btn" href="${p}">Open the demos anyway</a>` : "") + `<a class="btn alt" href="/">Back to the setup page</a>`;
+    $("links").hidden = false;
+  });
+}
+tick();
+</script>
+</body>
+</html>
