@@ -73,8 +73,10 @@ up: .env preflight
 down:   ## stop whichever bank's stack is running (NBE or RYD), from either folder
 	@scripts/stop_demo.sh
 
-start:
-	$(COMPOSE_ALL) start
+start:   ## only services that have a container: on-demand profiles (quality, hero, ...) usually have none
+	@svcs="$$($(COMPOSE_ALL) ps -a --services)"; \
+	if [ -z "$$svcs" ]; then echo "No containers for project $${COMPOSE_PROJECT_NAME:-nbe} yet: run 'make up'"; exit 1; fi; \
+	$(COMPOSE_ALL) start $$svcs
 
 stop:
 	$(COMPOSE_ALL) stop
