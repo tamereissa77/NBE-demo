@@ -56,7 +56,7 @@ The portal also hosts the **Arabic gate** (`/eval`): a blind scoring tool used t
 Prerequisites: a GB10 (or any NVIDIA host with about 100 GB of free GPU memory) running Docker with the NVIDIA container runtime, `make`, and model weights in `/opt/models` (`make models` downloads them; this is the only step that needs the internet).
 
 ```bash
-git clone -b General-Demo https://github.com/Mohamedtahaahmedtaha/NBE-demo.git ~/Bank-Demo && cd ~/Bank-Demo
+git clone -b General-Demo https://github.com/tamereissa77/NBE-demo.git ~/Bank-Demo && cd ~/Bank-Demo
 make setup         # optional: the setup page on :8210 to add a customer, pick it and start the demos (section 17)
 make customer NAME=nbe   # or from the command line: which bank and country to present (make customers lists them)
 make up            # ~4 min cold: creates .env, frees the GPU, starts models one by one, loads demo data on first run
