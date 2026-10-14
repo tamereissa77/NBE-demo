@@ -258,8 +258,8 @@ def missing_facts(key: str, text: str, offer: dict) -> list[str]:
 def offer_text(key: str, offer: dict) -> str:
     """Plain, compliant message built from the offer terms alone: used when the model cannot get the facts right."""
     if key.endswith("_en"):
-        return f"{offer['cashback_pct']}% cashback up to EGP {offer['cap']} when you pay by card at our partner merchant until {offer['valid_until']}. {REQUIRED['en']}"
-    return (f"استرداد نقدي {offer['cashback_pct']}% بحد أقصى {offer['cap']} جنيه عند الدفع ببطاقتك في {offer['merchant']} "
+        return f"{offer['cashback_pct']}% cashback up to {L.CURRENCY} {offer['cap']} when you pay by card at our partner merchant until {offer['valid_until']}. {REQUIRED['en']}"
+    return (f"استرداد نقدي {offer['cashback_pct']}% بحد أقصى {offer['cap']} {L.CURRENCY_AR} عند الدفع ببطاقتك في {offer['merchant']} "
             f"حتى {offer['valid_until']}. {REQUIRED['ar']}")
 
 

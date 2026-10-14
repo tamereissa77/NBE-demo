@@ -1,0 +1,23 @@
+[
+  {
+    "document": "D2 P10 v1 ar",
+    "missing": [
+      "الهوية الوطنية، تعريف بالراتب، كشف حساب آخر 6 أشهر"
+    ],
+    "review": "facts present as a bullet list (الهوية الوطنية / تعريف بالراتب / كشف حساب آخر 6 أشهر); checked by hand"
+  },
+  {
+    "document": "D5 ruling R02",
+    "missing": [
+      "إلزام البنك بتعويض العميل عن 60% من المبلغ لتقصيره في التحقق، وتحميل العميل 40% لإفصاحه عن رمز التحقق"
+    ],
+    "review": "outcome present, paraphrased (60% / 40% split, OTP disclosure); checked by hand"
+  },
+  {
+    "document": "D5 ruling R03",
+    "missing": [
+      "بطلان شرط التحكيم الأجنبي واختصاص اللجنة بنظر النزاع"
+    ],
+    "review": "outcome present, paraphrased (arbitration clause void, committee has jurisdiction); checked by hand"
+  }
+]

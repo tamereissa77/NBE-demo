@@ -1,0 +1,40 @@
+{
+  "note": "Synthetic placeholders until the bank supplies its rules and official team names. The presence of this file switches on: fixed English team names, the public-reply mode for the channels listed under public_reply, the extra banned phrases, and the guardrail gate on decisions.",
+  "rules": [
+    "اعتذر بوضوح وأظهر التعاطف دون لوم العميل.",
+    "لا تعد برد مبالغ أو تعويض أو موافقة قبل انتهاء التحقق؛ قل إن الحالة قيد المراجعة.",
+    "اذكر رقم الشكوى، واذكر أن أول رد من الفريق المختص سيصل خلال المدة المحددة. هذه المدة للرد الأول فقط: لا تصفه بأنه رد نهائي ولا تعد بحل المشكلة خلالها.",
+    "لا تطلب من العميل الرقم السري أو رمز التحقق أو بيانات البطاقة الكاملة.",
+    "في شكاوى الاحتيال: انصح بإيقاف البطاقة فوراً واذكر أن وحدة مكافحة الاحتيال تتابع.",
+    "إذا كان العميل في ظرف إنساني صعب فأولِ الحالة أولوية واعرض اتصالاً هاتفياً.",
+    "اكتب بلغة العميل: الفصحى المبسطة للعربية (حتى لو كتب بالعامية)، والإنجليزية للإنجليزية."
+  ],
+  "banned_extra": [
+    "الرد النهائي",
+    "رد نهائي",
+    "final (reply|response|answer|decision|resolution)"
+  ],
+  "teams_en": {
+    "cards": "Cards Department",
+    "fees": "Operations Reconciliation Department",
+    "transfers": "Transfers Department",
+    "loans": "Personal Finance Department",
+    "digital": "Digital Channels Support",
+    "branch": "Branch Quality Department",
+    "fraud": "Anti-Fraud Unit",
+    "accounts": "Accounts Department"
+  },
+  "public_reply": {
+    "channels": [
+      "social"
+    ],
+    "max_chars": 320,
+    "rules": [
+      "هذا الرد منشور للعامة: لا تذكر اسم العميل ولا تبدأ بتحية شخصية مثل «عزيزي».",
+      "لا تذكر أي تفاصيل عن الحالة: لا مبالغ ولا أرقام ولا أسماء فروع ولا ظروف صحية أو مالية ولا مدة زمنية.",
+      "اكتب جملتين أو ثلاثاً فقط: اعتذار موجز، ثم رقم الشكوى، ثم دعوة العميل إلى متابعة التفاصيل عبر الرسائل الخاصة.",
+      "لا تعد برد مبالغ أو تعويض أو بحل المشكلة، ولا تطلب أي بيانات في الرد العام."
+    ]
+  },
+  "guardrail_gate": true
+}

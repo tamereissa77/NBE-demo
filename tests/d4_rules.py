@@ -1,6 +1,6 @@
 """D4 safety rules, checked with a scripted model and a scripted bank: no model server, database or
 network is needed, so this runs anywhere the D4 image does.
-    docker run --rm -v ./tests:/tests:ro -v ./data:/data:ro nbe-d4 python /tests/d4_rules.py
+    docker run --rm -v ./tests:/tests:ro -v ./data:/data:ro -v ./data/seed-active:/data/seed:ro nbe-d4 python /tests/d4_rules.py
 
 Rules under test (services/d4_agent/app/main.py):
 - Confirm before block: block_card reaches the bank only if the agent's previous reply named that card,
@@ -8,7 +8,7 @@ Rules under test (services/d4_agent/app/main.py):
 - The one-time code bypasses the models: from the keypad, the chat or a voice transcript it goes to the
   bank; the agent and the guardrail get the message with its digits masked and only the bank's verdict.
 - Speech: amounts are spelled the Egyptian way, identifiers are read digit by digit, banking terms and
-  unwanted words follow data/seed/d4/pronunciation.ini.
+  unwanted words follow data/seed/<CC>/d4/pronunciation.ini (mounted as /data/seed).
 - Promises are kept: a reply that says it will do something without a tool call is retried with a tool
   call required, once, and never after an action already ran in that turn.
 - A recording the speech service did not hear clearly is not treated as the customer's words: no model

@@ -22,7 +22,7 @@ from d6_files_eval import score, upload  # noqa: E402
 REPO = Path(__file__).resolve().parents[1]
 ROOT = REPO / "test-cases" / "summaries"
 BASE = "http://localhost:8200/api/d6"
-D5_CONTRACT = REPO / "data" / "seed" / "d5" / "C01.md"
+D5_CONTRACT = REPO / "data" / "seed-active" / "d5" / "C01.md"
 DIGITS = str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789")
 
 

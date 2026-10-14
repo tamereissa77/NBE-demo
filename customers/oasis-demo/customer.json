@@ -1,0 +1,23 @@
+{
+  "id": "oasis",
+  "short": "Oasis Bank",
+  "country": "AE",
+  "name": {
+    "en": "Oasis Demo Bank",
+    "ar": "بنك الواحة التجريبي"
+  },
+  "website": "",
+  "logo": "logo.png",
+  "font": "plex",
+  "facts": [
+    {
+      "label": "Call centre / مركز الاتصال",
+      "value": "600 5 XXXXX (demo)"
+    },
+    {
+      "label": "Website / الموقع الإلكتروني",
+      "value": "www.oasis-demo-bank.example"
+    }
+  ],
+  "note": "Fictional bank for trying the UAE country pack. Not a real institution."
+}

@@ -61,7 +61,7 @@ build it first, and again after a portal change, with `npm ci && npm run build` 
 ## Tests for D4
 
 ```bash
-docker run --rm -v ./tests:/tests:ro -v ./data:/data:ro nbe-d4 python /tests/d4_rules.py   # no models needed
+docker run --rm -v ./tests:/tests:ro -v ./data:/data:ro -v ./data/seed-active:/data/seed:ro nbe-d4 python /tests/d4_rules.py   # no models needed
 docker run --rm --network nbe-core -v ./tests:/tests:ro nbe-d4 python /tests/d4_script.py  # real models, mock bank
 ```
 
@@ -73,7 +73,7 @@ as `http://localhost:<port>` there.
 
 ## How the D4 voice says banking terms
 
-`data/seed/d4/pronunciation.ini` maps written terms to how they should be spoken, per language
+`data/seed/<CC>/d4/pronunciation.ini` maps written terms to how they should be spoken, per language
 (`OTP = أو تي بي`, `EGP = Egyptian pounds`). It is applied to spoken replies and to the listen button on
 each chat message, and is re-read when it changes: edit, save, listen again. Card endings, one-time codes,
 ticket numbers and phone numbers are read digit by digit; amounts are read as numbers. A half, a quarter and

@@ -1,0 +1,46 @@
+{
+  "id": "riyad",
+  "short": "Riyad Bank",
+  "country": "SA",
+  "name": {
+    "en": "Riyad Bank",
+    "ar": "بنك الرياض"
+  },
+  "assistant": {
+    "en": "Riyad Bank AI Assistant",
+    "ar": "مساعد بنك الرياض الذكي"
+  },
+  "appTitle": {
+    "en": "Riyad Bank AI Demos",
+    "ar": "عروض الذكاء الاصطناعي لبنك الرياض"
+  },
+  "agentName": {
+    "en": "Riyad Bank Virtual Agent",
+    "ar": "المساعد الافتراضي لبنك الرياض"
+  },
+  "website": "https://www.riyadbank.com/personal-banking",
+  "heroTitle": {
+    "en": "AI use cases demo portal for Riyad Bank",
+    "ar": "بوابة عروض حالات استخدام الذكاء الاصطناعي لبنك الرياض"
+  },
+  "heroChips": false,
+  "logo": "logo.png",
+  "font": "plex",
+  "colors": {
+    "brand": "#1f0973",
+    "brand-dark": "#17054b",
+    "accent": "#00ae9a",
+    "accent-light": "#3fcfbe",
+    "accent-deep": "#008a7b",
+    "on-accent": "#17054b",
+    "canvas": "#f6f7f8",
+    "ink": "#17054b",
+    "ink-soft": "#4b5563",
+    "line": "#e2e3ea",
+    "status-review": "#f2a900",
+    "status-ok": "#00ae9a"
+  },
+  "bannerPalette": "deep indigo and teal colour palette",
+  "facts": [],
+  "note": "Colours sampled 7 Oct 2026 from riyadbank.com and the Riyad Bank logo. For the Riyad Bank customer demonstration only."
+}

@@ -3,6 +3,10 @@ api_keys.md
 models/
 data/generated/
 data/uploads/
+# written by make customer (scripts/apply_customer.py) from customers/<name>
+brand/
+data/customer.json
+data/seed-active/
 recordings/
 *.safetensors
 *.gguf

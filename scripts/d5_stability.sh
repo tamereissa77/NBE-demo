@@ -14,7 +14,7 @@ for alias in workhorse quality; do
   D5_REDUCE_ALIAS=$alias docker compose up -d --no-deps --force-recreate nbe-d5 >/dev/null
   for _ in $(seq 60); do curl -fsS -o /dev/null "$BASE/health" && break; sleep 2; done
   for i in $(seq "$RUNS"); do
-    python3 tests/golden_d5.py "$BASE" data/seed/d5 --json "$OUT/$alias-$i.json" > "$OUT/$alias-$i.log" 2>&1
+    python3 tests/golden_d5.py "$BASE" data/seed-active/d5 --json "$OUT/$alias-$i.json" > "$OUT/$alias-$i.log" 2>&1
     echo "  run $i: exit $? ($(python3 -c "import json;d=json.load(open('$OUT/$alias-$i.json'));print(d['planted_caught'],'caught,',d['severity_match'],'severity,',len(d['failures']),'failures')"))"
   done
 done

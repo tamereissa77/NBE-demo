@@ -26,6 +26,7 @@ x-demo-api: &demo-api
   networks: [nbe-core]
   volumes:
     - ./data:/data:ro          # seeds and generated synthetic data (PLAN.md Phase 3)
+    - ./data/seed-active:/data/seed:ro   # the active country's corpus, with the bank's name (make customer NAME=...)
   depends_on:
     nbe-postgres:
       condition: service_healthy
@@ -92,7 +93,7 @@ services:
       POSTGRES_DB: nbe
       POSTGRES_USER: nbe
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
-      TZ: ${TZ:-Africa/Cairo}
+      TZ: ${TZ:-Africa/Cairo}            # the customer's country (make customer)
     volumes:
       - nbe-postgres:/var/lib/postgresql/data
       - ./config/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
@@ -413,6 +414,7 @@ services:
     environment:
       POSTGRES_HOST: nbe-postgres
       LLM_GATEWAY_URL: http://nbe-llmgw:4000/v1
+      CUSTOMER_FILE: /repo/data/customer.json     # the active customer (nbe_core.locale)
     volumes:
       - ./data:/repo/data
     networks: [nbe-core]
@@ -429,6 +431,7 @@ services:
     environment: { <<: *demo-env, DEMO_ID: d1 }
     volumes:
       - ./data:/data:ro
+      - ./data/seed-active:/data/seed:ro
       - ./data/uploads/d1:/data/uploads/d1      # documents uploaded for review: they stay on this machine
 
   nbe-d2:
@@ -452,6 +455,7 @@ services:
     environment: { <<: *demo-env, DEMO_ID: d3 }
     volumes:
       - ./data:/data:ro
+      - ./data/seed-active:/data/seed:ro
       - ./data/generated/d3/banners:/data/generated/d3/banners   # cached banner mock-ups (written by /admin/banners)
 
   nbe-d4:

@@ -1,0 +1,18 @@
+{
+  "id": "mybank",
+  "short": "MyBank",
+  "country": "AE",
+  "name": {
+    "en": "My Bank",
+    "ar": "بنكي"
+  },
+  "website": "https://www.example.com",
+  "logo": "logo.png",
+  "font": "cairo",
+  "colors": {},
+  "facts": [
+    {"label": "Call centre / مركز الاتصال", "value": "800 XXXX"},
+    {"label": "Website / الموقع الإلكتروني", "value": "www.example.com"}
+  ],
+  "note": "Copy this folder to customers/<name>, put the bank's logo.png next to it, then: make customer NAME=<name>"
+}

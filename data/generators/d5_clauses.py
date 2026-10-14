@@ -7,9 +7,10 @@ Synthetic demo contracts, not any bank's real terms. The article text lives in s
 import json
 from pathlib import Path
 
+from nbe_core import locale as L
 from data.generators import specs
 
-OUT = Path("/repo/data/seed/d5")
+OUT = Path("/repo/data/seed") / L.CODE / "d5"      # the active country (COUNTRY in .env)
 
 TEMPLATE, DEVIATIONS = specs.CLAUSE_TEXT, specs.DEVIATION_TEXT
 
@@ -62,7 +63,7 @@ def build() -> dict:
     manifest = {"template": "template.md", "contracts": contracts, "rulings": rulings,
                 "note": "Clauses written deterministically (d5_clauses.py); rulings authored by the on-box LLM."}
     (OUT / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
-    golden = Path("/repo/data/seed/golden")
+    golden = OUT.parent / "golden"
     golden.mkdir(parents=True, exist_ok=True)
     (golden / "d5.json").write_text(json.dumps(contracts, ensure_ascii=False, indent=2), encoding="utf-8")
     return {"contracts": len(contracts), "rulings": len(rulings)}

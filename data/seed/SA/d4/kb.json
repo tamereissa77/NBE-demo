@@ -1,0 +1,242 @@
+[
+  {
+    "id": "KB01",
+    "topic": "كيف أوقف بطاقتي المفقودة أو المسروقة",
+    "question_ar": "كيف أوقف بطاقتي المفقودة أو المسروقة؟",
+    "answer_ar": "لحماية أموالك، يجب عليك أولاً إيقاف البطاقة المفقودة عبر تطبيق الجوال أو الهاتف المصرفي قبل البدء في إجراءات إصدار البديل. لاستبدال البطاقة، يتطلب الأمر التحقق من الهوية الوطنية أو هوية مقيم سارية عبر تطبيق نفاذ. تبلغ رسوم استبدال بطاقة مدى 15 ريالاً، بينما تبلغ رسوم بطاقة الائتمان 75 ريالاً، مع إعفاء بطاقات حسابات الرواتب من هذه الرسوم. يتم تسليم البطاقة البديلة في الفرع خلال 3 أيام عمل.",
+    "question_en": "How do I stop my lost or stolen card?",
+    "answer_en": "To protect your funds, you must first stop the lost card via the mobile app or phone banking before requesting a replacement. To replace the card, a valid National ID or Resident ID must be verified via the Nafath app. The replacement fee for Mada cards is 15 SAR, while the fee for credit cards is 75 SAR; salary account cards are exempt from these fees. The replacement card will be delivered at the branch within 3 working days."
+  },
+  {
+    "id": "KB02",
+    "topic": "رسوم استبدال البطاقات",
+    "question_ar": "ما هي الرسوم والإجراءات المتبعة لاستبدال بطاقتي المفقودة؟",
+    "answer_ar": "لاستبدال بطاقة مفقودة، يجب أولاً إيقافها عبر التطبيق أو الهاتف المصرفي. يتطلب الإجراء التحقق من الهوية الوطنية أو هوية مقيم سارية عبر تطبيق نفاذ. تبلغ رسوم استبدال بطاقة مدى 15 ريالاً، بينما تبلغ رسوم بطاقة الائتمان 75 ريالاً، مع العلم أن بطاقات حسابات الرواتب تُعفى من هذه الرسوم. يتم تسليم البطاقة البديلة في الفرع خلال 3 أيام عمل.",
+    "question_en": "What are the fees and procedures for replacing my lost card?",
+    "answer_en": "To replace a lost card, you must first block it via the app or phone banking. The procedure requires verifying a valid National ID or Resident ID through the Nafath app. The fee for replacing a Mada card is 15 SAR, while the credit card replacement fee is 75 SAR; please note that salary account cards are exempt from these fees. The replacement card will be delivered at the branch within 3 working days."
+  },
+  {
+    "id": "KB03",
+    "topic": "كيف أفعّل تطبيق الجوال",
+    "question_ar": "كيف أفعّل تطبيق الجوال؟",
+    "answer_ar": "يمكنك تفعيل تطبيق الجوال بكل سهولة عبر اتباع خطوات التسجيل المتاحة في التطبيق. يتطلب التفعيل إتمام عملية التحقق من هويتك عبر تطبيق نفاذ لضمان أمان حسابك. تتيح لك هذه القناة الرقمية إنجاز العديد من العمليات المصرفية دون الحاجة لزيارة الفرع، مثل فتح حساب ادخار، أو طلب الكسر المبكر للودائع، أو تحديث بياناتك، أو حتى تقديم طلب إغلاق الحساب، وذلك من خلال الربط المباشر مع البيانات الرسمية عبر نفاذ وأبشر.",
+    "question_en": "How do I activate the mobile application?",
+    "answer_en": "You can easily activate the mobile application by following the registration steps available within the app. Activation requires verifying your identity via the Nafath application to ensure the security of your account. This digital channel allows you to perform various banking transactions without visiting a branch, such as opening a savings account, requesting early termination of deposits, updating your information, or even submitting an account closure request, through direct integration with official data via Nafath and Absher."
+  },
+  {
+    "id": "KB04",
+    "topic": "نسيت كلمة مرور التطبيق",
+    "question_ar": "نسيت كلمة مرور التطبيق، ماذا أفعل؟",
+    "answer_ar": "في حال نسيان كلمة المرور الخاصة بتطبيق الجوال، يمكنك إعادة تعيينها بسهولة لضمان استمرارية وصولك إلى خدماتنا الرقمية. يمكنك القيام بذلك من خلال خيار ",
+    "question_en": "I forgot my application password, what should I do?",
+    "answer_en": "If you have forgotten your mobile application password, you can easily reset it to ensure continuous access to our digital services. You can do this through the \"Forgot Password\" option within the application, following the security prompts to verify your identity and establish a new password."
+  },
+  {
+    "id": "KB05",
+    "topic": "حدود التحويل اليومية",
+    "question_ar": "ما هي حدود التحويل اليومية المتاحة لي؟",
+    "answer_ar": "يبلغ الحد الافتراضي للتحويل اليومي عبر تطبيق الجوال 30,000 ريال. يمكنك رفع هذا الحد ليصل إلى أقصى حد متاح عبر التطبيق وهو 100,000 ريال، وذلك بعد إتمام عملية التحقق عبر تطبيق نفاذ. أما في حال رغبتكم في إجراء تحويلات تتجاوز مبلغ 100,000 ريال، فيتطلب الأمر تقديم طلب موقع في الفرع، على أن يسري هذا التعديل في يوم العمل التالي.",
+    "question_en": "What are my daily transfer limits?",
+    "answer_en": "The default daily transfer limit via the mobile app is SAR 30,000. You can increase this limit to a maximum of SAR 100,000 through the app after verifying via the Nafath app. For transfers exceeding SAR 100,000, a signed request must be submitted at the branch, and the change will take effect on the following business day."
+  },
+  {
+    "id": "KB06",
+    "topic": "كيف أرفع حد التحويل",
+    "question_ar": "كيف أرفع حد التحويل؟",
+    "answer_ar": "الحد الافتراضي للتحويل عبر التطبيق هو 30,000 ريال. يمكنك رفع هذا الحد ليصل إلى أقصى حد متاح عبر التطبيق وهو 100,000 ريال، وذلك بعد إتمام عملية التحقق عبر تطبيق نفاذ. أما في حال رغبتك في رفع الحد لما يتجاوز مبلغ 100,000 ريال، فيتوجب عليك زيارة الفرع لتقديم طلب موقّع، على أن يسري هذا التعديل في يوم العمل التالي.",
+    "question_en": "How do I increase my transfer limit?",
+    "answer_en": "The default transfer limit via the app is 30,000 SAR. You can increase this limit up to a maximum of 100,000 SAR through the app after verifying via the Nafath app. If you wish to increase the limit beyond 100,000 SAR, you must visit a branch to submit a signed request, which will become effective on the following business day."
+  },
+  {
+    "id": "KB07",
+    "topic": "رسوم الحوالات الدولية",
+    "question_ar": "ما هي رسوم الحوالات الدولية الصادرة وما هي شروطها؟",
+    "answer_ar": "لإجراء حوالة دولية صادرة، تبلغ العمولة 15 ريالاً في حال تم التنفيذ عبر تطبيق الجوال، و35 ريالاً في حال تم التنفيذ من خلال الفرع. الحد اليومي للحوالات هو 100,000 ريال أو ما يعادلها، وتستغرق عملية التنفيذ يومي عمل. يتطلب الإجراء تقديم نموذج الحوالة مع تحديد الغرض منها، كما يُشترط تقديم مستند داعم (مثل فاتورة أو عقد) للحوالات التي تتجاوز قيمتها 20,000 ريال.",
+    "question_en": "What are the fees and conditions for outgoing international transfers?",
+    "answer_en": "To perform an outgoing international transfer, the commission is 15 SAR if executed via the mobile app, and 35 SAR if executed through the branch. The daily limit is 100,000 SAR or its equivalent, and execution takes two business days. The procedure requires submitting a transfer form specifying the purpose; additionally, a supporting document (such as an invoice or contract) is required for transfers exceeding 20,000 SAR."
+  },
+  {
+    "id": "KB08",
+    "topic": "مواعيد عمل الفروع",
+    "question_ar": "ما هي مواعيد عمل الفروع؟",
+    "answer_ar": "تلتزم فروعنا بتقديم خدماتها للعملاء خلال ساعات العمل الرسمية المعتمدة. تختلف مواعيد العمل بين الفروع الرئيسية والفروع الموجودة في المراكز التجارية، كما قد تختلف المواعيد خلال عطلات نهاية الأسبوع أو المناسبات الرسمية. نوصي دائماً بزيارة موقعنا الإلكتروني أو استخدام تطبيق الجوال للتحقق من مواعيد عمل الفرع المحدد الذي ترغب في زيارته، لضمان حصولكم على الخدمة المطلوبة في الوقت المناسب.",
+    "question_en": "What are the branch working hours?",
+    "answer_en": "Our branches are committed to providing services to customers during official approved working hours. Working hours vary between main branches and those located in shopping malls, and may also differ during weekends or official holidays. We always recommend visiting our website or using the mobile application to check the specific working hours of the branch you wish to visit, to ensure you receive the required service at the appropriate time."
+  },
+  {
+    "id": "KB09",
+    "topic": "كيف أقدم شكوى",
+    "question_ar": "كيف أقدم شكوى؟",
+    "answer_ar": "في حال رغبتكم في تقديم شكوى، يمكنكم البدء بالمستوى الأول عبر زيارة الفرع أو التواصل مع مركز الاتصال، ويتم التعامل معها خلال يومي عمل. إذا لم تُحل الشكوى، يتم تصعيدها للمستوى الثاني لدى إدارة العناية بالعملاء خلال 5 أيام عمل. وفي حال عدم الوصول لحل خلال 15 يوم عمل، يحق لكم تصعيد الشكوى للمستوى الثالث عبر منصة «ساما تهتم» التابعة للبنك المركزي السعودي. نود التنويه بأن الشكاوى العاجلة المتعلقة بالاحتيال أو الخصم غير المصرح به تُعالج خلال 24 ساعة.",
+    "question_en": "How do I file a complaint?",
+    "answer_en": "If you wish to file a complaint, you can start at the first level by visiting a branch or contacting the Call Center, which will be addressed within 2 working days. If the complaint is not resolved, it is escalated to the second level at the Customer Care Department within 5 working days. If no resolution is reached within 15 working days, you have the right to escalate the complaint to the third level via the Central Bank of Saudi Arabia's 'Sama Care' platform. Please note that urgent complaints regarding fraud or unauthorized deductions are processed within 24 hours."
+  },
+  {
+    "id": "KB10",
+    "topic": "مدة معالجة الشكاوى",
+    "question_ar": "كم تستغرق معالجة شكاويكم والمدد الزمنية المحددة لكل مستوى؟",
+    "answer_ar": "تخضع معالجة الشكاوى لجدول زمني محدد لضمان حقوقكم؛ حيث يتم التعامل مع المستوى الأول عبر الفرع أو مركز الاتصال خلال يومي عمل، ويتم تصعيدها للمستوى الثاني لدى إدارة العناية بالعملاء خلال 5 أيام عمل. وفي حال عدم الحل خلال 15 يوم عمل، يمكنكم تصعيد الشكوى للمستوى الثالث عبر منصة (ساما تهتم) التابعة للبنك المركزي السعودي. ونود التنويه بأن الشكاوى العاجلة، مثل حالات الاحتيال والخصم غير المصرح به، تُعالج بصفة استثنائية خلال 24 ساعة فقط.",
+    "question_en": "How long does it take to process my complaints and what are the timeframes for each level?",
+    "answer_en": "Complaint processing follows a specific timeline to ensure your rights; Level 1 is handled via the branch or call center within 2 business days, and escalated to Level 2 at the Customer Care Department within 5 business days. If unresolved within 15 business days, you may escalate to Level 3 via the Central Bank of Saudi Arabia's (SAMA Care) platform. Please note that urgent complaints, such as fraud and unauthorized deductions, are processed exceptionally within 24 hours."
+  },
+  {
+    "id": "KB11",
+    "topic": "ما هو رمز التحقق OTP ولماذا لا يجب مشاركته",
+    "question_ar": "ما هو رمز التحقق OTP ولماذا لا يجب مشاركته؟",
+    "answer_ar": "رمز التحقق (OTP) هو رمز سري لمرة واحدة يُرسل إليك عبر رسالة نصية لضمان أمان عملياتك المصرفية، مثل إعادة تعيين الرقم السري للبطاقة عبر تطبيق الجوال. يُعد هذا الرمز بمثابة مفتاح رقمي يؤكد هويتك، لذا يجب عدم مشاركته مطلقاً مع أي شخص، بما في ذلك موظفي البنك؛ حيث لا يجوز لموظف الفرع الاطلاع على أرقامك السرية أو إملاؤها لك. مشاركة هذا الرمز قد تمنح أطرافاً غير مصرح لها الوصول إلى حسابك وإجراء عمليات غير مشروعة، لذا حافظ على خصوصيته لحماية أمنك المالي.",
+    "question_en": "What is an OTP and why should I not share it?",
+    "answer_en": "An OTP (One-Time Password) is a unique, single-use code sent to you via SMS to secure your banking transactions, such as resetting your card PIN via the mobile app. This code acts as a digital key to verify your identity; therefore, you must never share it with anyone, including bank employees, as branch staff are strictly prohibited from viewing or dictating your secret numbers. Sharing this code could allow unauthorized parties to access your account and perform illicit transactions, so keep it private to ensure your financial security."
+  },
+  {
+    "id": "KB12",
+    "topic": "كيف أحمي نفسي من الاحتيال",
+    "question_ar": "كيف أحمي نفسي من الاحتيال؟",
+    "answer_ar": "لحماية حساباتك من الاحتيال، نرجو منك عدم مشاركة بياناتك السرية أو رموز التحقق (OTP) مع أي شخص، علماً بأنه لا يجوز لموظف البنك الاطلاع على رقمك السري أو إملاؤه لك. في حال تعرضت لعملية احتيال أو خصم غير مصرح به، يجب عليك إبلاغنا فوراً لتصعيد الشكوى، حيث يتم التعامل مع شكاوى الاحتيال والخصم غير المصرح به كحالات عاجلة وتُعالج خلال 24 ساعة. كما ننصحك بإيقاف أي بطاقة مفقودة فوراً عبر التطبيق أو الهاتف المصرفي لضمان سلامة أموالك.",
+    "question_en": "How can I protect myself from fraud?",
+    "answer_en": "To protect your accounts from fraud, please do not share your confidential data or One-Time Password (OTP) with anyone, noting that bank employees are not permitted to view or dictate your PIN. In the event of fraud or unauthorized deductions, please report it immediately to escalate the complaint; fraud and unauthorized deduction complaints are treated as urgent and are processed within 24 hours. We also advise you to immediately stop any lost cards via the app or phone banking to ensure the safety of your funds."
+  },
+  {
+    "id": "KB13",
+    "topic": "فتح حساب ادخار",
+    "question_ar": "كيف يمكنني فتح حساب ادخار وما هي متطلباته؟",
+    "answer_ar": "يمكن للأفراد فتح حساب ادخار بسهولة عبر تطبيق الجوال من خلال التحقق عبر نفاذ دون الحاجة لزيارة الفرع، أو عبر القنوات المتاحة. يتطلب فتح الحساب وجود هوية وطنية سارية وإثبات العنوان الوطني. يبلغ الحد الأدنى للإيداع 500 ريال، وتُحتسب الأرباح بناءً على الرصيد اليومي وتوزع شهرياً وفق صيغة المضاربة. تستغرق مدة تفعيل الحساب يوم عمل واحد فقط.",
+    "question_en": "How can I open a savings account and what are its requirements?",
+    "answer_en": "Individuals can easily open a savings account via the mobile application through Nafath verification without visiting a branch. The requirements include a valid National ID and proof of National Address. The minimum deposit is 500 SAR. Profits are calculated on the daily balance and distributed monthly according to the Mudarabah formula. The account activation period is one business day."
+  },
+  {
+    "id": "KB14",
+    "topic": "الحد الأدنى لحساب الادخار",
+    "question_ar": "ما هو الحد الأدنى لفتح حساب الادخار؟",
+    "answer_ar": "لفتح حساب ادخار للأفراد، يتطلب الأمر توفر هوية وطنية سارية وإثبات العنوان الوطني. الحد الأدنى للإيداع لفتح الحساب هو 500 ريال سعودي. يتم احتساب الأرباح بناءً على الرصيد اليومي وتوزع شهرياً وفق صيغة المضاربة. تستغرق مدة تفعيل الحساب يوم عمل واحد، ويمكنك فتح الحساب بكل سهولة عبر تطبيق الجوال من خلال التحقق عبر نفاذ دون الحاجة لزيارة الفرع.",
+    "question_en": "What is the minimum amount required to open a savings account?",
+    "answer_en": "To open a savings account for individuals, a valid national ID and proof of national address are required. The minimum deposit to open the account is 500 SAR. Profits are calculated on the daily balance and distributed monthly according to the Mudaraba formula. The activation period is one business day. You can conveniently open the account via the mobile application by verifying through Nafath without the need to visit a branch."
+  },
+  {
+    "id": "KB15",
+    "topic": "الودائع لأجل والكسر المبكر",
+    "question_ar": "ما هي شروط الكسر المبكر للودائع لأجل وما هي التبعات المترتبة على ذلك؟",
+    "answer_ar": "يمكن للعميل طلب الكسر المبكر للودائع لأجل عبر تطبيق الجوال، بشرط مرور شهر واحد على الأقل من تاريخ الإيداع. في حال تم الكسر المبكر خلال السنة الأولى، سيترتب على ذلك خسارة 25% من الأرباح المستحقة، ولا يتم تطبيق أي خصم بعد مرور السنة الأولى. يتم صرف القيمة المستحقة للعميل في نفس يوم تقديم الطلب.",
+    "question_en": "What are the conditions for early termination of time deposits and what are the consequences?",
+    "answer_en": "Customers can request the early termination of time deposits via the mobile application, provided that at least one month has passed from the deposit date. If termination occurs within the first year, a loss of 25% of the accrued profits will be applied; no deductions apply after the first year. The value is disbursed on the same day the request is made."
+  },
+  {
+    "id": "KB16",
+    "topic": "بطاقات الائتمان: الحد والرسوم",
+    "question_ar": "ما هي الرسوم والحدود المتعلقة ببطاقات الائتمان؟",
+    "answer_ar": "في حال فقدان بطاقة الائتمان، يجب أولاً إيقافها عبر التطبيق أو الهاتف المصرفي قبل طلب البديل. تتطلب عملية استبدال البطاقة التحقق من الهوية الوطنية أو هوية مقيم سارية عبر تطبيق نفاذ، وتُطبق رسوم قدرها 75 ريالاً لإصدار بطاقة الائتمان البديلة، بينما تُعفى بطاقات حسابات الرواتب من هذه الرسوم. يتم تسليم البطاقة الجديدة في الفرع خلال مدة تصل إلى 3 أيام عمل.",
+    "question_en": "What are the fees and limits related to credit cards?",
+    "answer_en": "In the event of losing a credit card, you must first suspend it via the app or phone banking before requesting a replacement. The replacement process requires verifying a valid National ID or Resident ID via the Nafath app. A fee of 75 SAR applies for issuing a replacement credit card, whereas salary account cards are exempt from these fees. The new card will be delivered to the branch within 3 working days."
+  },
+  {
+    "id": "KB17",
+    "topic": "سداد مستحقات بطاقة الائتمان",
+    "question_ar": "كيف يمكنني سداد مستحقات بطاقة الائتمان الخاصة بي؟",
+    "answer_ar": "يمكنكم سداد مستحقات بطاقة الائتمان عبر القنوات الرقمية المتاحة للبنك، مثل تطبيق الجوال أو الخدمات المصرفية عبر الإنترنت، وذلك لضمان سرعة المعالجة وتجنب زيارة الفرع. نوصي دائماً بالحرص على سداد المبالغ المستحقة في مواعيدها المحددة لتجنب أي رسوم تأخير أو تأثير على السجل الائتماني. في حال واجهتكم أي صعوبات تقنية أثناء عملية السداد، يمكنكم التواصل مع مركز الاتصال أو زيارة أقرب فرع للحصول على المساعدة اللازمة من موظفينا.",
+    "question_en": "How can I pay my credit card dues?",
+    "answer_en": "You can pay your credit card dues through the bank's available digital channels, such as the mobile application or online banking services, to ensure fast processing and avoid visiting the branch. We always recommend ensuring that due amounts are paid on their scheduled dates to avoid any late fees or impact on your credit score. If you encounter any technical difficulties during the payment process, you can contact the call center or visit the nearest branch to receive the necessary assistance from our staff."
+  },
+  {
+    "id": "KB18",
+    "topic": "التمويل الشخصي: المستندات",
+    "question_ar": "ما هي المستندات المطلوبة لتقديم طلب التمويل الشخصي للموظفين؟",
+    "answer_ar": "لتقديم طلب التمويل الشخصي للموظفين، يتطلب الأمر تقديم الهوية الوطنية وتعريف بالراتب فقط. يرجى العلم أن الحد الأقصى للقسط الشهري هو 33.33% من إجمالي الراتب، وتصل أقصى مدة للتمويل إلى 5 سنوات. يتم الرد على الطلب خلال يومي عمل، ويخضع الطلب لعملية تحقق آلي من الراتب وجهة العمل عبر بيانات التأمينات الاجتماعية قبل إحالته إلى لجنة الائتمان.",
+    "question_en": "What are the required documents to apply for personal financing for employees?",
+    "answer_en": "To apply for personal financing for employees, you only need to provide a valid National ID and a salary certificate. Please note that the maximum monthly installment is 33.33% of the total monthly salary, and the maximum financing term is 5 years. A response will be provided within two business days. Additionally, an automated verification of salary and employer details will be conducted via GOSI data before the application is referred to the Credit Committee."
+  },
+  {
+    "id": "KB19",
+    "topic": "التمويل الشخصي: أقصى قسط",
+    "question_ar": "ما هو الحد الأقصى للقسط الشهري عند طلب التمويل الشخصي للموظفين؟",
+    "answer_ar": "عند تقديم طلب التمويل الشخصي للموظفين، يجب تقديم الهوية الوطنية وتعريف بالراتب فقط. يبلغ أقصى قسط مسموح به 33.33% من إجمالي الراتب الشهري، وذلك لمدة تمويل تصل إلى أقصاها 5 سنوات. يتم الرد على الطلب خلال يومي عمل، مع مراعاة أنه يتم إجراء تحقق آلي من الراتب وجهة العمل عبر بيانات التأمينات الاجتماعية قبل إحالة الطلب إلى لجنة الائتمان لاتخاذ القرار النهائي.",
+    "question_en": "What is the maximum monthly installment for employee personal financing?",
+    "answer_en": "When applying for employee personal financing, only a national ID and a salary certificate are required. The maximum allowable installment is 33.33% of the total monthly salary, for a maximum term of 5 years. A response will be provided within two business days. Please note that an automated verification of salary and employer will be conducted via GOSI data before the application is referred to the credit committee."
+  },
+  {
+    "id": "KB20",
+    "topic": "تحديث البيانات الشخصية",
+    "question_ar": "كيف يمكنني تحديث بياناتي الشخصية لدى البنك؟",
+    "answer_ar": "يتوجب على العملاء تحديث بياناتهم (اعرف عميلك) بصفة دورية؛ حيث يتم التحديث كل 3 سنوات للعملاء منخفضي المخاطر، وسنوياً لمرتفعي المخاطر. تتطلب العملية توفر هوية وطنية سارية وإثبات العنوان الوطني. في حال انتهاء صلاحية الهوية، يجب التحديث خلال 30 يوماً لتجنب تجميد الحركات المدينة. يمكنكم إتمام عملية التحديث بكل سهولة عبر تطبيق الجوال من خلال التحقق عبر نفاذ وجلب البيانات مباشرة من منصة أبشر دون الحاجة لزيارة الفرع.",
+    "question_en": "How can I update my personal information with the bank?",
+    "answer_en": "Customers must update their information (KYC) periodically; updates are required every 3 years for low-risk customers and annually for high-risk customers. The process requires a valid National ID and proof of National Address. If the ID expires, updates must be completed within 30 days to avoid the freezing of debit transactions. You can easily update your information via the mobile application by verifying through Nafath and retrieving data from Absher without the need to visit a branch."
+  },
+  {
+    "id": "KB21",
+    "topic": "حساب القاصر",
+    "question_ar": "كيف يمكنني فتح حساب لقاصر وما هي الشروط والخدمات المتاحة له؟",
+    "answer_ar": "يمكن فتح حساب للقاصر للفئة العمرية من الميلاد حتى 18 عاماً، ويتطلب ذلك تقديم سجل الأسرة وهوية الولي. وتتم عمليات السحب من الحساب بتوقيع الولي فقط. كما يتيح البنك إصدار بطاقة مدفوعة مسبقاً للقاصر بدءاً من سن 8 سنوات، وذلك بحد شهري قدره 1,000 ريال.",
+    "question_en": "How can I open an account for a minor and what are the terms and available services?",
+    "answer_en": "An account can be opened for minors from birth up to 18 years of age, requiring the family registry and the guardian's ID. Withdrawals are permitted only with the guardian's signature. Additionally, a prepaid card can be issued for minors starting from age 8, with a monthly limit of 1,000 SAR."
+  },
+  {
+    "id": "KB22",
+    "topic": "دفتر الشيكات",
+    "question_ar": "كيف يمكنني إصدار دفتر شيكات وما هي الشروط والرسوم المترتبة على ذلك؟",
+    "answer_ar": "يمكنك إصدار دفتر شيكات يحتوي على 25 ورقة، ويشترط للأهلية مرور شهر واحد على فتح الحساب الجاري مع عدم وجود شيكات مرتجعة. تبلغ مدة الإصدار 7 أيام عمل، علماً أنه لا توجد رسوم لأول دفترين في السنة. كما يتوفر خيار جديد لإصدار دفتر يحتوي على 50 ورقة برسوم قدرها 25 ريالاً.",
+    "question_en": "How can I issue a checkbook, and what are the requirements and fees?",
+    "answer_en": "You can issue a checkbook containing 25 leaves, provided that one month has passed since opening the current account and there are no returned checks. The issuance period is 7 working days, and there are no fees for the first two checkbooks per year. Additionally, a new option is available for a 50-leaf checkbook with a fee of 25 SAR."
+  },
+  {
+    "id": "KB23",
+    "topic": "إغلاق الحساب",
+    "question_ar": "كيف يمكنني إغلاق حسابي البنكي وما هي المتطلبات؟",
+    "answer_ar": "لإغلاق حسابك، يمكنك تقديم طلب كتابي عبر زيارة الفرع أو تقديم الطلب مباشرة من خلال التطبيق عبر التحقق من خلال نفاذ دون الحاجة لزيارة الفرع. يتطلب الإغلاق تسوية جميع المديونيات القائمة وإتلاف أو تسليم كافة البطاقات المرتبطة بالحساب. لا توجد رسوم على عملية إغلاق الحساب، وتستغرق مدة التنفيذ 3 أيام عمل. أما بالنسبة للرصيد المتبقي في الحساب، فسيتم تحويله إلى حسابك لدى أي بنك محلي آخر عبر نظام سريع.",
+    "question_en": "How can I close my bank account and what are the requirements?",
+    "answer_en": "To close your account, you can submit a written request at a branch or apply directly via the mobile app by verifying through Nafath without visiting a branch. Closing requires settling all outstanding debts and destroying or handing over all cards linked to the account. There are no fees for closing the account, and the processing time is 3 working days. Regarding any remaining balance, it will be transferred to your account at any other local bank via the Sarie system."
+  },
+  {
+    "id": "KB24",
+    "topic": "الخصم المكرر أو غير المصرح به",
+    "question_ar": "لقد لاحظت وجود خصم مكرر من حسابي، كما أن هناك عمليات خصم لم أقم بتنفيذها، ماذا أفعل؟",
+    "answer_ar": "نأسف لما واجهته من تجربة. نود طمأنتكم بأن البنك يتعامل مع حالات الخصم غير المصرح به كشكاوى عاجلة، حيث يتم البدء في معالجتها خلال 24 ساعة من تقديم البلاغ. لضمان حقوقكم، يرجى تصعيد الشكوى فوراً عبر الفرع أو مركز الاتصال (المستوى الأول)، وفي حال عدم الحل خلال 5 أيام عمل يتم التصعيد لإدارة العناية بالعملاء (المستوى الثاني). كما يمكنكم اللجوء للبنك المركزي السعودي عبر منصة 'ساما تهتم' إذا لم تُحل الشكوى خلال 15 يوم عمل. نرجو منكم مراجعة كشف الحساب وتزويدنا بالتفاصيل اللازمة لسرعة المعالجة.",
+    "question_en": "I noticed a duplicate deduction from my account, and there are also unauthorized transactions. What should I do?",
+    "answer_en": "We apologize for this experience. Please be assured that the bank treats unauthorized deduction cases as urgent complaints, which are processed within 24 hours of reporting. To protect your rights, please escalate the complaint immediately via the branch or call center (Level 1). If not resolved within 5 working days, it is escalated to the Customer Care Department (Level 2). You may also escalate to the Saudi Central Bank via the 'Sama Care' platform if the complaint remains unresolved after 15 working days. Please review your account statement and provide us with the necessary details for prompt processing."
+  },
+  {
+    "id": "KB25",
+    "topic": "الاسترداد النقدي على البطاقات",
+    "question_ar": "كيف يمكنني الاستفادة من ميزة الاسترداد النقدي على بطاقاتي؟",
+    "answer_ar": "نعتذر، لا تتوفر معلومات محددة في قواعد البيانات الحالية لدينا بخصوص تفاصيل ميزة الاسترداد النقدي على البطاقات. نرجو منك مراجعة العروض والبرامج الترويجية المتاحة عبر تطبيق الجوال الخاص بالبنك أو زيارة أقرب فرع للاطلاع على أحدث المزايا والبرامج المخصصة لبطاقاتكم، حيث تخضع هذه الميزات للشروط والأحكام الخاصة بكل برنامج.",
+    "question_en": "How can I benefit from the cashback feature on my cards?",
+    "answer_en": "We apologize, but there is no specific information currently available in our databases regarding the details of the cashback feature on cards. Please review the available offers and promotional programs via the bank's mobile application or visit your nearest branch to learn about the latest benefits and programs dedicated to your cards, as these features are subject to the terms and conditions of each program."
+  },
+  {
+    "id": "KB26",
+    "topic": "استخدام بطاقة مدى خارج المملكة",
+    "question_ar": "هل يمكنني استخدام بطاقة مدى الخاصة بي عند السفر خارج المملكة العربية السعودية؟",
+    "answer_ar": "نعم، يمكنك استخدام بطاقة مدى الخاصة بك لإجراء العمليات المالية خارج المملكة العربية السعودية. تتيح لك البطاقة إمكانية الشراء من المتاجر أو السحب النقدي من أجهزة الصراف الآلي التي تدعم الشبكات الدولية. لضمان تجربة استخدام سلسة، نوصي بالتأكد من تفعيل خيار الاستخدام الدولي عبر تطبيق الجوال قبل السفر، والتحقق من توفر الرصيد الكافي لتغطية المشتريات والرسوم المحتملة التي قد تفرضها الشبكات الدولية.",
+    "question_en": "Can I use my Mada card when traveling outside the Kingdom of Saudi Arabia?",
+    "answer_en": "Yes, you can use your Mada card to perform financial transactions outside the Kingdom of Saudi Arabia. The card allows you to make purchases at stores or withdraw cash from ATMs that support international networks. To ensure a smooth experience, we recommend ensuring that the international usage option is activated via the mobile application before traveling, and verifying that you have sufficient balance to cover purchases and any potential fees that may be imposed by international networks."
+  },
+  {
+    "id": "KB27",
+    "topic": "التحويل الفوري بين البنوك عبر سريع",
+    "question_ar": "كيف يمكنني إجراء تحويل فوري بين البنوك عبر نظام سريع؟",
+    "answer_ar": "يمكنك إجراء التحويلات الفورية بين البنوك المحلية باستخدام نظام 'سريع'، والذي يتيح نقل الأموال بشكل لحظي بين الحسابات في مختلف البنوك السعودية. تهدف هذه الخدمة إلى تسهيل العمليات المصرفية وضمان وصول الحوالات في وقت قياسي، مما يعزز من كفاءة إدارة أموالك وتلبية احتياجاتك المالية العاجلة بكل سهولة ويسر عبر القنوات الرقمية المتاحة للبنك.",
+    "question_en": "How can I make an instant transfer between banks via Sarie?",
+    "answer_en": "You can perform instant transfers between local banks using the 'Sarie' system, which allows for the real-time transfer of funds between accounts across various Saudi banks. This service aims to facilitate banking operations and ensure that transfers are received in record time, enhancing the efficiency of managing your funds and meeting your urgent financial needs easily through the bank's available digital channels."
+  },
+  {
+    "id": "KB28",
+    "topic": "خدمة العملاء والتواصل",
+    "question_ar": "كيف يمكنني التواصل مع البنك في حال وجود شكوى أو مشكلة لم يتم حلها؟",
+    "answer_ar": "في حال رغبتكم في تصعيد شكوى، يتم التعامل معها عبر ثلاثة مستويات: المستوى الأول عبر الفرع أو مركز الاتصال خلال يومي عمل، والمستوى الثاني عبر إدارة العناية بالعملاء خلال 5 أيام عمل. وفي حال عدم الحل خلال 15 يوم عمل، يمكنكم التصعيد للمستوى الثالث عبر البنك المركزي السعودي من خلال منصة 'ساما تهتم'. نود التنويه بأن الشكاوى العاجلة المتعلقة بالاحتيال أو الخصم غير المصرح به تُعالج بصفة استثنائية خلال 24 ساعة لضمان حماية حقوقكم.",
+    "question_en": "How can I contact the bank if I have a complaint or an unresolved issue?",
+    "answer_en": "If you wish to escalate a complaint, it is handled through three levels: Level 1 via the branch or call center within 2 working days, and Level 2 via the Customer Care Department within 5 working days. If the issue remains unresolved after 15 working days, you may escalate to Level 3 via the Saudi Central Bank through the 'Sama Care' platform. Please note that urgent complaints regarding fraud or unauthorized deductions are treated exceptionally and processed within 24 hours to ensure your rights are protected."
+  },
+  {
+    "id": "KB29",
+    "topic": "التحدث مع موظف",
+    "question_ar": "كيف يمكنني التحدث مع موظف للحصول على المساعدة؟",
+    "answer_ar": "للتحدث مع موظف والحصول على الدعم اللازم، يمكنك زيارة أقرب فرع للبنك خلال ساعات العمل الرسمية، حيث سيوفر لك موظف الخدمة المساعدة المباشرة. كما يمكنك التواصل مع مركز الاتصال للحصول على الدعم الهاتفي. يرجى ملاحظة أن بعض الإجراءات، مثل تحديث البيانات أو فتح حسابات الادخار أو إغلاق الحسابات، يمكن إتمامها رقمياً عبر تطبيق الجوال باستخدام التحقق عبر نفاذ دون الحاجة لزيارة الفرع، مما يوفر عليك الوقت والجهد.",
+    "question_en": "How can I speak with an employee to get assistance?",
+    "answer_en": "To speak with an employee and receive the necessary support, you can visit your nearest bank branch during official working hours, where a service representative will provide direct assistance. You can also contact the call center for telephone support. Please note that certain procedures, such as updating information, opening savings accounts, or closing accounts, can be completed digitally via the mobile app using Nafath verification without the need to visit a branch, saving you time and effort."
+  },
+  {
+    "id": "KB30",
+    "topic": "تغيير رقم الجوال المسجل",
+    "question_ar": "كيف يمكنني تغيير رقم الجوال المسجل في حسابي البنكي؟",
+    "answer_ar": "لتحديث رقم الجوال المسجل، يمكنك القيام بذلك بكل سهولة عبر تطبيق الجوال الخاص بالبنك من خلال خدمة تحديث البيانات، حيث يتطلب الأمر التحقق من هويتك عبر تطبيق نفاذ لضمان أمان العملية. كما يمكنك زيارة أحد فروعنا وتقديم طلب التحديث لموظف الخدمة مع إبراز الهوية الوطنية سارية المفعول. نوصي دائماً بالتأكد من تحديث بياناتك بانتظام لضمان استمرارية وصول التنبيهات والرموز الأمنية الخاصة بالعمليات المصرفية دون انقطاع.",
+    "question_en": "How can I change my registered mobile number?",
+    "answer_en": "To update your registered mobile number, you can easily do so via the bank's mobile application through the data update service, which requires identity verification via the Nafath application to ensure process security. Alternatively, you may visit one of our branches and submit an update request to a service representative by presenting a valid National ID. We always recommend updating your information regularly to ensure the continuous receipt of banking transaction alerts and security codes without interruption."
+  }
+]

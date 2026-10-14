@@ -6,19 +6,22 @@ COMPOSE := docker compose
 # Management commands see every profile, so on-demand model servers are included in ps/stop/down/logs
 COMPOSE_ALL := docker compose --profile core --profile quality --profile voice --profile image --profile hero --profile eval --profile extract
 -include .env
-export NBE_PORT IMAGE_TAG COMPOSE_PROJECT_NAME BRAND MODE
+export NBE_PORT IMAGE_TAG COMPOSE_PROJECT_NAME BRAND MODE COUNTRY BANK_NAME_EN
 
-.PHONY: start-NBE start-RYD brand help up down start stop restart build rebuild ps status logs clean \
+.PHONY: customer customers author start-NBE start-RYD brand help up down start stop restart build rebuild ps status logs clean \
         preflight gpu verify platform-check warm models d1 d2 d3 d4 d5 d6 d7 \
         data ingest demo-reset ui-test record offline-check arabic-gate models-lock hero hero-off quality-on quality-off voice-on voice-off image-on image-off
 
 help:
-	@echo "Bank AI demos on GB10 (this checkout: $${BRAND:-nbe}, project $${COMPOSE_PROJECT_NAME:-nbe})"
+	@echo "Bank AI demos on GB10 (customer: $${BANK_NAME_EN:-none yet}, country $${COUNTRY:-EG}, project $${COMPOSE_PROJECT_NAME:-nbe})"
 	@echo ""
-	@echo "  make start-NBE     start the National Bank of Egypt demos (branch main)"
-	@echo "  make start-RYD     start the Riyad Bank demos (branch Riyadh-Bank)"
-	@echo "                     either one stops the other bank's stack first; the first start of a bank builds its images"
-	@echo "  make brand         which bank's stack is running"
+	@echo "  make customers     list the customer profiles (customers/<name>: logo, names, country, colours)"
+	@echo "  make customer NAME=<name>"
+	@echo "                     present the demos for that customer: its logo, colours and names, and its country's"
+	@echo "                     data, currency, dialect and rules (EG, SA, AE, MA). Reloads the running stack."
+	@echo "  make author        write the active country's corpus with the LLM, once per new country (~25 min, stack up)"
+	@echo "  make start-NBE|start-RYD   shortcuts for make customer NAME=nbe|riyad"
+	@echo "  make brand         the active customer and which stack is running"
 	@echo ""
 	@echo "  make up            preflight (free the GPU), then start everything in a memory-safe order"
 	@echo "                     (MODE=show default: core + voice + image;  MODE=full adds Gemma 4 31B;  MODE=core: core only)"
@@ -61,10 +64,30 @@ help:
 	@sed -i "s/^D6_API_KEY=.*/D6_API_KEY=nbe-$$(head -c 18 /dev/urandom | base64 | tr -d '/+=')/" .env
 	@echo "Created .env from .env.example (random Postgres password and API keys)"
 
+customer:
+	@scripts/switch_customer.sh $(NAME)
+
+customers:
+	@python3 scripts/apply_customer.py --list
+
+# Once per new country: the LLM writes its procedures, knowledge base, rulings and complaints from the fact sheets
+# (data/generators/countries/<cc>.py) into data/seed/<CC>; commit that folder afterwards.
+author: .env
+	@docker ps --format '{{.Names}}' | grep -qx nbe-llmgw || { echo "Start the stack first: make up" >&2; exit 1; }
+	$(DATAGEN) python -m data.generators.author
+	$(DATAGEN) python -m data.generators.d5_clauses
+	@python3 scripts/apply_customer.py --seed-only >/dev/null
+	@python3 scripts/apply_customer.py --seed-only
+	@scripts/ingest.sh && cp data/customer.json data/generated/.loaded-customer.json
+
 start-NBE start-RYD:
-	@scripts/switch_brand.sh $(subst start-,,$@)
+	@scripts/switch_customer.sh $(if $(findstring NBE,$@),nbe,riyad)
+
+brand/brand.json:
+	@python3 scripts/apply_customer.py $${CUSTOMER:-nbe}
 
 brand:
+	@python3 -c 'import json; c=json.load(open("data/customer.json")); print("customer:", c["name"]["en"], "-", c["country"])' 2>/dev/null || echo "customer: none yet (make customer NAME=...)"
 	@docker ps --filter name=nbe-gateway --format 'running: project {{.Label "com.docker.compose.project"}} from {{.Label "com.docker.compose.project.working_dir"}}' | grep . || echo "no demo stack running"
 
 up: .env preflight
@@ -84,10 +107,10 @@ stop:
 restart:
 	$(COMPOSE_ALL) restart
 
-build: .env
+build: .env brand/brand.json
 	$(COMPOSE_ALL) --profile tools build   # tools: the data generators (datagen) and test runners
 
-rebuild: .env
+rebuild: .env brand/brand.json
 	$(COMPOSE_ALL) --profile tools build --no-cache
 
 ps:
@@ -131,6 +154,7 @@ data:
 	$(DATAGEN) python -m data.generators.d3_commerce
 	$(DATAGEN) python -m data.generators.d6_docs
 	$(DATAGEN) python -m data.generators.d5_clauses
+	@python3 scripts/apply_customer.py --seed-only >/dev/null || true   # the D5 clauses into data/seed-active
 
 ingest:
 	@scripts/ingest.sh

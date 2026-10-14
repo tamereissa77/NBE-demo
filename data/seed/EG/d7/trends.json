@@ -1,0 +1,5 @@
+{
+  "k_min": 4,
+  "k_max": 16,
+  "restarts": 8
+}

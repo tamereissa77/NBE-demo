@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ApiError, del, getJSON, postJSON, putJSON, upload } from "../api";
+import { BRAND } from "../brand";
 import { useI18n } from "../i18n";
 import type { WorkspaceProps } from "../pages/DemoPage";
 import { Block, Button, Chip, ErrorNote, Modal, Panel, Spinner } from "./common";
@@ -28,7 +29,7 @@ const EMPTY: FormData_ = { applicant_name: "", national_id: "", monthly_salary: 
 const SEVT = { high: "red", medium: "orange", low: "neutral" } as const;
 const L = {
   en: { files: "Loan files", newFile: "New file", none: "No files yet. Open one to upload an applicant's documents.", declared: "What the applicant declared",
-        name: "Applicant name", nid: "National ID number", salary: "Monthly salary (EGP)", employer: "Employer", address: "Address", amount: "Loan amount (EGP)", egp: "EGP", noAmount: "no amount", docCount: "documents",
+        name: "Applicant name", nid: BRAND.locale.nationalId?.en ?? "National ID number", salary: `Monthly salary (${BRAND.locale.currency.en})`, employer: "Employer", address: "Address", amount: `Loan amount (${BRAND.locale.currency.en})`, egp: BRAND.locale.currency.en, noAmount: "no amount", docCount: "documents",
         kind: "Applicant", employee: "Employee", business: "Business owner", save: "Save", open: "Open the file", docs: "Documents", add: "Add document",
         choose: "Choose image", verify: "Read and check", reverify: "Read new documents and check again", working: "Reading the documents on this machine and running the checks…",
         notRead: "not read yet", unreadable: "could not be read", panel: "Review decision panel", banner: "Flags for review: a human decides, never fraud-proof",
@@ -49,7 +50,7 @@ const L = {
         elaNote: "Error-level picture: bright regions recompress differently from the rest of the page. A visual aid only, not a finding.",
         verdicts: { flagged_for_review: "Flagged for review", no_issues_found: "No issues found", confirm_readings: "Confirm readings first", incomplete: "Incomplete file" } },
   ar: { files: "ملفات القروض", newFile: "ملف جديد", none: "لا توجد ملفات. افتح ملفاً لرفع مستندات العميل.", declared: "بيانات الطلب كما ذكرها العميل",
-        name: "اسم العميل", nid: "الرقم القومي", salary: "الراتب الشهري (جنيه)", employer: "جهة العمل", address: "العنوان", amount: "مبلغ القرض (جنيه)", egp: "جنيه", noAmount: "بدون مبلغ", docCount: "مستندات",
+        name: "اسم العميل", nid: BRAND.locale.nationalId?.ar ?? "رقم الهوية", salary: `الراتب الشهري (${BRAND.locale.currency.ar})`, employer: "جهة العمل", address: "العنوان", amount: `مبلغ التمويل (${BRAND.locale.currency.ar})`, egp: BRAND.locale.currency.ar, noAmount: "بدون مبلغ", docCount: "مستندات",
         kind: "صفة العميل", employee: "موظف", business: "صاحب نشاط", save: "حفظ", open: "فتح الملف", docs: "المستندات", add: "إضافة مستند",
         choose: "اختر صورة", verify: "اقرأ وافحص", reverify: "اقرأ المستندات الجديدة وافحص من جديد", working: "قراءة المستندات على هذا الجهاز وإجراء الفحوص…",
         notRead: "لم يُقرأ بعد", unreadable: "تعذرت قراءته", panel: "لوحة قرار المراجعة", banner: "إشارات للمراجعة فقط: القرار للإنسان",

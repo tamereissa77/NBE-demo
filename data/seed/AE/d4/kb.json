@@ -1,0 +1,242 @@
+[
+  {
+    "id": "KB01",
+    "topic": "كيف أوقف بطاقتي المفقودة أو المسروقة",
+    "question_ar": "كيف أوقف بطاقتي المفقودة أو المسروقة؟",
+    "answer_ar": "لحماية حسابك، يجب عليك إيقاف البطاقة المفقودة أو المسروقة فوراً عبر تطبيق الهاتف المحمول أو من خلال الاتصال بمركز الاتصال قبل البدء في إجراءات إصدار بطاقة بديلة. لإصدار بطاقة بديلة، يتطلب الأمر التحقق من خلال بطاقة الهوية الإماراتية السارية والتحقق عبر الهوية الرقمية (UAE PASS). تبلغ رسوم استبدال بطاقة الخصم 25 درهماً، بينما تبلغ رسوم بطاقة الائتمان 75 درهماً، مع إعفاء بطاقات حسابات الرواتب من هذه الرسوم. يتم تسليم البطاقة الجديدة في الفرع خلال 3 أيام عمل.",
+    "question_en": "How do I block my lost or stolen card?",
+    "answer_en": "To protect your account, you must immediately block your lost or stolen card via the mobile app or by contacting the Call Center before requesting a replacement. To issue a replacement card, a valid Emirates ID and verification via UAE PASS are required. The replacement fee for debit cards is AED 25, and for credit cards, it is AED 75; however, salary account cards are exempt from these fees. The new card will be delivered to the branch within 3 working days."
+  },
+  {
+    "id": "KB02",
+    "topic": "رسوم استبدال البطاقات",
+    "question_ar": "ما هي الرسوم والإجراءات المتبعة لاستبدال بطاقتي المفقودة؟",
+    "answer_ar": "لاستبدال بطاقة مفقودة، يجب أولاً إيقاف البطاقة عبر التطبيق أو مركز الاتصال. يتطلب الإجراء التحقق من خلال بطاقة الهوية الإماراتية السارية والتحقق عبر الهوية الرقمية (UAE PASS). تبلغ رسوم استبدال بطاقة الخصم 25 درهماً، بينما تبلغ رسوم بطاقة الائتمان 75 درهماً، مع العلم أن بطاقات حسابات الرواتب تُعفى من هذه الرسوم. يتم تسليم البطاقة الجديدة في الفرع خلال 3 أيام عمل.",
+    "question_en": "What are the fees and procedures for replacing my lost card?",
+    "answer_en": "To replace a lost card, you must first block the card via the app or the contact center. The process requires a valid Emirates ID and verification through UAE PASS. The replacement fee for debit cards is AED 25, while credit card replacement fees are AED 75; however, salary account cards are exempt from these fees. The new card will be delivered to the branch within 3 working days."
+  },
+  {
+    "id": "KB03",
+    "topic": "كيف أفعّل تطبيق الهاتف",
+    "question_ar": "كيف أفعّل تطبيق الهاتف؟",
+    "answer_ar": "لتفعيل تطبيق الهاتف الخاص بالبنك، يمكنك البدء بعملية التسجيل عبر التطبيق مباشرة. تتطلب عملية التفعيل والتحقق من الهوية استخدام الهوية الرقمية (UAE PASS) لضمان أمان حسابك وسهولة الوصول إلى الخدمات الرقمية. بمجرد إتمام عملية التحقق بنجاح، ستتمكن من إدارة حساباتك، وفتح حسابات توفير جديدة، وطلب خدمات متنوعة مثل استبدال البطاقات أو تحديث بياناتك الشخصية بكل سهولة وأمان من خلال هاتفك المحمول دون الحاجة لزيارة الفرع.",
+    "question_en": "How do I activate the mobile app?",
+    "answer_en": "To activate the bank's mobile application, you can start the registration process directly through the app. The activation and identity verification process requires using the UAE PASS to ensure the security of your account and easy access to digital services. Once the verification process is successfully completed, you will be able to manage your accounts, open new savings accounts, and request various services such as card replacement or updating your personal information easily and securely through your mobile phone without the need to visit a branch."
+  },
+  {
+    "id": "KB04",
+    "topic": "نسيت كلمة مرور التطبيق",
+    "question_ar": "نسيت كلمة مرور التطبيق، ماذا أفعل؟",
+    "answer_ar": "في حال نسيان كلمة المرور الخاصة بتطبيق الهاتف، يمكنك استعادة الوصول إلى حسابك بسهولة من خلال اتباع خطوات إعادة تعيين كلمة المرور المتاحة عبر التطبيق. يتطلب الأمر التحقق من هويتك لضمان أمان حسابك. نوصي دائماً باستخدام ميزة التحقق عبر الهوية الرقمية (UAE PASS) لتسهيل عملية الوصول وتأمين بياناتك الشخصية. إذا واجهت أي صعوبات تقنية أثناء محاولة إعادة التعيين، يرجى التواصل مع مركز الاتصال الخاص بنا للحصول على الدعم الفني اللازم.",
+    "question_en": "I forgot my application password, what should I do?",
+    "answer_en": "If you have forgotten your mobile application password, you can easily regain access to your account by following the password reset steps available within the app. This process requires verifying your identity to ensure the security of your account. We recommend using the UAE PASS authentication feature to facilitate access and secure your personal data. If you encounter any technical difficulties during the reset process, please contact our call center for the necessary technical support."
+  },
+  {
+    "id": "KB05",
+    "topic": "حدود التحويل اليومية",
+    "question_ar": "ما هي حدود التحويل اليومية المتاحة لدي؟",
+    "answer_ar": "يبلغ الحد الافتراضي للتحويل اليومي عبر تطبيق الهاتف 40,000 درهم. يمكنك رفع هذا الحد ليصل إلى أقصى حد متاح عبر التطبيق وهو 120,000 درهم، وذلك بعد إتمام عملية التحقق عبر الهوية الرقمية (UAE PASS). أما في حال رغبتكم في إجراء تحويلات تتجاوز هذا الحد، فيتوجب عليكم تقديم طلب موقع في الفرع، على أن يسري هذا التعديل في يوم العمل التالي.",
+    "question_en": "What are my daily transfer limits?",
+    "answer_en": "The default daily transfer limit via the mobile app is AED 40,000. You can increase this limit to a maximum of AED 120,000 through the app after verifying via UAE PASS. For amounts exceeding this limit, a signed request must be submitted at the branch, which will become effective on the following business day."
+  },
+  {
+    "id": "KB06",
+    "topic": "كيف أرفع حد التحويل",
+    "question_ar": "كيف أرفع حد التحويل؟",
+    "answer_ar": "لرفع حدود التحويل اليومية، يبلغ الحد الافتراضي عبر التطبيق 40,000 درهم. يمكنك رفع هذا الحد ليصل إلى أقصى حد وهو 120,000 درهم من خلال التطبيق مباشرة بعد إتمام عملية التحقق عبر الهوية الرقمية (UAE PASS). أما في حال رغبتك في رفع الحد لما يتجاوز مبلغ 120,000 درهم، فيتعين عليك تقديم طلب موقع شخصياً في الفرع، على أن يسري هذا التعديل في يوم العمل التالي.",
+    "question_en": "How do I increase my transfer limit?",
+    "answer_en": "To increase your daily transfer limits, the default limit via the app is AED 40,000. You can increase this limit up to a maximum of AED 120,000 directly through the app after verifying via UAE PASS. If you wish to increase the limit beyond AED 120,000, you must submit a signed request at the branch, which will become effective on the following business day."
+  },
+  {
+    "id": "KB07",
+    "topic": "رسوم التحويلات الدولية",
+    "question_ar": "ما هي الرسوم والحدود الخاصة بالتحويلات الدولية الصادرة؟",
+    "answer_ar": "لإجراء التحويلات الدولية الصادرة، يبلغ الحد اليومي 100,000 درهم أو ما يعادلها. تبلغ العمولة 25 درهماً عند التحويل عبر التطبيق، و60 درهماً عند التحويل من الفرع. يتطلب الإجراء تقديم نموذج التحويل مع توضيح الغرض منه، وتستغرق مدة التنفيذ يومي عمل. يرجى ملاحظة أنه يجب تقديم مستند داعم (مثل فاتورة أو عقد) للتحويلات التي تتجاوز قيمتها 35,000 درهم.",
+    "question_en": "What are the fees and limits for outgoing international transfers?",
+    "answer_en": "For outgoing international transfers, the daily limit is AED 100,000 or its equivalent. The commission is AED 25 for transfers via the app and AED 60 for transfers from the branch. The procedure requires a transfer form specifying the purpose, and execution takes two working days. Please note that a supporting document (such as an invoice or contract) is required for transfers exceeding AED 35,000."
+  },
+  {
+    "id": "KB08",
+    "topic": "مواعيد عمل الفروع",
+    "question_ar": "ما هي مواعيد عمل الفروع؟",
+    "answer_ar": "تعمل فروعنا لخدمتكم خلال ساعات العمل الرسمية المعتمدة، وتختلف هذه المواعيد حسب موقع الفرع وما إذا كان يقع داخل مراكز التسوق أو في مناطق تجارية مستقلة. نوصي دائماً بزيارة أقرب فرع إليكم أو التحقق من موقعنا الإلكتروني للتأكد من ساعات العمل الخاصة بكل فرع قبل الزيارة. كما نود تذكيركم بأنه يمكنكم إنجاز العديد من المعاملات المصرفية، مثل فتح الحسابات، وتحديث البيانات، وطلب إغلاق الحسابات، وإعادة تعيين الرقم السري، عبر تطبيق الهاتف المحمول باستخدام الهوية الرقمية (UAE PASS) دون الحاجة لزيارة الفرع.",
+    "question_en": "What are the branch working hours?",
+    "answer_en": "Our branches operate during official working hours, which may vary depending on the branch location, such as those located within shopping malls or independent commercial areas. We always recommend visiting your nearest branch or checking our website to confirm the specific operating hours for each location before your visit. We would also like to remind you that many banking transactions, such as opening accounts, updating information, requesting account closures, and resetting PINs, can be completed via our mobile application using UAE PASS without the need to visit a branch."
+  },
+  {
+    "id": "KB09",
+    "topic": "كيف أقدم شكوى",
+    "question_ar": "كيف أقدم شكوى؟",
+    "answer_ar": "لتقديم شكوى، يمكنك البدء بالمستوى الأول عبر زيارة الفرع أو التواصل مع مركز الاتصال، حيث يتم التعامل معها خلال يومي عمل. في حال عدم الرضا عن الحل، يتم تصعيد الشكوى للمستوى الثاني لدى وحدة شكاوى العملاء خلال 5 أيام عمل. إذا لم تُحل الشكوى خلال 30 يوماً، يمكنك الانتقال للمستوى الثالث عبر وحدة التظلمات المصرفية (سندك). يرجى العلم أن الشكاوى العاجلة المتعلقة بالاحتيال أو الخصم غير المصرح به تُعالج بصفة استثنائية خلال 24 ساعة.",
+    "question_en": "How do I file a complaint?",
+    "answer_en": "To file a complaint, you can start at Level 1 by visiting a branch or contacting the Call Center, which will be addressed within 2 working days. If the resolution is unsatisfactory, the complaint is escalated to Level 2 at the Customer Complaints Unit within 5 working days. If the issue remains unresolved after 30 days, you may escalate to Level 3 via the banking ombudsman unit (Sanadak). Please note that urgent complaints regarding fraud or unauthorized debits are processed within 24 hours."
+  },
+  {
+    "id": "KB10",
+    "topic": "مدة معالجة الشكاوى",
+    "question_ar": "كم هي المدة المستغرقة لمعالجة شكاويكم؟",
+    "answer_ar": "نحن نلتزم بمعالجة شكاواكم وفق مستويات محددة؛ حيث يتم التعامل مع المستوى الأول عبر الفرع أو مركز الاتصال خلال يومي عمل، والمستوى الثاني عبر وحدة شكاوى العملاء خلال 5 أيام عمل. وفي حال عدم الحل خلال 30 يوماً، يمكن تصعيد الشكوى للمستوى الثالث (وحدة التظلمات المصرفية سندك). أما بالنسبة للشكاوى العاجلة، مثل حالات الاحتيال والخصم غير المصرح به، فإننا نوليها أولوية قصوى وتُعالج خلال 24 ساعة لضمان حماية أموالكم.",
+    "question_en": "How long does it take to process my complaints?",
+    "answer_en": "We are committed to processing your complaints through specific levels: Level 1 is handled via the branch or call center within 2 working days, and Level 2 via the Customer Complaints Unit within 5 working days. If the issue remains unresolved after 30 days, it can be escalated to Level 3 (Sanadak Banking Ombudsman Unit). For urgent complaints, such as fraud and unauthorized deductions, we prioritize them and they are processed within 24 hours to ensure the protection of your funds."
+  },
+  {
+    "id": "KB11",
+    "topic": "ما هو رمز التحقق OTP ولماذا لا يجب مشاركته",
+    "question_ar": "ما هو رمز التحقق OTP ولماذا لا يجب مشاركته؟",
+    "answer_ar": "رمز التحقق (OTP) هو رمز سري لمرة واحدة يُرسل إلى هاتفك المحمول لتأكيد هويتك عند إجراء عمليات حساسة مثل التحويلات المالية أو إعادة تعيين الرقم السري للبطاقة. يُعد هذا الرمز بمثابة مفتاح أمان رقمي يضمن أنك أنت من يقوم بالعملية. يجب عدم مشاركة هذا الرمز مع أي شخص تحت أي ظرف، بما في ذلك موظفي البنك؛ فالبنك لن يطلب منك أبداً الإفصاح عن رمز التحقق الخاص بك. مشاركة هذا الرمز قد تؤدي إلى وصول أطراف غير مصرح لها إلى حساباتك وتنفيذ عمليات غير قانونية، لذا حافظ على سرية بياناتك لحماية أمنك المالي.",
+    "question_en": "What is an OTP and why should it not be shared?",
+    "answer_en": "An One-Time Password (OTP) is a unique, temporary code sent to your mobile device to verify your identity during sensitive transactions, such as fund transfers or resetting your card PIN. This code acts as a digital security key to ensure that you are the one performing the action. You must never share this code with anyone under any circumstances, including bank employees; the bank will never ask you to disclose your OTP. Sharing this code could allow unauthorized parties to access your accounts and execute fraudulent transactions, so please keep your credentials confidential to protect your financial security."
+  },
+  {
+    "id": "KB12",
+    "topic": "كيف أحمي نفسي من الاحتيال",
+    "question_ar": "كيف أحمي نفسي من الاحتيال؟",
+    "answer_ar": "لحماية حساباتك من الاحتيال، يجب عليك الحفاظ على سرية بياناتك الشخصية وعدم مشاركة الأرقام السرية أو رموز التحقق (OTP) مع أي شخص، علماً بأنه لا يجوز لموظف الفرع الاطلاع على رقمك السري أو إملاؤه لك. في حال ملاحظة أي عمليات مشبوهة أو خصم غير مصرح به، يرجى إبلاغنا فوراً، حيث يتم التعامل مع شكاوى الاحتيال والخصم غير المصرح به كحالات عاجلة وتُعالج خلال 24 ساعة. كما ننصحك بإيقاف بطاقتك المفقودة فوراً عبر التطبيق أو مركز الاتصال لضمان سلامة أموالك.",
+    "question_en": "How can I protect myself from fraud?",
+    "answer_en": "To protect your accounts from fraud, you must maintain the confidentiality of your personal data and never share your PINs or One-Time Passwords (OTP) with anyone; please note that branch employees are not permitted to view or dictate your PIN. If you notice any suspicious transactions or unauthorized debits, please inform us immediately, as fraud and unauthorized debit complaints are treated as urgent cases and are processed within 24 hours. We also recommend blocking your lost card immediately via the app or the contact center to ensure the safety of your funds."
+  },
+  {
+    "id": "KB13",
+    "topic": "فتح حساب توفير",
+    "question_ar": "كيف يمكنني فتح حساب توفير جديد؟",
+    "answer_ar": "يمكن للأفراد فتح حساب توفير من خلال تقديم بطاقة الهوية الإماراتية، وجواز السفر، وإثبات السكن. يتطلب الحساب حداً أدنى للرصيد يبلغ 1,000 درهم، وتُحتسب الفائدة على الرصيد اليومي وتُصرف شهرياً. تستغرق مدة تفعيل الحساب يوم عمل واحد فقط. ولتسهيل الإجراءات، يمكنكم فتح الحساب مباشرة عبر تطبيق الهاتف المحمول باستخدام خاصية التحقق عبر الهوية الرقمية (UAE PASS) دون الحاجة لزيارة الفرع.",
+    "question_en": "How can I open a new savings account?",
+    "answer_en": "Individuals can open a savings account by providing an Emirates ID, passport, and proof of residence. The account requires a minimum balance of AED 1,000, and interest is calculated on the daily balance and credited monthly. The activation period takes one working day. For your convenience, you can open an account directly via the mobile application using UAE PASS authentication without the need to visit a branch."
+  },
+  {
+    "id": "KB14",
+    "topic": "الحد الأدنى لحساب التوفير",
+    "question_ar": "ما هو الحد الأدنى للرصيد المطلوب لفتح حساب توفير للأفراد؟",
+    "answer_ar": "لفتح حساب توفير للأفراد، يتطلب الأمر توفير مستندات تشمل بطاقة الهوية الإماراتية، وجواز السفر، وإثبات السكن. يجب الالتزام بحد أدنى للرصيد قدره 1,000 درهم. وتجدر الإشارة إلى أن الفائدة تُحتسب بناءً على الرصيد اليومي ويتم صرفها بشكل شهري. يمكنكم فتح الحساب بكل سهولة عبر تطبيق الهاتف المحمول من خلال عملية التحقق عبر الهوية الرقمية (UAE PASS) دون الحاجة لزيارة الفرع، وتستغرق مدة تفعيل الحساب يوم عمل واحد فقط.",
+    "question_en": "What is the minimum balance required to open an individual savings account?",
+    "answer_en": "To open an individual savings account, you must provide documents including your Emirates ID, passport, and proof of residence. A minimum balance of 1,000 AED is required. Please note that interest is calculated on the daily balance and is credited monthly. For your convenience, you can open an account via the mobile application using UAE PASS verification without visiting a branch. The account activation process takes one business day."
+  },
+  {
+    "id": "KB15",
+    "topic": "الودائع الثابتة والكسر المبكر",
+    "question_ar": "ما هي الشروط المتبعة لطلب الكسر المبكر للودائع الثابتة وكيف يؤثر ذلك على الأرباح؟",
+    "answer_ar": "يمكن للعملاء طلب الكسر المبكر للودائع الثابتة عبر تطبيق الهاتف المحمول، بشرط مرور شهر واحد على الأقل من تاريخ الإيداع. في حال تم الكسر المبكر، سيترتب على ذلك خسارة 50% من الفائدة المستحقة خلال السنة الأولى من مدة الوديعة، بينما لا يتم تطبيق أي خصومات بعد ذلك. يتم صرف القيمة المستحقة للعميل في نفس يوم تقديم الطلب.",
+    "question_en": "What are the conditions for requesting early breakage of fixed deposits and how does it affect the interest?",
+    "answer_en": "Customers can request the early breakage of fixed deposits via the mobile application, provided that at least one month has passed from the deposit date. If early breakage occurs, it will result in a loss of 50% of the interest earned during the first year; no deductions apply thereafter. The value is disbursed to the customer on the same day the request is made."
+  },
+  {
+    "id": "KB16",
+    "topic": "بطاقات الائتمان: الحد والرسوم",
+    "question_ar": "ما هي الرسوم والحدود المتعلقة ببطاقات الائتمان؟",
+    "answer_ar": "في حال فقدان بطاقة الائتمان، يجب أولاً إيقافها عبر التطبيق أو مركز الاتصال قبل طلب البديل. تتطلب عملية الاستبدال التحقق من بطاقة الهوية الإماراتية سارية المفعول والتحقق عبر الهوية الرقمية (UAE PASS)، وتبلغ رسوم إصدار بطاقة الائتمان البديلة 75 درهماً، بينما تُعفى بطاقات حسابات الرواتب من هذه الرسوم. يتم تسليم البطاقة الجديدة في الفرع خلال 3 أيام عمل.",
+    "question_en": "What are the fees and limits related to credit cards?",
+    "answer_en": "In the event of a lost credit card, you must first block it via the app or the contact center before requesting a replacement. The replacement process requires a valid Emirates ID and verification via UAE PASS. The fee for a replacement credit card is AED 75, whereas salary account cards are exempt from this fee. The new card will be delivered to the branch within 3 working days."
+  },
+  {
+    "id": "KB17",
+    "topic": "سداد مستحقات بطاقة الائتمان",
+    "question_ar": "كيف يمكنني سداد مستحقات بطاقة الائتمان الخاصة بي؟",
+    "answer_ar": "يمكنكم سداد مستحقات بطاقة الائتمان عبر القنوات الرقمية المتاحة للبنك، مثل تطبيق الهاتف المتحرك، أو من خلال زيارة أحد فروعنا. نوصي دائماً بالالتزام بمواعيد السداد المحددة لتجنب أي رسوم تأخير أو تأثير على سجلكم الائتماني. في حال واجهتم أي صعوبات في عملية السداد، يرجى التواصل مع مركز الاتصال للحصول على الدعم اللازم أو زيارة الفرع لمناقشة خيارات السداد المتاحة.",
+    "question_en": "How can I pay my credit card dues?",
+    "answer_en": "You can settle your credit card dues through the bank's available digital channels, such as the mobile application, or by visiting one of our branches. We always recommend adhering to the specified payment deadlines to avoid any late fees or impact on your credit score. If you encounter any difficulties during the payment process, please contact our call center for assistance or visit a branch to discuss available payment options."
+  },
+  {
+    "id": "KB18",
+    "topic": "القرض الشخصي: المستندات",
+    "question_ar": "ما هي المستندات المطلوبة لتقديم طلب قرض شخصي للموظفين؟",
+    "answer_ar": "لتقديم طلب الحصول على قرض شخصي للموظفين، يتوجب تقديم بطاقة الهوية الإماراتية وشهادة راتب فقط. يرجى العلم أن الحد الأقصى للقسط الشهري لا يتجاوز 50% من إجمالي الراتب الشهري لجميع الالتزامات، وتصل أقصى مدة للسداد إلى 48 شهراً. يتم الرد على الطلب خلال يومي عمل، ويخضع الطلب للاستعلام الآلي من الاتحاد للمعلومات الائتمانية قبل إحالته إلى لجنة الائتمان.",
+    "question_en": "What are the documents required to apply for a personal loan for employees?",
+    "answer_en": "To apply for a personal loan for employees, you only need to provide an Emirates ID and a salary certificate. Please note that the maximum monthly installment is 50% of the total monthly salary for all liabilities, and the maximum term is 48 months. The response time is two working days, and the application is subject to an automated inquiry from the Al Etihad Credit Agency before being referred to the Credit Committee."
+  },
+  {
+    "id": "KB19",
+    "topic": "القرض الشخصي: أقصى قسط",
+    "question_ar": "ما هو الحد الأقصى للقسط الشهري عند طلب قرض شخصي للموظفين؟",
+    "answer_ar": "عند تقديم طلب للحصول على قرض شخصي للموظفين، يجب توفير بطاقة الهوية الإماراتية وشهادة راتب فقط. يبلغ الحد الأقصى للقسط الشهري 50% من إجمالي الراتب الشهري لتغطية جميع الالتزامات القائمة. تبلغ أقصى مدة للسداد 48 شهراً، ويتم الرد على الطلب خلال يومي عمل، وذلك بعد إجراء الاستعلام الآلي من الاتحاد للمعلومات الائتمانية وقبل الإحالة إلى لجنة الائتمان.",
+    "question_en": "What is the maximum monthly installment for an employee personal loan?",
+    "answer_en": "When applying for an employee personal loan, only an Emirates ID and a salary certificate are required. The maximum monthly installment is 50% of the total monthly salary to cover all obligations. The maximum term is 48 months, and the response time is two working days, following an automated inquiry from the Al Etihad Credit Bureau and prior to referral to the Credit Committee."
+  },
+  {
+    "id": "KB20",
+    "topic": "تحديث البيانات الشخصية",
+    "question_ar": "كيف يمكنني تحديث بياناتي الشخصية لدى البنك؟",
+    "answer_ar": "يتم تحديث بيانات العميل (إجراء اعرف عميلك) بشكل دوري؛ حيث يتم التحديث كل 3 سنوات للعملاء منخفضي المخاطر، وسنوياً لمرتفعي المخاطر. تتطلب عملية التحديث تقديم بطاقة هوية إماراتية سارية وإثبات سكن. في حال انتهاء صلاحية الهوية، يجب إجراء التحديث خلال 30 يوماً، وإلا سيتم تجميد الحركات المدينة على الحساب. لتسهيل الإجراءات، يمكنكم التحديث عبر تطبيق الهاتف باستخدام الهوية الرقمية (UAE PASS) وتقنية قراءة شريحة الهوية دون الحاجة لزيارة الفرع.",
+    "question_en": "How can I update my personal information with the bank?",
+    "answer_en": "Customer data updates (KYC) are performed periodically: every 3 years for low-risk customers and annually for high-risk customers. The update requires a valid Emirates ID and proof of residence. If your ID expires, you must update your information within 30 days to avoid the freezing of debit transactions. For your convenience, updates can be completed via the mobile app using UAE PASS and by scanning the Emirates ID chip, eliminating the need to visit a branch."
+  },
+  {
+    "id": "KB21",
+    "topic": "حساب القاصر",
+    "question_ar": "كيف يمكنني فتح حساب لقاصر وما هي الشروط والخدمات المتاحة له؟",
+    "answer_ar": "يمكن فتح حساب للقاصر من سن الميلاد وحتى 21 عاماً، ويتطلب ذلك تقديم شهادة ميلاد القاصر، وهوية الولي، وخلاصة القيد. يتم إجراء عمليات السحب بتوقيع الولي فقط. كما يتيح البنك إصدار بطاقة مدفوعة مسبقاً للقاصر بدءاً من سن 10 سنوات، مع وضع حد شهري للاستخدام يبلغ 1,500 درهم.",
+    "question_en": "How can I open an account for a minor and what are the terms and available services?",
+    "answer_en": "An account can be opened for a minor from birth up to 21 years of age. The required documents are the minor's birth certificate, the guardian's ID, and the family book. Withdrawals are processed with the guardian's signature only. Additionally, a prepaid card can be issued for the minor starting from age 10, with a monthly limit of 1,500 AED."
+  },
+  {
+    "id": "KB22",
+    "topic": "دفتر الشيكات",
+    "question_ar": "كيف يمكنني الحصول على دفتر شيكات؟ وما هي الشروط والرسوم المترتبة على ذلك؟",
+    "answer_ar": "للحصول على دفتر شيكات، يجب أن يكون قد مضى شهر واحد على الأقل على فتح حسابك الجاري، مع اشتراط عدم وجود أي شيكات مرتجعة. يتوفر دفتر الشيكات العادي بعدد 25 ورقة، وتكون أول دفاتريْن في السنة مجانية بدون رسوم، وتستغرق عملية الإصدار 5 أيام عمل. كما نوفر خياراً جديداً وهو دفتر يحتوي على 50 ورقة مقابل رسوم قدرها 30 درهماً.",
+    "question_en": "How can I obtain a chequebook? And what are the applicable terms and fees?",
+    "answer_en": "To obtain a chequebook, at least one month must have passed since opening your current account, provided there are no returned cheques. The standard chequebook contains 25 leaves, and the first two chequebooks per year are free of charge, with an issuance period of 5 working days. We also offer a new option: a 50-leaf chequebook for a fee of AED 30."
+  },
+  {
+    "id": "KB23",
+    "topic": "إغلاق الحساب",
+    "question_ar": "كيف يمكنني إغلاق حسابي البنكي؟",
+    "answer_ar": "لإغلاق حسابكم، يتطلب الأمر تقديم طلب كتابي في الفرع مع تسوية كافة المديونيات المستحقة، كما يجب إتلاف جميع البطاقات المرتبطة بالحساب أو تسليمها للبنك. لا توجد رسوم على عملية إغلاق الحساب، وتستغرق مدة التنفيذ 3 أيام عمل. كما نود إعلامكم بتوفر خيار جديد يتيح لكم تقديم طلب الإغلاق مباشرة عبر تطبيق الهاتف المحمول من خلال التحقق عبر الهوية الرقمية (UAE PASS) دون الحاجة لزيارة الفرع.",
+    "question_en": "How can I close my bank account?",
+    "answer_en": "To close your account, a written request must be submitted at the branch along with the settlement of all outstanding debts. Additionally, all associated cards must be destroyed or handed over to the bank. There are no closing fees, and the processing time is 3 working days. We also offer a new option allowing you to submit the closure request via the mobile application by verifying through UAE PASS without the need to visit the branch."
+  },
+  {
+    "id": "KB24",
+    "topic": "الخصم المكرر أو غير المصرح به",
+    "question_ar": "لقد لاحظت وجود خصم مكرر أو غير مصرح به من حسابي، ماذا أفعل؟",
+    "answer_ar": "في حال ملاحظة أي خصم مكرر أو غير مصرح به، يرجى التواصل معنا فوراً لتصعيد الشكوى. ندرك أهمية هذا الأمر، لذا يتم التعامل مع شكاوى الاحتيال والخصم غير المصرح به كشكاوى عاجلة، حيث يتم معالجتها خلال 24 ساعة. يمكنك تقديم الشكوى عبر زيارة الفرع أو الاتصال بمركز الاتصال (المستوى الأول)، وفي حال عدم الحل، يتم تصعيدها إلى وحدة شكاوى العملاء (المستوى الثاني) خلال 5 أيام عمل، وصولاً إلى وحدة التظلمات المصرفية 'سندك' إذا لم تُحل الشكوى خلال 30 يوماً.",
+    "question_en": "I noticed a duplicate or unauthorized deduction from my account, what should I do?",
+    "answer_en": "If you notice any duplicate or unauthorized deduction, please contact us immediately to escalate the complaint. We understand the urgency of this matter; therefore, fraud and unauthorized deduction complaints are treated as urgent cases and are processed within 24 hours. You can lodge a complaint via a branch or the call center (Level 1). If unresolved, it is escalated to the Customer Complaints Unit (Level 2) within 5 working days, and finally to the 'Sanadak' banking ombudsman if the issue is not resolved within 30 days."
+  },
+  {
+    "id": "KB25",
+    "topic": "الاسترداد النقدي على البطاقات",
+    "question_ar": "كيف يمكنني الاستفادة من ميزة الاسترداد النقدي على بطاقاتي؟",
+    "answer_ar": "نحن نسعى دائماً لتقديم قيمة مضافة لعملائنا من خلال برامج المكافآت. تتيح ميزة الاسترداد النقدي على البطاقات استعادة نسبة من المبالغ التي يتم إنفاقها عند استخدام بطاقاتكم في عمليات الشراء المعتمدة. تختلف تفاصيل هذه الميزة، بما في ذلك نسب الاسترداد وفئات المتاجر المشمولة، بناءً على نوع البطاقة المستخدمة وشروط البرنامج المطبقة وقت العملية. يرجى مراجعة الشروط والأحكام الخاصة بكل نوع من بطاقاتكم عبر تطبيقنا أو زيارة الفرع للحصول على كافة التفاصيل المتعلقة بكيفية تجميع النقود واستردادها.",
+    "question_en": "How can I benefit from the cashback feature on my cards?",
+    "answer_en": "We always strive to provide added value to our customers through reward programs. The cashback feature on cards allows you to recover a percentage of the amounts spent when using your cards for approved purchase transactions. The details of this feature, including cashback percentages and eligible merchant categories, vary based on the type of card used and the program terms applicable at the time of the transaction. Please review the terms and conditions for each of your card types via our app or by visiting a branch to obtain full details on how to accumulate and redeem your cashback."
+  },
+  {
+    "id": "KB26",
+    "topic": "استخدام البطاقة خارج الإمارات",
+    "question_ar": "هل يمكنني استخدام بطاقتي البنكية أثناء تواجدي خارج دولة الإمارات؟",
+    "answer_ar": "نعم، يمكنك استخدام بطاقاتك البنكية لإجراء المعاملات المالية أثناء تواجدك خارج دولة الإمارات العربية المتحدة. لضمان تجربة استخدام سلسة، يرجى التأكد من تفعيل خدمات الاستخدام الدولي عبر تطبيق الهاتف المحمول الخاص بالبنك قبل السفر. في حال فقدان البطاقة أثناء سفرك، يجب عليك إيقافها فوراً من خلال التطبيق أو عبر الاتصال بمركز الاتصال، ومن ثم يمكنك طلب إصدار بطاقة بديلة وفق الإجراءات المتبعة.",
+    "question_en": "Can I use my bank card while I am outside the UAE?",
+    "answer_en": "Yes, you can use your bank cards to perform financial transactions while you are outside the United Arab Emirates. To ensure a seamless experience, please make sure to activate international usage services via the bank's mobile application before traveling. In the event that your card is lost while traveling, you must immediately block it through the app or by contacting the call center, and then you can request a replacement card according to the standard procedures."
+  },
+  {
+    "id": "KB27",
+    "topic": "التحويل الفوري بين البنوك",
+    "question_ar": "كيف يمكنني إجراء تحويل فوري بين البنوك المختلفة؟",
+    "answer_ar": "لإجراء التحويلات بين البنوك، يرجى استخدام تطبيق الهاتف المحمول الخاص بالبنك لضمان السرعة والسهولة. تتوفر خدمة التحويل الفوري لتمكين انتقال الأموال بشكل مباشر إلى حسابات في بنوك أخرى. يرجى التأكد من إدخال بيانات المستفيد بدقة، بما في ذلك رقم الحساب أو رقم الآيبان (IBAN)، لضمان وصول الحوالة دون تأخير. نوصي دائماً بمراجعة تفاصيل العملية قبل التأكيد النهائي.",
+    "question_en": "How can I make an instant transfer between different banks?",
+    "answer_en": "To perform transfers between banks, please use the bank's mobile application to ensure speed and ease. The instant transfer service is available to enable the direct movement of funds to accounts in other banks. Please ensure that the beneficiary's details are entered accurately, including the account number or IBAN, to ensure the transfer arrives without delay. We always recommend reviewing the transaction details before final confirmation."
+  },
+  {
+    "id": "KB28",
+    "topic": "خدمة العملاء والتواصل",
+    "question_ar": "كيف يمكنني التواصل مع البنك في حال وجود شكوى أو استفسار، وما هي الإجراءات المتبعة؟",
+    "answer_ar": "لضمان أفضل تجربة تواصل، يمكنكم تقديم الشكاوى عبر الفرع أو مركز الاتصال (المستوى الأول) خلال يومي عمل، وفي حال عدم الحل، تُحول لوحدة شكاوى العملاء (المستوى الثاني) خلال 5 أيام عمل. أما إذا لم تُحل خلال 30 يوماً، يمكن اللجوء لوحدة التظلمات المصرفية 'سندك' (المستوى الثالث). نولي اهتماماً فائقاً للشكاوى العاجلة مثل الاحتيال والخصم غير المصرح به، حيث يتم معالجتها خلال 24 ساعة فقط. كما نوفر قنوات رقمية متطورة عبر التطبيق والتحقق عبر الهوية الرقمية (UAE PASS) لتسهيل معظم الإجراءات والخدمات المصرفية.",
+    "question_en": "How can I contact the bank if I have a complaint or an inquiry, and what are the procedures followed?",
+    "answer_en": "To ensure the best communication experience, complaints can be submitted via the branch or call center (Level 1) within two working days. If unresolved, they are escalated to the Customer Complaints Unit (Level 2) within 5 working days. If not resolved within 30 days, you may escalate to the 'Sanadak' banking ombudsman unit (Level 3). We prioritize urgent complaints, such as fraud and unauthorized debits, which are processed within 24 hours. We also provide advanced digital channels via the app and UAE PASS verification to facilitate most banking procedures and services."
+  },
+  {
+    "id": "KB29",
+    "topic": "التحدث مع موظف",
+    "question_ar": "كيف يمكنني التحدث مع موظف لتقديم شكوى أو طلب مساعدة؟",
+    "answer_ar": "لتقديم شكوى، يمكنك التواصل مع موظفينا في الفرع أو عبر مركز الاتصال (المستوى الأول)، وسيتم التعامل معها خلال يومي عمل. في حال عدم الحل، تُرفع الشكوى إلى وحدة شكاوى العملاء (المستوى الثاني) خلال 5 أيام عمل. أما إذا لم تُحل خلال 30 يوماً، فيمكنك التصعيد إلى وحدة التظلمات المصرفية 'سندك' (المستوى الثالث). يرجى العلم أن الشكاوى العاجلة المتعلقة بالاحتيال أو الخصم غير المصرح به تُعالج بخصوصية وسرعة خلال 24 ساعة فقط. نحن هنا لضمان حقوقكم وتقديم الدعم اللازم.",
+    "question_en": "How can I speak with an employee to file a complaint or request assistance?",
+    "answer_en": "To file a complaint, you can contact our staff at the branch or via the call center (Level 1), which will be addressed within two working days. If unresolved, the complaint is escalated to the Customer Complaints Unit (Level 2) within 5 working days. If it remains unresolved after 30 days, you may escalate to the 'Sanadak' banking ombudsman unit (Level 3). Please note that urgent complaints regarding fraud or unauthorized debits are processed within 24 hours. We are here to ensure your rights and provide the necessary support."
+  },
+  {
+    "id": "KB30",
+    "topic": "تغيير رقم الهاتف المسجل",
+    "question_ar": "كيف يمكنني تغيير رقم الهاتف المسجل في حسابي البنكي؟",
+    "answer_ar": "لتحديث رقم هاتفك المسجل لدينا، يرجى اتباع الإجراءات المعتمدة لضمان أمن حسابك. يمكنك القيام بذلك من خلال زيارة أحد فروعنا أو عبر تطبيق الهاتف المحمول الخاص بالبنك باستخدام خاصية التحقق عبر الهوية الرقمية (UAE PASS). يتطلب الإجراء التحقق من هويتك لضمان مطابقة البيانات وتحديث سجلاتنا بدقة. نوصي دائماً بالتأكد من أن رقم الهاتف الجديد متاح لديك لاستلام رموز التحقق والأمان اللازمة لإتمام العمليات المصرفية المستقبلية بسلاسة.",
+    "question_en": "How can I change my registered mobile number?",
+    "answer_en": "To update your registered mobile number, please follow the approved procedures to ensure your account security. You can do this by visiting one of our branches or via the bank's mobile application using the UAE PASS authentication method. The process requires identity verification to ensure data accuracy and update our records correctly. We always recommend ensuring that your new mobile number is accessible to receive necessary security and verification codes for seamless future banking transactions."
+  }
+]

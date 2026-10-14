@@ -45,8 +45,8 @@ RESTRICTED_MIN = 0.3
 GUARD_CONFIG = "d2"                 # policy folder under config/guardrails, loaded by the nbe-guardrails service
 _D = "[0-9٠-٩]"
 # Personal identifiers that must not appear in an answer whatever the model does: a card number (16 digits),
-# a national ID (14 digits), an Egyptian mobile number (01x and 8 digits, or with +20), in either digit script
-PII = re.compile(rf"(?<!{_D})(?:{_D}{{16}}|{_D}{{14}}|(?:(?:\+|00)[2٢][0٠][1١]|[0٠][1١]){_D}{{9}})(?!{_D})")
+# and the country's national ID and mobile numbers (nbe_core.locale.PII_RE), in either digit script
+PII = re.compile(rf"(?<!{_D})(?:{_D}{{16}}|" + L.PII_RE.replace("{D}", _D) + rf")(?!{_D})")
 app = create_app("d2", "Chat with Document", phase="wave1")
 DOCS: dict[str, dict] = {}          # file -> manifest entry + text + sections
 DELTA_CACHE: dict[str, dict] = {}   # procedure -> delta summary

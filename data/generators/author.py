@@ -17,8 +17,8 @@ from nbe_core import llm
 from nbe_core import locale as L
 from data.generators import specs
 
-SEED_DIR = Path("/repo/data/seed")
-GOLDEN_DIR = Path("/repo/data/seed/golden")
+SEED_DIR = Path("/repo/data/seed") / L.CODE          # the active country (COUNTRY in .env)
+GOLDEN_DIR = SEED_DIR / "golden"
 SEM = asyncio.Semaphore(4)
 FACT_WARNINGS: list[dict] = []   # documents that still miss a fact after 3 attempts (kept, flagged for review)
 SYSTEM = (f"أنت كاتب محتوى في إدارة الإجراءات والشؤون القانونية ببنك {L.ADJ_AR}. تكتب بالعربية الفصحى الواضحة والمهنية. "
@@ -266,7 +266,11 @@ async def d7(n: int = 500, batch: int = 10) -> None:
 
 async def main(which: list[str]) -> None:
     jobs = {"d2": d2, "d5": d5, "d4": d4, "d7": d7}
+    SEED_DIR.mkdir(parents=True, exist_ok=True)
     await asyncio.gather(*(jobs[w]() for w in which))
+    bank = SEED_DIR / "bank.json"          # the name the corpus carries: scripts/apply_customer.py swaps it for another bank
+    if not bank.exists():
+        bank.write_text(json.dumps(specs.AUTHORED_FOR, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     (SEED_DIR / "fact_check.json").write_text(json.dumps(FACT_WARNINGS, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"fact check: {len(FACT_WARNINGS)} document(s) flagged" + (f": {FACT_WARNINGS}" if FACT_WARNINGS else ""))
 

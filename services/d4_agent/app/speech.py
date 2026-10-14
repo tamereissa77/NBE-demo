@@ -25,13 +25,19 @@ import configparser
 import re
 from pathlib import Path
 
+from nbe_core import locale as L
+
 TERMS_FILE = Path("/data/seed/d4/pronunciation.ini")
 AR_DIGITS = str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789")
 NUMBER = re.compile(r"\d[\d,.]*\d|\d")
 PHONE = re.compile(r"\+\d[\d\sXx*]{6,}\d")          # +20 109 XXX 7891: masked digits are skipped
 # A unit right after a long number makes it an amount ("5000 جنيه", "12000 EGP"), read as a number
-UNIT = re.compile(r"\s*(جنيه|جنيها|جنيهاً|جنيهات|دولار|يورو|ريال|EGP|USD|EUR|SAR|(?:Egyptian |US |Saudi )?(?:pounds?|dollars?|euros?|riyals?)|%|٪)", re.I)
-MONEY = re.compile(r"(?<![\d.,])(\d{1,3}(?:,\d{3})+|\d+)(?:\.(\d{1,2}))?\s*(جنيهات|جنيهاً|جنيها|جنيه|دولار|يورو|ريال|قرش)(?!\w)")
+UNIT = re.compile(r"\s*(جنيه|جنيها|جنيهاً|جنيهات|دولار|يورو|ريال|ريالات|درهم|دراهم|EGP|USD|EUR|SAR|AED|MAD|"
+                  r"(?:Egyptian |US |Saudi |UAE |Emirati |Moroccan )?(?:pounds?|dollars?|euros?|riyals?|dirhams?)|%|٪)", re.I)
+# The country's own unit has a spoken fraction (قرش, هللة, فلس, سنتيم); the units of other currencies are read as written
+LOCAL_UNIT = re.compile(rf"(?:{L.CURRENCY_FORMS_AR})$")
+MONEY = re.compile(r"(?<![\d.,])(\d{1,3}(?:,\d{3})+|\d+)(?:\.(\d{1,2}))?\s*"
+                   rf"({L.CURRENCY_FORMS_AR}|جنيهات|جنيهاً|جنيها|جنيه|دولار|يورو|ريال|درهم|{L.CURRENCY_SUB_AR})(?!\w)")
 ARABIC_WORD = re.compile(r"[ء-ي]+")
 # 2.5, 8.25, 0.75: said with ونص، وربع، وتلات أرباع. Any other fraction is left to the voice ("فاصلة").
 FRACTION = re.compile(r"(?<![\d.,])(\d+)\.(50?|25|75)(?!\d)")
@@ -141,17 +147,17 @@ def egyptian_number(n: int, counting: bool = False) -> str:
 
 def _money(m: re.Match) -> str:
     whole, piastres, unit = int(m.group(1).replace(",", "")), int((m.group(2) or "0").ljust(2, "0")), m.group(3)
-    pound = unit.startswith("جنيه")
+    pound = bool(LOCAL_UNIT.match(unit))
     if piastres and not pound:
-        return m.group(0)                   # only pounds have a spoken name for the fraction
-    name = "جنيه" if pound else unit
+        return m.group(0)                   # only the local currency has a spoken name for the fraction
+    name = L.CURRENCY_AR if pound else unit
     fraction = FRACTIONS.get(str(piastres))            # جنيه ونص, not جنيه وخمسين قرش
     if not whole and fraction:
         return f"{fraction[1:]} {name}"
     spoken = f"{name} واحد" if whole == 1 else f"{egyptian_number(whole, counting=True)} {name}"
     if fraction:
         return f"{spoken} {fraction}"
-    return f"{spoken} و{egyptian_number(piastres, counting=True)} قرش" if piastres else spoken
+    return f"{spoken} و{egyptian_number(piastres, counting=True)} {L.CURRENCY_SUB_AR}" if piastres else spoken
 
 
 def _fraction(m: re.Match) -> str:
@@ -355,7 +361,7 @@ def normalize(text: str, lang: str) -> str:
         text = re.sub(r"(?<=[A-Za-z0-9])-(?=\d)", ", ", text)          # T-261008-17063 -> T, 261008, 17063
         text = PHONE.sub(lambda m: " ".join(re.sub(r"\D", "", m.group(0))), text)
     if lang == "en":                                                    # EGP 20,000 is said "twenty thousand Egyptian pounds"
-        text = re.sub(r"\b(EGP|USD|EUR|SAR)\s*(\d[\d,.]*\d|\d)", r"\2 \1", text)
+        text = re.sub(r"\b(EGP|USD|EUR|SAR|AED|MAD)\s*(\d[\d,.]*\d|\d)", r"\2 \1", text)
     for pattern, spoken in _file()[0].get(lang, []):                 # before the amounts: EGP becomes جنيه first
         text = pattern.sub(spoken, text)
     if lang == "en":

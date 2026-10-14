@@ -22,13 +22,13 @@ const L = {
         listen: "Listen", lane: "Tool-call lane", phone: "Customer's phone", enterCode: "Enter the code", script: "Demo script", account: "Account state", verified: "Verified",
         notVerified: "Not verified", stop: "STOP · guardrail blocked this turn", working: "Agent is thinking…", noSms: "No messages yet", recording: "Recording… release to send",
         micBlocked: "Microphone needs HTTPS or localhost; use typing or the script buttons.",
-        whatsapp: "WhatsApp chat", ivr: "IVR call", agent: "NBE Virtual Agent", online: "online", inCall: "Call in progress", keypad: "Secure keypad",
+        whatsapp: "WhatsApp chat", ivr: "IVR call", agent: BRAND.agentName?.en ?? `${BRAND.short} Virtual Agent`, online: "online", inCall: "Call in progress", keypad: "Secure keypad",
         codeSent: "Code entered on the secure keypad: it went to the bank, not to the AI", bankChecked: "Bank checked the code itself; the AI saw only the result" },
   ar: { customer: "العميل", start: "محادثة جديدة", say: "اكتب ما يقوله العميل…", send: "إرسال", voice: "نطق الردود", mic: "اضغط مع الاستمرار للتحدث",
         listen: "استمع", lane: "مسار الإجراءات", phone: "هاتف العميل", enterCode: "أدخل الرمز", script: "سيناريو العرض", account: "حالة الحساب", verified: "تم التحقق",
         notVerified: "لم يتم التحقق", stop: "إيقاف · منعت الحماية هذا الطلب", working: "المساعد يفكر…", noSms: "لا رسائل بعد", recording: "جارٍ التسجيل… اترك للإرسال",
         micBlocked: "الميكروفون يتطلب HTTPS أو localhost؛ استخدم الكتابة أو أزرار السيناريو.",
-        whatsapp: "محادثة واتساب", ivr: "مكالمة IVR", agent: "المساعد الافتراضي للبنك الأهلي", online: "متصل الآن", inCall: "المكالمة جارية", keypad: "لوحة أرقام آمنة",
+        whatsapp: "محادثة واتساب", ivr: "مكالمة IVR", agent: BRAND.agentName?.ar ?? `المساعد الافتراضي - ${BRAND.name.ar}`, online: "متصل الآن", inCall: "المكالمة جارية", keypad: "لوحة أرقام آمنة",
         codeSent: "أُدخل الرمز من لوحة الأرقام الآمنة: أُرسل إلى البنك لا إلى الذكاء الاصطناعي", bankChecked: "البنك تحقق من الرمز بنفسه؛ الذكاء الاصطناعي رأى النتيجة فقط" },
 };
 const SCRIPT = BRAND.locale.d4Script;   // per bank (brand/brand.json): local dialect and wording

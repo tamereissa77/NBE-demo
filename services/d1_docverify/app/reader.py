@@ -10,6 +10,7 @@ import os
 import time
 
 import httpx
+from nbe_core import locale as L
 from PIL import Image, ImageOps
 
 URL = os.getenv("DOCVLM_URL", "").rstrip("/")
@@ -21,14 +22,14 @@ TIMEOUT = float(os.getenv("DOCVLM_TIMEOUT_S", "240"))
 # They are read by the reader's plain base model through its generic prompt, in a second call, and the screen
 # says so: (name asked for, key returned, Arabic label, English label). An invoice has only such fields.
 DOC_TYPES: dict[str, dict] = {
-    "id_front": {"ar": "بطاقة الرقم القومي (وجه)", "en": "National ID, front", "fields": [
-        ("full_name", "الاسم", "Full name"), ("national_id", "الرقم القومي", "National ID number"),
+    "id_front": {"ar": f"{L.ID_CARD_AR} (وجه)", "en": "National ID, front", "fields": [
+        ("full_name", "الاسم", "Full name"), ("national_id", L.NATIONAL_ID_AR, "National ID number"),
         ("birthdate_printed", "تاريخ الميلاد", "Birth date"), ("address", "العنوان", "Address")]},
-    "id_back": {"ar": "بطاقة الرقم القومي (ظهر)", "en": "National ID, back", "fields": [
-        ("national_id", "الرقم القومي", "National ID number"), ("expiry_date", "تاريخ الانتهاء", "Expiry date"),
+    "id_back": {"ar": f"{L.ID_CARD_AR} (ظهر)", "en": "National ID, back", "fields": [
+        ("national_id", L.NATIONAL_ID_AR, "National ID number"), ("expiry_date", "تاريخ الانتهاء", "Expiry date"),
         ("gender", "النوع", "Gender"), ("marital_status", "الحالة الاجتماعية", "Marital status"), ("job_title", "المهنة", "Job")]},
     "hr_letter": {"ar": "خطاب جهة العمل", "en": "HR letter", "fields": [
-        ("employee_name", "اسم الموظف", "Employee name"), ("national_id", "الرقم القومي", "National ID number"),
+        ("employee_name", "اسم الموظف", "Employee name"), ("national_id", L.NATIONAL_ID_AR, "National ID number"),
         ("company_name", "جهة العمل", "Employer"), ("job_title", "الوظيفة", "Job title"),
         ("salary_amount", "الراتب", "Salary"), ("hire_date", "تاريخ التعيين", "Hire date"),
         ("has_stamp", "ختم", "Stamp"), ("has_signature", "توقيع", "Signature")],

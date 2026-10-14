@@ -9,6 +9,7 @@ import difflib
 import re
 from datetime import date
 
+from nbe_core import locale as L
 from nbe_core.text import normalize_ar
 from app import nid
 
@@ -20,7 +21,7 @@ BILL_MAX_AGE_DAYS = 92
 LETTER_MAX_AGE_DAYS = 90
 SALARY_CREDITS = ("salary_transfer_amount_1", "salary_transfer_amount_2", "salary_transfer_amount_3")
 
-LABEL = {"id_front": ("بطاقة الرقم القومي (وجه)", "ID card front"), "id_back": ("بطاقة الرقم القومي (ظهر)", "ID card back"),
+LABEL = {"id_front": (f"{L.ID_CARD_AR} (وجه)", "ID card front"), "id_back": (f"{L.ID_CARD_AR} (ظهر)", "ID card back"),
          "hr_letter": ("خطاب جهة العمل", "HR letter"), "utility_bill": ("فاتورة المرافق", "utility bill"),
          "electricity_bill": ("فاتورة الكهرباء", "electricity bill"), "commercial_register": ("السجل التجاري", "commercial register"),
          "bank_statement": ("كشف الحساب", "bank statement"), "invoice": ("الفاتورة الضريبية", "invoice"),
@@ -155,7 +156,7 @@ def check(form: dict, docs: list[dict], today: date) -> list[dict]:
         if d and (val(d, "national_id") is not None or kind != "hr_letter"):
             _, problems = nid.inspect(val(d, "national_id"))
             if problems:
-                flag("id_number_invalid", "high", f"الرقم القومي في {where(d, 'ar')} ليس رقماً قومياً صحيحاً: " + "؛ ".join(p[0] for p in problems),
+                flag("id_number_invalid", "high", f"{L.NATIONAL_ID_AR} في {where(d, 'ar')} غير صحيح: " + "؛ ".join(p[0] for p in problems),
                      f"The national ID number on the {where(d, 'en')} is not a valid number: " + "; ".join(p[1] for p in problems),
                      [(d, "national_id")], source="document")
     front, back, hr, reg = by.get("id_front"), by.get("id_back"), by.get("hr_letter"), by.get("commercial_register")
@@ -166,17 +167,17 @@ def check(form: dict, docs: list[dict], today: date) -> list[dict]:
     facts_back, _ = nid.inspect(val(back, "national_id")) if back else (None, [])
     printed = parse_date(val(front, "birthdate_printed"))
     if facts_front and printed and printed.isoformat() != facts_front["birthdate"]:
-        flag("id_birthdate_mismatch", "medium", f"تاريخ الميلاد المطبوع على البطاقة ({printed}) يختلف عن التاريخ داخل الرقم القومي ({facts_front['birthdate']})",
+        flag("id_birthdate_mismatch", "medium", f"تاريخ الميلاد المطبوع على البطاقة ({printed}) يختلف عن التاريخ داخل {L.NATIONAL_ID_AR} ({facts_front['birthdate']})",
              "The birth date printed on the card differs from the date inside its own national ID number",
              [(front, "national_id"), (front, "birthdate_printed")], source="document", printed=str(printed), in_number=facts_front["birthdate"])
     gender = str(val(back, "gender") or "")
     if facts_back and gender and normalize_ar(gender) != normalize_ar(facts_back["gender"]):
-        flag("id_gender_mismatch", "medium", f"النوع المطبوع على ظهر البطاقة ({gender}) يختلف عن النوع داخل الرقم القومي ({facts_back['gender']})",
+        flag("id_gender_mismatch", "medium", f"النوع المطبوع على ظهر البطاقة ({gender}) يختلف عن النوع داخل {L.NATIONAL_ID_AR} ({facts_back['gender']})",
              "The gender printed on the card differs from the gender inside its own national ID number",
              [(back, "national_id"), (back, "gender")], source="document")
     expiry = parse_date(val(back, "expiry_date"))
     if back and expiry and expiry < today:
-        flag("id_expired", "high", f"بطاقة الرقم القومي منتهية منذ {expiry}", f"The national ID card expired on {expiry}",
+        flag("id_expired", "high", f"{L.ID_CARD_AR} منتهية منذ {expiry}", f"The national ID card expired on {expiry}",
              [(back, "expiry_date")], source="document", expiry=str(expiry))
     for d, label in ((hr, "خطاب جهة العمل"), (reg, "السجل التجاري")):
         if d and val(d, "has_stamp") is False:
@@ -210,18 +211,18 @@ def check(form: dict, docs: list[dict], today: date) -> list[dict]:
              [(invoice, "subtotal_amount"), (invoice, "vat_amount"), (invoice, "total_amount")], source="document", subtotal=sub, vat=vat, total=total)
 
     # ---- the documents against each other and against the application
-    if front and back and len(nid.digits(val(front, "national_id"))) == nid.LENGTH == len(nid.digits(val(back, "national_id"))):
+    if front and back and nid.complete(val(front, "national_id")) and nid.complete(val(back, "national_id")):
         n = nid.differing(val(front, "national_id"), val(back, "national_id"))
         if n:
-            flag("id_sides_mismatch", "high", f"الرقم القومي على وجه البطاقة يختلف عن ظهرها في {n} رقم", f"The ID number on the front differs from the back in {n} digit(s)",
+            flag("id_sides_mismatch", "high", f"{L.NATIONAL_ID_AR} على وجه البطاقة يختلف عن ظهرها في {n} رقم", f"The ID number on the front differs from the back in {n} digit(s)",
                  [(front, "national_id"), (back, "national_id")], differing_digits=n)
-    ref_id = next((d for d in (front, back) if d and len(nid.digits(val(d, "national_id"))) == nid.LENGTH), None)
+    ref_id = next((d for d in (front, back) if d and nid.complete(val(d, "national_id"))), None)
     for other in (hr, declared):
         theirs = val(other, "national_id")
-        if ref_id and other and len(nid.digits(theirs)) == nid.LENGTH:
+        if ref_id and other and nid.complete(theirs):
             n = nid.differing(val(ref_id, "national_id"), theirs)
             if n:
-                flag("nid_mismatch", "high", f"الرقم القومي في {where(other, 'ar')} يختلف عن بطاقة الرقم القومي في {n} رقم",
+                flag("nid_mismatch", "high", f"{L.NATIONAL_ID_AR} في {where(other, 'ar')} يختلف عن {L.ID_CARD_AR} في {n} رقم",
                      f"The national ID number on the {where(other, 'en')} differs from the ID card in {n} digit(s)",
                      [(ref_id, "national_id"), (other, "national_id")], differing_digits=n)
 
@@ -256,7 +257,7 @@ def check(form: dict, docs: list[dict], today: date) -> list[dict]:
 
     salary, stated = number(val(hr, "salary_amount")), number(val(declared, "monthly_salary"))
     if hr and salary and stated and abs(salary - stated) / stated > SALARY_TOLERANCE:
-        flag("salary_mismatch", "high", f"الراتب في خطاب جهة العمل {salary:,.0f} جنيه يختلف عن الراتب المذكور في الطلب {stated:,.0f} جنيه",
+        flag("salary_mismatch", "high", f"الراتب في خطاب جهة العمل {salary:,.0f} {L.CURRENCY_AR} يختلف عن الراتب المذكور في الطلب {stated:,.0f} {L.CURRENCY_AR}",
              "The salary on the HR letter differs from the salary declared on the application", [(hr, "salary_amount")], letter=salary, declared=stated)
     if hr and val(hr, "company_name") and val(declared, "employer"):
         s = text_similarity(val(hr, "company_name"), val(declared, "employer"), _COMPANY_WORDS, digits=False)
@@ -268,7 +269,7 @@ def check(form: dict, docs: list[dict], today: date) -> list[dict]:
     paid = [k for k in SALARY_CREDITS if number(val(statement, k))]
     credits = [number(val(statement, k)) for k in paid]
     if hr and salary and credits and any(abs(c - salary) / salary > SALARY_TOLERANCE for c in credits):
-        flag("salary_vs_statement", "high", f"الراتب في خطاب جهة العمل {salary:,.0f} جنيه، بينما إيداعات الراتب في كشف الحساب: " + "، ".join(f"{c:,.0f}" for c in credits),
+        flag("salary_vs_statement", "high", f"الراتب في خطاب جهة العمل {salary:,.0f} {L.CURRENCY_AR}، بينما إيداعات الراتب في كشف الحساب: " + "، ".join(f"{c:,.0f}" for c in credits),
              "The salary on the HR letter differs from the salary credits on the bank statement",
              [(hr, "salary_amount")] + [(statement, k) for k in paid], letter=salary, credits=credits)
     elif len(credits) > 1 and max(credits) / min(credits) > 1 + 2 * SALARY_TOLERANCE:

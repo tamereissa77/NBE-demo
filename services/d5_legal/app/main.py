@@ -20,6 +20,7 @@ from fastapi import File, HTTPException, UploadFile
 from pydantic import BaseModel
 
 from nbe_core import create_app, llm, platform, retrieval
+from nbe_core import locale as L
 from nbe_core.text import normalize_ar
 from nbe_core.trace import Trace
 
@@ -342,15 +343,18 @@ def compound_risks(diff: list[dict], en: bool) -> list[dict]:
     return out
 
 
-_UNIT = r"(جنيه(?:اً|ا)?(?:\s+مصري)?|EGP|Egyptian pounds?)"
+# The country's currency as written in Arabic and English (nbe_core.locale): جنيه مصري / EGP, ريال سعودي / SAR, ...
+_ADJ = L.CURRENCY_LONG_AR.split(" ", 1)[1] if " " in L.CURRENCY_LONG_AR else ""
+_UNIT = rf"((?:{L.CURRENCY_FORMS_AR})" + (rf"(?:\s+{_ADJ})?" if _ADJ else "") + rf"|{L.CURRENCY}|{L.CURRENCY_EN_LONG[:-1]}s?)"
+_CODE = L.CURRENCY
 
 
 def _source_units(text: str) -> dict[str, str]:
     """Number (digits only) -> the longest currency unit written next to it in the source."""
     src = text.translate(_DIGITS)
     found: dict[str, str] = {}
-    for m in re.finditer(r"(\d[\d,.]*)\s*" + _UNIT + r"|EGP\s*(\d[\d,.]*)", src):
-        num, unit = (m.group(1), m.group(2)) if m.group(1) else (m.group(3), "EGP")
+    for m in re.finditer(r"(\d[\d,.]*)\s*" + _UNIT + rf"|{_CODE}\s*(\d[\d,.]*)", src):
+        num, unit = (m.group(1), m.group(2)) if m.group(1) else (m.group(3), _CODE)
         key = num.replace(",", "").rstrip(".")
         if len(unit) > len(found.get(key, "")):
             found[key] = re.sub(r"\s+", " ", unit)
@@ -365,8 +369,8 @@ def _with_unit(amount: str, units: dict[str, str]) -> str:
         return amount
     unit = units[nums[0]]
     s = amount.translate(_DIGITS)
-    s = re.sub(r"(?:EGP\s*)?(\d[\d,.]*\d)(?:\s*" + _UNIT + ")?",
-               lambda m: f"EGP {m.group(1)}" if unit == "EGP" else f"{m.group(1)} {unit}", s, count=1)
+    s = re.sub(rf"(?:{_CODE}\s*)?(\d[\d,.]*\d)(?:\s*" + _UNIT + ")?",
+               lambda m: f"{_CODE} {m.group(1)}" if unit == _CODE else f"{m.group(1)} {unit}", s, count=1)
     return re.sub(r"\s+", " ", s).strip()
 
 
@@ -447,14 +451,14 @@ def _fallback_summary(chunks: list[dict], mapped: list, text: str, operative: st
 
 def _court_from_header(text: str) -> str | None:
     """'المحكمة: …' / 'Court: …' line before the first section."""
-    m = re.search(r"^\s*(?:المحكمة|Court)\s*:\s*(.+?)\s*$", text.split("\n## ")[0], re.M)
+    m = re.search(r"^\s*(?:المحكمة|اللجنة|الهيئة|Court|Committee)\s*:\s*(.+?)\s*$", text.split("\n## ")[0], re.M)
     return m.group(1) if m else None
 
 
 def _outcome_from_operative(operative: str) -> str:
     """Last resort for an empty outcome: the operative part's first ruling, verbatim, without markup."""
     body = re.sub(r"^#+[^\n]*\n|\*+", "", operative.strip()).strip()
-    body = re.sub(r"^(?:حكمت المحكمة|The court rules)\s*:?\s*", "", body).strip()
+    body = re.sub(r"^(?:حكمت المحكمة|قررت اللجنة|قررت الهيئة|The court rules|The committee decides)\s*:?\s*", "", body).strip()
     first = re.split(r"\n\s*\n|\n\s*2\.", body)[0]
     return re.sub(r"^\s*1\.\s*", "", re.sub(r"\s+", " ", first)).strip()[:400]
 
@@ -463,7 +467,7 @@ def _operative_amounts(operative: str, units: dict[str, str]) -> list[str]:
     """Amounts written with a currency unit in the operative part, in order, with the source's unit."""
     src = operative.translate(_DIGITS)
     found = [m.group(1) for m in re.finditer(r"(\d[\d,.]*\d)\s*" + _UNIT, src)]
-    found += [m.group(1) for m in re.finditer(r"EGP\s*(\d[\d,.]*\d)", src)]
+    found += [m.group(1) for m in re.finditer(rf"{_CODE}\s*(\d[\d,.]*\d)", src)]
     return list(dict.fromkeys(_with_unit(n, units) for n in found))
 
 

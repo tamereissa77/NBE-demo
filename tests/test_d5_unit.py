@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-os.environ.setdefault("D5_SEED_DIR", str(ROOT / "data" / "seed" / "d5"))
+os.environ.setdefault("D5_SEED_DIR", str(ROOT / "data" / "seed" / "EG" / "d5"))   # written for the Egyptian corpus
 sys.path[:0] = [str(ROOT / "packages" / "nbe_core"), str(ROOT / "services" / "d5_legal")]
 
 from app import main  # noqa: E402

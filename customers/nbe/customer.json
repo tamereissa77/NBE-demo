@@ -1,0 +1,55 @@
+{
+  "id": "nbe",
+  "short": "NBE",
+  "country": "EG",
+  "name": {
+    "en": "National Bank of Egypt",
+    "ar": "البنك الأهلي المصري"
+  },
+  "assistant": {
+    "en": "NBE AI Assistant",
+    "ar": "مساعد البنك الأهلي الذكي"
+  },
+  "appTitle": {
+    "en": "NBE AI Demos",
+    "ar": "عروض الذكاء الاصطناعي للبنك الأهلي المصري"
+  },
+  "agentName": {
+    "en": "NBE Virtual Agent",
+    "ar": "المساعد الافتراضي للبنك الأهلي"
+  },
+  "website": "https://www.nbe.com.eg",
+  "logo": "logo.png",
+  "font": "cairo",
+  "colors": {
+    "brand": "#006643",
+    "brand-dark": "#0c5435",
+    "accent": "#ffa100",
+    "accent-light": "#f9c40e",
+    "accent-deep": "#fd6805",
+    "on-accent": "#141414",
+    "ink": "#141414",
+    "status-review": "#ffa100",
+    "status-ok": "#006643"
+  },
+  "bannerPalette": "warm green and golden orange colour palette",
+  "facts": [
+    {
+      "label": "Call centre / مركز الاتصال",
+      "value": "19623"
+    },
+    {
+      "label": "Website / الموقع الإلكتروني",
+      "value": "www.nbe.com.eg"
+    },
+    {
+      "label": "Customer service e-mail / البريد الإلكتروني لخدمة العملاء",
+      "value": "customer.service@nbe.com.eg"
+    },
+    {
+      "label": "Fax / فاكس",
+      "value": "+202 25945221"
+    }
+  ],
+  "note": "Colours sampled 6 Oct 2026 from nbe.com.eg and the NBE logo. Logo and colours for the NBE customer demonstration only."
+}

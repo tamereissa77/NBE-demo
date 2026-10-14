@@ -31,21 +31,30 @@ fi
 # The demo services run as their own user: the folders they write to must be open to it
 mkdir -p data/uploads/d1 data/generated/d3/banners && chmod 777 data/uploads/d1 data/generated/d3/banners 2>/dev/null || true
 
+# The active customer (make customer NAME=...): a fresh checkout starts with NBE. Its corpus, rendered with the
+# bank's name, is what the services mount as /data/seed.
+[ -f data/customer.json ] || python3 scripts/apply_customer.py "${CUSTOMER:-nbe}"
+[ -d data/seed-active ] || python3 scripts/apply_customer.py --seed-only
+# The brand is baked into the portal image: rebuild it (cached, seconds) so it always shows the active customer
+$C build nbe-portal >/dev/null
+
 step "data services, and the link to the models on the GB10"
 $C up -d $BUILD_FLAG --wait nbe-postgres nbe-qdrant nbe-llmgw
 
 step "platform and demo services: $DEMOS"
 $C up -d $BUILD_FLAG --wait nbe-mockbank nbe-guardrails nbe-docling nbe-eval $(printf 'nbe-%s ' $DEMOS) nbe-portal nbe-gateway
 
-# First start on a fresh machine: generate synthetic data and load every demo (embeddings come from the GB10)
-if [ ! -f data/generated/d1/manifest.json ] || [ ! -f data/generated/d3/customers.csv ]; then
-  step "generating synthetic data (first run)"
+# First start on a fresh box, or the customer changed since the data was last loaded (make customer)
+fresh() { ! cmp -s data/customer.json data/generated/.loaded-customer.json; }
+if [ ! -f data/generated/d1/manifest.json ] || [ ! -f data/generated/d3/customers.csv ] || fresh; then
+  step "generating synthetic data (first run, or a new customer)"
   make -s data
+  python3 scripts/apply_customer.py --seed-only
 fi
 if ! curl -fsS "http://localhost:${NBE_PORT:-8200}/api/d2/documents" | grep -q procedure || \
-   [ "$(docker exec nbe-qdrant bash -c 'exec 3<>/dev/tcp/127.0.0.1/6333; printf "GET /collections/d2_procedures HTTP/1.0\r\n\r\n" >&3; head -1 <&3' 2>/dev/null | grep -c 200)" = "0" ]; then
-  step "loading demo data (first run)"
-  NBE_PORT=${NBE_PORT:-8200} scripts/ingest.sh
+   [ "$(docker exec nbe-qdrant bash -c 'exec 3<>/dev/tcp/127.0.0.1/6333; printf "GET /collections/d2_procedures HTTP/1.0\r\n\r\n" >&3; head -1 <&3' 2>/dev/null | grep -c 200)" = "0" ] || fresh; then
+  step "loading demo data (first run, or a new customer)"
+  NBE_PORT=${NBE_PORT:-8200} scripts/ingest.sh && cp data/customer.json data/generated/.loaded-customer.json
 fi
 
 echo; echo "Portal: http://localhost:${NBE_PORT:-8200}   (models: $HUB)"

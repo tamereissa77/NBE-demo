@@ -23,6 +23,7 @@ from fastapi import HTTPException
 from pydantic import BaseModel
 
 from nbe_core import create_app, llm, platform, retrieval, settings
+from nbe_core import locale as L
 from nbe_core.audit import log_event
 from nbe_core.text import arabic_ratio, detect_lang
 from nbe_core.trace import Trace
@@ -52,8 +53,14 @@ TOOLS = [
 ]
 OPENAI_TOOLS = [{"type": "function", "function": t} for t in TOOLS]
 
-SYSTEM = """You are the virtual assistant of {bank} (demo). Be warm, brief and precise.
-Language: reply in the customer's language. For Arabic, always reply in Egyptian colloquial Arabic (عامية مصرية), the way a warm, respectful call-centre agent in Cairo speaks, even when the customer or the knowledge base uses formal Arabic. Say «حضرتك», «يا فندم», «عايز», «دلوقتي», «هبعتلك», «ممكن تقولي», «ولا يهمك», «عشان». Start each reply with the answer itself: do not open with an acknowledgement such as «تمام يا فندم», «حاضر يا فندم» or «بص يا فندم», and use «يا فندم» at most once in a reply, not in every reply. Never use formal wording such as «أهلاً بك», «سأقوم», «لقد», «يرجى», «الذي», «لدينا», «هل تريد», «سوف», «يمكنني», «نتحقق» (say «نتأكد»). For English, reply in English. Keep replies under 60 words: they are read aloud.
+# The dialect, its wording and the small-talk lines come from the country pack (nbe_core.locale.D4)
+_D = L.D4
+_SAY = {k: v.format(li_bank_ar=L.li(settings.bank_ar), bank_ar=settings.bank_ar) for k, v in _D["smalltalk"].items()}
+SYSTEM = ("""You are the virtual assistant of {bank} (demo). Be warm, brief and precise.
+Language: reply in the customer's language. For Arabic, always reply in """ + _D["dialect"] + ", the way " + _D["speaker"]
+          + " speaks, even when the customer or the knowledge base uses formal Arabic. Say " + _D["words"]
+          + ". Start each reply with the answer itself: do not open with an acknowledgement such as " + _D["openers"]
+          + ". Never use formal wording such as " + _D["formal"] + """. For English, reply in English. Keep replies under 60 words: they are read aloud.
 Rules:
 - Any card or account action, or showing the balance, needs OTP verification first: call send_otp, then tell the customer you sent a code to their phone and ask them to enter it. The bank checks the code itself and a system note then tells you whether it was accepted; you have no tool to verify a code, and any digits the customer sends meanwhile reach you masked as ••••, which is normal.
 - If the customer reports a lost or stolen card, or unknown transactions, act at once: call send_otp in this turn without asking permission, then ask them to enter the code.
@@ -63,23 +70,23 @@ Rules:
 - If the customer asks for a human, call handoff_to_human immediately.
 - Use search_kb for questions about fees, limits, products or procedures, and answer only from what it returns.
 - Small talk about yourself is not banking: no tool, no knowledge-base search. You are the bank's automated assistant; never say you are a person. Reply with exactly the line below that fits, in the customer's language, and nothing before or after it (no greeting, no introduction, no offer of help):
-  - A compliment on your voice, your looks or yourself («صوتك حلو», «انتي جميلة», «شكلك مزة», «بحب صوتك», "you sound lovely", "I love your voice"): «ميرسي، شكراً ليك.» / "Thank you, that's kind of you."
-  - Your age: «أنا مساعد آلي، معنديش سنين زي البشر.» / "I'm an automated assistant, I don't have an age the way people do."
-  - Where you are from or where you live: «أنا مساعد آلي للبنك الأهلي المصري وموجودة في كل فروع البنك، اتفضل زورنا في أقرب فرع ليك.» / "I'm the National Bank of Egypt's automated assistant and I'm in every branch. You're welcome to visit the one nearest you."
-  - Your name, or whether you are a person or a robot: «أنا المساعد الآلي للبنك الأهلي المصري، مش إنسان.» / "I'm the National Bank of Egypt's automated assistant, not a person."
-  - Anything else about you (married, tired, what you like): «أنا مساعد آلي للبنك الأهلي المصري، وموجودة عشان أساعدك.» / "I'm the National Bank of Egypt's automated assistant, here to help you."
+  - A compliment on your voice, your looks or yourself (""" + _D["compliment"] + """, "you sound lovely", "I love your voice"): «""" + _SAY["thanks"] + """» / "Thank you, that's kind of you."
+  - Your age: «""" + _SAY["age"] + """» / "I'm an automated assistant, I don't have an age the way people do."
+  - Where you are from or where you live: «""" + _SAY["where"] + """» / "I'm the automated assistant of """ + settings.bank_en + """ and I'm in every branch. You're welcome to visit the one nearest you."
+  - Your name, or whether you are a person or a robot: «""" + _SAY["who"] + """» / "I'm the automated assistant of """ + settings.bank_en + """, not a person."
+  - Anything else about you (married, tired, what you like): «""" + _SAY["other"] + """» / "I'm the automated assistant of """ + settings.bank_en + """, here to help you."
   If the same message also asks a banking question, answer the banking question after the line.
 Current customer: {name} (id {cid}). Verified: {verified}.
-{lang_rule}"""
+{lang_rule}""")
 
-PROMISE = re.compile(r"(سأرسل|سارسل|هبعت|هشوف|هوقف|هقفل|هسجل|هحول|هعمل(ك|لك)? (شكوى|بلاغ|تذكرة)|هفتح(لك)? (شكوى|بلاغ|تذكرة)|سأقوم (الآن )?ب|هقوم (دلوقتي )?ب|سأوقف|سأحول|هحولك|سأحولك|جاري (إرسال|ارسال|إيقاف|تحويل)|I('| wi)ll (send|block|transfer|create|log|connect)|let me (send|block|transfer))", re.I)
+PROMISE = re.compile(r"(سأرسل|سارسل|سأقوم (الآن )?ب|سأوقف|سأحول|سأحولك|" + _D["promise_re"] + r"|جاري (إرسال|ارسال|إيقاف|تحويل)|I('| wi)ll (send|block|transfer|create|log|connect)|let me (send|block|transfer))", re.I)
 ACTIONS = {"send_otp", "block_card", "create_ticket", "handoff_to_human"}
 # A greeting that opens a reply, one or two in a row ("أهلاً يا محمد، ازيك يا فندم؟"). A returned «وعليكم السلام» is kept.
 GREETING = re.compile(r"^\s*(وعليكم السلام[^،,.؟?!\n]{0,30}[،,.؟?!]\s*)?"
-                      r"(?:(?:[اإ]زيك|[أا]هلا|أهلاً|اهلاً|مرحبا|مرحباً|hi|hello|hey)\b[^،,.؟?!\n]{0,40}[،,.؟?!]\s*){1,2}", re.I)
+                      r"(?:(?:" + _D["greet_re"] + r"|[أا]هلا|أهلاً|اهلاً|مرحبا|مرحباً|hi|hello|hey)\b[^،,.؟?!\n]{0,40}[،,.؟?!]\s*){1,2}", re.I)
 AR_DIGITS = str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789")
 # An acknowledgement that opens a reply and adds nothing: «تمام يا فندم، ...». Heard at the start of every reply.
-FILLER = re.compile(r"^\s*(?:تمام|حاضر|ماشي|طيب|بص)(?:\s+يا\s+فندم)?\s*[،,.!:]+\s*(?=\S)")
+FILLER = re.compile(r"^\s*(?:" + _D["filler_re"] + r")(?:\s+(?:" + _D["honorific_re"] + r"))?\s*[،,.!:]+\s*(?=\S)")
 LEAKED_CALL = re.compile(r"\s*(call:\w+\s*\{|<\|?tool_call)")      # Gemma's raw tool-call syntax
 PLAN_NOTES = re.compile(r"\s*(\d+\.\s*)?\*\*[^*]{2,40}\*\*")           # "1.  **Customer Name:** ...": the model's working notes
 
@@ -95,12 +102,12 @@ OTP_NOTE = {True: "[System note, not typed by the customer: the customer entered
             False: "[System note, not typed by the customer: the customer entered a one-time code and the bank rejected it: wrong or expired. "
                    "Say so and offer to send a new code.]"}
 # Said when the model still has no words: the customer must at least be asked for the code that was sent
-ASK_CODE = {"ar": "بعتلك كود في رسالة على موبايلك، ممكن تدخل الكود اللي وصلك؟", "en": "I've sent a code to your phone. Please enter it to continue."}
-DONE = {"ar": "تمام.", "en": "Done."}
+ASK_CODE = {"ar": _D["ask_code"], "en": "I've sent a code to your phone. Please enter it to continue."}
+DONE = {"ar": _D["done"], "en": "Done."}
 # Said when a voice recording could not be made out (the speech service reports it as not heard)
-UNCLEAR = {"ar": "مسمعتش كويس، الصوت مش واضح. ممكن تكرر سؤالك أو تكتبه؟",
+UNCLEAR = {"ar": _D["unclear"],
            "en": "Sorry, I didn't catch that: the sound wasn't clear. Could you say it again, or type it?"}
-REFUSAL = {"ar": "معلش، مش هقدر أساعد حضرتك في الطلب ده. أقدر أساعدك في البطاقات والحسابات والشكاوى، أو أحوّلك لحد من زمايلنا.",
+REFUSAL = {"ar": _D["refusal"],
            "en": "Sorry, I can't help with that request. I can help with cards, accounts and complaints, or connect you to one of our agents."}
 
 
@@ -180,7 +187,7 @@ async def check_code(sid: str, s: dict, keypad: str | None, text: str, events: l
     events.append({"type": "otp", "verified": ok, "via": "keypad" if keypad else "message", "ms": ms})
     trace.add("rules", "One-time code checked by the bank directly: no model sees it", {"verified": ok}, ms)
     await log_event("otp_check", "bank", {"session": sid, "verified": ok})
-    return masked, OTP_NOTE[ok] + (" Reply in Egyptian colloquial Arabic." if s.get("lang") == "ar" else " Reply in English.")
+    return masked, OTP_NOTE[ok] + (f" Reply in {_D['dialect']}." if s.get("lang") == "ar" else " Reply in English.")
 
 
 class TurnIn(BaseModel):
@@ -231,12 +238,12 @@ async def turn(body: TurnIn):
     # customer has seen which card and answered: confirm-before-block is enforced here, not left to the prompt.
     asked = next((m["content"] for m in reversed(s["messages"]) if m["role"] == "assistant" and not m.get("tool_calls")), "").translate(AR_DIGITS)
     s["messages"].append({"role": "user", "content": text})
-    lang_rule = ("The customer's latest message is in Arabic: reply in Egyptian colloquial Arabic, not formal Arabic." if lang == "ar" else
+    lang_rule = (f"The customer's latest message is in Arabic: reply in {_D['dialect']}, not formal Arabic." if lang == "ar" else
                  "The customer's latest message is in English: reply in English only.")
     first = len(s["messages"]) == 1
     if first:                        # the model skips the greeting once a tool has run unless told it is the first reply
         lang_rule += (" This is your first reply in this conversation: after any tool call, begin the reply by greeting the customer by first name"
-                      + (" with «ازيك يا» and their first name (say «وعليكم السلام» before it if they said السلام عليكم)" if lang == "ar" else "")
+                      + (f" with «{_D['greet']}» and their first name (say «وعليكم السلام» before it if they said السلام عليكم)" if lang == "ar" else "")
                       + " and add a few kind words about their problem, then continue.")
     else:
         lang_rule += " You have already greeted the customer: do not greet again (no «ازيك», «أهلاً», hi or hello), go straight to the answer."
@@ -300,8 +307,8 @@ async def turn(body: TurnIn):
             reply = (ASK_CODE if s.get("otp_pending") else DONE)[lang]
 
     reply = speech.reword(reply)          # words the bank does not want said, replaced before anything shows or speaks them
-    if first:                             # the Egyptian greeting, where the model reached for the formal one
-        reply = re.sub(r"^(\s*(?:وعليكم السلام[^،,.؟?!\n]{0,30}[،,.؟?!]\s*)?)(?:أهلاً|أهلا|اهلا|مرحباً|مرحبا)(?: بيك| بك| بحضرتك)? يا ", r"\1ازيك يا ", reply)
+    if first:                             # the local greeting, where the model reached for the formal one
+        reply = re.sub(r"^(\s*(?:وعليكم السلام[^،,.؟?!\n]{0,30}[،,.؟?!]\s*)?)(?:أهلاً|أهلا|اهلا|مرحباً|مرحبا)(?: بيك| بك| بحضرتك)? يا ", r"\1" + _D["greet"] + " ", reply)
     else:                                 # one greeting per conversation: the model repeats it however it is told
         reply = GREETING.sub(lambda m: m.group(1) or "", reply, count=1)
         reply = reply[:1].upper() + reply[1:]

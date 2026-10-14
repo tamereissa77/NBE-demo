@@ -17,4 +17,4 @@ requires = ["setuptools>=69"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["nbe_core"]
+packages = ["nbe_core", "nbe_core.countries"]

@@ -1,0 +1,23 @@
+{
+  "id": "atlas",
+  "short": "Atlas Bank",
+  "country": "MA",
+  "name": {
+    "en": "Atlas Demo Bank",
+    "ar": "بنك الأطلس التجريبي"
+  },
+  "website": "",
+  "logo": "logo.png",
+  "font": "cairo",
+  "facts": [
+    {
+      "label": "Call centre / مركز العلاقات مع الزبناء",
+      "value": "05 22 XX XX XX (demo)"
+    },
+    {
+      "label": "Website / الموقع الإلكتروني",
+      "value": "www.atlas-demo-bank.example"
+    }
+  ],
+  "note": "Fictional bank for trying the Morocco country pack. Not a real institution."
+}
